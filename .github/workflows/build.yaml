@@ -28,11 +28,10 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Build
         run: |
+          pwd
           npm run build
-        working-directory: guyera.github.io
       - name: Upload static files as artifact
         id: deployment
         uses: actions/upload-pages-artifact@v3 # or specific "vX.X.X" version tag for this action
-        working-directory: guyera.github.io
         with:
           path: out/
