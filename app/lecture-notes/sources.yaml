@@ -19,3 +19,7 @@ pages:
     pathName: 'python-basics'
     pageTitle: 'Python Basics'
     namedIdentifier: 'python-basics'
+  - source: 'pythons-basic-data-structures/source.tsx'
+    pathName: 'pythons-basic-data-structures'
+    pageTitle: "Python's Basic Data Structures"
+    namedIdentifier: 'pythons-basic-data-structures'

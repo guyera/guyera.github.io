@@ -19,6 +19,7 @@ import { inter } from '@/app/ui/fonts'
 import { lusitana } from '@/app/ui/fonts'
 import { garamond } from '@/app/ui/fonts'
 
+import { fileURLToPath } from 'url'
 import path from 'path'
 import fs from 'fs'
 
@@ -40,11 +41,8 @@ for (let page of sourcesConfig.pages) {
 }
 
 let PATH_NAME = (() => {
-  if (fs.lstatSync(__dirname).isDirectory()) {
-    return path.basename(__dirname)
-  } else {
-    return path.basename(path.dirname(__dirname))
-  }
+  const filename = fileURLToPath(import.meta.url);
+  return path.basename(path.dirname(filename))
 })()
 
 export const dynamic = 'force-static'
