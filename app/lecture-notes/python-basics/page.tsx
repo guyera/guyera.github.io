@@ -1,5 +1,6 @@
 import PythonBlock from '../ui/pythonblock'
 import SyntaxBlock from '../ui/syntaxblock'
+import TerminalBlock from '../ui/terminalblock'
 import ShellBlock from '../ui/shellblock'
 import Image from '../ui/image'
 import Code from '../ui/code'
@@ -72,6 +73,8 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
         <Item><Link href="#if-statements">If statements</Link></Item>
         <Item><Link href="#loops">Loops</Link></Item>
         <Item><Link href="#lists">Lists</Link></Item>
+        <Item><Link href="#tracebacks">Tracebacks</Link></Item>
+        <Item><Link href="#code-style">Code Style</Link></Item>
       </Itemize>
 
       <SectionHeading id="program-boilerplate">Program boilerplate</SectionHeading>
@@ -1455,6 +1458,42 @@ Calamity
 `
       }</ShellBlock>
 
+      <P>Attempting to access an element that does not exist by specifying an out-of-bounds index in between the square brackets results in an exception being thrown (specifically an <Code>IndexError</Code>). This causes the program to immediately crash, assuming you don't catch the exception (we may discuss exceptions and how they're thrown and caught later on in the course, time permitting):</P>
+
+      <PythonBlock fileName='out_of_bounds.py'>{
+`def main() -> None:
+    # Create a list with 3 strings in it
+    some_cool_words = ['Anomaly', 'Calamity', 'Anachronism']
+
+    # The list has 3 elements, so the valid indices are 0, 1, and 2. An
+    # index of 3 would be out-of-bounds. This throws an exception:
+    print(some_cool_words[3])
+
+    # Print the list to the terminal
+    print(some_cool_words)
+
+if __name__ == '__main__':
+    main()
+`
+      }</PythonBlock>
+
+      <P>Running the above program produces the following output (it crashes immediately):</P>
+
+<TerminalBlock copyable={false}>{
+`(env) $ python out_of_bounds.py 
+Traceback (most recent call last):
+  File "/home/alex/instructor/static-content/guyera.github.io/code-samples/python-basics/out_of_bounds.py", line 13, in <module>
+    main()
+    ~~~~^^
+  File "/home/alex/instructor/static-content/guyera.github.io/code-samples/python-basics/out_of_bounds.py", line 7, in main
+    print(some_cool_words[3])
+          ~~~~~~~~~~~~~~~^^^
+IndexError: list index out of range
+`
+}</TerminalBlock>
+
+      <P>There are some other ways to index a list in Python as well. For example, Python supports negative indices, list slicing, and more. We won't discuss them formally, but for the curious reader, the top answer on <Link href="https://stackoverflow.com/questions/509211/how-slicing-in-python-works">this StackOverflow question</Link> explains these things quite well.</P>
+
       <P>Once a list is created, you can add elements to it and remove elements from it whenever you'd like. To append an element to a list (i.e., to add a new element to the end), use the <Code>.append()</Code> method on the list, passing in the value that you want to append as the argument:</P>
 
       <PythonBlock fileName="lists.py">{
@@ -1688,6 +1727,31 @@ if __name__ == '__main__':
 `
       }</ShellBlock>
 
+      <SectionHeading id="tracebacks">Tracebacks</SectionHeading>
+
+      <P>A <Term>stack trace</Term> is the list of function calls on the call stack at a given point in time during a program's execution, typically listed in the reverse order in which they were called (i.e., with the most recent called function at the top). For example, if a program is currently inside the <Code>bar()</Code> function, which was called from within the <Code>foo()</Code> function, which was called from within the <Code>main()</Code> function, then the stack trace would be the list <Code>bar(), foo(), main()</Code> (in that order).</P>
+
+      <P>In Python, whenever a runtime error occurs that causes the program to crash (such as an <Code>IndexError</Code> as a result of indexing a list with an out-of-bounds index), the interpreter prints out a so-called <Bold>traceback</Bold> the moment the program crashes. Tracebacks are a Python-specific term, but they're basically backward stack traces. That is, they're stack traces, except the functions are listed in the order in which they were called rather than the reverse.</P>
+
+      <P>Stack traces and tracebacks are extremely helpful for debugging runtime errors. They typically contain enough information to point the programmer directly to the exact line of code at which the error occurred. Let's take a look at the traceback from our earlier <Code>IndexError</Code> example:</P>
+
+<TerminalBlock copyable={false}>{
+`(env) $ python out_of_bounds.py 
+Traceback (most recent call last):
+  File "/home/alex/instructor/static-content/guyera.github.io/code-samples/python-basics/out_of_bounds.py", line 13, in <module>
+    main()
+    ~~~~^^
+  File "/home/alex/instructor/static-content/guyera.github.io/code-samples/python-basics/out_of_bounds.py", line 7, in main
+    print(some_cool_words[3])
+          ~~~~~~~~~~~~~~~^^^
+IndexError: list index out of range
+`
+}</TerminalBlock>
+
+      <P>Tracebacks are typically read from the bottom up (and, unsurprisingly, stack traces are typically read top-down). Starting at the bottom of the above traceback, we see that the program crashed due to an <Code>IndexError</Code>. The error is accompanied by a message: <Code>list index out of range</Code>. This tells us that we tried to index a list with an out-of-range (out-of-bounds) index. Looking at the first entry above that error message, we see that the program was executing line 7 of <Code>out_of_bounds.py</Code>, which is a part of the <Code>main</Code> function, at the time that it crashed. It even shows us exactly what that line of code looks like: <Code>print(some_cool_words[3])</Code>. We can immediately surmise that <Code>3</Code> is an out-of-bounds index for the <Code>some_cool_words</Code> list. If we needed more context, we could continue up the traceback; looking at the next entry up, we can see that the <Code>main()</Code> function (where the program crashed) was <It>in turn</It> called from line 13, which is part of the module (global) scope. And, again, it shows us what that line of code looks like: <Code>main()</Code>. This context can be useful if a given function is called from many places throughout the program<Emdash/>it tells you <It>which</It> exact function call led to the crash. Of course, in this case, the crash was in <Code>main()</Code>, which is typically only called once in each program. But you can imagine complex debugging scenarios where tracing function calls several entries up the traceback can provide important diagnostic information.</P>
+
+      <P>Do not be afraid of tracebacks. You're going to create a lot of bugs throughout this course, and some of those bugs will cause the program to crash. Tracebacks are invaluable for diagnosing those sorts of issues.</P>
+
       <SectionHeading id="code-style">Code style</SectionHeading>
 
       <P><Term>Code style</Term> refers to the formatting and organization of source code that influences how it <It>looks</It> rather than how it <It>works</It>. Beginner programmers often neglect the importance of code style. In industry, if your code style does not adhere to your team's style guidelines, it will be rejected during code review, and you'll have to correct it. This is a waste of your time, but it's also a waste of the reviewers' time. To avoid that situation, pay close attention to the style guidelines <It>as</It> you write the code rather than after the fact.</P>
@@ -1726,7 +1790,7 @@ if __name__ == '__main__':
 `
       }</PythonBlock>
 
-      <P>A string literal can be broken up into multiple smaller lines of code by 1) enclosing it in parentheses (assuming it isn't already enclosed in parentheses), and 2) segmenting the it into smaller string literals within said parentheses. For example, the below program is identical to the above one, but the string literal is broken up into three small lines of code instead of one very large line of code:</P>
+      <P>A string literal can be broken up into multiple smaller lines of code by 1) enclosing it in parentheses (assuming it isn't already enclosed in parentheses), and 2) segmenting it into smaller string literals within said parentheses. For example, the below program is identical to the above one, but the string literal is broken up into three small lines of code instead of one very large line of code:</P>
 
       <PythonBlock fileName="print_long_string.py">{
 `def main() -> None:

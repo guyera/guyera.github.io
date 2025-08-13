@@ -31,6 +31,12 @@ imap <leader>shell<Space> <ShellBlock>{<CR><CR>}</ShellBlock>OA``OD
 " Map \\shell followed by a space to a non-copyable ShellBlock component
 imap <leader><leader>shell<Space> <ShellBlock copyable={false}>{<CR><CR>}</ShellBlock>OA``OD
 
+" Map \terminal followed by a space to a non-copyable TerminalBlock component
+imap <leader>terminal<Space> <TerminalBlock copyable={false}>{<CR><CR>}</TerminalBlock>OA``OD
+
+" Map \\terminal followed by a space to a copyable TerminalBlock component
+imap <leader><leader>terminal<Space> <TerminalBlock>{<CR><CR>}</TerminalBlock>OA``OD
+
 " Map \py followed by a space to a copyable PythonBlock component
 imap <leader>py<Space> <PythonBlock>{<CR><CR>}</PythonBlock>OA``OD
 
