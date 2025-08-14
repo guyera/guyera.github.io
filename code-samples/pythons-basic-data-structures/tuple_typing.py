@@ -1,4 +1,3 @@
-# By the way, this allows easy computing of square roots
 from math import sqrt
 
 from typing import Tuple

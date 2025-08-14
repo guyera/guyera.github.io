@@ -275,8 +275,7 @@ ValueError: too many values to unpack (expected 2)
       <P>Here's a more complete example that defines a function named <Code>quadratic_formula</Code> that returns the two roots of a quadratic equation in a single tuple:</P>
 
       <PythonBlock fileName={'tuple_typing.py'}>{
-`# By the way, this allows easy computing of square roots
-from math import sqrt
+`from math import sqrt
 
 from typing import Tuple
 
@@ -328,8 +327,7 @@ x2: 0.6513878188659973
       <P>Here's the updated code taking into account the above changes:</P>
 
       <PythonBlock fileName={'tuple_typing.py'} highlightLines={'{12, 20}'}>{
-`# By the way, this allows easy computing of square roots
-from math import sqrt
+`from math import sqrt
 
 from typing import Tuple
 
