@@ -326,7 +326,7 @@ x2: 0.6513878188659973
 
       <P>Here's the updated code taking into account the above changes:</P>
 
-      <PythonBlock fileName={'tuple_typing.py'} highlightLines={'{12, 20}'}>{
+      <PythonBlock fileName={'tuple_typing.py'} highlightLines={'{11, 19}'}>{
 `from math import sqrt
 
 from typing import Tuple
