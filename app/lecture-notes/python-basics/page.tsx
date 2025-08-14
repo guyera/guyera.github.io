@@ -72,6 +72,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
         <Item><Link href="#standard-input">Standard input</Link></Item>
         <Item><Link href="#if-statements">If statements</Link></Item>
         <Item><Link href="#loops">Loops</Link></Item>
+        <Item><Link href="#imports">Imports</Link></Item>
         <Item><Link href="#lists">Lists</Link></Item>
         <Item><Link href="#tracebacks">Tracebacks</Link></Item>
         <Item><Link href="#code-style">Code Style</Link></Item>
@@ -907,30 +908,34 @@ Your age is (roughly) 26
 
       <PythonBlock fileName="relational_operators.py">{
 `def main() -> None:
-    print(1 == 1) # Prints True
+    x = 1
+    print(x == 1) # Prints True
     
-    print(1 < 4) # Prints True
+    print(x < 4) # Prints True
     
-    print(1 > 4) # Prints False
+    print(x > 4) # Prints False
 
-    print(3+7 <= 10) # Prints True
+    x = 3
+    y = 7
+    print(x + y <= 10) # Prints True
 
-    print(3 + 7 >= 11) # Prints False
+    print(x + y >= 11) # Prints False
 
-    print(4 != 3) # Prints True
+    print(x != 4) # Prints True
 
     # Some relational operators, such as ==, work on more than
     # just numeric expressions:
 
-    print('Hello' == 'Hello') # Prints True
+    my_string = 'Hello'
+    print(my_string == 'Hello') # Prints True
 
-    print('Hello' != 'Hello') # Prints False
+    print(my_string != 'Hello') # Prints False
 
     # Of course, you can store the value of a relational
     # operation in a boolean variable:
 
-    x = 'Hello' == 'Goodbye' # x is False
-    print(x) # Prints False
+    my_string_is_equal_to_goodbye = my_string == 'Goodbye'
+    print(my_string_is_equal_to_goodbye) # Prints False
 
 if __name__ == '__main__':
     main()
@@ -1397,6 +1402,83 @@ if __name__ == '__main__':
 
       <P>As mentioned earlier, for loops can be used to iterate over any kind of iterable container. Ranges are just one kind of iterable container. Lists are another kind, as are dictionaries, etc. You can even create your own types of iterable containers; we may learn how to do this later on in the term, time permitting.</P>
 
+      <SectionHeading id="imports">Imports</SectionHeading>
+
+      <P>Sometimes you need access to functions, variables, types, or other code constructs that have already been created by someone else but aren't built directly into the Python language itself. To get access to those constructs, you usually have to import them from the Python module or package that defines them.</P>
+
+      <P>In order to import from a module or package, that module or package must be accessible to your program. This means that it must either be installed in your system / development environment (e.g., via <Code>pip</Code>, like how you installed Mypy), or it must be a local module or package that's directly present in your Python path (e.g., in your working directory). We'll discuss the process of creating local Python modules and packages in a future lecture. For now, let's focus on importing packages and modules that are already installed in your development environment.</P>
+
+      <P>There are many "standard" packages and modules that come installed with Python itself. These packages and modules make up <Link href="https://docs.python.org/3/library/index.html">the Python Standard Library</Link>. Since these packages and modules are standard, you don't need to do anything special to install them<Emdash/>any Python program can import from them.</P>
+
+      <P>Once a module or package is available, there are a few ways of importing things from it. One way is to import the entire module or package by simply writing <Code>import</Code> followed by the name of the module or package that you want to import. For example, the <Code>math</Code> package is part of the Python standard library, so you could import it like so:</P>
+
+      <PythonBlock showLineNumbers={false}>{
+`import math`
+      }</PythonBlock>
+
+      <P>Typically, most or all of your import statements (such as the above line) should appear at the very top of your Python file (there are use cases for function-local imports and such, but we won't discuss them in this course).</P>
+
+      <P>In order to access something within an imported module or package, use the dot operator<Emdash/>simply type the name of the module or package, followed by a dot (<Code>.</Code>), followed by the name of the thing that you want to access that's defined within the module or package. For example, the <Code>math</Code> package defines a function named <Code>sqrt</Code>, which can be used to compute the square root of a float value (you pass it the value whose square root you want to compute, and it returns the computed square root). You could use it like so:</P>
+
+      <PythonBlock fileName={'imports.py'}>{
+`import math
+
+def main() -> None:
+    x = 100
+    y = math.sqrt(x) # compute y as the square root of x
+
+    # Prints The square root of 100 is 10
+    print(f'The square root of {x} is {y}')
+
+if __name__ == '__main__':
+    main()
+`
+      }</PythonBlock>
+
+      <P>Running the above program produces the following output:</P>
+
+      <TerminalBlock copyable={false}>{
+`(env) $ python imports.py 
+The square root of 100 is 10.0
+`
+      }</TerminalBlock>
+
+      <P>(In order to know which things are defined by a given module or package, you have to read the documentation for said module or package. <Link href="https://docs.python.org/3/library/index.html">The standard library's documentation</Link> will be extremely helpful to you. As an exercise in navigating it, I encourage you to find the documentation for <Code>math.sqrt()</Code>.)</P>
+
+      <P>Alternatively, you can import individual things from a module or package rather than importing the <It>entire</It> module or package itself. Here's the syntax:</P>
+
+      <SyntaxBlock>{
+`from <module or package> import <thing you want to import>`
+      }</SyntaxBlock>
+
+      <P>Replace <Code>{'<module or package>'}</Code> with the name of the module or package, and replace <Code>{'<thing you want to import>'}</Code> with the name of the thing that you want to import. For example, you could import the <Code>sqrt</Code> function from the <Code>math</Code> package like so:</P>
+
+      <PythonBlock showLineNumbers={false}>{
+`from math import sqrt`
+      }</PythonBlock>
+
+      <P>Once you've imported something from a module or package as above, you can use directly (i.e., <It>without</It> needing to prefix it with the name of the module or package followed by the dot operator). Here's a rewrite of our previous example using this new syntax:</P>
+
+      <PythonBlock fileName={'imports.py'}>{
+`from math import sqrt
+
+def main() -> None:
+    x = 100
+
+    # Notice: just sqrt(x), as opposed to math.sqrt(x)
+    y = sqrt(x) # compute y as the square root of x
+
+    # Prints The square root of 100 is 10
+    print(f'The square root of {x} is {y}')
+
+if __name__ == '__main__':
+    main()
+`
+      }</PythonBlock>
+
+      <P>There are a few other ways to import things from modules and packages, but we won't discuss them right now.</P>
+
+
       <SectionHeading id="lists">Lists</SectionHeading>
 
       <P>The word "list" has different meanings depending on the context. Formally, it's an <Term>abstract data type</Term> that represents a homogeneous, positional, sequential ("linear") collection of values. That's to say, a list is a container that contains other things; those other things have a sequential ordering to them (there's a "first" thing, a "second" thing, a "third" thing, and so on); and the things in the list are all of the same type. (This is in contrast to various other abstract data types, like graphs, trees, sets, maps, etc, which are non-positional and / or non-sequential).</P>
@@ -1427,6 +1509,8 @@ if __name__ == '__main__':
       }</ShellBlock>
 
       <P>Note: If the list is large, the Python interpreter may choose to only print <It>some</It> of its values to the terminal. If you want to ensure that all values are printed, you should iterate through the list using a for loop and print them one at a time (or do something fancier, like unpacking the list and passing its elements to <Code>print()</Code> along with a separator).</P>
+
+      <P>In Python, lists can be heterogeneous, meaning that the elements (values) in a list are allowed to be of different types. However, creating heterogeneous lists is <It>usually</It> ill-advised, and getting them to pass through Mypy can be a bit tricky. We don't have enough time to cover the "good" use cases of heterogeneous lists, nor how to type-annotate them, so for the sake of this course, try to just avoid them. (To be clear, homogeneous lists<Emdash/>lists wherein all elements are of the same type<Emdash/>are perfectly fine and easy to type-annotate).</P>
 
       <P>To access a specific element within a list, type out the name of the list variable followed by square brackets. Inside the square brackets, specify an <Term>index</Term>. An index is an integer that specifies a position within a sequential container (such as a list). In Python, lists are indexed by 0, meaning 0 is the index of the first element, 1 is the index of the second element, and so on. Here's an updated example:</P>
 
@@ -1609,7 +1693,7 @@ Calamity
 
       <P>Suppose you want to create a function that accepts a list as an argument. Then the parameter must be type-annotated as a list. In order to do that, you must first import the <Code>List</Code> type annotation from the <Code>typing</Code> library. You can do this by putting the following line of code at the very top of your Python program:</P>
 
-      <PythonBlock>{
+      <PythonBlock showLineNumbers={false}>{
 `from typing import List`
       }</PythonBlock>
 
