@@ -1,11 +1,9 @@
 from math import sqrt
 
-from typing import Tuple
-
 def quadratic_formula(
         a: float,
         b: float,
-        c: float) -> Tuple[float, float]:
+        c: float) -> tuple[float, float]:
     first_root = (-b - sqrt(b**2 - 4*a*c)) / (2 * a)
     second_root = (-b + sqrt(b**2 - 4*a*c)) / (2 * a)
     return first_root, second_root # Return the roots as a tuple

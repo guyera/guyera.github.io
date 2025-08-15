@@ -259,17 +259,19 @@ ValueError: too many values to unpack (expected 2)
       
       <P>A similar exception is thrown if you try to unpack a tuple into <It>too many</It> variables.</P>
 
-      <P>Suppose you want to write a function that accepts a tuple as a parameter or returns a tuple. In that case, you'll need to know how to explicitly type-annotate tuples so that they're accepted by Mypy. First, import the <Code>Tuple</Code> type from the <Code>typing</Code> library (just like how you import the <Code>List</Code> type for type-annotating lists):</P>
-
-      <PythonBlock showLineNumbers={false}>{
-`from typing import Tuple`
-      }</PythonBlock>
-
-      <P>Then, to express the type of a tuple, write the word <Code>Tuple</Code> followed by square brackets enclosing a comma-separated list of the types of all the values that will be contained within the tuple. For example, suppose you want to write a function named <Code>foo()</Code> that has a single parameter <Code>x</Code>, which is in turn a tuple that consists of a string, followed by an integer, followed by another string. You could define <Code>foo()</Code> like so:</P>
+      <P>Suppose you want to write a function that accepts a tuple as a parameter or returns a tuple. In that case, you'll need to know how to explicitly type-annotate tuples so that they're accepted by Mypy. The syntax for a tuple type annotation is as follows:</P>
 
       <SyntaxBlock>{
-`def foo(x: Tuple[str, int, str]):
-  # Do something interesting with x...`
+`tuple[<type1>, <type2>, <type3>, ..., <typeN>]`
+      }</SyntaxBlock>
+
+      <P>Replace each of the the <Code>{'<typeX>'}</Code> instances with the type of the element in the tuple at the corresponding position.</P>
+
+      <P>For example, suppose you want to write a function named <Code>foo()</Code> that has a single parameter <Code>x</Code>, which is in turn a tuple that consists of a string, followed by an integer, followed by another string. You could define <Code>foo()</Code> like so:</P>
+
+      <SyntaxBlock>{
+`def foo(x: tuple[str, int, str]):
+    # Do something interesting with x...`
       }</SyntaxBlock>
 
       <P>Here's a more complete example that defines a function named <Code>quadratic_formula</Code> that returns the two roots of a quadratic equation in a single tuple:</P>
@@ -277,12 +279,10 @@ ValueError: too many values to unpack (expected 2)
       <PythonBlock fileName={'tuple_typing.py'}>{
 `from math import sqrt
 
-from typing import Tuple
-
 def quadratic_formula(
         a: float,
         b: float,
-        c: float) -> Tuple[float, float]:
+        c: float) -> tuple[float, float]:
     first_root = (-b - sqrt(b**2 - 4*a*c)) / (2 * a)
     second_root = (-b + sqrt(b**2 - 4*a*c)) / (2 * a)
     return (first_root, second_root) # Return the roots as a tuple
@@ -326,15 +326,13 @@ x2: 0.6513878188659973
 
       <P>Here's the updated code taking into account the above changes:</P>
 
-      <PythonBlock fileName={'tuple_typing.py'} highlightLines={'{11, 19}'}>{
+      <PythonBlock fileName={'tuple_typing.py'} highlightLines={'{9, 17}'}>{
 `from math import sqrt
-
-from typing import Tuple
 
 def quadratic_formula(
         a: float,
         b: float,
-        c: float) -> Tuple[float, float]:
+        c: float) -> tuple[float, float]:
     first_root = (-b - sqrt(b**2 - 4*a*c)) / (2 * a)
     second_root = (-b + sqrt(b**2 - 4*a*c)) / (2 * a)
     return first_root, second_root # Return the roots as a tuple
