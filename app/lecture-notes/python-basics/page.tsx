@@ -1691,30 +1691,20 @@ Calamity
 `
       }</ShellBlock>
 
-      <P>Suppose you want to create a function that accepts a list as an argument. Then the parameter must be type-annotated as a list. In order to do that, you must first import the <Code>List</Code> type annotation from the <Code>typing</Code> library. You can do this by putting the following line of code at the very top of your Python program:</P>
-
-      <PythonBlock showLineNumbers={false}>{
-`from typing import List`
-      }</PythonBlock>
-
-      <P>The next thing to know about List type annotations is that Mypy requires lists to be homogeneous. That's to say, even though Python technically allows you to create lists that contain elements of various types, Mypy requires all elements within a given list to be of the same type. When annotating the type of a list parameter in a function, you must decide what type of element will be contained within that list. The syntax for the parameter annotation is then as follows:</P>
+      <P>Suppose you want to create a function that accepts a list as an argument or returns a list as a return value. Then you'll need to know how to type-annotate a list in order to get your code to pass Mypy's type checking. The syntax for a list type annotation is as follows:</P>
 
       <SyntaxBlock>{
-`<parameter name>: List[<element type>]`
+`list[<element type>]`
       }</SyntaxBlock>
 
-      <P>Replace <Code>{`<parameter name>`}</Code> with the name of the parameter that you're declaring, and replace <Code>{`<element type>`}</Code> with the type of element that the list will contain.</P>
+      <P>Replace <Code>{`<element type>`}</Code> with the type of element that the list will contain.</P>
 
       <P>Here's an example program that defines and calls a function that accepts a list of integers as a parameter:</P>
 
-      <PythonBlock fileName="lists_in_functions.py">{
-`from typing import List
-
-# The list_of_values parameter is a list of integers. Hence,
-# we annotate its type as List[int]. Recall that you MUST
-# import the List type from the typing library as above in order
-# for this to work.
-def compute_sum_of_values(list_of_values: List[int]) -> int:
+      <PythonBlock fileName="lists_in_functions.py" highlightLines={'{3}'}>{
+`# The list_of_values parameter is a list of integers. Hence,
+# we annotate its type as list[int].
+def compute_sum_of_values(list_of_values: list[int]) -> int:
     value_sum = 0
     for value in list_of_values:
         value_sum += value
@@ -1738,6 +1728,15 @@ if __name__ == '__main__':
 12
 `
       }</ShellBlock>
+
+      <P>You could create a function that returns a list similarly. For example, the following code snippet defines a function named <Code>some_function()</Code> that returns a list of floats:</P>
+
+      <PythonBlock>{
+`def some_function() -> list[float]:
+    return [3.14, 9.81, -1.5]`
+      }</PythonBlock>
+      
+      <P>In Python, Lists are technically allowed to be <Bold>heterogeneous</Bold>, meaning that a single List can contain elements of multiple different types. In contrast, the above type annotation examples are for homogeneous lists<Emdash/>lists that only contain elements of a single type. If you want to create a heterogeneous list, the type annotation syntax is more complicated. In fact, getting Mypy to accept a heterogeneous list usually requires disabling most of Mypy's static type checking capabilities for that particular list altogether, which is generally frowned upon. Moreover, heterogeneous lists are <It>usually</It> a sign of poor code design (though not necessarily<Emdash/>there are valid use cases for them). For these reasons, I won't show you how to type-annotate a heterogeneous list, and I won't quiz you on how to do it. If you'd like to know how to do it, I encourage you to look into the <Code>Any</Code> and <Code>Union</Code> type annotations, but understand that the proper use cases for these annotations are somewhat few and far between, and you probably shouldn't use them unless you really know what you're doing.</P>
 
       <P>Suppose you want to check whether a certain value exists within a given list. You can do this with the <Code>in</Code> operator: <Code>some_value in some_list</Code> will evaluate to <Code>True</Code> if and only if <Code>some_value</Code> is indeed present within <Code>some_list</Code>. For example:</P>
 

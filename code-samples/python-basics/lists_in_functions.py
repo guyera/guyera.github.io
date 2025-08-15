@@ -1,10 +1,6 @@
-from typing import List
-
 # The list_of_values parameter is a list of integers. Hence,
-# we annotate its type as List[int]. Recall that you MUST
-# import the List type from the typing library as above in order
-# for this to work.
-def compute_sum_of_values(list_of_values: List[int]) -> int:
+# we annotate its type as list[int].
+def compute_sum_of_values(list_of_values: list[int]) -> int:
     value_sum = 0
     for value in list_of_values:
         value_sum += value
