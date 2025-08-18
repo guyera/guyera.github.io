@@ -80,7 +80,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
 
       <SectionHeading id="program-boilerplate">Program boilerplate</SectionHeading>
 
-      <P>By default, whenever a Python file is loaded in any way, be it directly into the <Code>python</Code> interpreter (e.g., <Code>python hello.py</Code>) or indirectly imported from within another Python file (e.g., <Code>import hello.py</Code>), all of the code contained within the loaded file will be executed immediately in top-down order. But in many cases (specifically when creating a standalone Python program), you have a block of code that you <It>only</It> want to be executed when the file containing that code is loaded specifically into the Python interpreter<Emdash/>not when imported from another Python file.</P>
+      <P>By default, whenever a Python file is loaded in any way, be it directly into the <Code>python</Code> interpreter (e.g., <Code>python hello.py</Code>) or indirectly imported from within another Python file (e.g., <Code>import hello.py</Code>), all the code contained within the loaded file will be executed immediately in top-down order. But in many cases (specifically when creating a standalone Python program), you have a block of code that you <It>only</It> want to be executed when the file containing that code is loaded specifically into the Python interpreter<Emdash/>not when imported from another Python file.</P>
 
       <P>This can be achieved by wrapping that block of code in an if statement that looks like this:</P>
 
@@ -490,7 +490,7 @@ if __name__ == '__main__':
 
       <P>As you should know, a <Term>function</Term> is essentially a reusable block of code. To define a function in Python, use the <Code>def</Code> keyword, followed by the name of the function that you wish to define, followed by a parameter list enclosed in parentheses, followed by an arrow (<Code>{'->'}</Code>), followed by the function's return type (or <Code>None</Code> if the function doesn't return anything), followed by a colon. All of these things together are referred to as the <Term>function header</Term>. The <Term>function body</Term> (i.e., the block of code that the function executes) then goes immediately below the header. The function body must be indented over by one additional "level" of indentation relative to the header. How exactly you define a "level" of indentation is up to you, but Python requires that you must be consistent. It's common practice in Python to use four spaces as a level of indentation. If you followed the <Link href={allPathData["terminal-based-text-editing"].pathName}>Vim lecture</Link> closely, then you should have already configured Vim to insert four spaces whenever you press the tab key.</P>
 
-      <P>You've already seen one example several times<Emdash/>the <Code>main()</Code> function that we've been creating in all of our programs so far. Here's a slightly more complicated (but still very simple) example of a Python function:</P>
+      <P>You've already seen one example several times<Emdash/>the <Code>main()</Code> function that we've been creating in all our programs so far. Here's a slightly more complicated (but still very simple) example of a Python function:</P>
 
       <PythonBlock fileName="volume_of_sphere.py">{
 `# The name of the function is volume_of_sphere
@@ -1067,7 +1067,7 @@ Correct. Come on in.
 `
       }</ShellBlock>
 
-      <P>Using an if statement together with an else statement creates two blocks of code, exactly one of which will be executed. But suppose you want more than just two such blocks of code. Suppose you want, say, 10 blocks of code, and exactly which one should be executed depends on several complex conditions. As a simple example, suppose we want to update the above program to print a special message when the user types in "password" as the password. In such a case, there are three possible outputs that the program might produce, depending on what the user entered. A common way to accomplish something like this is with <Term>elif statements</Term>. "Elif" stands for "else if". An elif statement may only follow a preceding if statement or other elif statement. An elif statement's body will be executed if and only if 1) all of the preceding if and elif statements' conditions were evaluated to be <Code>False</Code>, and 2) the elif statement's condition is evaluated to be <Code>True</Code>.</P>
+      <P>Using an if statement together with an else statement creates two blocks of code, exactly one of which will be executed. But suppose you want more than just two such blocks of code. Suppose you want, say, 10 blocks of code, and exactly which one should be executed depends on several complex conditions. As a simple example, suppose we want to update the above program to print a special message when the user types in "password" as the password. In such a case, there are three possible outputs that the program might produce, depending on what the user entered. A common way to accomplish something like this is with <Term>elif statements</Term>. "Elif" stands for "else if". An elif statement may only follow a preceding if statement or other elif statement. An elif statement's body will be executed if and only if 1) all the preceding if and elif statements' conditions were evaluated to be <Code>False</Code>, and 2) the elif statement's condition is evaluated to be <Code>True</Code>.</P>
 
       <P>To create an elif statement in Python, type the keyword <Code>elif</Code>, followed by an expression whose type is <Code>bool</Code> (i.e., a condition), followed by a colon. Then write the elif statement body immediately below that, again indented by one level of indentation. Let's update our example again:</P>
 
@@ -1107,7 +1107,7 @@ Very funny.
 
       <P>I've left out some details. For one, you can chain an arbitrary number of elif statements together, but such a chain must start with an if statement and may only have at most one else statement. Moreover, if a such a chain does have an else statement, it must appear at the very end of the chain.</P>
 
-      <P>When the Python interpreter encounters such a chain of if, elif, and else statements, it starts by evaluating the condition of the first if statement. If it's true, it executes the if statement's body, and that's the end of it. It then jumps past all of the rest of the elif and else statements in the entire chain. However, if the if statement's condition is false, it proceeds to evaluate the condition of the next elif statement. If <It>that</It> condition is true, it executes the corresponding elif statement body. Otherwise, it proceeds to evaluate the condition of the <It>next</It> elif statement, and so on. If all of the if and elif statements' conditions evaluate to false, then it will instantly execute the else statement body, assuming there <It>is</It> an else statement (indeed, else statements do not have conditions; their bodies simply execute whenever all of the preceding if and elif statements' conditions evaluate to false).</P>
+      <P>When the Python interpreter encounters such a chain of if, elif, and else statements, it starts by evaluating the condition of the first if statement. If it's true, it executes the if statement's body, and that's the end of it. It then jumps past all the rest of the elif and else statements in the entire chain. However, if the if statement's condition is false, it proceeds to evaluate the condition of the next elif statement. If <It>that</It> condition is true, it executes the corresponding elif statement body. Otherwise, it proceeds to evaluate the condition of the <It>next</It> elif statement, and so on. If all the if and elif statements' conditions evaluate to false, then it will instantly execute the else statement body, assuming there <It>is</It> an else statement (indeed, else statements do not have conditions; their bodies simply execute whenever all the preceding if and elif statements' conditions evaluate to false).</P>
 
       <P>Students are often confused about the difference between an if statement and an elif statement. I think the difference is illustrated well by the following example:</P>
 
@@ -1244,7 +1244,7 @@ Found 1 error in 1 file (checked 1 source file)
 
       <P>A while loop works exactly like an if statement, except 1) you use the <Code>while</Code> keyword instead of the <Code>if</Code> keyword; 2) you cannot place elif nor else statements after a while loop; and 3) whenever the interpreter reaches the end of a while loop body, it jumps back up to the top of the while loop, re-evaluating the condition and executing the body <It>again</It> if the condition is still satisfied (in contrast, when the interpreter reaches the end of an if statement body, it proceeds to execute whatever code comes after the if statement and attached elif / else statements). The while loop will continue executing over and over again until, eventually, the interpreter evaluates the loop condition and finds it to be false.</P>
 
-      <P>Here's an example program that 1) asks the user to repeatedly enter numbers until they choose to quit, and then 2) prints the sum of all of the numbers that they entered:</P>
+      <P>Here's an example program that 1) asks the user to repeatedly enter numbers until they choose to quit, and then 2) prints the sum of all the numbers that they entered:</P>
 
       <PythonBlock fileName="while_loop.py">{
 `def main() -> None:
@@ -1263,9 +1263,9 @@ Found 1 error in 1 file (checked 1 source file)
     
     # The control flow will only reach this point once the user
     # types 'q' to quit. That means that they're done entering
-    # numbers. Let's print the sum of all of the numbers that
+    # numbers. Let's print the sum of all the numbers that
     # they entered:
-    print(f'The sum of all of the numbers you entered is {value_sum}')
+    print(f'The sum of all the numbers you entered is {value_sum}')
 
 if __name__ == '__main__':
     main()
@@ -1282,7 +1282,7 @@ Enter a number: 12
 Type q if you'd like to quit. Otherwise, type anything else: jfdsajfd
 Enter a number: 4
 Type q if you'd like to quit. Otherwise, type anything else: q
-The sum of all of the numbers you entered is 17
+The sum of all the numbers you entered is 17
 `
       }</ShellBlock>
 
@@ -1311,9 +1311,9 @@ The sum of all of the numbers you entered is 17
     
     # The control flow will only reach this point once the user
     # types 'q' to quit. That means that they're done entering
-    # numbers. Let's print the sum of all of the numbers that
+    # numbers. Let's print the sum of all the numbers that
     # they entered:
-    print(f'The sum of all of the numbers you entered is {value_sum}')
+    print(f'The sum of all the numbers you entered is {value_sum}')
 
 if __name__ == '__main__':
     main()
@@ -1366,9 +1366,9 @@ range(0, 5)
     <body>`
       }</SyntaxBlock>
 
-      <P>When the interpreter encounters a for loop, it immediately creates a variable with the specified name (<Code>{`<variable name>`}</Code>) and assigns it the value of the first element in the iterable container (<Code>{`<iterable>`}</Code>). It then executes the for loop body. Every time it finishes executing the for loop body, it updates the variable by assigning it the value of the <It>next</It> element in the iterable container, and then it executes the for loop body again. It continues in this manner until the variable has iterated over all of the elements in the iterable container, at which point the for loop terminates.</P>
+      <P>When the interpreter encounters a for loop, it immediately creates a variable with the specified name (<Code>{`<variable name>`}</Code>) and assigns it the value of the first element in the iterable container (<Code>{`<iterable>`}</Code>). It then executes the for loop body. Every time it finishes executing the for loop body, it updates the variable by assigning it the value of the <It>next</It> element in the iterable container, and then it executes the for loop body again. It continues in this manner until the variable has iterated over all the elements in the iterable container, at which point the for loop terminates.</P>
 
-      <P>As a simple example, let's create a for loop that iterates over all of the integers from 0 through 9 and computes their sum:</P>
+      <P>As a simple example, let's create a for loop that iterates over all the integers from 0 through 9 and computes their sum:</P>
 
       <PythonBlock fileName="for_loop.py">{
 `def main() -> None:
@@ -1443,7 +1443,7 @@ if __name__ == '__main__':
 `
       }</PythonBlock>
 
-      <P>To be clear, you should <Ul>only</Ul> do this when the for loop body does not explicitly reference the for loop variable. If the for loop body <It>does</It> explicitly reference the for loop variable (e.g., in our previous example when we computed the sum of all of the values in <Code>range(10)</Code>), then you should <Ul>not</Ul> name your for loop variable <Code>_</Code>.</P>
+      <P>To be clear, you should <Ul>only</Ul> do this when the for loop body does not explicitly reference the for loop variable. If the for loop body <It>does</It> explicitly reference the for loop variable (e.g., in our previous example when we computed the sum of all the values in <Code>range(10)</Code>), then you should <Ul>not</Ul> name your for loop variable <Code>_</Code>.</P>
 
       <P>As mentioned earlier, for loops can be used to iterate over any kind of iterable container. Ranges are just one kind of iterable container. Lists are another kind, as are dictionaries, etc. You can even create your own types of iterable containers; we may learn how to do this later on in the term, time permitting.</P>
 
@@ -1778,8 +1778,41 @@ if __name__ == '__main__':
 `def some_function() -> list[float]:
     return [3.14, 9.81, -1.5]`
       }</PythonBlock>
+
+      <P>Lists seemingly behave a bit differently from other, more primitive types of data when used as arguments and parameters. In particular, if a function has a list as a parameter and modifies one or more of the elements within said list (or adds an element, or removes an element), the list that's passed into the function as the corresponding <It>argument</It> is also modified in the same way. It's sort of as if a list that's passed as an argument to a function is "linked" to the corresponding parameter (and, in some sense, it <It>is</It>; we'll cover the details in a future lecture). However, if the parameter is assigned an entirely new list in the middle of the function via the assignment operator, the argument is <It>not</It> reassigned that new list (i.e., the assignment operator used on a list parameter works in the same way as it does when used on a primitive-type parameter<Emdash/>it modifies the parameter, but not the argument). Here's an example to illustrate:</P>
+
+      <PythonBlock fileName="modify_list_parameter.py">{
+`def modify_list(list_of_names: list[str]) -> None:
+    list_of_names.append('Liang') # This also modifies the argument
+    del list_of_names[0] # This also modifies the argument
+    list_of_names.insert(0, 'Joe') # This also modifies the argument
+    
+    # This does NOT modify the argument.
+    list_of_names = ['John', 'Jacob', 'Jingleheimer', 'Schmidt']
+
+def main() -> None:
+    some_names = ['Mohammad', 'Mahatma', 'Aditya', 'Zhi']
+
+    modify_list(some_names)
+
+    # Prints ['Joe', 'Mahatma', 'Aditya', 'Zhi', 'Liang']
+    print(some_names)
+    
+
+if __name__ == '__main__':
+    main()
+`
+      }</PythonBlock>
+
+      <P>Running the above program produces the following output:</P>
+
+      <TerminalBlock copyable={false}>{
+`(env) $ python modify_list_parameter.py 
+['Joe', 'Mahatma', 'Aditya', 'Zhi', 'Liang']
+`
+      }</TerminalBlock>
       
-      <P>In Python, lists are technically allowed to be <Bold>heterogeneous</Bold>, meaning that a single list can contain elements of multiple different types. In contrast, all of the above examples have been for homogeneous lists<Emdash/>lists that only contain elements of a single type. If you want to create a heterogeneous list, the type annotation syntax is more complicated. In fact, getting Mypy to accept a heterogeneous list usually requires disabling most of Mypy's static type checking capabilities for that particular list altogether, which is generally frowned upon. Moreover, heterogeneous lists are <It>usually</It> a sign of poor code design (though not necessarily<Emdash/>there are valid use cases for them). For these reasons, I won't show you how to create nor type-annotate a heterogeneous list, and I won't quiz you on how to do it. If you'd like to know how to do it, I encourage you to look into the <Code>Any</Code> and <Code>Union</Code> type annotations, but understand that the proper use cases for heterogeneous lists are somewhat few and far between, and you probably shouldn't use them unless you really know what you're doing.</P>
+      <P>In Python, lists are technically allowed to be <Bold>heterogeneous</Bold>, meaning that a single list can contain elements of multiple different types. In contrast, all the above examples have been for homogeneous lists<Emdash/>lists that only contain elements of a single type. If you want to create a heterogeneous list, the type annotation syntax is more complicated. In fact, getting Mypy to accept a heterogeneous list usually requires disabling most of Mypy's static type checking capabilities for that particular list altogether, which is generally frowned upon. Moreover, heterogeneous lists are <It>usually</It> a sign of poor code design (though not necessarily<Emdash/>there are valid use cases for them). For these reasons, I won't show you how to create nor type-annotate a heterogeneous list, and I won't quiz you on how to do it. If you'd like to know how to do it, I encourage you to look into the <Code>Any</Code> and <Code>Union</Code> type annotations, but understand that the proper use cases for heterogeneous lists are somewhat few and far between, and you probably shouldn't use them unless you really know what you're doing.</P>
 
       <P>Suppose you want to check whether a certain value exists within a given list. You can do this with the <Code>in</Code> operator: <Code>some_value in some_list</Code> will evaluate to <Code>True</Code> if and only if <Code>some_value</Code> is indeed present within <Code>some_list</Code>. For example:</P>
 
@@ -1824,7 +1857,7 @@ That user is in the list!
 `[<expression> for <variable name> in <iterable>]`
       }</SyntaxBlock>
       
-      <P>When the interpreter encounters a list comprehension as above, it iterates through each of the elements in the specified iterable (<Code>{`<iterable>`}</Code>), assigning each element to the variable (<Code>{`<variable name>`}</Code>) one at a time. For each value assigned to the variable (i.e., for each value in the iterable), it evaluates the expression (<Code>{`<expression>`}</Code>). The values of all of the expressions are collected into a single, new list object.</P>
+      <P>When the interpreter encounters a list comprehension as above, it iterates through each of the elements in the specified iterable (<Code>{`<iterable>`}</Code>), assigning each element to the variable (<Code>{`<variable name>`}</Code>) one at a time. For each value assigned to the variable (i.e., for each value in the iterable), it evaluates the expression (<Code>{`<expression>`}</Code>). The values of all the expressions are collected into a single, new list object.</P>
 
       <P>That will probably make more sense with an example:</P>
 
@@ -1833,7 +1866,7 @@ That user is in the list!
     my_list = [3.14, 9.81, 12.6, -1.5]
 
     # For each value in my_list, which we'll refer to generally
-    # as x, double it (i.e., compute 2 * x). Store all of those
+    # as x, double it (i.e., compute 2 * x). Store all those
     # doubled values in a new list object, which we then store
     # inside the \`doubled_list\` variable.
     doubled_list = [2 * x for x in my_list]

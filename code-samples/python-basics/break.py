@@ -18,9 +18,9 @@ def main() -> None:
     
     # The control flow will only reach this point once the user
     # types 'q' to quit. That means that they're done entering
-    # numbers. Let's print the sum of all of the numbers that
+    # numbers. Let's print the sum of all the numbers that
     # they entered:
-    print(f'The sum of all of the numbers you entered is {value_sum}')
+    print(f'The sum of all the numbers you entered is {value_sum}')
 
 if __name__ == '__main__':
     main()
