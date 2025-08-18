@@ -373,7 +373,7 @@ if __name__ == '__main__':
 
       <P>Recall that we're going to be using Mypy extensively in this course to verify that our code is rigorously type-safe. If you haven't already, please follow the steps in my <Link href={allPathData["python-hello-world"].pathName}>"Hello, World!" lecture notes</Link> to install Mypy and configure it to run in strict mode by default.</P>
 
-      <P>There are various things that you can do with variables and types in Python but which are forbidden by Mypy (especially when running it in strict mode). For one, Mypy forbids changing a variable's type mid-execution. For example, the following is technically legal Python code, but it's <It>illegal</It> under Mypy's strict static analysis:</P>
+      <P>There are various things that you can technically do with variables and types in Python but which are forbidden by Mypy (especially when running it in strict mode). For one, Mypy forbids changing a variable's (static) type mid-execution. For example, the following is technically legal Python code, but it's <It>illegal</It> under Mypy's strict static analysis:</P>
 
       <PythonBlock fileName="change_type.py">{
 `def main() -> None:
@@ -395,7 +395,7 @@ Found 1 error in 1 file (checked 1 source file)
 `
       }</ShellBlock>
 
-      <P>Indeed, when a variable is first created within a given scope, Mypy evaluates the type of the expression whose value is assigned to the variable (i.e., the type of the expression on the right side of the assignment operator) and "associates" the variable with that type. From that point on, that variable may only be assigned other values of the same type. If <Code>x</Code> is first created by assigning <Code>x = 12</Code>, then Mypy determines <Code>x</Code> to be an <Code>int</Code>-typed variable, and all subsequent assignments to <Code>x</Code> must also be <Code>int</Code>-typed values. Similarly, if <Code>x</Code> is first created by assigning <Code>x = 'Hello'</Code>, then Mypy determines <Code>x</Code> to be a <Code>str</Code>-typed variable, and all subsesquent assignments to <Code>x</Code> must also be <Code>str</Code>-typed values.</P>
+      <P>Indeed, when a variable is first created within a given scope, Mypy evaluates the static type of the expression whose value is assigned to the variable (i.e., the type of the expression on the right side of the assignment operator) and "associates" the variable with that type. From that point on, that variable may only be assigned other values of the same type (or rather, other values that are "compatible" with that static type, but don't worry about the nuances for now). That is, if <Code>x</Code> is first created by assigning <Code>x = 12</Code>, then Mypy determines <Code>x</Code> to be an <Code>int</Code>-typed variable, and all subsequent assignments to <Code>x</Code> must also be <Code>int</Code>-typed values. Similarly, if <Code>x</Code> is first created by assigning <Code>x = 'Hello'</Code>, then Mypy determines <Code>x</Code> to be a <Code>str</Code>-typed variable, and all subsesquent assignments to <Code>x</Code> must also be <Code>str</Code>-typed values.</P>
 
       <P>We'll discuss other restrictions imposed by Mypy as they become relevant. But remember: always run your source code through Mypy to verify that it's type-safe. Even if your program technically runs properly and does what it's supposed to do, your grade will still be penalized for any errors reported by Mypy when run in strict mode.</P>
 
@@ -508,7 +508,7 @@ def volume_of_sphere(radius: float) -> float:
 
       <P>Students are often confused by arguments, parameters, and return values, so pay close attention here. Functions are generally isolated from each other. In most cases, a given function is not allowed to access the variables that are created within other functions. Indeed, a function is only allowed to access its own variables (see <Link href="#scope">the section on scope</Link> for more details about this). However, functions would not be very useful if they couldn't communicate with each other. In other words, there must be <It>some</It> way of passing data (e.g., the value of a variable) from one function to another.</P>
 
-      <P>Actually, there are at least two such ways. The first way is via <Term>arguments</Term> and <Term>parameters</Term>. When one function A calls (uses / executes) another function B, A can supply <Term>inputs</Term> to B in the form of arguments. These arguments are <Ul>copied</Ul> into the corresponding parameters of B. In other words, parameters are placeholders for a function's inputs, and arguuments are the actual input values that are supplied when calling the function.</P>
+      <P>Actually, there are at least two such ways. The first way is via <Term>arguments</Term> and <Term>parameters</Term>. When one function A calls (uses / executes) another function B, A can supply <Term>inputs</Term> to B in the form of arguments. These arguments are, in some sense, copied into the corresponding parameters of B (that's not exactly how it works, but that's a good enough understanding for now). In other words, parameters are placeholders for a function's inputs, and arguments are the actual input values that are supplied when calling the function.</P>
 
       <P>The other way of communicating data from one function to another is via <Term>return values</Term>. While arguments and parameters are used to communicate inputs to a function, return values are used to communicate outputs from a function. When a function call terminates (i.e., when the function finishes executing), the function call itself is substituted with the value that was returned by the function. Indeed, this means that function calls are expressions<Emdash/>they have types and values.</P>
 
@@ -546,13 +546,58 @@ if __name__ == '__main__':
 `
       }</ShellBlock>
       
-      <P>When the Python interpreter encounters the function call in line 16, it jumps up to the <Code>volume_of_sphere</Code> function. The argument, <Code>5.0</Code>, is <Ul>copied</Ul> into the parameter, <Code>radius</Code>, and then the function body begins. The function computes <Code>4 / 3 * 3.141592 * radius * radius * radius</Code>. In this context, <Code>radius</Code> is <Code>5.0</Code>, because that's the value that was copied from the argument in the function call. This expression is evaluated as <Code>104.7197333</Code>. This value is stored inside the function's local variable, <Code>volume</Code>. Finally, the function returns a <Ul>copy</Ul> of that value (<Code>volume</Code>) back to the function caller. Now that the function is over, the interpreter jumps <It>back</It> to where the function was called from<Emdash/>line 16. The function call itself, <Code>volume_of_sphere(5.0)</Code>, is replaced with the return value, <Code>104.7197333</Code>. This is precisely how return values work<Emdash/>they serve as the value of the corresponding function call. This value is then stored inside the <Code>main()</Code> function's local variable, <Code>volume_of_radius_5_sphere</Code>, which is finally printed to the terminal.</P>
+      <P>When the Python interpreter encounters the function call in line 16, it jumps up to the <Code>volume_of_sphere</Code> function. The argument, <Code>5.0</Code>, is (sort of) copied into the parameter, <Code>radius</Code>, and then the function body begins. The function computes <Code>4 / 3 * 3.141592 * radius * radius * radius</Code>. In this context, <Code>radius</Code> is <Code>5.0</Code>, because that's the value that was copied from the argument in the function call. This expression is evaluated as <Code>104.7197333</Code>. This value is stored inside the function's local variable, <Code>volume</Code>. Finally, the function returns the value of <Code>volume</Code> back to the function caller. Now that the function is over, the interpreter jumps <It>back</It> to where the function was called from<Emdash/>line 16. The function call itself, <Code>volume_of_sphere(5.0)</Code>, is replaced with the return value, <Code>104.7197333</Code>. This is precisely how return values work<Emdash/>they serve as the value of the corresponding function call. This value is then stored inside the <Code>main()</Code> function's local variable, <Code>volume_of_radius_5_sphere</Code>, which is finally printed to the terminal. (There are some nuances surrounding all of this, particularly involving objects and references, that we won't cover for a few more lectures).</P>
 
-      <P>It's critical that you understand the interaction between the <Code>main()</Code> function and the <Code>volume_of_sphere()</Code> function. The <Code>main()</Code> function calls the <Code>volume_of_sphere()</Code> function, passing in an argument (<Code>5.0</Code>) as an input. That argument is then <Ul>copied</Ul> into the <Code>volume_of_sphere()</Code> function's parameter, <Code>radius</Code>. When the <Code>volume_of_sphere()</Code> function returns its output, that return value is again <Ul>copied</Ul> back to the call site (i.e., the place where the function was called), and that copied value serves as the value of the function call as an expression.</P>
+      <P>It's absolutely critical that you understand the following: arguments, parameters, return values, and function call values do not serve to pass <It>variables</It> between functions<Emdash/>they serve to pass <It>values</It> between functions. In fact, a given function B may <Ul>never</Ul> access the variables scoped to another function A. However, A may pass the <It>values</It> of one or more of its variables to B in the form of arguments, which are then (sort of) copied into B's corresponding parameters. And, going in the other direction, B may pass the <It>value</It> of one of its variables back to A in the form of a return value, when is then (sort of) copied into the call site, replacing the function call itself. Do not move on until you're certain that you understand this concept. If you don't understand how arguments, parameters, return values, and function calls work, then you will struggle with the entire rest of this course.</P>
 
-      <P>That might all sound very convoluted, but it's the idiomatic way of passing data to and from functions. Inputs are passed as arguments, which are copied into parameters. Outputs are returned via return values, which are copied into the call site to serve as the value of the function call itself. Typically, that copied return value will be stored in another variable at the call site (in this case, the return value is stored inside <Code>volume_of_radius_5_sphere</Code>).</P>
+      <P>Here's another example program to illustrate this concept:</P>
 
-      <P>Note that a <Code>return</Code> statement marks the end of a function<Emdash/>the moment the interpreter encounters a return statement, the function ends, even if there's still more code below said return statement.</P>
+      <PythonBlock fileName="function_communication.py">{
+`def cool_function(x: int) -> int:
+    print(x)
+    x = 5
+    return x
+
+def main() -> None:
+    x = 1
+    
+    # The below function call prints 1 and returns 5, but the return
+    # value is discarded
+    cool_function(x)
+    
+    # Prints 1 (NOT 5---the main() function's x variable is separate
+    # from cool_function()'s x variable / parameter)
+    print(x)
+
+    # The below function call prints 1 and returns 5. We then store the
+    # return value (5) in this function's x variable, changing it from
+    # 1 to 5.
+    x = cool_function(x)
+
+    print(x) # Prints 5
+
+    # Change this function's x variable back to 1
+    x = 1
+
+    # The below function call prints 1 and returns 5. We then store the
+    # return value (5) in a new variable named y. This function's
+    # x variable remains 1.
+    y = cool_function(x)
+
+    print(x) # Prints 1
+    print(y) # Prints 5
+
+
+if __name__ == '__main__':
+    main()
+`
+      }</PythonBlock>
+
+      <P>The above example illustrates that parameters and arguments are not the same thing. Rather, a function's parameter is essentially initialized to (assigned) a copy of the value of the corresponding argument that's supplied in the function call. As such, even if an argument is a variable named <Code>x</Code>, <It>and</It> the corresponding parameter is a variable named <Code>x</Code>, those are still two completely separate variables. The fact that they have the same name is completely irrelevant; every function gets its own variables. Additionally, the above example illustrates that <Code>return x</Code> does return <Code>x</Code> itself, but rather the <It>value</It> of <Code>x</Code>. Again, each function gets its own variables<Emdash/>variables cannot be passed from one function to another. <Code>return x</Code> simply takes the value of the function's variable named <Code>x</Code> and substitutes that value into the the call site. The function caller can then do whatever they would like with that return value<Emdash/>they can discard it, store it in <It>another</It> (completely separate) variable named <Code>x</Code>, store it in another variable named <Code>y</Code>, or literally anything else that you could do with a value.</P>
+
+      <P>If you're absolutely certain that you understand the above concept, you can move on.</P>
+
+      <P>A <Code>return</Code> statement marks the end of a function<Emdash/>the moment the interpreter encounters a return statement, the function ends, even if there's still more code below said return statement.</P>
 
       <P>Here's something else that I haven't mentioned yet: Notice that the parameter of the <Code>volume_of_sphere()</Code> function is declared via <Code>radius: float</Code>. This syntax means that the name of the parameter is <Code>radius</Code>, and its type is <Code>float</Code>. Although Python does not technically require parameters to have type annotations, Mypy does; if any of your functions' parameters are missing type annotations, Mypy will raise an error when run in strict mode.</P>
 
@@ -575,7 +620,7 @@ if __name__ == '__main__':
 `
       }</PythonBlock>
 
-      <P>The <Code>print_multiplication_table()</Code> function prints a multiplication table to the terminal with the given width and height as specified by the parameters (which are copied from the arguments). Don't worry about how it works for now; we'll discuss loops momentarily. In any case, running the above program produces the following output:</P>
+      <P>The <Code>print_multiplication_table()</Code> function prints a multiplication table to the terminal with the given width and height as specified by the parameters (which are essentially copied from the arguments). Don't worry about how it works for now; we'll discuss loops momentarily. In any case, running the above program produces the following output:</P>
 
       <ShellBlock copyable={false}>{
 `(env) python-hello-world $ python none_return_type.py 
@@ -674,7 +719,7 @@ if __name__ == '__main__':
 
       <P>When a symbol (such as a variable) is created within a scope, it's only bound, and therefore accessible, within that scope, specifically below the line of code in which it was created. That's to say, symbols created in one scope are not accessible within other scopes.</P>
 
-      <P>In Python, scopes are largely organized around functions<Emdash/>every function has its own scope. I said earlier that functions cannot access each others' variables. Scope is the reason for that. When a variable or other symbol is created inside a function, it's only bound within that function's scope. Other functions have their own scopes and hence cannot access each others' symbols. This is why data must be passed (usually copied) to and from functions via arguments, parameters, and return values. </P>
+      <P>In Python, scopes are largely organized around functions<Emdash/>every function has its own scope. I said earlier that functions cannot access each others' variables. Scope is the reason for that. When a variable or other symbol is created inside a function, it's only bound within that function's scope. Other functions have their own scopes and hence cannot access each others' symbols. This is why data must be passed to and from functions via arguments, parameters, and return values. </P>
 
       <P>Function scopes are not the only kinds of scopes in Python. There is also a notion of module scope (i.e., global scope) as well as class scope. We'll talk about class scope later on in the term. As for module scope, it's simply the implied scope that exists outside of all functions. For example, take a look back at the last program that we wrote in the previous section. Here it is again for your convenience:</P>
 
