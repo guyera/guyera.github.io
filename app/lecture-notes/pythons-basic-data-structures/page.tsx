@@ -563,7 +563,7 @@ KeyError: 1996
 
       <P>If you want to create an empty set, you unfortunately can't just use an empty pair of curly braces. Well, Python technically allows that, but it confuses Mypy. To avoid issues, use the built-in <Code>set()</Code> function instead, passing in no arguments. For example:</P>
 
-      <PythonBlock copyable={false} showLines={false}>{
+      <PythonBlock copyable={false} showLineNumbers={false}>{
 `my_cool_set = set()`
       }</PythonBlock>
 
