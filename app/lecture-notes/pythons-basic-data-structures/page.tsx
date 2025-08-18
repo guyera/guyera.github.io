@@ -64,6 +64,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
         <Item><Link href="#tuples">Tuples</Link></Item>
         <Item><Link href="#sets">Sets</Link></Item>
         <Item><Link href="#dictionaries">Dictionaries</Link></Item>
+        <Item><Link href="#type-errors-with-collections">Type errors with collections</Link></Item>
       </Itemize>
 
       <SectionHeading id="tuples">Tuples</SectionHeading>
@@ -650,7 +651,7 @@ if __name__ == '__main__':
 
       <SectionHeading id="dictionaries">Dictionaries</SectionHeading>
 
-      <P>Let's finish with a discussion of <Bold>dictionaries</Bold>. A dictionary is a map from <Bold>keys</Bold> to <Bold>values</Bold>. There are four common operations done on dictionaries:</P>
+      <P>A <Bold>dictionary</Bold> is a map from <Bold>keys</Bold> to <Bold>values</Bold>. There are four common operations done on dictionaries:</P>
 
       <Itemize>
         <Item>Insert a key-value pair into the dictionary</Item>
