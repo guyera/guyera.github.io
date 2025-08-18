@@ -75,7 +75,8 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
         <Item><Link href="#imports">Imports</Link></Item>
         <Item><Link href="#lists">Lists</Link></Item>
         <Item><Link href="#tracebacks">Tracebacks</Link></Item>
-        <Item><Link href="#code-style">Code Style</Link></Item>
+        <Item><Link href="#code-style">Code style</Link></Item>
+        <Item><Link href="#explicit-type-annotations-of-local-variables">Explicit type annotations of local variables</Link></Item>
       </Itemize>
 
       <SectionHeading id="program-boilerplate">Program boilerplate</SectionHeading>
@@ -490,7 +491,26 @@ if __name__ == '__main__':
 
       <P>As you should know, a <Term>function</Term> is essentially a reusable block of code. To define a function in Python, use the <Code>def</Code> keyword, followed by the name of the function that you wish to define, followed by a parameter list enclosed in parentheses, followed by an arrow (<Code>{'->'}</Code>), followed by the function's return type (or <Code>None</Code> if the function doesn't return anything), followed by a colon. All of these things together are referred to as the <Term>function header</Term>. The <Term>function body</Term> (i.e., the block of code that the function executes) then goes immediately below the header. The function body must be indented over by one additional "level" of indentation relative to the header. How exactly you define a "level" of indentation is up to you, but Python requires that you must be consistent. It's common practice in Python to use four spaces as a level of indentation. If you followed the <Link href={allPathData["terminal-based-text-editing"].pathName}>Vim lecture</Link> closely, then you should have already configured Vim to insert four spaces whenever you press the tab key.</P>
 
-      <P>You've already seen one example several times<Emdash/>the <Code>main()</Code> function that we've been creating in all our programs so far. Here's a slightly more complicated (but still very simple) example of a Python function:</P>
+      <P>You've already seen one example several times<Emdash/>the <Code>main()</Code> function that we've been creating in all our programs so far. The syntax for creating a function is as follows:</P>
+
+      <SyntaxBlock>{
+`def <name>(<parameter1>, <parameter2>, ..., <parameterN>) -> <return type>:
+    <function body>`
+      }</SyntaxBlock>
+
+      <P>Replace <Code>{'<name>'}</Code> with the name of the function, replace each <Code>{'<parameterX>'}</Code> with a parameter declaration (more on this in a moment), replace <Code>{'<return type>'}</Code> with the function's return type, and replace <Code>{'<function body>'}</Code> with the function's body (i.e., the block of code that you want the function to execute).</P>
+
+      <P>The syntax for a single parameter declaration is as follows:</P>
+
+      <SyntaxBlock>{
+`<name>: <type>`
+      }</SyntaxBlock>
+
+      <P>Replace <Code>{'<name>'}</Code> with the parameter's name (parameters are just variables, so they must be given names like all other variables), and replace <Code>{'<type>'}</Code> with the parameter's type. Python does not technically require you to annotate the types of parameters, but Mypy often does (and it always does when run with <Code>--strict</Code>, as we do in this course).</P>
+
+      <P>Within the function body, a value can be returned via <Code>{'return <value>'}</Code> (replace <Code>{'<value>'}</Code> with the value that you'd like the function to return).</P>
+
+      <P>That's a lot of syntax, so here's an example to illustrate:</P>
 
       <PythonBlock fileName="volume_of_sphere.py">{
 `# The name of the function is volume_of_sphere
@@ -595,11 +615,9 @@ if __name__ == '__main__':
 
       <P>The above example illustrates that parameters and arguments are not the same thing. Rather, a function's parameter is essentially initialized to (assigned) a copy of the value of the corresponding argument that's supplied in the function call. As such, even if an argument is a variable named <Code>x</Code>, <It>and</It> the corresponding parameter is a variable named <Code>x</Code>, those are still two completely separate variables. The fact that they have the same name is completely irrelevant; every function gets its own variables. Additionally, the above example illustrates that <Code>return x</Code> does return <Code>x</Code> itself, but rather the <It>value</It> of <Code>x</Code>. Again, each function gets its own variables<Emdash/>variables cannot be passed from one function to another. <Code>return x</Code> simply takes the value of the function's variable named <Code>x</Code> and substitutes that value into the the call site. The function caller can then do whatever they would like with that return value<Emdash/>they can discard it, store it in <It>another</It> (completely separate) variable named <Code>x</Code>, store it in another variable named <Code>y</Code>, or literally anything else that you could do with a value.</P>
 
-      <P>If you're absolutely certain that you understand the above concept, you can move on.</P>
+      <P>If you're absolutely certain that you understand the above concept, then we can move on.</P>
 
-      <P>A <Code>return</Code> statement marks the end of a function<Emdash/>the moment the interpreter encounters a return statement, the function ends, even if there's still more code below said return statement.</P>
-
-      <P>Here's something else that I haven't mentioned yet: Notice that the parameter of the <Code>volume_of_sphere()</Code> function is declared via <Code>radius: float</Code>. This syntax means that the name of the parameter is <Code>radius</Code>, and its type is <Code>float</Code>. Although Python does not technically require parameters to have type annotations, Mypy does; if any of your functions' parameters are missing type annotations, Mypy will raise an error when run in strict mode.</P>
+      <P>As in most other programming languages, a <Code>return</Code> statement marks the end of a function<Emdash/>the moment the interpreter encounters a return statement, the function ends, even if there's still more code below said return statement.</P>
 
       <P>It is permissible for a function to not return anything. This is particularly common when writing functions that simply print some formatted data to standard output. Such functions do not need to communicate outputs back to the function caller<Emdash/>they only need to communciate outputs to the terminal for the user to see. Such functions should have a return type of <Code>None</Code> (see the <Code>main()</Code> function, for example<Emdash/>its return type is <Code>None</Code> because it doesn't return anything). When calling a function whose return type is <Code>None</Code> (i.e., a function that doesn't return anything), the function call should <Ul>not</Ul> be used as the right-hand side of an assignment operation. For example, if a function named <Code>foo()</Code> does not return anything, it might be sensible to call it via <Code>foo()</Code>, but not <Code>x = foo()</Code>. After all, if <Code>foo()</Code> does not return anything, then the function call does not have a value, so you shouldn't try to store it in a variable (such as <Code>x</Code>) as if it does have a value (technically, <Code>None</Code> <It>is</It> a value in Python, but in this case, there'd be no point in storing it in a variable). Here's an example program that defines and calls a function with no return value:</P>
 
@@ -1996,6 +2014,49 @@ if __name__ == '__main__':
       }</PythonBlock>
 
       <P>There are many other aspects to the style guidelines in this course. Please review them on your own time. Again, failure to obey the style guidelines may result in a grade penalty.</P>
+
+      <SectionHeading id="explicit-type-annotations-of-local-variables">Explicit type annotations of local variables</SectionHeading>
+
+      <P>A <Bold>local variable</Bold> is a regular variable that's created within a function (not a parameter, and not a global variable). In most cases, Mypy can infer the type of each local variable based on how it's used. For example, if you create a variable <Code>x</Code> via the statement <Code>x = 5</Code>, Mypy can infer that <Code>x</Code> is of type <Code>int</Code>. Subsequent attempts to assign it a different type of value (e.g., <Code>x = 'Hello'</Code>) will result in Mypy raising a type error, as we've discussed.</P>
+
+      <P>However, in some rare cases, Mypy is unable to determine the type of a variable. Here's a somewhat contrived example:</P>
+
+      <PythonBlock fileName="ambiguous_type.py">{
+`def main() -> None:
+    # An empty list. But is it a list of ints? Strings? What is it???
+    my_list = []
+
+if __name__ == '__main__':
+    main()
+`
+      }</PythonBlock>
+
+      <P>Running the above program through Mypy produces the following error:</P>
+
+      <TerminalBlock copyable={false}>{
+`(env) $ mypy ambiguous_type.py 
+ambiguous_type.py:3: error: Need type annotation for "my_list" (hint: "my_list: list[<type>] = ...")  [var-annotated]
+Found 1 error in 1 file (checked 1 source file)
+`
+      }</TerminalBlock>
+
+      <P>Mypy is telling us that, based on the context, it's not able to figure what type of list <Code>my_list</Code> is. After all, nowhere in the entire program do we ever store any actual values in <Code>my_list</Code>, so Mypy isn't able to figure out what type of values <Code>my_list</Code> is meant to store. This is problematic; Mypy is a static type checker, so if it can't figure out the static type of a variable, it's not able to conduct a complete static analysis. Hence, the error.</P>
+
+      <P>In this contrived example, <Code>my_list</Code> is a pointless variable, so we could just get rid of it, and that would resolve the error. But in some niche cases, that's not an option. In those cases, you simply have to tell Mypy what type the variable is. As stated by the hint in the above error message, you do this in the exact same way that you annotate types of function parameters<Emdash/>immediately after the variable's name, write a colon followed by the variable's type:</P>
+
+      <PythonBlock fileName="unambiguous_type.py" highlightLines="{2-5}">{
+`def main() -> None:
+    # Mypy can't figure out what type of list this is by itself,
+    # so we have to explicitly tell it. In this case, I want it to be
+    # a list of strings, so the type annotation is list[str]
+    my_list: list[str] = []
+
+if __name__ == '__main__':
+    main()
+`
+      }</PythonBlock>
+
+      <P>The above program passes through Mypy with no errors.</P>
     </>
   )
 }
