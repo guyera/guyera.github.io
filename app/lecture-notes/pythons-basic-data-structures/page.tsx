@@ -650,12 +650,13 @@ if __name__ == '__main__':
 
       <SectionHeading id="dictionaries">Dictionaries</SectionHeading>
 
-      <P>Let's finish with a discussion of <Bold>dictionaries</Bold>. A dictionary is a map from <Bold>keys</Bold> to <Bold>values</Bold>. There are three common operations done on dictionaries:</P>
+      <P>Let's finish with a discussion of <Bold>dictionaries</Bold>. A dictionary is a map from <Bold>keys</Bold> to <Bold>values</Bold>. There are four common operations done on dictionaries:</P>
 
       <Itemize>
         <Item>Insert a key-value pair into the dictionary</Item>
         <Item>Access the value associated with a given key in the dictionary (either to modify or simply to retrieve it)</Item>
         <Item>Check whether a given key is present in the dictionary</Item>
+        <Item>Remove a key-value pair from the dictionary</Item>
       </Itemize>
 
       <P>The purpose of a dictionary is to build an association, or mapping, that makes it easy to perform lookups. For example, suppose your program commonly needs to look up the age of a person given their name. A simple way to accomplish this would be to create a dictionary that maps names to ages. In that case, the names would be the keys, and the ages would be the values.</P>
