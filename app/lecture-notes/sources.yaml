@@ -23,3 +23,7 @@ pages:
     pathName: 'pythons-basic-data-structures'
     pageTitle: "Python's Basic Data Structures"
     namedIdentifier: 'pythons-basic-data-structures'
+  - source: 'exceptions/source.tsx'
+    pathName: 'exceptions'
+    pageTitle: "Exceptions"
+    namedIdentifier: 'exceptions'
