@@ -1,10 +1,8 @@
 def main() -> None:
-    # Mypy is able to infer that this is a set of strings because,
-    # later, we add a string to it
-    my_set = set()
-
-    # Here's where we add a string to the set
-    my_set.add('John')
+    # If we want this to be a set of integers, but Mypy isn't able
+    # to figure that out on its own, we can explicitly annotate its
+    # type as set[int] (for example)
+    my_set: set[int] = set()
 
 if __name__ == '__main__':
     main()

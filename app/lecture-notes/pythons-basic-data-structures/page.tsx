@@ -919,7 +919,7 @@ Sorry! I don't know the age of John
 
       <SectionHeading id="type-errors-with-collections">Type errors with collections</SectionHeading>
 
-      <P>Mypy can get confused about the type of a list, set, or dictionary if you initialize it to be empty and never add any elements to it <It>anywhere</It> in your code. Of course, that wouldn't be a very useful thing to do, but if you accidentally do it, Mypy will complain. For example, consider the following code:</P>
+      <P>As with lists, Mypy can get confused about the type of a set or dictionary if you initialize it to be empty and never add any elements to it <It>anywhere</It> in your code (and possibly in some other niche cases). For example, consider the following code:</P>
 
       <PythonBlock fileName="ambiguous_type_set.py">{
 `def main() -> None:
@@ -936,28 +936,25 @@ if __name__ == '__main__':
       <P>Running the above program through Mypy produces the following output:</P>
 
       <TerminalBlock copyable={false}>{
-`(env) pythons-basic-data-structures $ mypy ambiguous_type_set.py 
+`(env) $ mypy ambiguous_type_set.py 
 ambiguous_type_set.py:5: error: Need type annotation for "my_set" (hint: "my_set: set[<type>] = ...")  [var-annotated]
 Found 1 error in 1 file (checked 1 source file)
 `
       }</TerminalBlock>
 
-      <P>A similar error occurs when you do the same thing with a list or dictionary.</P>
+      <P>A similar error occurs when you do the same thing with a dictionary.</P>
 
-      <P>Mypy is telling us that it can't infer the type of <Code>my_set</Code> based on the code, so it needs us to explicitly type-annotate it. We <It>could</It> do that (e.g., <Code>my_set: set[str] = set()</Code>, assuming we want <Code>my_set</Code> to be a set of strings), but in most cases, the actual issue lies elsewhere. In this case, <Code>my_set</Code> is completely useless; it's created to be empty, and there are no lines of code that add any values to it. If we introduced even a single line of code anywhere in the function that added a value to the set, Mypy would be able to infer its type, and it would stop complaining:</P>
+      <P>Mypy is telling us that it can't infer the type of <Code>my_set</Code> based on the context, so it needs us to explicitly type-annotate it. As discussed in a previous lecture, we can do this like so:</P>
 
       <PythonBlock fileName="unambiguous_type_set.py">{
 `def main() -> None:
-    # Mypy is able to infer that this is a set of strings because,
-    # later, we add a string to it
-    my_set = set()
-
-    # Here's where we add a string to the set
-    my_set.add('John')
+    # If we want this to be a set of integers, but Mypy isn't able
+    # to figure that out on its own, we can explicitly annotate its
+    # type as set[int] (for example)
+    my_set: set[int] = set()
 
 if __name__ == '__main__':
-    main()
-`
+    main()`
       }</PythonBlock>
 
       <P>The above code passes through Mypy with no errors.</P>
