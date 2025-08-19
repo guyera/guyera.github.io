@@ -558,7 +558,7 @@ World!
 
       <P>Notice: Each run of the program appends new data onto the end of the existing file's contents as left by the previous run of the program.</P>
 
-      <P>And that's the gist of file I/O in Python as we'll use it in this course. There are many details to file I/O</P>
+      <P>And that's the gist of file I/O in Python as we'll use it in this course. There are many details to file I/O that I skipped over, but this should be good enough for our purposes.</P>
 
     </>
   )
