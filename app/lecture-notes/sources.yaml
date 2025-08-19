@@ -31,3 +31,7 @@ pages:
     pathName: 'file-io'
     pageTitle: "File I/O"
     namedIdentifier: 'file-io'
+  - source: 'pod-types/source.tsx'
+    pathName: 'pod-types'
+    pageTitle: "POD Types"
+    namedIdentifier: 'pod-types'
