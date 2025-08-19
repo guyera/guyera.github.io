@@ -27,3 +27,7 @@ pages:
     pathName: 'exceptions'
     pageTitle: "Exceptions"
     namedIdentifier: 'exceptions'
+  - source: 'file-io/source.tsx'
+    pathName: 'file-io'
+    pageTitle: "File I/O"
+    namedIdentifier: 'file-io'
