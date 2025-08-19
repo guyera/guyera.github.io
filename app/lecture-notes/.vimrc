@@ -66,3 +66,12 @@ imap <leader>sec<Space> <SectionHeading id="">TODO</SectionHeading>ODODODOD
 
 " Map \term followed by a space to a term component
 imap <leader>term<Space> <Term></Term>ODODODODODODOD
+
+" Map \sln followed by a space to showLineNumbers={false}
+imap <leader>sln<Space> showLineNumbers={false}
+
+" Map \hl followed by a space to highlightLines="{}"
+imap <leader>hl<Space> highlightLines="{}"<Left><Left>
+
+" Map \fn followed by a space to fileName=""
+imap <leader>fn<Space> fileName=""<Left>
