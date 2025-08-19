@@ -125,9 +125,27 @@ if __name__ == '__main__':
     main()`
       }</PythonBlock>
 
-      <P>This is a "Hello, World!" program, meaning that when you run it through the <Code>python</Code> interpreter (e.g., via <Code>python hello.py</Code>, assuming the file is named <Code>hello.py</Code> and is present in your working directory), it simply prints "Hello, World!" to the terminal.</P>
+      <P>This is a "Hello, World!" program, meaning that when you run it through the <Code>python</Code> interpreter (e.g., via <Code>python hello.py</Code>, assuming the file is named <Code>hello.py</Code> and is present in your working directory), it simply prints "Hello, World!" to the terminal:</P>
+
+      <TerminalBlock copyable={false}>{
+`(env) $ python hello.py 
+Hello, World!
+`
+      }</TerminalBlock>
 
       <P>You can also write data to standard error in a similar manner. In practice, most error messages should be printed via standard error instead of standard output. But we won't discuss standard error in this course; you may simply use standard output for all message printing.</P>
+
+      <P>Before we move on, I should remind you of something very important: in this course, we will be using Mypy religiously. Whenever you make <Ul>any</Ul> changes to your code, you should always run it through Mypy again to make sure that there are no errors detectable via static analysis. Some errors reported by Mypy will cause the program to crash when you try to run it anyways, but some are more subtle<Emdash/>some errors reported by Mypy reflect mistakes in your code (or simply bad practices) that may or may not result in obvious problems when the program is actually executed. Mypy is critical for finding these mistakes quickly and easily. You <Ul>must</Ul> heed Mypy's warnings and errors. If you submit code for a lab or assignment for which Mypy reports warnings or errors, you will be penalized for it. Also, heed my advice: do not write hundreds of lines of code and <It>then</It> try to go back and fix all the errors. That just gives you a false sense of progress. Instead, follow the principles of regression testing: 1) make a tiny change to the code, 2) run the code through Mypy, addressing reported warnings and errors until no more are reported, 3) execute the program to make sure that it behaves as expected (i.e., to make sure that your changes didn't break any of the existing features of the program), and 4) repeat from step 1) until the program is complete.</P>
+
+      <P>As a reminder, you can run the above program through Mypy like so:</P>
+
+      <TerminalBlock copyable={false}>{
+`(env) $ mypy hello.py
+Success: no issues found in 1 source file
+`
+      }</TerminalBlock>
+
+      <P>For the sake of brevity, I will not be explicitly showing you every time I run a program through Mypy (though I may show you occasional Mypy example runs just to demonstrate common errors). But rest assured that I do, indeed, run every single program written for these lecture notes through Mypy. This is one instance where I actually follow my own advice, and you should, too.</P>
 
       <P>You might've noticed that the <Code>print()</Code> function automatically appends an endline character sequence to the end of the printed message. For example, if a program used the <Code>print()</Code> function twice in a row to print two separate messages, those messages would appear on separate lines in the terminal. In some cases, you might not want that; you might instead want several printed messages to appear on the same line. To achieve this, you can pass a second argument to the <Code>print()</Code> function. This second argument is a keyword argument, meaning it's typically specified by name. Its name is <Code>end</Code>, and it's a string argument that specifies the characters that should be automatically appended to the printed message. By default, the <Code>end</Code> argument has the value <Code>'\n'</Code>, which is a special character sequence representing the end of a line. Hence, by default, the <Code>print()</Code> function automatically appends a new line at the end of each printed message, as if simulating pressing the enter key. To disable this behavior, simply specify <Code>end=''</Code> as the second argument to the <Code>print()</Code> function. <Code>''</Code> is an empty string, meaning a string consisting of no characters whatsoever. Hence, nothing will be appended to the printed message.</P>
 
@@ -1751,6 +1769,75 @@ Calamity
 ['Anomaly', 'Clandestine', 'Calamity', 'Amok']
 `
       }</ShellBlock>
+
+      <P>As mentioned earlier, you can iterate over the elements of a list using a for loop, just as you can iterate over a range:</P>
+
+      <PythonBlock fileName="iterate_list.py" highlightLines="{4}">{
+`def main() -> None:
+    my_list = [9.81, 3.14, -1.5]
+    sum_of_values = 0.0
+    for number in my_list:
+        sum_of_values += number
+    print(f'The sum of the values in the list is: {sum_of_values}')
+
+if __name__ == '__main__':
+    main()
+`
+      }</PythonBlock>
+
+      <P>Running the above program produces the following output:</P>
+
+      <TerminalBlock copyable={false}>{
+`(env) $ python iterate_list.py 
+The sum of the values in the list is: 11.450000000000001
+`
+      }</TerminalBlock>
+
+      <P>To retrieve the length of a list (i.e., the number of elements in a list), use the built-in <Code>len()</Code> function, passing in the list itself as an argument. It returns the list's length as an integer:</P>
+
+      <PythonBlock fileName="lists.py">{
+`def main() -> None:
+    # Create a list with 3 strings in it
+    some_cool_words = ['Anomaly', 'Calamity', 'Anachronism']
+
+    # Print the second element in the list (lists are indexed
+    # by 0, so the first element has index 0, the second
+    # element has index 1, and so on. We want to print the
+    # second element, so we use 1 as our index).
+    print(some_cool_words[1])
+
+    # Add a fourth cool word to the end of the list
+    some_cool_words.append('Amok')
+
+    # Delete the 3rd element from the list
+    del some_cool_words[2]
+
+    # Insert another word at index 1, meaning between the current
+    # first and second elements
+    some_cool_words.insert(1, 'Clandestine')
+
+    # Print the list to the terminal
+    print(some_cool_words)
+
+    # Print the length of the list to the terminal (prints 4)
+    print(len(some_cool_words))
+
+if __name__ == '__main__':
+    main()
+`
+      }</PythonBlock>
+
+      <P>Running the above program produces the following output:</P>
+
+      <TerminalBlock copyable={false}>{
+`(env) $ python lists.py 
+Calamity
+['Anomaly', 'Clandestine', 'Calamity', 'Amok']
+4
+`
+      }</TerminalBlock>
+
+      <P>(A somewhat common use case for <Code>len()</Code> is to retrieve the length of a list so that it can be used as an argument to the <Code>range()</Code> function. For example, <Code>range(len(my_list))</Code> would create a range of integers from 0 to N-1, where N is the length of <Code>my_list</Code>. You could then iterate over that range using a for loop, such as <Code>for i in range(len(my_list)):</Code>. Within the for loop, <Code>my_list[i]</Code> would access the current list element. That might sound like a roundabout way of iterating over a list, but it has its use cases. There are better ways to do something like this, though. For the curious reader, look up the <Code>enumerate()</Code> function.)</P>
 
       <P>Suppose you want to create a function that accepts a list as an argument or returns a list as a return value. Then you'll need to know how to type-annotate a list in order to get your code to pass Mypy's type checking. The syntax for a list type annotation is as follows:</P>
 

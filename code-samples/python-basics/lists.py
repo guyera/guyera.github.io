@@ -21,5 +21,8 @@ def main() -> None:
     # Print the list to the terminal
     print(some_cool_words)
 
+    # Print the length of the list to the terminal (prints 4)
+    print(len(some_cool_words))
+
 if __name__ == '__main__':
     main()
