@@ -47,6 +47,11 @@ let PATH_NAME = (() => {
   return path.basename(path.dirname(filename))
 })()
 
+let PARENT_PATH = (() => {
+  const filename = fileURLToPath(import.meta.url);
+  return `/${path.dirname(path.dirname(filename)).split("app/")[1]}`
+})()
+
 export const dynamic = 'force-static'
 export const dynamicParams = false
 
@@ -160,7 +165,7 @@ Last login: Wed Jul 16 11:57:34 2025 from 10.248.115.72
       
       <P>Congratulations! You're now logged into your account on the engineering servers. Until you exit out of your terminal (or kill the SSH session via the <Code>exit</Code> shell command), any and all shell commands that you execute in the terminal will actually be sent to the engineering servers, interpreted by a shell running remotely on the servers (specifically, the default shell that you configured via the interface in TEACH<Emdash/>hopefully <Code>/bin/bash</Code>), and executed on the servers on your behalf. In essence, you're now able to control the engineering servers remotely via a text-based terminal interface.</P>
 
-      <P>See <Link href={`/lecture-notes/${allPathData["basic-shell-commands"].pathName}`}>my lecture notes on basic Bash commands</Link> to learn how to navigate your engineering file space within the terminal.</P>
+      <P>See <Link href={`${PARENT_PATH}/${allPathData["basic-shell-commands"].pathName}`}>my lecture notes on basic Bash commands</Link> to learn how to navigate your engineering file space within the terminal.</P>
     </>
   )
 }

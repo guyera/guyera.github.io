@@ -46,6 +46,11 @@ let PATH_NAME = (() => {
   return path.basename(path.dirname(filename))
 })()
 
+let PARENT_PATH = (() => {
+  const filename = fileURLToPath(import.meta.url);
+  return `/${path.dirname(path.dirname(filename)).split("app/")[1]}`
+})()
+
 export const dynamic = 'force-static'
 export const dynamicParams = false
 

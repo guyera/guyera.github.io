@@ -46,6 +46,11 @@ let PATH_NAME = (() => {
   return path.basename(path.dirname(filename))
 })()
 
+let PARENT_PATH = (() => {
+  const filename = fileURLToPath(import.meta.url);
+  return `/${path.dirname(path.dirname(filename)).split("app/")[1]}`
+})()
+
 export const dynamic = 'force-static'
 export const dynamicParams = false
 
@@ -390,7 +395,7 @@ if __name__ == '__main__':
 
       <P>Similar to the <Code>+=</Code> shorthand operator, there's also <Code>-=</Code>, <Code>*=</Code>, <Code>/=</Code>, and even <Code>%=</Code>. They each work how you'd expect; they apply the corresponding mathematical operator between the variable on the left and the value of the expression on the right, and then they store the result in the variable on the left. For example, <Code>x *= 3</Code> is equivalent to <Code>x = x * 3</Code> (it triples the value of <Code>x</Code>); <Code>x %= 7</Code> is equivalent to <Code>x = x % 7</Code>, and so on.</P>
 
-      <P>Recall that we're going to be using Mypy extensively in this course to verify that our code is rigorously type-safe. If you haven't already, please follow the steps in my <Link href={allPathData["python-hello-world"].pathName}>"Hello, World!" lecture notes</Link> to install Mypy and configure it to run in strict mode by default.</P>
+      <P>Recall that we're going to be using Mypy extensively in this course to verify that our code is rigorously type-safe. If you haven't already, please follow the steps in my <Link href={`${PARENT_PATH}/${allPathData["python-hello-world"].pathName}`}>"Hello, World!" lecture notes</Link> to install Mypy and configure it to run in strict mode by default.</P>
 
       <P>There are various things that you can technically do with variables and types in Python but which are forbidden by Mypy (especially when running it in strict mode). For one, Mypy forbids changing a variable's (static) type mid-execution. For example, the following is technically legal Python code, but it's <It>illegal</It> under Mypy's strict static analysis:</P>
 
@@ -507,7 +512,7 @@ if __name__ == '__main__':
 
       <SectionHeading id="functions">Functions</SectionHeading>
 
-      <P>As you should know, a <Term>function</Term> is essentially a reusable block of code. To define a function in Python, use the <Code>def</Code> keyword, followed by the name of the function that you wish to define, followed by a parameter list enclosed in parentheses, followed by an arrow (<Code>{'->'}</Code>), followed by the function's return type (or <Code>None</Code> if the function doesn't return anything), followed by a colon. All of these things together are referred to as the <Term>function header</Term>. The <Term>function body</Term> (i.e., the block of code that the function executes) then goes immediately below the header. The function body must be indented over by one additional "level" of indentation relative to the header. How exactly you define a "level" of indentation is up to you, but Python requires that you must be consistent. It's common practice in Python to use four spaces as a level of indentation. If you followed the <Link href={allPathData["terminal-based-text-editing"].pathName}>Vim lecture</Link> closely, then you should have already configured Vim to insert four spaces whenever you press the tab key.</P>
+      <P>As you should know, a <Term>function</Term> is essentially a reusable block of code. To define a function in Python, use the <Code>def</Code> keyword, followed by the name of the function that you wish to define, followed by a parameter list enclosed in parentheses, followed by an arrow (<Code>{'->'}</Code>), followed by the function's return type (or <Code>None</Code> if the function doesn't return anything), followed by a colon. All of these things together are referred to as the <Term>function header</Term>. The <Term>function body</Term> (i.e., the block of code that the function executes) then goes immediately below the header. The function body must be indented over by one additional "level" of indentation relative to the header. How exactly you define a "level" of indentation is up to you, but Python requires that you must be consistent. It's common practice in Python to use four spaces as a level of indentation. If you followed the <Link href={`${PARENT_PATH}/${allPathData["terminal-based-text-editing"].pathName}`}>Vim lecture</Link> closely, then you should have already configured Vim to insert four spaces whenever you press the tab key.</P>
 
       <P>You've already seen one example several times<Emdash/>the <Code>main()</Code> function that we've been creating in all our programs so far. The syntax for creating a function is as follows:</P>
 

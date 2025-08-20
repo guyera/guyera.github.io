@@ -46,6 +46,11 @@ let PATH_NAME = (() => {
   return path.basename(path.dirname(filename))
 })()
 
+let PARENT_PATH = (() => {
+  const filename = fileURLToPath(import.meta.url);
+  return `/${path.dirname(path.dirname(filename)).split("app/")[1]}`
+})()
+
 export const dynamic = 'force-static'
 export const dynamicParams = false
 
@@ -68,7 +73,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
 
       <SectionHeading id="pod-types-via-classes">POD types ("structure types") via classes</SectionHeading>
 
-      <P>In <Link href={allPathData["file-io"].pathName}>our File I/O lecture</Link>, we created a program that loads information about cities from a text file, particularly their names and population counts. Suppose you want to store all that information in a list. That sounds easy, but there's a problem: you know how to create a list of strings, and you know how to create a list of integers, but how do you create a list of <It>cities</It>?</P>
+      <P>In <Link href={`${PARENT_PATH}/${allPathData["file-io"].pathName}`}>our File I/O lecture</Link>, we created a program that loads information about cities from a text file, particularly their names and population counts. Suppose you want to store all that information in a list. That sounds easy, but there's a problem: you know how to create a list of strings, and you know how to create a list of integers, but how do you create a list of <It>cities</It>?</P>
 
       <P>There are a few solutions. A naive solution would be to have <It>two</It> lists: a list of strings to store the cities' names, and a list of integers to store their corresponding population counts. For example, perhaps <Code>city_names[0]</Code> represents the name of the first city read from the text file, and <Code>city_populations[0]</Code> represents the population of that same city. This solution technically works, but there are a host of problems with it. For one, you (the programmer) have to be very careful to make sure that these two lists are always in alignment. If you ever insert a new city name into <Code>city_names</Code>, but you forget to insert the population of that city into <Code>city_populations</Code> (or if you remove a value from one of the lists, or if you change a value in one of the lists, etc), then the two lists will no longer be in alignment with one another; <Code>city_names[4]</Code> might represent the name of one city while <Code>city_populations[4]</Code> represents the population of a different city altogether. And at that point, there might be no way of knowing which populations correspond to which cities (you'll also probably run into an <Code>IndexError</Code> when iterating through the lists if one list is longer than the other).</P>
 
@@ -328,7 +333,7 @@ City population: 2721000
 
       <SectionHeading id="file-input-example">Example: Loading POD types via text I/O</SectionHeading>
 
-      <P>At the start of this lecture, I said that our goal was to write a program that reads a list of cities and their information from a file, storing it all in a single list. Let's combine what we've learned in this lecture with what we learned in <Link href={allPathData["file-io"].pathName}>the File I/O lecture</Link> to do just that. And for the sake of completeness, I'll even add a simple user interface so that the user can choose from a couple options to explore the data in a couple different ways (perhaps that's a bit overboard, but I like to throw in some larger examples every now and then):</P>
+      <P>At the start of this lecture, I said that our goal was to write a program that reads a list of cities and their information from a file, storing it all in a single list. Let's combine what we've learned in this lecture with what we learned in <Link href={`${PARENT_PATH}/${allPathData["file-io"].pathName}`}>the File I/O lecture</Link> to do just that. And for the sake of completeness, I'll even add a simple user interface so that the user can choose from a couple options to explore the data in a couple different ways (perhaps that's a bit overboard, but I like to throw in some larger examples every now and then):</P>
 
       <PythonBlock>{
 `from typing import TextIO

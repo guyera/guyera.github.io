@@ -49,6 +49,11 @@ let PATH_NAME = (() => {
   return path.basename(path.dirname(filename))
 })()
 
+let PARENT_PATH = (() => {
+  const filename = fileURLToPath(import.meta.url);
+  return `/${path.dirname(path.dirname(filename)).split("app/")[1]}`
+})()
+
 export const dynamic = 'force-static'
 export const dynamicParams = false
 
@@ -79,7 +84,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
 
       <P>Vim has its quirks, but it's also very powerful if you know how to use it. Advanced Vim users will confidently will tell you that they can write code far faster than anyone using an IDE. And they're often right<Emdash/>its text processing capabilities are unparalleled, especially when supplemented with other shell utilities (e.g., <Code>awk</Code>, <Code>sed</Code>, <Code>find</Code>, <Code>grep</Code>, etc). And for the advanced features that IDEs support out-of-the-box (e.g., frontend linters to detect and highlight syntax errors), there are Vim plugins for that (e.g., <Link href="https://github.com/dense-analysis/ale">this one</Link>).</P>
 
-      <P>All that being said, this is not a Vim course, so we'll only be using Vim in a relatively basic capacity. Open your terminal and <Link href={allPathData["terminals-shells-and-ssh"].pathName}>connect to the engineering servers over SSH</Link>. Use <Code>cd</Code> to navigate to the directory where you want to write code while following along with the lectures (I recommend using <Code>mkdir</Code> to create a directory named <Code>lecture-notes</Code> inside your <Code>cs162</Code> directory, and then navigate into it). Then, execute the following command:</P>
+      <P>All that being said, this is not a Vim course, so we'll only be using Vim in a relatively basic capacity. Open your terminal and <Link href={`${PARENT_PATH}/${allPathData["terminals-shells-and-ssh"].pathName}`}>connect to the engineering servers over SSH</Link>. Use <Code>cd</Code> to navigate to the directory where you want to write code while following along with the lectures (I recommend using <Code>mkdir</Code> to create a directory named <Code>lecture-notes</Code> inside your <Code>cs162</Code> directory, and then navigate into it). Then, execute the following command:</P>
 
       <ShellBlock>vim hello.py</ShellBlock>
 

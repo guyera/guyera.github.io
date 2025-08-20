@@ -45,6 +45,11 @@ let PATH_NAME = (() => {
   return path.basename(path.dirname(filename))
 })()
 
+let PARENT_PATH = (() => {
+  const filename = fileURLToPath(import.meta.url);
+  return `/${path.dirname(path.dirname(filename)).split("app/")[1]}`
+})()
+
 export const dynamic = 'force-static'
 export const dynamicParams = false
 
@@ -179,7 +184,7 @@ if __name__ == '__main__':
 `python hello.py`
       }</ShellBlock>
       
-        The text, "Hello, World!",should be printed to your terminal. Refer to my <Link href={allPathData["python-basics"].pathName}>Python Basics lecture notes</Link> to learn why this program does what it does.
+        The text, "Hello, World!",should be printed to your terminal. Refer to my <Link href={`${PARENT_PATH}/${allPathData["python-basics"].pathName}`}>Python Basics lecture notes</Link> to learn why this program does what it does.
     </>
   )
 }
