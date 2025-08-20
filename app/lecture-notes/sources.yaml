@@ -35,3 +35,7 @@ pages:
     pathName: 'pod-types'
     pageTitle: "POD Types"
     namedIdentifier: 'pod-types'
+  - source: 'modules-and-packages/source.tsx'
+    pathName: 'modules-and-packages'
+    pageTitle: "Modules and Packages"
+    namedIdentifier: 'modules-and-packages'
