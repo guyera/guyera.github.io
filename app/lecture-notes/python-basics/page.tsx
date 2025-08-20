@@ -1562,7 +1562,7 @@ if __name__ == '__main__':
 
       <SectionHeading id="lists">Lists</SectionHeading>
 
-      <P>The word "list" has different meanings depending on the context. Formally, it's an <Term>abstract data type</Term> that represents a homogeneous, positional, sequential ("linear") collection of values. That's to say, a list is a container that contains other things; those other things have a sequential ordering to them (there's a "first" thing, a "second" thing, a "third" thing, and so on); and the things in the list are all of the same type. (This is in contrast to various other abstract data types, like graphs, trees, sets, maps, etc, which are non-positional and / or non-sequential).</P>
+      <P>The word "list" has different meanings depending on the context. Formally, it's an <Term>abstract data type</Term> that represents a homogeneous, positional, sequential ("linear") collection of values. That's to say, a list is a container that contains other things; those other things have a sequential ordering to them (there's a "first" thing, a "second" thing, a "third" thing, and so on); and the things in the list are all of the same type. (This is in contrast to various other abstract data types, like graphs, trees, sets, maps, tuples, etc, which are non-positional, non-sequential, and / or heterogeneous).</P>
 
       <P>But in Python, "list" actually has a slightly different meaning. In Python, <Term>list</Term> is actually a data type. That's to say, you can create <Code>int</Code> variables, you can create <Code>bool</Code> variables, and so on, but you can also create <Code>list</Code> variables.</P>
 
