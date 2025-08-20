@@ -1795,7 +1795,7 @@ The sum of the values in the list is: 11.450000000000001
 
       <P>To retrieve the length of a list (i.e., the number of elements in a list), use the built-in <Code>len()</Code> function, passing in the list itself as an argument. It returns the list's length as an integer:</P>
 
-      <PythonBlock fileName="lists.py">{
+      <PythonBlock fileName="lists.py" highlightLines="{25}">{
 `def main() -> None:
     # Create a list with 3 strings in it
     some_cool_words = ['Anomaly', 'Calamity', 'Anachronism']
