@@ -19,10 +19,6 @@ pages:
     pathName: 'python-basics'
     pageTitle: 'Python Basics'
     namedIdentifier: 'python-basics'
-  - source: 'pythons-basic-data-structures/source.tsx'
-    pathName: 'pythons-basic-data-structures'
-    pageTitle: "Python's Basic Data Structures"
-    namedIdentifier: 'pythons-basic-data-structures'
   - source: 'exceptions/source.tsx'
     pathName: 'exceptions'
     pageTitle: "Exceptions"
@@ -39,3 +35,15 @@ pages:
     pathName: 'modules-and-packages'
     pageTitle: "Modules and Packages"
     namedIdentifier: 'modules-and-packages'
+  - source: 'methods/source.tsx'
+    pathName: 'methods'
+    pageTitle: "Methods"
+    namedIdentifier: 'methods'
+  - source: 'encapsulation-and-information-hiding/source.tsx'
+    pathName: 'encapsulation-and-information-hiding'
+    pageTitle: "Encapsulation and Information Hiding"
+    namedIdentifier: 'encapsulation-and-information-hiding'
+  - source: 'pythons-basic-data-structures/source.tsx'
+    pathName: 'pythons-basic-data-structures'
+    pageTitle: "Python's Basic Data Structures"
+    namedIdentifier: 'pythons-basic-data-structures'

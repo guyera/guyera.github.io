@@ -1,4 +1,4 @@
-from animals.dog import Dog, print_dog as print_dog
+from animals.dog import Dog, print_dog
 
 def main() -> None:
     # Notice: It's now just Dog(), as opposed to dog.Dog(), because of
