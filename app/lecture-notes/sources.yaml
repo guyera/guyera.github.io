@@ -29,9 +29,9 @@ pages:
   - pathName: 'methods'
     pageTitle: "Methods"
     namedIdentifier: 'methods'
-  - pathName: 'encapsulation-and-information-hiding'
-    pageTitle: "Encapsulation and Information Hiding"
-    namedIdentifier: 'encapsulation-and-information-hiding'
+  - pathName: 'encapsulation'
+    pageTitle: "Encapsulation"
+    namedIdentifier: 'encapsulation'
   - pathName: 'pythons-basic-data-structures'
     pageTitle: "Python's Basic Data Structures"
     namedIdentifier: 'pythons-basic-data-structures'
