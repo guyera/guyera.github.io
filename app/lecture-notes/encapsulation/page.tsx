@@ -69,6 +69,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
         <Item><Link href="#encapsulation">Encapsulation</Link></Item>
         <Item><Link href="#private-attributes-and-methods">Private attributes and methods</Link></Item>
         <Item><Link href="#managing-coupling">Managing coupling</Link></Item>
+        <Item><Link href="#class-invariants">Class invariants</Link></Item>
         <Item><Link href="#getters-and-setters">Getters and setters</Link></Item>
       </Itemize>
 
