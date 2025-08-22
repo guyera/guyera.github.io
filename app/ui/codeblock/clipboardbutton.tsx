@@ -26,13 +26,13 @@ class ClipboardButton extends React.Component<Props, State> {
 
   render() {
     return (
-      <div className={`z-1 absolute right-0 top-0 w-[30%] aspect-square max-h-[calc(100%-1.5em)] mr-3 mt-3 ${this.props.mouseOver ? "opacity-100" : "opacity-20"}`}>
-        <div className="absolute right-0 top-0 h-full aspect-square">
-          <div className="absolute right-0 top-0 max-h-full max-w-full w-9 aspect-square bg-[#000000aa] hover:bg-[#444444aa] rounded-md cursor-pointer" onClick={this.copyToClipboard}>
-	      <Image src={clipboardIcon} alt="" className={`absolute w-full h-full p-1.5 ${!this.state.clicked ? "block" : "hidden"}`}/>
-	      <Image src={checkIcon} alt="" className={`absolute w-full h-full p-2 ${this.state.clicked ? "block" : "hidden"}`}/>
-	  </div>
-	</div>
+      <div className={`z-1 absolute right-0 top-0 w-[30%] aspect-square max-h-[calc(100%-1.5em)] mr-3 mt-3 pointer-events-none`}>
+        <div className="absolute right-0 top-0 h-full aspect-square pointer-events-none">
+          <div className={`absolute right-0 top-0 max-h-full max-w-full w-9 aspect-square bg-[#000000aa] hover:bg-[#444444aa] rounded-md pointer-events-auto cursor-pointer ${this.props.mouseOver ? "opacity-100" : "opacity-20"}`} onClick={this.copyToClipboard}>
+	          <Image src={clipboardIcon} alt="" className={`absolute w-full h-full p-1.5 ${!this.state.clicked ? "block" : "hidden"}`}/>
+	          <Image src={checkIcon} alt="" className={`absolute w-full h-full p-2 ${this.state.clicked ? "block" : "hidden"}`}/>
+	        </div>
+	      </div>
       </div>
     )
   }

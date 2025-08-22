@@ -42,8 +42,7 @@ async function RehypeCopyableCodeBlock({ code, language, fileName, highlightLine
   const processedHtmlString = processedHtml.toString()
   return (
     <>
-      {fileName ? <pre className="language-filename"><code>{fileName}</code></pre> : <></>}
-      <CopyableCodeBlock code={code}>
+      <CopyableCodeBlock code={code} fileName={fileName}>
         {parse(processedHtmlString)}
       </CopyableCodeBlock>
     </>
