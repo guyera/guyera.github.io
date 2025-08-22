@@ -14,7 +14,7 @@ export default async function Enumerate({ children, listStyleType="lower-alpha" 
       break
   }
   return (
-    <ol className={`${listStyleClass} list-inside pl-16`}>
+    <ol className={`${listStyleClass} list-inside pl-16 mb-7`}>
       {children}
     </ol>
   )
