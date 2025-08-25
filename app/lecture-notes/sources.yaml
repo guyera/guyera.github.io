@@ -32,6 +32,9 @@ pages:
   - pathName: 'encapsulation'
     pageTitle: "Encapsulation"
     namedIdentifier: 'encapsulation'
+  - pathName: 'none-and-optionals'
+    pageTitle: 'None and Optionals'
+    namedIdentifier: 'none-and-optionals'
   - pathName: 'pythons-basic-data-structures'
     pageTitle: "Python's Basic Data Structures"
     namedIdentifier: 'pythons-basic-data-structures'
