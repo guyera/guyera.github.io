@@ -1,6 +1,6 @@
 from typing import Optional
 
-from person import Person # A POD type
+from person import Person # A POD type with a constructor
 
 # Return type is Optional[Person], meaning the return value
 # will either be an Person or None. If the person with the given

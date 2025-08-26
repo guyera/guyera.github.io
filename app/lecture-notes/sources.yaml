@@ -15,26 +15,29 @@ pages:
     pageTitle: 'Python Basics'
     namedIdentifier: 'python-basics'
   - pathName: 'exceptions'
-    pageTitle: "Exceptions"
+    pageTitle: 'Exceptions'
     namedIdentifier: 'exceptions'
   - pathName: 'file-io'
-    pageTitle: "File I/O"
+    pageTitle: 'File I/O'
     namedIdentifier: 'file-io'
   - pathName: 'pod-types'
-    pageTitle: "POD Types"
+    pageTitle: 'POD Types'
     namedIdentifier: 'pod-types'
   - pathName: 'modules-and-packages'
-    pageTitle: "Modules and Packages"
+    pageTitle: 'Modules and Packages'
     namedIdentifier: 'modules-and-packages'
   - pathName: 'methods'
-    pageTitle: "Methods"
+    pageTitle: 'Methods'
     namedIdentifier: 'methods'
   - pathName: 'encapsulation'
-    pageTitle: "Encapsulation"
+    pageTitle: 'Encapsulation'
     namedIdentifier: 'encapsulation'
   - pathName: 'none-and-optionals'
     pageTitle: 'None and Optionals'
     namedIdentifier: 'none-and-optionals'
+  - pathName: 'references-and-copies'
+    pageTitle: 'References and Copies'
+    namedIdentifier: 'references-and-copies'
   - pathName: 'pythons-basic-data-structures'
     pageTitle: "Python's Basic Data Structures"
     namedIdentifier: 'pythons-basic-data-structures'
