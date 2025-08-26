@@ -38,6 +38,12 @@ pages:
   - pathName: 'references-and-copies'
     pageTitle: 'References and Copies'
     namedIdentifier: 'references-and-copies'
+  - pathName: 'inheritance'
+    pageTitle: 'Inheritance'
+    namedIdentifier: 'inheritance'
+  - pathName: 'polymorphism'
+    pageTitle: 'Polymorphism'
+    namedIdentifier: 'polymorphism'
   - pathName: 'pythons-basic-data-structures'
     pageTitle: "Python's Basic Data Structures"
     namedIdentifier: 'pythons-basic-data-structures'
