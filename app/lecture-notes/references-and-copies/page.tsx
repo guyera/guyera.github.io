@@ -381,6 +381,53 @@ if __name__ == '__main__':
       <P>If you're just copying primitives (e.g., integers), <It>or</It> if you're copying objects whose attributes all refer to primitives (e.g., a <Code>Person</Code> with a string attribute <Code>name</Code> and integer attribute <Code>age</Code>, but no class-type attributes), then it technically doesn't matter whether you use shallow copies or deep copies. In such cases, the two kinds of copies are equivalent. But if you want to copy an object that has other objects inside it that, in turn, have other objects inside <It>them</It> (and so on), then there's a huge difference between a shallow copy and a deep copy. And in such cases, you <It>usually</It> want a deep copy, or else certain modifications to the copy could result in corresponding modifications to the original.</P>
 
       <P>The only advantage of shallow copies is that, when copying extremely complicated objects with deep object graphs, shallow copies are more efficient than deep copies. This is because shallow copies only copy the "outer" object, whereas deep copies traverse the entire object graph and copy <It>everything</It>. But again, shallow copies can lead to issues if you want the two objects (the original and the copy) to serve as completely independent objects from one another, enabling you to modify the deeper contents of one without it affecting the corresponding contents of the other.</P>
+
+      <P>Lastly: everything that I've told you about the assignment operator<Emdash/>about how it modifies the variable on the left to refer to a new object as specified on the right<Emdash/>also applies to function arguments and parameters. When a function is called, the function's parameters (which are variables and therefore references) are set up to refer to the objects specified by the arguments. Indeed, this means that a given function parameter and its corresponding argument are two separate variables, but they refer to the same underlying object in the context of the function call. If the function then reaches <It>inside</It> that object (e.g., via the dot operator), that will also reach inside the object that the argument refers to. To avoid issues in such cases, you may need to use <Code>deepcopy()</Code> to copy the object before passing it as an argument:</P>
+
+      <PythonBlock fileName="functioncall.py">{
+`from copy import deepcopy
+
+class Person:
+    name: str
+
+def change_person(p: Person) -> None:
+    p.name = 'Sally'
+
+def main() -> None:
+    joe = Person()
+    joe.name = 'Joe'
+
+    # The parameter, p, refers to the same object that the argument,
+    # joe, refers to. Line 5, then, reaches inside the object that
+    # p refers to (which is also the object that joe refers to),
+    # modifying its name attribute to refer to a new string object
+    # storing the value 'Sally'. This means that joe.name is ALSO
+    # modified
+    change_person(joe)
+
+    print(joe.name) # Prints Sally
+    
+    # Let's change joe's name back to 'Joe'
+    joe.name = 'Joe'
+
+    # This time, to avoid the issue, we can use copy() or deepcopy()
+    # to create a copy of the OBJECT that joe refers to, and then pass
+    # THAT as the argument. p will then refer to THAT object, rather
+    # than the object that joe refers to. In this case, copy() and
+    # deepcopy() will both work. But again, we usually want a deep copy
+    change_person(deepcopy(joe))
+
+    print(joe.name) # Prints Joe
+
+if __name__ == '__main__':
+    main()
+`
+      }</PythonBlock>
+
+      <P>Remember when I told that lists behave a bit strange when used as parameters? How, when a function modifies the elements within a list that's received as a parameter, the corresponding elements are also modified within the list that was passed as an argument? This is precisely the reason: the parameter is not a <It>copy</It> of the argument's value, but rather a <It>reference</It> to the argument's value. If you want any sort of object-copying to take place, you have to do it yourself by calling <Code>deepcopy()</Code>.</P>
+
+      <P>(Technically, the same principles apply to return values as well, but that rarely matters in practice).</P>
+      
     </>
   )
 }
