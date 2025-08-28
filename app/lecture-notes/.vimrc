@@ -47,7 +47,7 @@ imap <leader><leader>py<Space> <PythonBlock copyable={false}>{<CR><CR>}</PythonB
 imap <leader>syntax<Space> <SyntaxBlock>{<CR><CR>}</SyntaxBlock>OA``OD
 
 " Map \l followed by a space to an internal link
-imap <leader>l<Space> <Link href={`${PARENT_PATH}/${allPathData[""].pathName}`}>TEXT</Link>ODODODODODODODODODODODODODODODODODODODODODODODOD
+imap <leader>l<Space> <Link href={`${PARENT_PATH}/${allPathData[""].pathName}`}>TEXT</Link>ODODODODODODODODODODODODODODODODODODODODODODODODODOD
 
 " Map \\l followed by a space to an external link
 imap <leader><leader>l<Space> <Link href="">TEXT</Link>ODODODODODODODODODODODODOD
@@ -75,3 +75,6 @@ imap <leader>hl<Space> highlightLines="{}"<Left><Left>
 
 " Map \fn followed by a space to fileName=""
 imap <leader>fn<Space> fileName=""<Left>
+
+" Map \todo followed by a space to {/*TODO*/}
+imap <leader>todo<Space> {/*TODO*/}
