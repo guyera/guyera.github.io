@@ -748,7 +748,7 @@ Found 1 error in 1 file (checked 5 source files)
 
       <SectionHeading id="other-details">Other details</SectionHeading>
 
-      <P>This lecture barely scratched the surface of generics. They support many more advanced features that we don't have time to cover, such as generic classes with more than one type parameter; covariant generic classes (e.g., <Code>list</Code>); contravariant generic classes (e.g., <Code>Callable</Code>); and more. I encourage you to research things if you're curious, and feel free to stop by my office hours if you'd like to chat about them.</P>
+      <P>This lecture barely scratched the surface of generics. They support many more advanced features that we don't have time to cover, such as generic classes with more than one type parameter; covariant generic classes (e.g., <Code>Sequence</Code>); contravariant generic classes (e.g., <Code>Callable</Code>); and more. I encourage you to research things if you're curious, and feel free to stop by my office hours if you'd like to chat about them.</P>
     </>
   )
 }
