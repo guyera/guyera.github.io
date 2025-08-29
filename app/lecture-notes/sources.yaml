@@ -44,6 +44,9 @@ pages:
   - pathName: 'polymorphism'
     pageTitle: 'Polymorphism'
     namedIdentifier: 'polymorphism'
+  - pathName: 'generics'
+    pageTitle: 'Generics'
+    namedIdentifier: 'generics'
   - pathName: 'pythons-basic-data-structures'
     pageTitle: "Python's Basic Data Structures"
     namedIdentifier: 'pythons-basic-data-structures'
