@@ -47,6 +47,9 @@ pages:
   - pathName: 'generics'
     pageTitle: 'Generics'
     namedIdentifier: 'generics'
+  - pathName: 'recursion'
+    pageTitle: 'Recursion'
+    namedIdentifier: 'recursion'
   - pathName: 'pythons-basic-data-structures'
     pageTitle: "Python's Basic Data Structures"
     namedIdentifier: 'pythons-basic-data-structures'
