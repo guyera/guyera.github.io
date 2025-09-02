@@ -83,7 +83,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
 
       <P spaceBelow={false}>fib(1) = 0</P>
       <P spaceBelow={false}>fib(2) = 1</P>
-      <P>fib(x) = fib(x - 1) + fib(x - 2), for all x > 2</P>
+      <P>fib(x) = fib(x - 1) + fib(x - 2), for all x {'>'} 2</P>
 
       <P>The argument to the fib() function specifies which number in the sequence should be computed. If the argument is 1, then the first number should be computed. If it's 10, then the 10th number should be computed. The function then computes that number of the fibonacci sequence, which serves as the function's output. The first two numbers in the fibonacci sequence are 0 and 1, hence fib(1) = 0 and fib(2) = 1. Each subsequent number in the fibonacci sequence is the sum of the previous two numbers, hence fib(x) = fib(x - 1) + fib(x - 2).</P>
 
