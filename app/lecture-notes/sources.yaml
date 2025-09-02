@@ -50,6 +50,9 @@ pages:
   - pathName: 'recursion'
     pageTitle: 'Recursion'
     namedIdentifier: 'recursion'
+  - pathName: 'memory-models'
+    pageTitle: 'Memory Models'
+    namedIdentifier: 'memory-models'
   - pathName: 'pythons-basic-data-structures'
     pageTitle: "Python's Basic Data Structures"
     namedIdentifier: 'pythons-basic-data-structures'
