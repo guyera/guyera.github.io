@@ -116,7 +116,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
               <Item>To compute <Code>fib(1)</Code>, the computer jumps to the top of the <Code>fib()</Code> function, passing <Code>1</Code> as the argument to <Code>x</Code>. This time, the first base case's if statement will trigger, returning <Code>0</Code> and immediately ending the function call.</Item>
           </Enumerate>
           
-          <Item>Now that <Code>fib(2)</Code> and <Code>fib(1)</Code> have been computed as 1 and 0, respectively, the sum can be computed within the <Code>fib(3)</Code> function call as 1 + 0 = 1. That sum is returned from the <Code>fib(3)</Code> function call (i.e., <Code>return fib(2) + fib(1)</Code> -> <Code>return 1 + 0</Code> -> <Code>return 1</Code>).</Item>
+          <Item>Now that <Code>fib(2)</Code> and <Code>fib(1)</Code> have been computed as 1 and 0, respectively, the sum can be computed within the <Code>fib(3)</Code> function call as 1 + 0 = 1. That sum is returned from the <Code>fib(3)</Code> function call (i.e., <Code>return fib(2) + fib(1)</Code> {'->'} <Code>return 1 + 0</Code> {'->'} <Code>return 1</Code>).</Item>
 
           <Item>But remember: the <Code>fib(4)</Code> function call in turn called <Code>fib(3)</Code> <It>and</It> <Code>fib(2)</Code>. Everything I've described up to this point has been regarding the <Code>fib(3)</Code> computation. So, once it's done computing <Code>fib(3)</Code> to be 1, it moves on to compute <Code>fib(2)</Code>. Again, the computer jumps to the top of the <Code>fib()</Code> function, passing <Code>2</Code> as the argument to <Code>x</Code>. The second base case's if statement triggers, returning <Code>1</Code> and ending the function.</Item>
         </Enumerate>
