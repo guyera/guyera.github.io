@@ -82,7 +82,9 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
 
       <P>For example, perhaps you've found yourself deep into implementing a class or function when you suddenly realized that, in order to get it to fit into the rest of the application, you have to scrap the whole thing and start over. One of the main goals of software design is to work out these sorts of high-level issues before investing too much time into implementation.</P>
 
-      <P>There are lot of different strategies surrounding software design, but most of them are <Bold>top-down</Bold> strategies, meaning that the idea is generally to start with a very zoomed-out, "high-level" view of the software and its objectives, and, as you work on the design, slowly work your way downward toward the "lower-level" details. Once you get to a "low enough" level that you can reason about the solutions easily, you might feel comfortable terminating the design process and jumping into the code.</P>
+      <P>There are lot of different strategies surrounding software design, but we'll focus on <Bold>top-down</Bold> design. Top-down design means to start with a very zoomed-out, "high-level" view of the software product and its objectives, and, as you work on the design, slowly work your way downward toward the "lower-level" details. Once you get to a "low enough" level that you can reason about the solutions easily, you might feel comfortable terminating the design process and jumping into the code.</P>
+
+      <P>(There also exist bottom-up design strategies, but they're beyond the scope of this lecture. We will, however, cover bottom-up <It>implementation</It> strategies in the <Link href={`${PARENT_PATH}/${allPathData["bottom-up-implementation-and-testing"].pathName}`}>next lecture</Link>.)</P>
 
       <SectionHeading id="example">Example</SectionHeading>
 
@@ -218,7 +220,7 @@ days_in_month(m, y):
 `
       }</SyntaxBlock>
       
-      <P>And at this point, all our components are fleshed out. Again, we could go into <It>slightly</It> more detail here and there, but the level of detail at this point is sufficient that most reasonably decent programmers (including every student this class, hopefully!) should be able to translate this design to actual code without too much effort (we'll actually do this in the <Link href={`${PARENT_PATH}/${allPathData["bottom-up-implementation"].pathName}`}>next lecture</Link>). So I'll stop here.</P>
+      <P>And at this point, all our components are fleshed out. Again, we could go into <It>slightly</It> more detail here and there, but the level of detail at this point is sufficient that most reasonably decent programmers (including every student this class, hopefully!) should be able to translate this design to actual code without too much effort (we'll actually do <It>some</It> of the implementation in the <Link href={`${PARENT_PATH}/${allPathData["bottom-up-implementation-and-testing"].pathName}`}>next lecture</Link>). So I'll stop here.</P>
     </>
   )
 }
