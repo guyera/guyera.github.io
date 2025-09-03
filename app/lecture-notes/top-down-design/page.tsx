@@ -189,7 +189,7 @@ days_between_dates_in_year(date1, date2):
     if date1's month is the same as date2's month:
         return date2's day - date1's day
     otherwise:
-        answer = days_in_month(date1's month) - date1's month # To get to the end of date1's month
+        answer = days_in_month(date1's month) - date1's day # To get to the end of date1's month
         answer = answer + 1 # To get to the first of the NEXT month
         for each month m between date1 and date2 (exclusive):
             answer = answer + days_in_month(m, date1's year) # To get past month m
@@ -197,7 +197,9 @@ days_between_dates_in_year(date1, date2):
 `
       }</SyntaxBlock>
 
-      <P>Here we refer to another new component: <Code>days_in_month</Code>. This component will compute the number of days in the given month (for the given year). Here it is:</P>
+      <P>Here we refer to another new component: <Code>days_in_month</Code>. This component will compute the number of days in the given month (for the given year). It accepts the year as an input because the number of days in a given month might vary by year (as is the case with February, in particular). Indeed, this means that, while designing one high-level component, you may need to think about <It>some</It> of the lower-level details of its dependencies (lower-level components) insofar as you need to determine what information will need to be <It>passed</It> to those components (i.e., you need to at least figure out what their interfaces will look like).</P>
+
+      <P>Finally, here's the <Code>days_in_month</Code> component:</P>
 
       <SyntaxBlock>{
 `# Computes the number of days in the given month m, for the given year y
