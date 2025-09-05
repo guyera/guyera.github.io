@@ -182,7 +182,7 @@ mkdir labs`
 
       <SectionHeading>Other shell commands</SectionHeading>
 
-      <P>You now know how to organize and navigate your file space on the engineering servers using <Code>ls</Code>, <Code>cd</Code>, <Code>mkdir</Code>, and <Code>mkdir</Code>, but terminals and shells are capable of a lot more than that. Below are some other shell commands that you might find useful every now and then.</P>
+      <P>You now know how to organize and navigate your file space on the engineering servers using <Code>pwd</Code>, <Code>ls</Code>, <Code>cd</Code>, and <Code>mkdir</Code>, but terminals and shells are capable of a lot more than that. Below are some other shell commands that you might find useful every now and then.</P>
 
       <Itemize>
         <Item><Code>rm</Code>: used to remove (delete) files. Provide a single command-line argument specifying the path to the file you want to remove. For example, the following shell command would delete the file called <Code>hello.txt</Code> that's currently in your working directory (assuming such a file exists):</Item>
