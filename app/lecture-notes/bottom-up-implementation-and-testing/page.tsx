@@ -308,7 +308,7 @@ AssertionError: 2100 is not a leap year, but is_leap_year() returned True
         <Item>Repeat from step 1 until the software system is complete.</Item>
       </Enumerate>
 
-      <P>Technically, what I've just described is actually a specific kind of TDD known as <Bold>Red-Green-Refactor</Bold> (but it's a very common kind of TDD). It's named this because after step 1, the newly written test will fail (i.e., the codebase is "red"); after step 2, the newly written test will pass (i.e., the codebase is "green" again); and after step 3, the code has been refactored (if necessary) back up to the team's standards.</P>
+      <P>Technically, TDD is a bit broader than this. What I've just described is actually the core development cycle within TDD known as <Bold>Red-Green-Refactor</Bold>. It's named this because after step 1, the newly written test will fail (i.e., the codebase is "red"); after step 2, the newly written test will pass (i.e., the codebase is "green" again); and after step 3, the code has been refactored (if necessary) back up to the team's standards.</P>
 
       <P>The main idea of TDD is that the first step is to write a test, and the <It>second</It> step is to implement the relevant behavior such that the test passes. This forces the developer to think about how they can verify that the system works correctly before actually implementing the system.</P>
 
