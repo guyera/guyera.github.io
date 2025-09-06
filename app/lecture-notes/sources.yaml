@@ -59,6 +59,9 @@ pages:
   - pathName: 'memory-models'
     pageTitle: 'Memory Models'
     namedIdentifier: 'memory-models'
+  - pathName: 'searching-and-sorting'
+    pageTitle: 'Searching and Sorting'
+    namedIdentifier: 'searching-and-sorting'
   - pathName: 'pythons-basic-data-structures'
     pageTitle: "Python's Basic Data Structures"
     namedIdentifier: 'pythons-basic-data-structures'
