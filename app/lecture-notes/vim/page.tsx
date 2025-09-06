@@ -135,7 +135,7 @@ hello.py
 
       <P>(This lecture isn't about Python, but if you're curious, you can execute the Python program that we just wrote by typing <Code>python hello.py</Code> into the terminal and pressing enter; refer to <Link href={allPathData["python-hello-world"].pathName}>my "Hello, World!" Python lecture notes</Link> for more information).</P>
 
-      <P>If you wish to edit the some more, simply execute the same command as earlier: <Code>vim hello.py</Code>. Since <Code>hello.py</Code> already exists, this will simply open the file in Vim for editing rather than creating it.</P>
+      <P>If you wish to edit the file some more, simply execute the same command as earlier: <Code>vim hello.py</Code>. Since <Code>hello.py</Code> already exists, this will simply open the file in Vim for editing rather than creating it.</P>
 
       <SectionHeading id="vim-tricks">Some Vim tricks</SectionHeading>
       
