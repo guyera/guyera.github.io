@@ -205,7 +205,7 @@ mkdir labs`
 
         <ShellBlock>cat hello.txt</ShellBlock>
 
-        <Item><Code>cat</Code> can also be used to concatenate two or more files' contents together into a single string of text (this was actually its original purpose), but it's mostly just used to display file contents in the terminal. It will be more useful once we've discussed <Link href={`/lecture-notes/${allPathData["terminal-based-text-editing"].pathName}`}>terminal-based text-editing</Link>.</Item>
+        <Item><Code>cat</Code> can also be used to concatenate two or more files' contents together into a single string of text (this was actually its original purpose), but it's mostly just used to display file contents in the terminal. It will be more useful once we've discussed <Link href={`${PARENT_PATH}/${allPathData["terminal-based-text-editing"].pathName}`}>terminal-based text-editing</Link>.</Item>
       </Itemize>
 
       <SectionHeading>Other terminal tricks</SectionHeading>
