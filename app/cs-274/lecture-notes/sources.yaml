@@ -1,0 +1,4 @@
+pages:
+  - pathName: 'c-in-context'
+    pageTitle: 'C in Context'
+    namedIdentifier: 'c-in-context'
