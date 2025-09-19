@@ -6,7 +6,7 @@ def volume_of_sphere(radius: float) -> float:
     # Compute the volume of a sphere with the given radius
     # and return it (the equation for the volume of a 
     # sphere is 4/3 pi r^2)
-    volume = 4 / 3 * 3.141592 * radius * radius
+    volume = 4 / 3 * 3.141592 * radius * radius * radius
     return volume
 
 def main() -> None:
