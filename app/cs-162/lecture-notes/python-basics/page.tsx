@@ -648,7 +648,7 @@ if __name__ == '__main__':
 `def print_multiplication_table(width: int, height: int) -> None:
     for row_idx in range(height):
         for col_idx in range(width):
-            print((row_idx + 1) * (col_idx + 1), end="\t")
+            print((row_idx + 1) * (col_idx + 1), end="\\t")
         print()
 
 def main() -> None:
@@ -899,7 +899,7 @@ Banana
 
       <PythonBlock fileName="compute_age.py">{
 `def main() -> None:
-    birth_year = input('What year were you born?\n')
+    birth_year = input('What year were you born?\\n')
     
     print(f'Your age is (roughly) {2025 - birth_year}')
 
@@ -944,7 +944,7 @@ TypeError: unsupported operand type(s) for -: 'int' and 'str'
     # but this solution allows us to treat birth_year as an int
     # from this point on without having to repeatedly type-cast it
     # every time we reference it.
-    birth_year = int(input('What year were you born?\n'))
+    birth_year = int(input('What year were you born?\\n'))
     
     print(f'Your age is (roughly) {2025 - birth_year}')
 
@@ -1048,7 +1048,7 @@ False
 
       <PythonBlock fileName="if_statement.py">{
 `def main() -> None:
-    password = input("What's the password?\n")
+    password = input("What's the password?\\n")
     
     if password == '1234':
         print('Correct. Come on in.')
@@ -1079,7 +1079,7 @@ Correct. Come on in.
 
       <PythonBlock fileName="if_statement.py">{
 `def main() -> None:
-    password = input("What's the password?\n")
+    password = input("What's the password?\\n")
     
     # Notice that "if" and "else" headers are at the same level of
     # indentation, and their bodies are at the same level of
@@ -1114,7 +1114,7 @@ Correct. Come on in.
 
       <PythonBlock fileName="if_statement.py">{
 `def main() -> None:
-    password = input("What's the password?\n")
+    password = input("What's the password?\\n")
     
     if password == '1234':
         print('Correct. Come on in.')
@@ -1930,7 +1930,7 @@ if __name__ == '__main__':
 `def main() -> None:
     list_of_users = ['Roger', 'Jennifer', 'Rob']
     
-    user_input = input('What user would you like to search for?\n')
+    user_input = input('What user would you like to search for?\\n')
     
     # Check whether the specified user is in the list
     if user_input in list_of_users:
@@ -2027,7 +2027,7 @@ IndexError: list index out of range
 
       <P>And, indeed, there's a style guide for our course. You can find it in Canvas. Most of it is fairly intuitive, but one aspect that can trip students up is the line length limit. Specifically, our style guide requires that your lines of code are no longer than 80 characters each. If you have a line of code that's longer than that, you must find a way to break it up into smaller lines.</P>
 
-      <P>How you break up a line of code into multiple smaller lines depends on the content of that line of code. A long if statement header can be broken up into multiple smaller lines at logical operators, but you have to type a backslash character (<Code>\</Code>) at the end of each broken-up line except for the last. In such a case, it's also a good idea to adjust the indentation of the subsequent broken-up lines to clearly delineate the end of the if statement header from the start of the if statement body. For example:</P>
+      <P>How you break up a line of code into multiple smaller lines depends on the content of that line of code. A long if statement header can be broken up into multiple smaller lines at logical operators, but you have to type a backslash character (<Code>{'\\'}</Code>) at the end of each broken-up line except for the last. In such a case, it's also a good idea to adjust the indentation of the subsequent broken-up lines to clearly delineate the end of the if statement header from the start of the if statement body. For example:</P>
 
       <PythonBlock fileName="logical_operators.py">{
 `def main() -> None:

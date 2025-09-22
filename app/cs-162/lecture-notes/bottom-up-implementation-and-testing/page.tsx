@@ -289,7 +289,7 @@ Traceback (most recent call last):
     main()
     ~~~~^^
   File "/home/alex/instructor/static-content/guyera.github.io/code-samples/bottom-up-implementation/daysbetweendates.py", line 44, in main
-    assert year_divisible_by_100_but_not_400_result == False,\
+    assert year_divisible_by_100_but_not_400_result == False,\\
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AssertionError: 2100 is not a leap year, but is_leap_year() returned True
 `

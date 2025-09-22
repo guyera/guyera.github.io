@@ -281,7 +281,7 @@ for p in my_database.people:
         print('People who are 42 years of age')
         for p in self.people:
             if p.age == 42:
-                print(f'\t{p.name}')
+                print(f'\\t{p.name}')
 `
       }</PythonBlock>
 
@@ -337,7 +337,7 @@ class PersonDatabase:
         print(f'People who are {age} years of age')
         for p in self.people:
             if p.age == age:
-                print(f'\t{p.name}')
+                print(f'\\t{p.name}')
 `
       }</PythonBlock>
 
@@ -395,7 +395,7 @@ class PersonDatabase:
         print(f'People who are {age} years of age')
         for p in self.people:
             if p.age == age:
-                print(f'\t{p.name}')
+                print(f'\\t{p.name}')
 `
       }</PythonBlock>
 
