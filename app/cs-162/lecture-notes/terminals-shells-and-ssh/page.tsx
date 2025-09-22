@@ -1,6 +1,7 @@
 import PythonBlock from '../ui/pythonblock'
 import SyntaxBlock from '../ui/syntaxblock'
 import ShellBlock from '../ui/shellblock'
+import TerminalBlock from '../ui/terminalblock'
 import Image from '../ui/image'
 import Code from '../ui/code'
 import It from '../ui/italic'
@@ -104,7 +105,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
 
       <P>If all goes well, a confirmation message should be displayed stating that the key was copied successfully. It may look different on different systems, but this is what it looks like on mine:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `/usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/home/alex/.ssh/id_ed25519.pub"
 /usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
 /usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
@@ -121,7 +122,7 @@ Number of key(s) added: 1
 Now try logging into the machine, with: "ssh 'guyera@access.engr.oregonstate.edu'"
 and check to make sure that only the key(s) you wanted were added.
 `
-      }</ShellBlock>
+      }</TerminalBlock>
 
       <P>You should now be able to log into the engineering severs remotely via SSH, and it shouldn't require a Duo authentication. Let's do that now. Notice the message at the bottom of my above screenshot; it says to try logging into the machine with the <Code>ssh</Code> command:</P>
 
@@ -133,7 +134,7 @@ and check to make sure that only the key(s) you wanted were added.
 
       <P>But if all goes well, a message similar to the following should be displayed in your terminal:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `========================================================================
  You Are Accessing an Oregon State University System
  Unauthorized Access Prohibited
@@ -161,7 +162,7 @@ Last login: Wed Jul 16 11:57:34 2025 from 10.248.115.72
 (base) guyera@flip2:~$ 
 
 `
-      }</ShellBlock>
+      }</TerminalBlock>
       
       <P>Congratulations! You're now logged into your account on the engineering servers. Until you exit out of your terminal (or kill the SSH session via the <Code>exit</Code> shell command), any and all shell commands that you execute in the terminal will actually be sent to the engineering servers, interpreted by a shell running remotely on the servers (specifically, the default shell that you configured via the interface in TEACH<Emdash/>hopefully <Code>/bin/bash</Code>), and executed on the servers on your behalf. In essence, you're now able to control the engineering servers remotely via a text-based terminal interface.</P>
 

@@ -1,6 +1,7 @@
 import PythonBlock from '../ui/pythonblock'
 import SyntaxBlock from '../ui/syntaxblock'
 import ShellBlock from '../ui/shellblock'
+import TerminalBlock from '../ui/terminalblock'
 import Image from '../ui/image'
 import Code from '../ui/code'
 import It from '../ui/italic'
@@ -127,11 +128,11 @@ if __name__ == '__main__':
 
       <P>Let's save the file and quit Vim. Type <Code>wq</Code> after the colon and press enter. You should now find yourself back in your shell once again. If you execute <Code>ls</Code>, you should now see <Code>hello.py</Code> in your working directory:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `(base) guyera@flip4:lecture-notes$ ls
 hello.py
 `
-      }</ShellBlock>
+      }</TerminalBlock>
 
       <P>(This lecture isn't about Python, but if you're curious, you can execute the Python program that we just wrote by typing <Code>python hello.py</Code> into the terminal and pressing enter; refer to <Link href={allPathData["python-hello-world"].pathName}>my "Hello, World!" Python lecture notes</Link> for more information).</P>
 
@@ -151,7 +152,7 @@ hello.py
 
       <P>Now, copy and paste the following contents into the file within Vim (recall that you can paste while in Insert Mode via Ctrl+Shift+V, assuming your terminal configuration has been setup properly):</P>
 
-      <ShellBlock>{
+      <TerminalBlock>{
 `set nu
 set mouse=a
 filetype plugin indent on
@@ -164,7 +165,7 @@ set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 `
-      }</ShellBlock>
+      }</TerminalBlock>
 
       <P>Now save and quit Vim (press escape to enter Normal Mode, then type <Code>:wq</Code> and press enter).</P>
 

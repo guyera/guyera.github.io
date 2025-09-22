@@ -183,13 +183,13 @@ if __name__ == '__main__':
 
       <P>Running the above program produces the following output:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `(env) $ python disable_endline.py 
 Hello, 
 World!
 Hello, World!
 I like pie (env) $`
-      }</ShellBlock>
+      }</TerminalBlock>
 
       <P>Notice that the the first "World!" appears on a separate line in the terminal from the preceding "Hello, ". This is because the first <Code>print()</Code> function call prints "Hello, " with a terminating endline character sequence (this is the default behavior of the <Code>print()</Code> function). Similarly, the second "Hello, " appears on a separate line in the terminal from the preceding "World!" for the same reason. However, the second "World!" appears on the same line as the preceding "Hello, " because <Code>end=''</Code> specifies that no endline character sequence (nor any other characters) should be appended to the "Hello, " message. "I", "like", "pie", and the subsequent terminal prompt (<Code>(env) $</Code>) are all separated by spaces as specified by <Code>end=' '</Code>.</P>
 
@@ -230,7 +230,7 @@ if __name__ == '__main__':
 
       <P>Running the above program produces the following output:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `(env) $ python escape_sequences.py 
 Hello,
 World!
@@ -241,7 +241,7 @@ Shepherd's Pie
 "Four score and seven years ago"
 \\
 `
-      }</ShellBlock>
+      }</TerminalBlock>
 
       <SectionHeading id="types-expressions-and-operators">Types, Expressions, and Operators</SectionHeading>
 
@@ -339,13 +339,13 @@ if __name__ == '__main__':
 
       <P>Running the above program produces the following output:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `(env) $ python variables.py 
 5
 10
 Hello
 `
-      }</ShellBlock>
+      }</TerminalBlock>
 
       <P>Variables can also be referenced in expressions whose values are assigned to other variables. For example:</P>
 
@@ -412,12 +412,12 @@ if __name__ == '__main__':
 
       <P>Although the above program technically runs just fine, passing it through Mypy will raise a type error:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `(env) python-hello-world $ mypy change_type.py 
 change_type.py:5: error: Incompatible types in assignment (expression has type "float", variable has type "int")  [assignment]
 Found 1 error in 1 file (checked 1 source file)
 `
-      }</ShellBlock>
+      }</TerminalBlock>
 
       <P>Indeed, when a variable is first created within a given scope, Mypy evaluates the static type of the expression whose value is assigned to the variable (i.e., the type of the expression on the right side of the assignment operator) and "associates" the variable with that type. From that point on, that variable may only be assigned other values of the same type (or rather, other values that are "compatible" with that static type, but don't worry about the nuances for now). That is, if <Code>x</Code> is first created by assigning <Code>x = 12</Code>, then Mypy determines <Code>x</Code> to be an <Code>int</Code>-typed variable, and all subsequent assignments to <Code>x</Code> must also be <Code>int</Code>-typed values. Similarly, if <Code>x</Code> is first created by assigning <Code>x = 'Hello'</Code>, then Mypy determines <Code>x</Code> to be a <Code>str</Code>-typed variable, and all subsesquent assignments to <Code>x</Code> must also be <Code>str</Code>-typed values.</P>
 
@@ -458,13 +458,13 @@ if __name__ == '__main__':
 
       <P>Running the above program produces the following output:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `(env) $ python f_strings.py 
 The area of a circle with radius 5 is 78.5398
 x is 10, and y is 7.5
 x is {x}, and y is {y}
 `
-      }</ShellBlock>
+      }</TerminalBlock>
 
       <SectionHeading id="type-casting">Type Casting</SectionHeading>
       
@@ -501,10 +501,10 @@ if __name__ == '__main__':
 
       <P>Running the above program produces the following output:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `(env) python-hello-world $ python type_casting.py 
 <class 'float'>`
-      }</ShellBlock>
+      }</TerminalBlock>
 
       <P>Indeed, the type of <Code>x</Code> is printed as <Code>{`<class 'float'>`}</Code>, which proves that <Code>x</Code> is a float rather than a string.</P>
 
@@ -583,11 +583,11 @@ if __name__ == '__main__':
 
       <P>Running the above program produces the following output:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `(env) $ python volume_of_sphere.py 
 523.5986666666666
 `
-      }</ShellBlock>
+      }</TerminalBlock>
       
       <P>When the Python interpreter encounters the function call in line 16, it jumps up to the <Code>volume_of_sphere</Code> function. The argument, <Code>5.0</Code>, is (sort of) copied into the parameter, <Code>radius</Code>, and then the function body begins. The function computes <Code>4 / 3 * 3.141592 * radius * radius * radius</Code>. In this context, <Code>radius</Code> is <Code>5.0</Code>, because that's the value that was copied from the argument in the function call. This expression is evaluated as <Code>523.5986666666666</Code>. This value is stored inside the function's local variable, <Code>volume</Code>. Finally, the function returns the value of <Code>volume</Code> back to the function caller. Now that the function is over, the interpreter jumps <It>back</It> to where the function was called from<Emdash/>line 16. The function call itself, <Code>volume_of_sphere(5.0)</Code>, is replaced with the return value, <Code>523.5986666666666</Code>. This is precisely how return values work<Emdash/>they serve as the value of the corresponding function call. This value is then stored inside the <Code>main()</Code> function's local variable, <Code>volume_of_radius_5_sphere</Code>, which is finally printed to the terminal. (There are some nuances surrounding all of this, particularly involving objects and references, that we won't cover for a few more lectures).</P>
 
@@ -663,7 +663,7 @@ if __name__ == '__main__':
 
       <P>The <Code>print_multiplication_table()</Code> function prints a multiplication table to the terminal with the given width and height as specified by the parameters (which are essentially copied from the arguments). Don't worry about how it works for now; we'll discuss loops momentarily. In any case, running the above program produces the following output:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `(env) python-hello-world $ python none_return_type.py 
 1       2       3       4       5       6       7
 2       4       6       8       10      12      14
@@ -675,7 +675,7 @@ if __name__ == '__main__':
 2       4       6
 3       6       9
 4       8       12`
-      }</ShellBlock>
+      }</TerminalBlock>
 
       <P>Notice that we called the <Code>print_multiplication_table()</Code> function twice within the <Code>main()</Code> function, but we did <Ul>not</Ul> try to store its return value inside a variable at any point. Again, this is a function that doesn't return anything, so it wouldn't make sense to attempt to store the values of the function calls anywhere (their values are <Code>None</Code>, which aren't useful in this case).</P>
 
@@ -885,13 +885,13 @@ if __name__ == '__main__':
 
       <P>Suppose you run the above program and enter "Banana" as your favorite fruit. The output would look like this:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `(env) $ python prompt_favorite_fruit.py 
 What is your favorite fruit?
 Banana
 Banana
 `
-      }</ShellBlock>
+      }</TerminalBlock>
 
       <P>Notice that the word "Banana" appears twice. The first "Banana" was not actually printed by the program<Emdash/>it's what I (the user) typed into the terminal. After I typed it and pressed the enter key, the string <Code>'Banana'</Code> was stored inside the <Code>favorite_fruit</Code> variable. The program then resumed and printed the value of that variable back to the terminal, hence the second "Banana".</P>
 
@@ -910,16 +910,16 @@ if __name__ == '__main__':
 
       <P>Running the above program through Mypy raises an error message:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `(env) $ mypy compute_age.py 
 compute_age.py:4: error: Unsupported operand types for - ("int" and "str")  [operator]
 Found 1 error in 1 file (checked 1 source file)
 `
-      }</ShellBlock>
+      }</TerminalBlock>
 
       <P>Mypy is trying to tell us that the subtraction operator (<Code>-</Code>) cannot be used to subtract a string from an integer (i.e., we have a type error). And indeed, attempting to run the program itself results in an error at runtime after the user types in their birth year:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `(env) $ python compute_age.py 
 What year were you born?
 1999
@@ -932,7 +932,7 @@ Traceback (most recent call last):
                                    ~~~~~^~~~~~~~~~~~
 TypeError: unsupported operand type(s) for -: 'int' and 'str'
 `
-      }</ShellBlock>
+      }</TerminalBlock>
 
       <P>So, how do we fix this? Well, recall our discussion about <Link href="#type-casting">type casting</Link>. I said that, in some cases, expressions must be <It>explicitly</It> type casted to convert them to the desired type (that's to say, in some cases, the interpreter will not automatically convert expressions into other types just to make them valid<Emdash/>it's your responsibility to do the type casting in such cases). In order to subtract <Code>birth_year</Code> from <Code>2025</Code>, we must first explicitly type-cast <Code>birth_year</Code> into an integer (or some other numeric type that can be subtracted from an integer):</P>
 
@@ -955,21 +955,21 @@ if __name__ == '__main__':
 
       <P>Running the above program through Mypy prints no error messages:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `(env) $ mypy compute_age.py 
 Success: no issues found in 1 source file
 `
-      }</ShellBlock>
+      }</TerminalBlock>
 
       <P>And running the program itself produces the following output (assuming the user enters 1999 as their birth year):</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `(env) $ python compute_age.py 
 What year were you born?
 1999
 Your age is (roughly) 26
 `
-      }</ShellBlock>
+      }</TerminalBlock>
 
       <P>Note: This isn't the point of the lecture, but the proper way of computing someone's age from their birthdate would be to use a complete and robust <Link href="https://docs.python.org/3/library/datetime.html">datetime library</Link>. Conducting arithmetic on dates and times is infamously difficult due to daylight savings time, discrepancies between time zones, time zone adjustments, leap years, and so on, so you should probably rely on an existing complete solution rather than trying to implement your own.</P>
 
@@ -1030,7 +1030,7 @@ if __name__ == '__main__':
 
       <P>Running the above program produces the following output:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `(env) $ python relational_operators.py 
 True
 True
@@ -1042,7 +1042,7 @@ True
 False
 False
 `
-      }</ShellBlock>
+      }</TerminalBlock>
 
       <P>Let's talk if statements. To create an if statement in Python, start with the header: type the keyword <Code>if</Code>, followed by an expression whose type is <Code>bool</Code> (i.e., a condition), followed by a colon. Then, write the body of the if statement below the header. The body is the block of code that will execute if and only if the condition is satisfied. If statement bodies must be indented by one additional "level" of indentation, just like function bodies (again, you must be consistent about how you indent your code). Here's an example:</P>
 
@@ -1060,7 +1060,7 @@ if __name__ == '__main__':
 
       <P>Here are some example runs of the above program:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `(env) $ python if_statement.py 
 What's the password?
 4321
@@ -1069,7 +1069,7 @@ What's the password?
 1234
 Correct. Come on in.
 `
-      }</ShellBlock>
+      }</TerminalBlock>
 
       <P>Notice: When I type "4321" as the password, the if statement body does <Ul>not</Ul> execute, so the program prints nothing. But when I type "1234", the if statement body <Ul>does</Ul> execute, so the program prints "Correct. Come on in."</P>
 
@@ -1096,7 +1096,7 @@ if __name__ == '__main__':
 
       <P>Here are some new example runs of the updated program:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `(env) $ python if_statement.py 
 What's the password?
 4321
@@ -1106,7 +1106,7 @@ What's the password?
 1234
 Correct. Come on in.
 `
-      }</ShellBlock>
+      }</TerminalBlock>
 
       <P>Using an if statement together with an else statement creates two blocks of code, exactly one of which will be executed. But suppose you want more than just two such blocks of code. Suppose you want, say, 10 blocks of code, and exactly which one should be executed depends on several complex conditions. As a simple example, suppose we want to update the above program to print a special message when the user types in "password" as the password. In such a case, there are three possible outputs that the program might produce, depending on what the user entered. A common way to accomplish something like this is with <Term>elif statements</Term>. "Elif" stands for "else if". An elif statement may only follow a preceding if statement or other elif statement. An elif statement's body will be executed if and only if 1) all the preceding if and elif statements' conditions were evaluated to be <Code>False</Code>, and 2) the elif statement's condition is evaluated to be <Code>True</Code>.</P>
 
@@ -1130,7 +1130,7 @@ if __name__ == '__main__':
 
       <P>And here are some updated example runs:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `(env) $ python if_statement.py 
 What's the password?
 4321
@@ -1144,7 +1144,7 @@ What's the password?
 password
 Very funny.
 `
-      }</ShellBlock>
+      }</TerminalBlock>
 
       <P>I've left out some details. For one, you can chain an arbitrary number of elif statements together, but such a chain must start with an if statement and may only have at most one else statement. Moreover, if a such a chain does have an else statement, it must appear at the very end of the chain.</P>
 
@@ -1187,13 +1187,13 @@ if __name__ == '__main__':
 
       <P>Running the above program produces the following output:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `(env) $ python if_vs_elif.py 
 ABC
 XYZ
 987
 `
-      }</ShellBlock>
+      }</TerminalBlock>
 
       <P>Now let's talk <Term>logical operators</Term>. Logical operators operate on booleans and produce booleans. There are three main logical operators that you should know about:</P>
 
@@ -1243,12 +1243,12 @@ if __name__ == '__main__':
 
       <P>Here's the error reported by Mypy:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `(env) $ mypy if_in_function.py 
 if_in_function.py:1: error: Missing return statement  [return]
 Found 1 error in 1 file (checked 1 source file)
 `
-      }</ShellBlock>
+      }</TerminalBlock>
 
       <P>In fact, even <It>this</It> is illegal, even though, objectively, the if statement condition should never be false:</P>
 
@@ -1315,7 +1315,7 @@ if __name__ == '__main__':
 
       <P>Here's an example run:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `(env) $ python while_loop.py 
 Enter a number: 1
 Type q if you'd like to quit. Otherwise, type anything else: j
@@ -1325,7 +1325,7 @@ Enter a number: 4
 Type q if you'd like to quit. Otherwise, type anything else: q
 The sum of all the numbers you entered is 17
 `
-      }</ShellBlock>
+      }</TerminalBlock>
 
       <P>Importantly, a while loop does not necessarily end the <It>moment</It> that its condition becomes false. Rather, a while loops ends when the interpreter <It>evaluates</It> the while loop condition and, in doing so, determines it to be false. The interpreter evaluates the while loop condition once when the loop is first encountered, and then again every time it reaches the end of the while loop body. Hence, if the condition becomes false in the <It>middle</It> of the while loop body, the rest of the loop body will still execute as normal, and then the condition will be re-evaluated as false, and <It>then</It> the loop will terminate.</P>
 
@@ -1391,12 +1391,12 @@ if __name__ == '__main__':
 
       <P>Running the above program produces the following output:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `(env) $ python range.py 
 range(0, 5)
 [0, 1, 2, 3, 4]
 `
-      }</ShellBlock>
+      }</TerminalBlock>
       
       <P>Another way of using the <Code>range()</Code> function is to provide two integer arguments instead of one. In such a case, the first argument specifies the first value in the range, and the second argument specifies the last value in the range plus 1 (just as in the previous example). Finally, you can call the <Code>range()</Code> function and pass in three arguments. In such a case, the first argument specifies the first value in the range, the second argument specifies the last value in the range plus 1, and the third argument specifies the step size.</P>
 
@@ -1437,11 +1437,11 @@ if __name__ == '__main__':
 
       <P>Running the above program produces the following output:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `(env) $ python for_loop.py 
 45
 `
-      }</ShellBlock>
+      }</TerminalBlock>
 
       <P>Indeed, 0 + 1 + 2 + ... + 9 = 45, so the for loop works correctly.</P>
 
@@ -1461,14 +1461,14 @@ if __name__ == '__main__':
 
       <P>Running the above program produces the following output:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `(env) $ python repeated_for_loop.py 
 Hello, World!
 Hello, World!
 Hello, World!
 Hello, World!
 Hello, World!`
-      }</ShellBlock>
+      }</TerminalBlock>
 
       <P>This works fine, but notice that it creates a completely unecessary variable, <Code>i</Code>. Indeed, <Code>i</Code> iterates over the values of the range, but we don't actually <It>care</It> about the values themselves<Emdash/>we only care about creating a loop that runs for 5 iterations. There's unfortunately no way around that; every for loop must create an iterating variable, even if the loop body doesn't explicitly reference that variable. However, there's a convention: if your for loop body doesn't explicitly reference the for loop variable at any point, and the goal is simply to run the for loop for a certain number of iterations, then you should name the for loop variable <Code>_</Code>:</P>
       
@@ -1588,11 +1588,11 @@ if __name__ == '__main__':
 
       <P>Running the above program produces the following output:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `(env) $ python lists.py 
 ['Anomaly', 'Calamity', 'Anachronism']
 `
-      }</ShellBlock>
+      }</TerminalBlock>
 
       <P>Note: If the list is large, the Python interpreter may choose to only print <It>some</It> of its values to the terminal. If you want to ensure that all values are printed, you should iterate through the list using a for loop and print them one at a time (or do something fancier, like unpacking the list and passing its elements to <Code>print()</Code> along with a separator).</P>
 
@@ -1619,12 +1619,12 @@ if __name__ == '__main__':
 
       <P>And here's the output:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `(env) $ python lists.py 
 Calamity
 ['Anomaly', 'Calamity', 'Anachronism']
 `
-      }</ShellBlock>
+      }</TerminalBlock>
 
       <P>Attempting to access an element that does not exist by specifying an out-of-bounds index in between the square brackets results in an exception being thrown (specifically an <Code>IndexError</Code>). This causes the program to immediately crash, assuming you don't catch the exception (we may discuss exceptions and how they're thrown and caught later on in the course, time permitting):</P>
 
@@ -1688,12 +1688,12 @@ if __name__ == '__main__':
 
       <P>Here's the output:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `(env) $ python lists.py 
 Calamity
 ['Anomaly', 'Calamity', 'Anachronism', 'Amok']
 `
-      }</ShellBlock>
+      }</TerminalBlock>
 
       <P>Note: Methods, like <Code>.append()</Code>, are special functions that exist <It>within</It> certain objects (i.e., within certain complex values, such as lists). We'll discuss methods in greater detail later on in the term.</P>
 
@@ -1726,12 +1726,12 @@ if __name__ == '__main__':
 
       <P>Here's the output:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `(env) $ python lists.py 
 Calamity
 ['Anomaly', 'Calamity', 'Amok']
 `
-      }</ShellBlock>
+      }</TerminalBlock>
 
       <P>Notice that the third element, "Anachronism", is deleted from the list. There are other ways to remove elements from a list as well, such as the <Code>.remove()</Code> and <Code>.pop()</Code> functions. We won't discuss them, but feel free to look them up if you're curious.</P>
 
@@ -1768,12 +1768,12 @@ if __name__ == '__main__':
 
       <P>And here's the output:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `(env) $ python lists.py 
 Calamity
 ['Anomaly', 'Clandestine', 'Calamity', 'Amok']
 `
-      }</ShellBlock>
+      }</TerminalBlock>
 
       <P>As mentioned earlier, you can iterate over the elements of a list using a for loop, just as you can iterate over a range:</P>
 
@@ -1876,11 +1876,11 @@ if __name__ == '__main__':
 
       <P>Running the above program produces the following output:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `(env) $ python lists_in_functions.py 
 12
 `
-      }</ShellBlock>
+      }</TerminalBlock>
 
       <P>You could create a function that returns a list similarly. For example, the following code snippet defines a function named <Code>some_function()</Code> that returns a list of floats:</P>
 
@@ -1945,7 +1945,7 @@ if __name__ == '__main__':
 
       <P>Here are some example runs:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `(env) $ python search_in_list.py 
 What user would you like to search for?
 Alex
@@ -1955,7 +1955,7 @@ What user would you like to search for?
 Rob
 That user is in the list!
 `
-      }</ShellBlock>
+      }</TerminalBlock>
 
       <P>(If you want to check whether a given value is <It>not</It> in a given iterable, you can either use the <Code>not</Code> logical operator to simply negate the rest of the <Code>in</Code> operation, or you can use the dedicated <Code>not in</Code> operator. I won't quiz you on that, though.)</P>
 
@@ -1990,11 +1990,11 @@ if __name__ == '__main__':
 
       <P>Here's the output of the above program:</P>
 
-      <ShellBlock copyable={false}>{
+      <TerminalBlock copyable={false}>{
 `(env) $ python list_comprehension.py 
 [6.28, 19.62, 25.2, -3.0]
 `
-      }</ShellBlock>
+      }</TerminalBlock>
 
       <SectionHeading id="tracebacks">Tracebacks</SectionHeading>
 
