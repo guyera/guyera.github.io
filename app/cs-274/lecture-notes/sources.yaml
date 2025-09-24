@@ -2,3 +2,6 @@ pages:
   - pathName: 'c-in-context'
     pageTitle: 'C in Context'
     namedIdentifier: 'c-in-context'
+  - pathName: 'hello-world'
+    pageTitle: 'Hello, World!'
+    namedIdentifier: 'hello-world'

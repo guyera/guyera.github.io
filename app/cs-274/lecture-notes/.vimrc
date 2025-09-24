@@ -37,11 +37,11 @@ imap <leader>terminal<Space> <TerminalBlock copyable={false}>{<CR><CR>}</Termina
 " Map \\terminal followed by a space to a copyable TerminalBlock component
 imap <leader><leader>terminal<Space> <TerminalBlock>{<CR><CR>}</TerminalBlock>OA``OD
 
-" Map \py followed by a space to a copyable PythonBlock component
-imap <leader>py<Space> <PythonBlock>{<CR><CR>}</PythonBlock>OA``OD
+" Map \c followed by a space to a copyable CBlock component
+imap <leader>c<Space> <CBlock>{<CR><CR>}</CBlock>OA``OD
 
-" Map \\py followed by a space to a non-copyable PythonBlock component
-imap <leader><leader>py<Space> <PythonBlock copyable={false}>{<CR><CR>}</PythonBlock>OA``OD
+" Map \\c followed by a space to a non-copyable CBlock component
+imap <leader><leader>c<Space> <CBlock copyable={false}>{<CR><CR>}</CBlock>OA``OD
 
 " Map \syntax followed by a space to a SyntaxBlock component
 imap <leader>syntax<Space> <SyntaxBlock>{<CR><CR>}</SyntaxBlock>OA``OD
