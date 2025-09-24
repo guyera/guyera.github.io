@@ -254,6 +254,32 @@ $
 `valgrind ./hello-world`
       }</ShellBlock>
 
+      <P>Valgrind will print a bunch of additional information about the program as it runs. Just before running the program, it prints a header containing some information about Valgrind and the command that it's executing. As the program runs, if Valgrind detects any errors (e.g., certain kinds of memory management errors), it will print diagnostic information about them, including a stack trace pointing to the line of C source code in which the error occurred. Finally, after the program terminates, Valgrind prints some summary information about the final state of the process, including a heap summary that's vital for detecting memory leaks (more on this in a future lecture).</P>
+
+      <P>Here's what it looks like when we run <Code>hello-world</Code> through Valgrind:</P>
+
+      <TerminalBlock copyable={false}>{
+`$ valgrind ./hello-world 
+==1706140== Memcheck, a memory error detector
+==1706140== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==1706140== Using Valgrind-3.24.0 and LibVEX; rerun with -h for copyright info
+==1706140== Command: ./hello-world
+==1706140== 
+Hello, World!
+==1706140== 
+==1706140== HEAP SUMMARY:
+==1706140==     in use at exit: 0 bytes in 0 blocks
+==1706140==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==1706140== 
+==1706140== All heap blocks were freed -- no leaks are possible
+==1706140== 
+==1706140== For lists of detected and suppressed errors, rerun with: -s
+==1706140== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+`
+      }</TerminalBlock>
+
+      <P>Notice: the program's output, "Hello, World!", is sandwiched between Valgrind's debugging messages.</P>
+
       <SectionHeading id="executable-file-permissions">Executable file permissions</SectionHeading>
 
       {/*TODO*/}
