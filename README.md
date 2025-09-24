@@ -7,10 +7,4 @@ For more information, see the [course curriculum](https://nextjs.org/learn) on t
 `npm run dev`
 	Starts the development server.
 
-`npm run build` builds the app for production.
-
-`npm start` runs the built app in production mode.
-
-Tutorial [here](https://nextjs.org/learn/dashboard-app/getting-started)
-
-Currently [here](https://nextjs.org/learn/dashboard-app/optimizing-fonts-images) in the tutorial, specifically on optimizing images.
+`npm run build` builds the app for production. Exports to static site in `out/`.
