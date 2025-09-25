@@ -1,4 +1,3 @@
-import PythonBlock from './ui/pythonblock'
 import SyntaxBlock from './ui/syntaxblock'
 import TerminalBlock from './ui/terminalblock'
 import ShellBlock from './ui/shellblock'
