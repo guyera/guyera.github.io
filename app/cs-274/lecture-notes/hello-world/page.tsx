@@ -90,7 +90,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
         <Item>Development efficiency. Vim's text-processing capabilities are unparallelled if you know how to use it effectively.</Item>
       </Itemize>
 
-      <P>While you don't have to use Vim for all your assignments and labs, terminal and shells are a critical part of this course's content, so you will be assessed on your ability to use them throughout the term.</P>
+      <P>While you don't have to use Vim for all your assignments and labs, terminals and shells are a critical part of this course's content, so you will be assessed on your ability to use them throughout the term.</P>
 
       <SectionHeading id="hello-world">Hello, World!</SectionHeading>
 
@@ -114,15 +114,15 @@ int main() {
 
       <SectionHeading id="translation">Translation</SectionHeading>
 
-      <P>Many students struggle to understand how computers interact with programming languages, so let me try to bring some clarity here. A given CPU (the "heart" of a computer) can only possibly understand a single language: its respective <Bold>machine code</Bold> language. Machine code is a very primitive sort of language that's expressed entirely in terms of the given CPU architecture's <Bold>instruction set</Bold>. An instruction set, in turn, is the set of low-level operations that the given CPU can understand. These operations are typically expressed in the form of opcodes (identifying numeric operation values) and operands.</P>
+      <P>Many students struggle to understand how computers interact with programming languages, so let me try to bring some clarity here. A given CPU (the "brain" of a computer) can only possibly understand a single language: its respective <Bold>machine code</Bold> language. Machine code is a very primitive sort of language that's expressed entirely in terms of the given CPU architecture's <Bold>instruction set</Bold>. An instruction set, in turn, is the set of low-level operations that the CPUs of the given architecture can understand. These operations are typically expressed in the form of opcodes (identifying numeric operation values) and operands.</P>
 
-      <P>It's technically possible to write a program directly in a given CPU's machine code language (and, once upon a time, people had no other choice). Such programs are immediately understandable to the given CPU. However, there are several large problems with this strategy. For one, machine code is incredibly difficult for a person to understand. Writing an extremely large program in machine code would be unnecessarily difficult. Second, machine code is not <Bold>portable</Bold>. That's to say, a program written in one CPU's machine code may not be intrepretable to another CPU (particularly if the two CPUs have different architectures or are configured differently by their operating systems), so such programs would have to be written many times<Emdash/>once for each target platform.</P>
+      <P>It's technically possible to write a program directly in a given CPU's machine code language (and, once upon a time, people had no other choice). Such programs are immediately understandable to the given CPU. However, there are several large problems with this strategy. For one, machine code is incredibly difficult for a person to understand. Writing an extremely large program in machine code would be unnecessarily difficult. Second, machine code is not <Bold>portable</Bold>. That's to say, a program written in one CPU's machine code language may not be intrepretable to another CPU (particularly if the two CPUs have different architectures or are configured differently by their operating systems), so such programs would have to be written many times<Emdash/>once for each target platform.</P>
 
       <P>So instead, we write programs in "higher-level" programming languages like C. These languages offer <Bold>abstractions</Bold> over the underlying CPU architectures' instruction set(s). That is, when you're writing a C program, you don't have to think about CPU architectures or opcodes. Those details are abstracted away by the language.</P>
 
       <P>But as I said, a computer can only understand its machine code language; it can't understand programs written in C, or Python, or any other "high-level" language. So before a C program can be executed by a particular computer, it must be converted, or <Bold>translated</Bold>, into the respective computer's machine code language. Yes, "translation" means the same thing here as it does in natural language: to convert something written in one language to another language. But in this case, we're talking about programming languages<Emdash/>converting a program written in C into a program written in the target computer's machine code language.</P>
 
-      <P>Of course, machine code is difficult for a person to understand, so program translation is typically done automatically by another computer program. Such programs are known as <Bold>translators</Bold>. For example, a translator might convert a C program into machine code. There are two primary kinds of translators:</P>
+      <P>Of course, machine code is difficult for a person to understand, so program translation is typically done automatically by another computer program. Such programs are known as <Bold>translators</Bold>. For example, a translator might convert a C program into one of many machine code languages (depending on the target platform). There are two primary kinds of translators:</P>
 
       <Itemize>
         <Item><Bold>Compilers</Bold>. These convert programs from one language to another <Ul>up front</Ul>. In other words, they perform the entire translation process all in one fell swoop. Assuming the target language is machine code, then after the compilation process is complete, the compiled machine code can be executed directly on the target platform.</Item>
@@ -131,7 +131,7 @@ int main() {
 
       <P>The crucial difference is when the translation happens. Compilers translate programs before they're executed (before runtime). Interpreters translate (interpret) programs <It>as</It> they're being executed (at runtime).</P>
 
-      <P>(There are also many compiler/interpreter hybrids. Take CPython for example. It's the standard Python implementation. It compiles Python code into an intermediary bytecode, which is easier for the interpreter to understand, and then it interprets that bytecode on the fly at runtime. Most Java implementations work in a similar manner.)</P>
+      <P>(There are also many compiler/interpreter hybrids. Take CPython for example. It's the standard Python implementation. It compiles Python code into an intermediary bytecode, which is easier for the interpreter to parse, and then it interprets that bytecode on the fly at runtime. Most Java implementations work in a similar manner.)</P>
       
         <SectionHeading id="building-a-c-program">Building a C program</SectionHeading>
 
@@ -139,7 +139,7 @@ int main() {
 
       <P>While there do exist some C interpreters, they're not very mainstream. One of C's main objectives is to support the development of high-performance applications. Translation is expensive, and interpreters bear that cost at runtime, which slows down the program. Compilers bear that cost up front, before runtime, which tends to produce faster programs. So, in line with C's objectives, C programs are almost always compiled rather than interpreted.</P>
 
-      <P>There are various build tools that are capable of compiling C programs into machine code executables. We'll be using the GNU Compiler Collection's (GCC) build tool, <Code>gcc</Code>. It's installed on the ENGR servers, so if you're working in an SSH session onthe servers, it'll be available to you out of the box. It's also typically available on MacOS systems. If you're on Windows and want a local installation, you might look into <Link href="https://sourceforge.net/projects/mingw/">MinGW</Link>.</P>
+      <P>There are various build tools that are capable of compiling C programs into machine code executables. We'll be using the GNU Compiler Collection's (GCC) build tool, <Code>gcc</Code>. It's installed on the ENGR servers, so if you're working in an SSH session on the servers, it'll be available to you out of the box. It's also typically available on MacOS systems. If you're on Windows and want a local installation, you might look into <Link href="https://sourceforge.net/projects/mingw/">MinGW</Link>.</P>
 
       <P><Code>gcc</Code> has lots of neat options, but we'll be using it in a very limited capacity. To compile our <Code>hello.c</Code> program, execute the following shell command:</P>
 
@@ -172,25 +172,27 @@ hello.c  hello-world
 
       <P>(Ignore the dollar signs. They're simply my terminal prompt. That is, my shell automatically displays them at the beginning of every shell command.)</P>
 
-      <P>I also executed <Code>ls</Code> a couple times to illustrate what's going on. Initially, my working directory only contains the file <Code>hello.c</Code>. But after running the build command, it contains an additional file named <Code>hello-world</Code>. To be clear, <Code>hello.c</Code> and <Code>hello-world</Code> contain the exact same program, but expressed in two different languages. <Code>hello.c</Code> is our program expressed in the C programming language, whereas <Code>hello-world</Code> is our program expressed in the ENGR servers' machine code language.</P>
+      <P>I also executed <Code>ls</Code> a couple times to illustrate what's going on. Initially, my working directory only contains the file <Code>hello.c</Code>. But after running the build command, it contains an additional file named <Code>hello-world</Code>. To be clear, <Code>hello.c</Code> and <Code>hello-world</Code> contain the exact same program, but expressed in two different languages. <Code>hello.c</Code> is our program expressed in the C programming language (as shown previously), whereas <Code>hello-world</Code> is our program expressed in the ENGR servers' machine code language (as generated by <Code>gcc</Code> by compiling <Code>hello.c</Code>).</P>
 
       <P>In your terminal, <Code>ls</Code> may display <Code>hello-world</Code> in green text. This indicates that it's an executable file (more on <Link href="#executable-file-permissions">executable file permissions</Link> in a bit). In other words, it's 1) expressed in terms of the computer's machine code language, and 2) contains the necessary metadata and other information for the operating system's program loader to be able to load it and execute it (e.g., as in <Link href="https://en.wikipedia.org/wiki/Executable_and_Linkable_Format">ELF</Link>, in the case of *nix systems).</P>
 
+      <P>(Technically, some executable files that are run through interpreters, like shell scripts, don't need to be written in the computer's machine code language).</P>
+
       <P>Before we move on, I need to point out an extremely common and also extremely detrimental mistake. Suppose that, when writing my shell command, I accidentaly write it like so:</P>
 
-      <ShellBlock>{
+      <ShellBlock copyable={false}>{
 `gcc -g -o hello.c hello-world`
       }</ShellBlock>
 
       <P>Notice: I accidentally switched the placement of <Code>hello.c</Code> and <Code>hello-world</Code>. It's a seemingly small mistake, but it can have disastrous consequences: in some cases, it can overwrite your source code file (<Code>hello.c</Code>) with machine code. <Ul>Do not do this</Ul>. It's a very fast way to lose a whole lot of progress on an assignment.</P>
 
-      <P>(If you ever accidentally do this, there are ways of recovering some of your work. If you frequently commit and push to GitHub, then you can recover it via Git. Otherwise, you <It>may</It> be able to partially recover it using the ENGR servers' snapshots. But really, just do yourself a favor and be really careful to avoid making this mistake altogether.)</P>
+      <P>(If you ever accidentally do this, there are ways of recovering some of your work, but they're not entirely reliable, and you'll almost always lose at least some progress. If you frequently commit and push to GitHub, then you can recover the most recently pushed commit via Git. Otherwise, you <It>may</It> be able to partially recover your lost work using the ENGR servers' snapshots. But really, just do yourself a favor and be really careful to avoid making this mistake altogether.)</P>
 
       <SectionHeading id="executing-a-c-program">Executing a C program</SectionHeading>
 
       <P>Executable programs (programs written in machine code) are stored as files, just like non-executable (source code) files. In our case, <Code>hello-world</Code> is a file containing an executable program. We sometimes refer to such files colloquially as <Bold>executables</Bold> (e.g., <Code>hello-world</Code> is an executable).</P>
 
-      <P>Executables can be executed just like any other shell command. Simply type out the path to the executable and press enter. If the executable resides in your working directory (and it often does), then you may need to prefix the name of the executable with <Code>./</Code>. This explicitly tells the shell that you're trying to execute a file within your working directory rather than in some central system directory.</P>
+      <P>Executables can be executed just like any other shell command. Simply type out the path to the executable and press enter. If the executable resides in your working directory (and it often does), then you may need to prefix the name of the executable with <Code>./</Code>. This explicitly tells the shell that you're trying to execute a file within your working directory rather than in some central system directory (e.g., within the system path).</P>
 
       <P>For example, we can execute <Code>hello-world</Code> like so (assuming it's contained in our working directory):</P>
 
@@ -222,7 +224,7 @@ Hello, World!$
 `
       }</TerminalBlock>
 
-      <P>There's a simple reason for this: we updated <Code>hello.c</Code>, but we forgot to update the executable file, <Code>hello-world</Code>. These are two completely separate files; updating the former does not update the latter. To update <Code>hello-world</Code>, we simply have to rebuild from scratch using the same shell command that we did earlier:</P>
+      <P>There's a simple reason for this: we updated <Code>hello.c</Code>, but we forgot to update the executable file, <Code>hello-world</Code>. These are two completely separate files; updating the former does not update the latter. To update <Code>hello-world</Code>, we have to rebuild it using the same shell command that we did earlier:</P>
 
       <ShellBlock>{
 `$ gcc -g -o hello-world hello.c 
@@ -231,7 +233,7 @@ Hello, World!$
 
       <P>You must recompile your program every time you make any changes to any of its source code files, or else the executable will be outdated and unreflective of your recent changes.</P>
 
-      <P>Now, running our program produces the following output:</P>
+      <P>Now, running our program produces the following output, with the subsequent terminal prompt on its own line:</P>
 
       <TerminalBlock copyable={false}>{
 `$ ./hello-world 
@@ -240,15 +242,11 @@ $
 `
       }</TerminalBlock>
 
-      <P>(Again, the dollar signs are just my terminal prompts. The dollar sign at the bottom of the output simply means that when I type my next shell command, it will be immediately to the right of that dollar sign.)</P>
-
       <SectionHeading id="valgrind">Valgrind</SectionHeading>
-
-      {/*TODO*/}
 
       <P>Although you <It>can</It> execute programs by simply writing out their name (prefixed with <Code>./</Code> if they're in your working directory) and pressing enter, when developing and debugging a C program, you should almost always execute it through a debugger. The ENGR servers have a debugging tool suite known as Valgrind. It's already installed and available for use. (If you're develooping locally, you'll likely have to use an alternative debugger; most C IDEs have C debugging tools built into them).</P>
 
-      <P>We'll talk more about Valgrind later. But for now, I just want you to know: in this course, you should basically always run all of your programs through Valgrind (or another debugger). Really, there's absolutely no reason <It>not</It> to use Valgrind (or another debugger) in this course, and it's vital for catching and diagnosing lots of sneaky bugs (e.g., memory errors). To run an executable through Valgrind, simply type <Code>valgrind </Code> before the path to the executable. For example:</P>
+      <P>We'll talk more about Valgrind later. But for now, I just want you to know: in this course, you should basically always run all of your programs through Valgrind (or another debugger). Really, there's absolutely no reason <It>not</It> to use Valgrind (or another debugger) in this course, and it's vital for catching and diagnosing lots of sneaky bugs (e.g., memory errors). To run an executable through Valgrind, simply type <Code>valgrind</Code> before the path to the executable. For example:</P>
 
       <ShellBlock>{
 `valgrind ./hello-world`
@@ -282,16 +280,18 @@ Hello, World!
 
       <SectionHeading id="executable-file-permissions">Executable file permissions</SectionHeading>
 
-      <P>In order to execute a file, it must be executable. This means two things:</P>
+      <P>In order to execute a file, it must be executable. This usually means two things:</P>
 
       <Itemize>
         <Item>It must follow the target system's executable file format. Linux uses the Executable and Linkable Format (ELF). All executables generated by <Code>gcc</Code> targeting Linux systems will automatically follow this format.</Item>
         <Item>The user who intends to execute the file must have the proper permissions to do so. In most cases, all executables generated by <Code>gcc</Code> will have all executable permission bits enabled, meaning that all users will have the necessary permissions to execute them.</Item>
       </Itemize>
 
-      <P>In some scenarios (e.g., when writing shell scripts), you might find yourself wanting to execute a file for which you do not have executable permissions. Even if you're the <It>owner</It> of the file (e.g., because you created), you may still not have executable permissions for it.</P>
+      <P>In some scenarios (e.g., when writing shell scripts), you might find yourself wanting to execute a file for which you do not have executable permissions. Even if you're the <It>owner</It> of the file (e.g., because you created it), you may still not have executable permissions for it by default.</P>
 
       <P>But if you're the owner of a file, you can change the permissions associated with that file, giving yourself executable permissions so that you can execute it.</P>
+
+      <P>(You shouldn't need to do this for compiled C programs, but I'll show you how to do it anyways just in case.)</P>
 
       <P>Let's learn by example. Suppose you try to execute the <Code>hello-world</Code> file, but you're met with a permissions error:</P>
 
@@ -301,7 +301,7 @@ valgrind: ./hello-world: Permission denied
 `
       }</TerminalBlock>
 
-      <P>This error means that you don't have permissions to execute the <Code>hello-world</Code> file. To see the permissions associated with a file, use the <Code>ls</Code> command, but supply the <Code>-l</Code> flag:</P>
+      <P>This error means that you don't have permissions to execute the <Code>hello-world</Code> file. Again, you shouldn't encounter errors like this in most cases since programs built by <Code>gcc</Code> are executable by default. Regardless, suppose that, somehow, you run into this situation. To see the permissions associated with a file, use the <Code>ls</Code> command, but supply the <Code>-l</Code> flag:</P>
 
       <TerminalBlock copyable={false}>{
 `$ ls -l
@@ -315,15 +315,15 @@ total 120
 
       <P>The permissions of a file are given in the first part of the output. See all those dashes, r's, and w's? Those reflect file permissions. In this case, both files have the same permissions: <Code>-rw-r--r--</Code>.</P>
 
-      <P>The first character in the permission string actually just tells you what type of file it is. A dash means that it's a regular file (or, more rigorously, a hard link). A <Code>d</Code> means that it's a directory (folder). There are other characters as well for other special kinds of files (e.g., symbolic links).</P>
+      <P>The first character in the permission string actually just tells you what type of file it is. A dash (<Code>-</Code>) means that it's a regular file (or, more rigorously, a hard link). A <Code>d</Code> means that it's a directory (folder). There are other characters as well for other special kinds of files (e.g., symbolic links).</P>
 
-      <P>The next three characters (<Code>rw-</Code>, in the case of both the above files) specify the permissions of the file's owner. As stated, both of these files are owned by <Code>guyera</Code>, so they reflect what permissions the Linux user <Code>guyera</Code> has when working with the files. The first of these three characters specifies whether the owning user has permissions to read the file (i.e., to view its contents). If it's an <Code>r</Code>, then the owning user does have such permissions. If it's a dash (<Code>-</Code>), then they don't. In this case, it's an <Code>r</Code> for both files, so <Code>guyera</Code> does, indeed, have permissions to read (view the contents of) these files. The second of these three characters is similar, but it specifies whether the owning user has permissions to write the file (i.e., modify its contents). If it's a <Code>w</Code>, then they do. If it's a dash (<Code>-</Code>), then they don't. In this case, it's a <Code>w</Code> for both files, so <Code>guyera</Code> does, indeed, have permissions to write (modify) these files. Finally, the third of these three characters specifies whether the owning user has permissions to execute the file. If it's an <Code>x</Code>, then they do. If it's a dash (<Code>-</Code>), then they don't. In this case, it's a dash for both files, so <Code>guyera</Code> cannot execute either of them.</P>
+      <P>The next three characters (<Code>rw-</Code>, in the case of both the above files) specify the permissions of the file's owning user. As stated, both of these files are owned by <Code>guyera</Code>, so they reflect what permissions the Linux user <Code>guyera</Code> has when working with the files. The first of these three characters specifies whether the owning user has permissions to read the file (i.e., to view its contents). If it's an <Code>r</Code>, then the owning user does have such permissions. If it's a dash (<Code>-</Code>), then they don't. In this case, it's an <Code>r</Code> for both files, so <Code>guyera</Code> does, indeed, have permissions to read (view the contents of) these files. The second of these three characters is similar, but it specifies whether the owning user has permissions to write the file (i.e., modify its contents). If it's a <Code>w</Code>, then they do. If it's a dash (<Code>-</Code>), then they don't. In this case, it's a <Code>w</Code> for both files, so <Code>guyera</Code> does, indeed, have permissions to write (modify) these files. Finally, the third of these three characters specifies whether the owning user has permissions to execute the file. If it's an <Code>x</Code>, then they do. If it's a dash (<Code>-</Code>), then they don't. In this case, it's a dash for both files, so <Code>guyera</Code> cannot execute either of them (hence the "permission denied" error).</P>
 
       <P>Before moving on, I should explain the remaining permission characters. The next three (<Code>r--</Code>) work the same way, but they specify the permissions for users who 1) aren't the owning user of the file, but 2) <It>do</It> belong to the owning user group of the file. In this case, that means users who are <It>not</It> <Code>guyera</Code>, but who <It>do</It> belong to the group <Code>upg4546</Code> (and, in this case, <Code>upg4546</Code> is actually my personal Linux user group, so <Code>guyera</Code> is the only user in it). The last three characters (also <Code>r--</Code>) work the same way, but they specify the permissions for all other users (users who aren't the owning user of the file <It>and</It> don't belong to the owning user group of the file).</P>
 
       <P>That's all to say, I (<Code>guyera</Code>) own the file <Code>hello-world</Code>, but I don't have executable permissions as signified by the fourth permission character being a dash instead of an <Code>x</Code>. Before I can execute it, I must give myself executable permissions for the file.</P>
 
-      <P>The owner of a file can modify its permissions via the <Code>chmod</Code> command. In its simplest form, it can be used like so: <Code>{"chmod <users>+<permissions> <file>"}</Code>. Replace <Code>{"<users>"}</Code> with one or more characters signifying the users whose permissions you want to change with respect to the file. You can use <Code>a</Code> to change all users' permissions, <Code>u</Code> to change the owning user's permissions, <Code>g</Code> to change the owning user group's permissions, or <Code>o</Code> to change all other users' permissions. Replace <Code>{"<permissions>"}</Code> with one or more characters signifying the permissions you'd like to give to those users. You can use <Code>r</Code> to give them read permissions, <Code>w</Code> to give them write permissions, or <Code>x</Code> to give them executable permissions. Finally, replace <Code>{"<file>"}</Code> with the path to the file whose permissions you're modifying.</P>
+      <P>The owner of a file can modify its permissions via the <Code>chmod</Code> shell command. In its simplest form, it can be used like so: <Code>{"chmod <users>+<permissions> <file>"}</Code>. Replace <Code>{"<users>"}</Code> with one or more characters signifying the users whose permissions you want to change with respect to the file. You can use <Code>a</Code> to change all users' permissions, <Code>u</Code> to change the owning user's permissions, <Code>g</Code> to change the owning user group's permissions, or <Code>o</Code> to change all other users' permissions. Replace <Code>{"<permissions>"}</Code> with one or more characters signifying the permissions you'd like to give to those users. You can use <Code>r</Code> to give them read permissions, <Code>w</Code> to give them write permissions, or <Code>x</Code> to give them executable permissions. Finally, replace <Code>{"<file>"}</Code> with the path to the file whose permissions you're modifying.</P>
 
       <P>For example, we can give ourselves executable permissions for <Code>hello-world</Code> like so:</P>
 
@@ -344,21 +344,21 @@ total 120
 `
       }</TerminalBlock>
 
-      <P>I've also run <Code>ls -l</Code> again so that you can see the updated permissions for <Code>hello-world</Code>: <Code>-rwxr--r--</Code>. The <Code>x</Code> indicates that the owning user (us) now has executable permissions.</P>
+      <P>I've also run <Code>ls -l</Code> again so that you can see the updated permissions for <Code>hello-world</Code>: <Code>-rwxr--r--</Code>. The <Code>x</Code> indicates that the owning user (me) now has executable permissions.</P>
 
       <P>You can also use <Code>chmod</Code> to remove or set permissions. The <Code>+</Code> character means to add permissions. Replace it with a <Code>-</Code> character to remove permissions, or an <Code>=</Code> character to set permissions. We might revisit this in a future lecture, but that's enough on file permissions for now.</P>
 
       <SectionHeading id="compiler-errors">Compiler errors</SectionHeading>
 
-      <P>Certain kinds of programming errors can be detected via <Bold>static analysis</Bold>. Static loosely means "before runtime" (whereas dynamic means "at runtime"), so static analysis refers to analysis of a program's code before actually running it. There are various static analysis tools, but the most common one is a compiler. Yes, compilers translate code from one language to another, but as they do so, they analyze the source code and make sure that it's valid. If a compiler detects that the source code isn't valid, it will fail to compile the program and print out a very useful diagnostic error message.</P>
+      <P>Certain kinds of programming errors can be detected via <Bold>static analysis</Bold>. Static loosely means "before runtime" (whereas dynamic means "at runtime"), so static analysis refers to analysis of a program's code before actually running it. There are various static analysis tools for C programs, but the most common one is simply your compiler. Yes, compilers translate code from one language to another, but as they do so, they analyze the source code and make sure that it's valid. If a compiler detects that the source code isn't valid, it will fail to compile the program and print out a very useful diagnostic error message.</P>
 
-      <P>For example, suppose we had forgotten one of the (very important) semicolon in our <Code>hello.c</Code> file:</P>
+      <P>For example, suppose we had forgotten one of the (very important) semicolons in our <Code>hello.c</Code> file:</P>
 
       <CBlock fileName="hello.c">{
 `#include <stdio.h>
 
 int main() {
-        printf("Hello, World!\n")
+        printf("Hello, World!\\n")
         return 0;
 }
 `
@@ -372,7 +372,7 @@ int main() {
 `$ gcc hello.c 
 hello.c: In function ‘main’:
 hello.c:4:34: error: expected ‘;’ before ‘return’
-    4 |         printf("Hello, World!\n")
+    4 |         printf("Hello, World!\\n")
       |                                  ^
       |                                  ;
     5 |         return 0;
@@ -380,7 +380,7 @@ hello.c:4:34: error: expected ‘;’ before ‘return’
 `
       }</TerminalBlock>
 
-      <P>Yes, that's literally what <Code>gcc</Code> displays in the terminal. Notice how helpful this message is. Not only does it say that it expected a semicolon before the word <Code>'return'</Code>, it even displays the line of code on which the semicolon was expected to appear, and it displays an arrow pointing to exactly where it expected to see that semicolon.</P>
+      <P>Yes, that's literally what <Code>gcc</Code> displays in the terminal. Notice how helpful this message is. Not only does it say that it expected a semicolon before the word <Code>'return'</Code>, it even displays the line of code on which the semicolon was expected to appear, and it displays an arrow pointing to exactly where it expected to see that semicolon (and a semicolon character below that arrow, in case you've forgotten what a semicolon looks like).</P>
 
       <P>Not all error messages are quite <It>that</It> nice. Some of them are a little less clear. For example, in some cases, the compiler knows that something is wrong, but it doesn't necessarily know how to fix it. But even in those cases, compiler error messages are extremely helpful in diagnosing the problem.</P>
 
@@ -388,7 +388,7 @@ hello.c:4:34: error: expected ‘;’ before ‘return’
 
       <P>(Sometimes, the offending line of code is slightly off. For example, if a line of code is missing an important token from the end of it (such as a semicolon), the compiler can sometimes misinterpret the issue as missing a token from the beginning of the subsequent line. In such a case, if the error occurs in line N, it might instead point you to line N+1 or similar. Regardless, it will always get you extremely close to the issue.)</P>
 
-      <P>Rather than making hundreds of complicated changes and then trying to recompile it all at once, prefer to work in small iterations. Make a single small change to the source code; try to recompile; and fix any compiler errors until compilation succeeds again. Rinse and repeat until the program is done and works as intended. You're less likely to encounter a large slew of error messages all at once that way (which can be much harder to diagnose since some of the errors can be interrelated in complicated ways). Still, even when making small changes, you can occasionally encounter multiple compiler errors at once. In such a case, always start at the very top<Emdash/>diagnose the first error, fix it, recompile, and, if the error is gone, move on to the next one. (Don't start with the bottom error message; the errors lower down in the printout can often be caused by errors higher up, so you should start at the top and work your way down.)</P>
+      <P>Lastly, a pro tip: rather than making hundreds of complicated changes and then trying to recompile it all at once, prefer to work in small iterations. Make a single small change to the source code; try to recompile; and fix any compiler errors until compilation succeeds again. Rinse and repeat until the program is done and works as intended. You're less likely to encounter a large slew of error messages all at once that way (which can be much harder to diagnose since some of the errors can be interrelated in complicated ways). Still, even when making small changes, you can occasionally encounter multiple compiler errors at once. In such a case, always start at the very top<Emdash/>diagnose the first error, fix it, recompile, and, if the error is gone, move on to the next one. (Don't start with the bottom error message; the errors lower down in the printout can often be caused by errors higher up, so you should start at the top and work your way down).</P>
     </>
   )
 }
