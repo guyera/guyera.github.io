@@ -5,3 +5,6 @@ pages:
   - pathName: 'hello-world'
     pageTitle: 'Hello, World!'
     namedIdentifier: 'hello-world'
+  - pathName: 'c-basics'
+    pageTitle: 'C Basics'
+    namedIdentifier: 'c-basics'
