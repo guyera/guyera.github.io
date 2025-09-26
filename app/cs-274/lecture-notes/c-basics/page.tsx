@@ -77,7 +77,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
         <Item><Link href="#const"><Code>const</Code></Link></Item>
       </Itemize>
 
-      <SectionHeading id="include"><Code>#include</Code> and preprocessing directives</SectionHeading>
+      <SectionHeading id="include-and-preprocessing-directives"><Code>#include</Code> and preprocessing directives</SectionHeading>
 
       <P>This lecture will teach you the basics of C. We'll start with <Code>#include</Code> directives. You saw one such directive in the first line of <Code>hello.c</Code> in <Link href={`${PARENT_PATH}/${allPathData["hello-world"].pathName}`}>our previous lecture</Link>:</P>
 
@@ -323,8 +323,8 @@ The value of 1.0 / 3.0, rounded to two decimal places, is: 0.33
 
       <P>Notice that I provided three arguments to <Code>printf()</Code> this time:</P>
 
-      <Enumerate>
-        <Item>"The value of 2+2 is: %d\nThe value of 1.0 / 3.0, rounded to two decimal places, is: %.2lf\n". This is the format string. It has two placeholders (format specifiers): <Code>%d</Code>, and <Code>%.2lf</Code>.</Item>
+      <Enumerate listStyleType="decimal">
+        <Item><Code>"The value of 2+2 is: %d\nThe value of 1.0 / 3.0, rounded to two decimal places, is: %.2lf\n"</Code>. This is the format string. It has two placeholders (format specifiers): <Code>%d</Code>, and <Code>%.2lf</Code>.</Item>
         <Item><Code>2 + 2</Code></Item>
         <Item><Code>1.0 / 3.0</Code></Item>
       </Enumerate>
@@ -334,6 +334,28 @@ The value of 1.0 / 3.0, rounded to two decimal places, is: 0.33
       <P>Because each argument after the format string corresponds to a format specifier within the format string, the number of arguments to <Code>printf()</Code> after the format string <Ul>must</Ul> match the number of format specifiers within the format string. Moreover, the types of the arguments must be compatible with their corresponding format specifiers. For example, the <Code>%d</Code> format specifier is a placeholder for an integer (as I explained earlier), which is why I used it as the format specifier for the integer argument <Code>2 + 2</Code>.</P>
 
       <P>If you use the wrong format specifiers, such as <Code>%f</Code> for an integer argument or <Code>%d</Code> for a floating point argument, it will likely print the wrong value to the terminal (technically, it results in <Bold>undefined behavior</Bold>, which we'll discuss later in the term).</P>
+
+      <P>Technically, <Code>printf()</Code> does not always <It>immediately</It> print the specified text to the terminal. Rather, it writes the specified text into C's internal standard output buffer. Only when that buffer is <Ul>flushed</Ul> will it be printed to the terminal.</P>
+
+      <P>By default, standard output is line-buffered, meaning that whenever a newline character sequence (<Code>"\n"</Code>) is written to the standard output buffer (e.g., via <Code>printf()</Code>), all the text in the buffer leading up to it will be flushed and displayed in the terminal immediately.</P>
+
+      <P>But sometimes you want to display text in the terminal without putting a newline character sequence at the end. In such a case, you may have to manually flush the buffer immediately after the <Code>prinf()</Code> call. You can do this like so:</P>
+
+      <SyntaxBlock>{
+`fflush(stdout);`
+      }</SyntaxBlock>
+
+      <P>For example:</P>
+
+      <CBlock showLineNumbers={false}>{
+`printf("This line of text does not have a newline sequence at the end.");
+fflush(stdout); // Flush standard output to display the printed text immediately
+`
+      }</CBlock>
+
+      <P>(The <Code>fflush()</Code> function and <Code>stdout</Code> macro are provided by <Code>stdio.h</Code>.)</P>
+
+      <P>Note that the standard output buffer is also automatically flushed the moment the program terminates (and in some other cases). So if the very last thing your program does is write some text to standard output, you technically don't have to manually flush the buffer, even if there's no newline character sequence at the end of the printed text (it'll be flushed promptly when the program ends, one way or another).</P>
 
       <SectionHeading id="breaking-up-lines">Breaking up lines</SectionHeading>
 
@@ -372,7 +394,164 @@ The value of 1.0 / 3.0, rounded to two decimal places, is: 0.33
       <P>(Notice that I indented the remainder of the string by an extra tab of indentation. This makes it clear that it's a continuation of a single string argument rather than its own, independent string argument.)</P>
 
       <SectionHeading id="types-expressions-and-operators">Types, expressions, and operators</SectionHeading>
+
+      <P>An <Bold>expression</Bold> is a piece of code with a <Bold>type</Bold> and a <Bold>value</Bold>. A type, or <Bold>data type</Bold>, is simply a kind of data. A value is simply the data itself (e.g., the number 3 is an integer value, and the word "Hello" is a string value).</P>
+
+      <P>There are various <Bold>primitive types</Bold> in C. These types are very simple and built into the language. Some basic primitive types include:</P>
+
+      <Itemize>
+        <Item><Code>int</Code>. This data type represents integer values (whole numbers).</Item>
+        <Item><Code>float</Code>. This data type represents floating point values (i.e., numbers with decimal points in them).</Item>
+        <Item><Code>long int</Code>, or simply <Code>long</Code>. This data type is similar to <Code>int</Code>, but it's usually capable of representing larger (i.e., greater magnitude) values. The tradeoff is that it usually consumes more memory than the <Code>int</Code> data type.</Item>
+        <Item><Code>double</Code>. This data type is similar to <Code>float</Code>, but it's usually capable of representing larger (i.e., greater magnitude) values and with greater precision (i.e., more decimal places).</Item>
+      </Itemize>
+
+      <P>The simplest kinds of expressions are <Bold>literals</Bold>. A literal is just a hard-coded value. You can create literals for each of the primitive types that I just mentioned:</P>
+
+      <Itemize>
+        <Item><Code>10</Code>, <Code>-142</Code>, and <Code>0</Code> are all literals of type <Code>int</Code>.</Item>
+        <Item><Code>3.14</Code>, <Code>-4.5</Code>, <Code>0.0</Code>, <Code>.1</Code>, and even <Code>3.</Code> are all considered to be literals of type <Ul><Code>double</Code></Ul>. Basically, any plainly written number with a decimal point in it is a <Code>double</Code> literal.</Item>
+        <Item><Code>long</Code> literals look the same as <Code>int</Code> literals, except they have an <Code>l</Code> (that's a lowercase L) at the end of them. For example: <Code>10l</Code>, <Code>-142l</Code>, and <Code>0l</Code> are all examples of <Code>long</Code> literals.</Item>
+        <Item><Code>float</Code> literals look the same as <Code>double</Code> literals, except they have an <Code>f</Code> at the end of them. For example, <Code>3.14f</Code>, <Code>-4.5f</Code>, <Code>0.0f</Code>, <Code>.1f</Code>, and <Code>3.f</Code> are all examples of <Code>float</Code> literals.</Item>
+      </Itemize>
+
+      <P>(There are some exceptions to the above, but this understanding is good enough.)</P>
+
+      <P>You can also create string literals (i.e., hard-coded strings). As it turns out, there is no primitive "string" data type in C. C represents strings in rather complicated ways. We'll talk about that more later. But for now, just understand that a string literal is any sequence of zero or more characters enclosed in quotation marks, such as <Code>"Hello, World!"</Code>, or <Code>"pizza"</Code>, or <Code>"3.14"</Code>, or even <Code>""</Code> (the empty string).</P>
+
+      <P>We've already seen several examples of literals. Let me jog your memory:</P>
+
+      <CBlock fileName="printformatted.c" highlightLines="{5-8}">{
+`#include <stdio.h>
+
+int main() {
+        printf(
+                "The value of 2+2 is: %d\\nThe value of 1.0 / 3.0, "
+                        "rounded to two decimal places, is: %.2lf\\n",
+                2 + 2,
+                1.0 / 3.0
+        );
+}
+`
+      }</CBlock>
+
+      <P>In the above highlighed code, the first entire argument is one big string literal. As I mentioned earlier, a string literal can be broken up across multiple lines of code by using some extra quotation marks. But it's still, in some sense, just one string literal. The second argument, <Code>2 + 2</Code> is a larger expression that consists of two <Code>int</Code> literals (and an operator between them): the first <Code>2</Code>, and the second <Code>2</Code>. The third argument, <Code>1.0 / 3.0</Code>, is a larger expression that consists of two <Code>double</Code> literals (and an operator between them): <Code>1.0</Code>, and <Code>3.0</Code>.</P>
+
+      <P>Of course, you can also print the values of literals by themselves:</P>
+
+      <CBlock fileName="printliterals.c">{
+`#include <stdio.h>
+
+int main() {
+        // Prints 3.140000 (passed as a float)
+        printf("%f\\n", 3.14f);
+
+        // Prints 3.14 (passed as a float) to just two decimal places
+        printf("%.2f\\n", 3.14f);
+
+        // Prints 3.140000 (passed as a double)
+        // (doubles have more precision than floats, but it still only
+        // prints six decimal places on the ENGR servers. This is just
+        // the default printing behavior for both floats and doubles.)
+        printf("%lf\\n", 3.14);
+
+        // Prints -100 (passed as an int)
+        printf("%d\\n", -100);
+
+        // Prints 728 (passed as a long)
+        printf("%ld\\n", 728l);
+}
+`
+      }</CBlock>
+
+      <P>Running the above program produces the following output:</P>
+
+      <TerminalBlock copyable={false}>{
+`$ gcc -g -o printliterals printliterals.c
+$ valgrind ./printliterals 
+==2159281== Memcheck, a memory error detector
+==2159281== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==2159281== Using Valgrind-3.24.0 and LibVEX; rerun with -h for copyright info
+==2159281== Command: ./printliterals
+==2159281== 
+3.140000
+3.14
+3.140000
+-100
+728
+==2159281== 
+==2159281== HEAP SUMMARY:
+==2159281==     in use at exit: 0 bytes in 0 blocks
+==2159281==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==2159281== 
+==2159281== All heap blocks were freed -- no leaks are possible
+==2159281== 
+==2159281== For lists of detected and suppressed errors, rerun with: -s
+==2159281== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+`
+      }</TerminalBlock>
+
+      <P>Let's talk about operators more formally. C supports many arithmetic operators, including:</P>
+
+      <Itemize>
+        <Item><Code>+</Code> (addition)</Item>
+        <Item><Code>-</Code> (subtraction)</Item>
+        <Item><Code>*</Code> (multiplication)</Item>
+        <Item><Code>/</Code> (division)</Item>
+        <Item><Code>%</Code> (modulo, which is essentially remainder after integer division)</Item>
+      </Itemize>
+
+      <P>There are some others as well that we won't talk about right now.</P>
+
+      <P>Most of these operators work as you'd expect. However, here are some important notes:</P>
+
+      <Itemize>
+        <Item>PEMDAS applies as you'd expect. And yes, you can use parentheses to control order of operations. For example, <Code>printf("%d\n", 3 * 4 + 5)</Code> prints <Code>17</Code> to the terminal, but <Code>printf("%d\n", 3 * (4 + 5))</Code> prints <Code>27</Code>.</Item>
+        <Item>Dividing two integers results in so-called <Bold>integer division</Bold>. Basically, the output is truncated (rounded toward zero). For example, <Code>3</Code> is an <Code>int</Code>, and <Code>4</Code> is an <Code>int</Code>, but <Code>3 / 4</Code> is also considered to be an <Code>int</Code> by the C compiler. Specifically, it's an <Code>int</Code> with value <Code>0</Code> (in "real life", 3 / 4 would be 0.75, but integer division means that C always truncates / rounds these quotients toward zero<Emdash/>positive quotients are rounded down, and negative quotients are rounded up). If you want to avoid this rounding / truncating behavior, just make sure that at least one of the two operands is a float or double (e.g., <Code>3.0 / 4</Code>, or <Code>3 / 4.0</Code>, or <Code>3.0 / 4.0</Code>).</Item>
+
+        <P>(If you're dividing integer variables and want to avoid integer division, you can employ type casting.)</P>
+      </Itemize>
+
+      <P>Note that C does not have an operator for exponentiation. To raise a base to the power of an exponent, you must use the <Code>pow()</Code> function, which is provided by the standard library header file <Code>cmath.h</Code>. Importantly, this function's return type is <Code>double</Code>, so if you want to print its return value directly, you should use a <Code>%lf</Code> format specifier (using <Code>%d</Code> will not work, even if the arguments are integers):</P>
+
+      <CBlock fileName="powexample.c">{
+`#include <stdio.h>
+#include <math.h> // Needed to use the pow() function
+
+int main() {
+        // Compute 2 to the power of 5 and print the result
+        printf("%f\n", pow(2, 5)); // Prints 32.000000
+}
+`
+      }</CBlock>
+
+      <P>Running the above program produces the following output:</P>
+
+      <TerminalBlock copyable={false}>{
+`$ gcc -g -o powexample powexample.c
+$ valgrind ./powexample 
+==2163896== Memcheck, a memory error detector
+==2163896== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==2163896== Using Valgrind-3.24.0 and LibVEX; rerun with -h for copyright info
+==2163896== Command: ./powexample
+==2163896== 
+32.000000
+==2163896== 
+==2163896== HEAP SUMMARY:
+==2163896==     in use at exit: 0 bytes in 0 blocks
+==2163896==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==2163896== 
+==2163896== All heap blocks were freed -- no leaks are possible
+==2163896== 
+==2163896== For lists of detected and suppressed errors, rerun with: -s
+==2163896== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+`
+      }</TerminalBlock>
+
       <SectionHeading id="automatic-variables">Automatic variables</SectionHeading>
+
+      {/*TODO Should I cover implicit type casting? I think so. Explicit type casting and typedef will come later, though.*/}
+      
       <SectionHeading id="const"><Code>const</Code></SectionHeading>
 
 
