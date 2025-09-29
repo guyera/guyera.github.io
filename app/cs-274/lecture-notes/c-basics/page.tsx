@@ -144,7 +144,7 @@ int main() {
 
       <P>(Again, we'll cover the exact syntax of functions, including return statements, later.)</P>
 
-      <P>It's convention that an exit code of 0 indicates that the process (program) terminated normally. In other words, no errors occurred that caused the program to end prematurely<Emdash/>the program ran to completion as expected. Moreover, if an error <It>does</It> occur that causes the program to end prematurely, the convention is that the <Code>main()</Code> function should return some nonzero exit code in such a case. But there are no specific conventions beyond that. Exactly <It>what</It> nonzero exit code is returned by <Code>main()</Code> in case of an error is completely up to the programmer.</P>
+      <P>It's convention that an exit code of 0 indicates that the process (program) terminated normally. In other words, no errors occurred that caused the program to end prematurely<Emdash/>the program ran to completion as expected. Moreover, if an error <It>does</It> occur that causes the program to end prematurely, the convention is that the <Code>main()</Code> function should return some nonzero exit code. But there are no specific conventions beyond that. Exactly <It>what</It> nonzero exit code is returned by <Code>main()</Code> in case of an error is completely up to the programmer.</P>
 
       <P>(It's common to return different exit codes for different kinds of errors. For example, for a given program, perhaps an exit code of 1 means that it failed to open a certain data file that it needs to read data from, whereas an exit code of 2 means that it failed to connect to a server over the internet when it needed to. But for a different program, exit codes of 1 and 2 could mean completely different things.)</P>
 
@@ -241,9 +241,6 @@ printf("Hello, World!\\n"); /* You can also put a comment here */
 
       <P>However, whitespace matters very much in practice. Not to the computer, necessarily, but to people. Code is hard to read if it isn't properly indented and / or aligned. The above code is already hard to read, but it'd be especially hard to read if it had several other functions before and / or after the <Code>main()</Code> function. In such a case, it'd be extremely difficult to tell where one function ends and the next begins. Proper indentation makes these things visually obvious.</P>
 
-      <P>Please follow the course's style guidelines when indenting your code.</P>
-
-
       <SectionHeading id="standard-output">Standard output</SectionHeading>
 
       <P>Every process (running program) has a few special files associated with it, including its <Bold>standard input</Bold>, <Bold>standard output</Bold>, and <Bold>standard error</Bold> files. In most cases, these files are essentially linked to the terminal. This means that, for example, any text written into a process's standard output file (or its standard error file) is automatically displayed within the terminal (though it's possible to redirect a process's standard files to other locations; we might do that later in the term).</P>
@@ -335,7 +332,7 @@ The value of 1.0 / 3.0, rounded to two decimal places, is: 0.33
 
       <P>If you use the wrong format specifiers, such as <Code>%f</Code> for an integer argument or <Code>%d</Code> for a floating point argument, it will likely print the wrong value to the terminal (technically, it results in <Bold>undefined behavior</Bold>, which we'll discuss later in the term).</P>
 
-      <P>Technically, <Code>printf()</Code> does not always <It>immediately</It> print the specified text to the terminal. Rather, it writes the specified text into C's internal standard output buffer. Only when that buffer is <Ul>flushed</Ul> will it be printed to the terminal.</P>
+      <P><Code>printf()</Code> does not always <It>immediately</It> print the specified text to the terminal. Rather, it writes the specified text into C's internal standard output buffer. Only when that buffer is <Ul>flushed</Ul> will it be printed to the terminal.</P>
 
       <P>By default, standard output is line-buffered, meaning that whenever a newline character sequence (<Code>"\n"</Code>) is written to the standard output buffer (e.g., via <Code>printf()</Code>), all the text in the buffer leading up to it will be flushed and displayed in the terminal immediately.</P>
 
@@ -355,13 +352,13 @@ fflush(stdout); // Flush standard output to display the printed text immediately
 
       <P>(The <Code>fflush()</Code> function and <Code>stdout</Code> macro are provided by <Code>stdio.h</Code>.)</P>
 
-      <P>Note that the standard output buffer is also automatically flushed the moment the program terminates (and in some other cases). So if the very last thing your program does is write some text to standard output, you technically don't have to manually flush the buffer, even if there's no newline character sequence at the end of the printed text (it'll be flushed promptly when the program ends, one way or another).</P>
+      <P>Note that the standard output buffer is also automatically flushed the moment the program terminates (and in some other cases). So if the very last thing your program does is write some text to standard output, you technically don't have to manually flush the buffer, even if there's no newline character sequence at the end of the printed text. It'll be flushed promptly when the program ends, one way or another.</P>
 
       <SectionHeading id="breaking-up-lines">Breaking up lines</SectionHeading>
 
       <P>Before moving on, I should mention that the previous example had a very long line of code:</P>
 
-      <CBlock showLineNumbers={false} copyable={false}>{
+      <CBlock showLineNumbers={false}>{
 `printf("The value of 2+2 is: %d\\nThe value of 1.0 / 3.0, rounded to two decimal places, is: %.2lf\\n", 2 + 2, 1.0 / 3.0);`
       }</CBlock>
 
@@ -369,7 +366,7 @@ fflush(stdout); // Flush standard output to display the printed text immediately
 
       <P>There are various ways to break up long lines of code. If it's a function call with many arguments, you can put each argument in its own line:</P>
 
-      <CBlock showLineNumbers={false} copyable={false}>{
+      <CBlock showLineNumbers={false}>{
 `printf(
         "The value of 2+2 is: %d\\nThe value of 1.0 / 3.0, rounded to two decimal places, is: %.2lf\\n",
         2 + 2,
@@ -379,9 +376,9 @@ fflush(stdout); // Flush standard output to display the printed text immediately
 
       <P>(Notice that I additionally indented the arguments over by one tab of indentation. This makes it clear that they're a part of an enclosing function call rather than their own, independent statements.)</P>
 
-      <P>That helped a little bit, but the format string is quite long by itself. We can do better. In C, string literals (text written in quotation marks) can be broken up trivially: just put a quotation mark somewhere in the middle of the string literal, and move the remainder of the string literal down to the next line with another quotation mark at the beginning of it:</P>
+      <P>That helped a little bit, but the format string is quite long by itself. We can do better. In C, string literals (text written in quotation marks) can be broken up trivially: just write it as two or more string literals, each on their own adjacent lines of code (with no commas between them, nor any other special characters). The compiler automatically concatenates adjacent C string literals into one big literal:</P>
 
-      <CBlock>{
+      <CBlock showLineNumbers={false}>{
 `printf(
         "The value of 2+2 is: %d\\nThe value of 1.0 / 3.0, "
                 "rounded to two decimal places, is: %.2lf\\n",
@@ -391,7 +388,7 @@ fflush(stdout); // Flush standard output to display the printed text immediately
 `
       }</CBlock>
 
-      <P>(Notice that I indented the remainder of the string by an extra tab of indentation. This makes it clear that it's a continuation of a single string argument rather than its own, independent string argument.)</P>
+      <P>(Notice that I indented the second literal by an extra tab of indentation. This makes it clear that it's a continuation of a single string argument rather than its own, independent string argument. Also notice that there's still a comma after the second string literal, which separates it from the subsequent argument, <Code>2 + 2</Code>.)</P>
 
       <SectionHeading id="types-expressions-and-operators">Types, expressions, and operators</SectionHeading>
 
@@ -435,7 +432,7 @@ int main() {
 `
       }</CBlock>
 
-      <P>In the above highlighed code, the first entire argument is one big string literal. As I mentioned earlier, a string literal can be broken up across multiple lines of code by using some extra quotation marks. But it's still, in some sense, just one string literal. The second argument, <Code>2 + 2</Code> is a larger expression that consists of two <Code>int</Code> literals (and an operator between them): the first <Code>2</Code>, and the second <Code>2</Code>. The third argument, <Code>1.0 / 3.0</Code>, is a larger expression that consists of two <Code>double</Code> literals (and an operator between them): <Code>1.0</Code>, and <Code>3.0</Code>.</P>
+      <P>In the above highlighed code, the first entire argument is one big string literal (or, in some sense, two string literals that the compiler automatically concatenates together). The second argument, <Code>2 + 2</Code>, is a larger expression that consists of two <Code>int</Code> literals: the first <Code>2</Code>, and the second <Code>2</Code>. The third argument, <Code>1.0 / 3.0</Code>, is a larger expression that consists of two <Code>double</Code> literals: <Code>1.0</Code>, and <Code>3.0</Code>.</P>
 
       <P>Of course, you can also print the values of literals by themselves:</P>
 
@@ -520,7 +517,7 @@ $ valgrind ./printliterals
 
 int main() {
         // Compute 2 to the power of 5 and print the result
-        printf("%f\n", pow(2, 5)); // Prints 32.000000
+        printf("%f\\n", pow(2, 5)); // Prints 32.000000
 }
 `
       }</CBlock>
