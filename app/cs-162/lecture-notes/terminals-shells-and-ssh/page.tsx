@@ -128,7 +128,7 @@ Last login: Wed Jul 16 11:57:34 2025 from 10.248.115.72
 
       <P>See <Link href={`${PARENT_PATH}/${allPathData["basic-shell-commands"].pathName}`}>my lecture notes on basic Bash commands</Link> to learn how to navigate your engineering file space within the terminal.</P>
 
-      <SectionHeading id="bypassing-duo-with-ssh-keys-method-one">(Optional) Bypassing Duo with SSH keys (method 1)</SectionHeading>
+      <SectionHeading id="bypassing-duo-with-ssh-keys-method-one">Bypassing Duo with SSH keys (method 1)</SectionHeading>
       
       <P>Having to authenticate your SSH logins with Duo can be annoying. Luckily, there's an alternative authentication method that, if enabled, allows you to bypass the Duo authentication step. This alternative method is to configure SSH keys to authenticate your laptop with the ENGR servers.</P>
 
@@ -171,7 +171,7 @@ and check to make sure that only the key(s) you wanted were added.
 
       <P>If you're still asked for your ONID password / a Duo authentication when connecting to the ENGR servers over SSH, then something went wrong in the above steps when configuring your SSH keys. Don't hesitate to stop by office hours for help. (You might also try method 2 below, but it's more complicated and is mostly reserved for Windows systems that don't have the <Code>ssh-copy-id</Code> command available).</P>
 
-      <SectionHeading id="bypassing-duo-with-ssh-keys-method-two">(Optional) Bypassing Duo with SSH keys (method 2)</SectionHeading>
+      <SectionHeading id="bypassing-duo-with-ssh-keys-method-two">Bypassing Duo with SSH keys (method 2)</SectionHeading>
 
       <P>The <Code>ssh-copy-id</Code> command isn't available on some Windows computers. If you're in that situation, you can still configure SSH keys manually. You'll still need to generate SSH keys for this method, so if you haven't already done so, follow the beginning steps of method 1 above to generate your keys (i.e., run the <Code>ssh-keygen</Code> command as directed in the previous section).</P>
 
