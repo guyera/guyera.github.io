@@ -495,7 +495,7 @@ test_is_leap_year.py ....                                                    [10
       <PythonBlock fileName="test_number_of_days_in_year.py">{
 `from daysbetweendates import number_of_days_in_year
 
-def test_non_leap_year_has_365_days():
+def test_non_leap_year_has_365_days() -> None:
     # Arrange
     y = 2003 # Non-leap year
     
@@ -549,7 +549,7 @@ test_number_of_days_in_year.py .                                             [10
       <PythonBlock fileName="test_number_of_days_in_year.py" showLineNumbers={false}>{
 `... # existing code is the same as before. Omitted for brevity.
 
-def test_leap_year_has_366_days():
+def test_leap_year_has_366_days() -> None:
     # Arrange
     y = 2004 # Leap year
     

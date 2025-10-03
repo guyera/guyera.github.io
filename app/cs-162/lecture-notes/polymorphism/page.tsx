@@ -639,12 +639,12 @@ TypeError: Can't instantiate abstract class Monster without an implementation fo
 
       <P>Failure to override an abstract method correctly can result in various kinds of errors. For example, if the <Code>Goblin</Code> class's <Code>attack()</Code> override accepted two parameters instead of one, then <Code>m.attack(p)</Code> would fail when <Code>m</Code> has the dynamic type <Code>Goblin</Code> (it'd be calling a method with two parameters but only passing in one argument). Moreover, if the <It>name</It> of the override wasn't written correctly (e.g., due to a typo), then Mypy and the interpreter would treat it as a different method altogether, in which case the <Code>Goblin</Code> class would be abstract due to faliing to override the <Code>attack()</Code> method.</P>
 
-      <P>To protect yourself from these sorts of mistakes, the <Code>typing</Code> package provides a special decorator: <Code>@override</Code>. Once imported, it can be used to annotate a method override by writing it directly above the override's definition. This tells Mypy that the intention is to override a method from the base class. Mypy will then carefully check that the override does, indeed, match all the specifications of the base class method (including the name, parameter list, and return type). If any of the specifications are not a match, it will immediately throw an error, pointing you to your mistake.</P>
+      <P>To protect yourself from these sorts of mistakes, the <Code>typing_extensions</Code> package provides a special decorator: <Code>@override</Code>. Once imported, it can be used to annotate a method override by writing it directly above the override's definition. This tells Mypy that the intention is to override a method from the base class. Mypy will then carefully check that the override does, indeed, match all the specifications of the base class method (including the name, parameter list, and return type). If any of the specifications are not a match, it will immediately throw an error, pointing you to your mistake.</P>
       
       <P>For example:</P>
 
       <PythonBlock fileName="goblin.py">{
-`from typing import override # Import the override decorator
+`from typing_extensions import override # Import the override decorator
 
 from monster import Monster
 from player import Player
