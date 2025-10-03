@@ -79,6 +79,8 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
         <Item><Link href="#more-on-variables">More on variables</Link></Item>
         <Item><Link href="#type-casting">Type casting</Link></Item>
         <Item><Link href="#const"><Code>const</Code></Link></Item>
+        <Item><Link href="#basic-standard-input">Basic standard input</Link></Item>
+        <Item><Link href="#if-statements">If statements</Link></Item>
       </Itemize>
 
       <SectionHeading id="include-and-preprocessing-directives"><Code>#include</Code> and preprocessing directives</SectionHeading>
@@ -1047,9 +1049,48 @@ x = y = 10;
 
       <SectionHeading id="type-casting">Type casting</SectionHeading>
 
-      {/*TODO*/}
+      <P><Bold>Type casting</Bold> means to convert an expression of one type into a new expression of another type. There are two kinds of type casting in C: <Bold>implicit type casting</Bold>, and <Bold>explicit type casting</Bold>.</P>
+
+      <P><Bold>Implicit type casting</Bold> happens implicitly and automatically. Specifically, whenever the compiler expects you to provide a certain type of expression in a certain place within your code, but you provide a different type of expression instead, the compiler will attempt to implicitly type-cast the provided expression into the required type. For example, consider <Code>int x = 3.14;</Code>. The compiler expects an <Code>int</Code>-typed expression to appear on the right side of the assignment operator since you're assigning a value to an <Code>int</Code> variable. But a <Code>double</Code>-typed expression is provided instead. The compiler will implicitly convert <Code>3.14</Code> into an <Code>int</Code>-typed expression (more on conversion rules in a moment).</P>
+
+      <P>Implicit type casting isn't always possible. There are cases where the compiler will refuse to implicitly type-cast an expression even when the conversion is technically possible (or, at the very least, there are cases where it will issue a warning, such as when type-casting a pointer-typed to another integral type).</P>
+
+      <P>But more importantly, implicit type casting can sometimes be a bit awkward. Suppose you want to divide two integers, but you don't want the result to be truncated. As we've discussed, a simple solution is to make one of those integers a <Code>double</Code> or a <Code>float</Code> instead, such as <Code>1.0 / 2</Code>, or <Code>1 / 2.0</Code>. But what if the two integers that you're trying to divide are variables or some other complicated kind of expression? Then you can't simply append a <Code>.0</Code> to the end of it to make it a <Code>double</Code> or <Code>float</Code> (e.g., <Code>x.0 / y</Code> makes no sense). This problem <It>could</It> be solved with implicit type casting:</P>
+
+      <CBlock copyable={false} showLineNumbers={false}>{
+`double x_as_double = x; // Implicit type casting
+// Now you can compute x_as_double / y to avoid truncation
+printf("%lf\\n", x_as_double / y);`
+      }</CBlock>
+
+      <P>But that's a bit awkward. It requires creating an extra variable, <Code>x_as_double</Code>, just to implicitly cast <Code>x</Code>'s value to a <Code>double</Code>-typed expression to facilitate the division without truncation.</P>
+
+      <P>This problem is better solved with <Bold>explicit type casting.</Bold> Any expression can be explicitly and manually casted to another type. Type write out the type that you want to cast the expression to in a pair of parentheses immediately before the expression itself:</P>
+
+      <CBlock copyable={false} showLineNumbers={false}>{
+`printf("%lf\\n", (double) x / y); // Prints 0.5`
+      }</CBlock>
+
+      <P><Code>(double) x</Code> casts <Code>x</Code> into a <Code>double</Code>-typed expression, which we then divide by <Code>y</Code>. Again, this avoids integer truncation if <Code>x</Code> and <Code>y</Code> are both <Code>int</Code>-typed variables.</P>
+
+      <P>Importantly, only the expression immediately to the write of the parentheses-enclosed type is casted. In the above example, <Code>x</Code> is casted to a <Code>double</Code>, and <It>then</It> the result is divided by <Code>y</Code>. That's very different from the following:</P>
+
+      <CBlock copyable={false} showLineNumbers={false}>{
+`printf("%lf\\n", (double) (x / y)); // Prints 0.0`
+      }</CBlock>
+
+      <P>In this case, <Code>x / y</Code> is computed, and <It>then</It> the result is casted to a <Code>double</Code>. And in this case, because <Code>x / y</Code> happens before the type cast, integer division is performed, so the result is truncated to 0 (and then that 0 is casted to a <Code>double</Code> value, <Code>0.0</Code>).</P>
+
       
       <SectionHeading id="const"><Code>const</Code></SectionHeading>
+
+      {/*TODO*/}
+
+      <SectionHeading id="basic-standard-input">Basic standard input</SectionHeading>
+
+      {/*TODO*/}
+
+      <SectionHeading id="if-statements">If statements</SectionHeading>
 
       {/*TODO*/}
 
