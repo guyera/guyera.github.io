@@ -1,6 +1,6 @@
 from daysbetweendates import number_of_days_in_year
 
-def test_non_leap_year_has_365_days():
+def test_non_leap_year_has_365_days() -> None:
     # Arrange
     y = 2003 # Non-leap year
     
@@ -10,7 +10,7 @@ def test_non_leap_year_has_365_days():
     # Assert
     assert result == 365
 
-def test_leap_year_has_366_days():
+def test_leap_year_has_366_days() -> None:
     # Arrange
     y = 2004 # Leap year
     

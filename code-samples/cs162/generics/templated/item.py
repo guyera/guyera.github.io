@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 class Item:
     _price: float # Every item has a price
 
-    def __init__(self, price) -> None:
+    def __init__(self, price: float) -> None:
         self._price = price
 
     def get_price(self) -> float:

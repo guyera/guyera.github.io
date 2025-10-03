@@ -1,4 +1,4 @@
-from typing import override # Import the override decorator
+from typing_extensions import override # Import the override decorator
 
 from monster import Monster
 from player import Player
