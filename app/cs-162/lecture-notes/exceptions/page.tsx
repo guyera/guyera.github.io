@@ -69,7 +69,8 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
         <Item><Link href="#exceptions">Exceptions</Link></Item>
         <Item><Link href="#catching-exceptions">Catching exceptions</Link></Item>
         <Item><Link href="#casting-strings-to-other-types">Casting strings to other types</Link></Item>
-        <Item><Link href="#throwing-exceptions">Raising exceptions</Link></Item>
+        <Item><Link href="#raising-exceptions">Raising exceptions</Link></Item>
+        <Item><Link href="#throwing-vs-returning">Throwing vs returning</Link></Item>
         <Item><Link href="#debate-on-exceptions">(Optional content) Debate on exceptions</Link></Item>
       </Itemize>
 
@@ -354,7 +355,7 @@ You must be a fan of Hitchhiker's Guide to the Galaxy!
 
       <P>I strongly recommend that you use the above <Code>prompt_for_integer()</Code> function (or similar) throughout all of your homework assignments and labs where you need to to prompt the user for a whole number. That's why I made the prompt itself a parameter<Emdash/>it can be reused for any assignment by simply switching the argument out for whatever message you want to be printed (feel free to use it as-is or modify it to your heart's content; you might also, for example, parameterize the error message rather than leaving it generic). I also recommend creating similar functions that prompt the user for other kinds of data.</P>
 
-      <SectionHeading id="throwing-exceptions">Raising exceptions</SectionHeading>
+      <SectionHeading id="raising-exceptions">Raising exceptions</SectionHeading>
       
       <P>So, exceptions can be caught, but how are they <It>generated</It>? Where do they come from? For example, if you wanted to write your own function that explicitly throws an exception in a certain situation (i.e., without executing some <It>other</It> function that throws an exception, such as a bad type cast or out-of-bounds indexing operation), how can you accomplish that?</P>
 
@@ -414,15 +415,106 @@ Cannot compute the log of 0!
 
       <P>Notice that <Code>print(e)</Code> simply prints the exception's message, which is the very same message as the one that was provided between the parentheses when the <Code>ValueError</Code> was created within the <Code>base_10_log()</Code> function.</P>
 
+      <SectionHeading id="throwing-vs-returning">Throwing vs returning</SectionHeading>
+
+      <P>Throwing an exception out of a function (i.e., raising an exception, or calling another function that raises an exception, and not immediately catching it within the same function body) is an <Ul>alternative</Ul> to returning a value from a function. That is, any given function may terminate in one of three ways: 1) reaching the end of its control block (body); 2) returning a value; or 3) throwing an exception.</P>
+
+      <P>(Technically, when a function reaches the end of its control block, it implicitly returns <Code>None</Code>. So 1) is actually a subset of 2).)</P>
+
+      <P>If a function terminates by throwing an exception, then it does not return anything. Note that this is different from returning <Code>None</Code>. <Code>None</Code> is an actual object that can be returned. Throwing an exception does <It>not</It> cause the function to return the object <Code>None</Code>. Rather, it literally means the function does not return <It>anything</It> whatsoever.</P>
+
+      <P>You might be surprised to hear that Mypy is okay with this. Ordinarily, Mypy is very strict about requiring functions with a given return type to always return something of that type. But the reason is simple: when an exception is thrown from a function call, it affects the program's control flow (i.e., the order of execution of various lines of code) differently from how a return value would. When a function returns a value, the program resumes at the call site (i.e., where the function was called from), replacing the function call itself with the return value. In contrast, when a function throws an exception, the program behaves quite differently: it proceeds to unwind the call stack until the exception is caught, as explained earlier. For example, when the <Code>raise</Code> operator is used to raise an exception, the interpreter checks whether the <Code>raise</Code> operator was used inside a <Code>try</Code> block with an accompanying <Code>except</Code> block that's capable of catching the raised exception. If so, it simply jumps to the <Code>except</Code> block and executes its body, and then it proceeds from there, executing whatever comes after the <Code>except</Code> block. But if not, then it throws (propagates) the raised exception to the call site (i.e., to the function that called the one that raised the exception). It then checks if that function call was inside a <Code>try</Code> block with an accompanying <Code>except</Code> block that's capable of catching the thrown exception. If so, it jumps to <It>that</It> <Code>except</Code> block, executes its body, and proceeds from there. But if not, it throws (propagates) the exception <It>further</It> down the call stack, back to the function that called <It>that</It> function, and so on. It continues doing this until either a) the exception is caught, or b) the exception is propagated all the way out of global / module scope, at which point the program crashes and prints a traceback.</P>
+
+      <P>Because of the way that exceptions affect the program's control flow, when a function throws an exception, its return value is completely unnecessary. After all, the point of a return value is to be substituted into the function call expression at the call site. But if a function terminates by throwing an exception, then the call site never gets a chance to evaluate the function call expression <It>anyways</It>; it immediately jumps to an <Code>except</Code> block or propagates the exception down the call stack.</P>
+
+      <P>Consider this example:</P>
+
+      <PythonBlock fileName="raisenotreturn.py">{
+`from traceback import print_exc
+
+def cool_function(x: int) -> int:
+    if x == 1:
+        return 100
+    elif x == 2:
+        return 1000
+    
+    raise ValueError(f'x must be either 1 or 2, but got {x}')
+
+def main() -> None:
+    # Prints 100
+    print(cool_function(1))
+
+    # Prints 1000
+    print(cool_function(2))
+    
+    try:
+        # Never gets a chance to print anything. It raises an
+        # exception, which gets thrown here to main(). It then
+        # immediately jumps to the except block below.
+        print(cool_function(3))
+    except ValueError as e:
+        print("cool_function(3) failed. Here's the traceback: ")
+        print_exc()
+
+    # Also never gets a chance to print anything. It raises an
+    # exception, which gets thrown here to main(). But we don't
+    # catch it here, so it gets propagated down the call stack
+    # (in this case, it's never caught, so the program crashes).
+    print(cool_function(4))
+    
+
+if __name__ == '__main__':
+    main()
+`
+      }</PythonBlock>
+
+      <P>Running the above program produces the following output:</P>
+
+      <TerminalBlock copyable={false}>{
+`$ python raisenotreturn.py 
+100
+1000
+cool_function(3) failed. Here's the traceback: 
+Traceback (most recent call last):
+  File "/nfs/stak/users/guyera/instructor/static-content/guyera.github.io/code-samples/cs162/exceptions/raisenotreturn.py", line 22, in main
+    print(cool_function(3))
+  File "/nfs/stak/users/guyera/instructor/static-content/guyera.github.io/code-samples/cs162/exceptions/raisenotreturn.py", line 9, in cool_function
+    raise ValueError(f'x must be either 1 or 2, but got {x}')
+ValueError: x must be either 1 or 2, but got 3
+Traceback (most recent call last):
+  File "/nfs/stak/users/guyera/instructor/static-content/guyera.github.io/code-samples/cs162/exceptions/raisenotreturn.py", line 35, in <module>
+    main()
+  File "/nfs/stak/users/guyera/instructor/static-content/guyera.github.io/code-samples/cs162/exceptions/raisenotreturn.py", line 31, in main
+    print(cool_function(4))
+  File "/nfs/stak/users/guyera/instructor/static-content/guyera.github.io/code-samples/cs162/exceptions/raisenotreturn.py", line 9, in cool_function
+    raise ValueError(f'x must be either 1 or 2, but got {x}')
+ValueError: x must be either 1 or 2, but got 4
+`
+      }</TerminalBlock>
+
+      <P>Pay close attention to the code comments. When a value other than <Code>1</Code> or <Code>2</Code> is passed to <Code>cool_function()</Code>, it throws an exception, which is either caught at the call site or propagated down the call stack. In either case, the function call is never fully evaluated, and its value is never printed. For example, <Code>print(cool_function(3))</Code> doesn't actually get a chance to print anything whatsoever; the <Code>cool_function(3)</Code> call throws an exception, altering the program's control flow before the enclosing <Code>print()</Code> function call gets a chance to start. The same goes for <Code>print(cool_function(4))</Code> (but in that case, the entire program crashes).</P>
+
+      <P>This is why throwing an exception is an <Ul>alternative</Ul> to returning a value. If an exception is thrown out of a function, then it never gets a chance to return anything. And that's okay since its return value will never get a chance to be used at the call site anyways.</P>
+
+      <P>And indeed, Mypy is okay with this. Even though <Code>cool_function()</Code> is annotated as having a return type of <Code>int</Code>, it doesn't actually return an <Code>int</Code> when <Code>x</Code> is anything other than <Code>1</Code> or <Code>2</Code>. But since it throws an exception in all other cases, Mypy doesn't complain:</P>
+
+      <TerminalBlock copyable={false}>{
+`$ mypy raisenotreturn.py 
+Success: no issues found in 1 source file
+`
+      }</TerminalBlock>
+
+      {/*TODO Expand on the previous paragraph.*/}
+
       <SectionHeading id="debate-on-exceptions">(Optional content) Debate on exceptions</SectionHeading>
 
       <P>There's a lot of debate within the software engineering community surrounding exceptions. I'd be remiss if I didn't mention it.</P>
 
       <P>First of all, I mentioned a rule of thumb earlier: if you can detect that an error will occur using an if statement, that should be preferred over simply executing the operation in a try block and catching the error with an except block.</P>
 
-      <P>There are a few reasons for this rule of thumb. The main reason is performance. If statements are simple, and computers are very good at evaluating and interpreting them. Try and except (and <Code>raise</Code>, which we'll talk about <Link href="#throwing-exceptions">shortly</Link>), on the other hand, are much more complicated. They require your computer to accrue exception information, propagate it down the call stack (also called "stack unwinding"), detect whether a given except block is capable of handling the thrown exception, and many other minute details that we won't talk about. Moreover, if the error can be anticipated early using an if statement rather than caught when it occurs using try / except, the program can often avoid several unnecessary operations.</P>
+      <P>There are a few reasons for this rule of thumb. The main reason is performance. If statements are simple, and computers are very good at evaluating and interpreting them. On the other hand, try, except, and <Code>raise</Code> are much more complicated. They require your computer to accrue exception information, propagate it down the call stack (also called "stack unwinding"), detect whether a given except block is capable of handling the thrown exception, and many other minute details that we won't talk about. Moreover, if the error can be anticipated early using an if statement rather than caught when it occurs using try / except, the program can often avoid several unnecessary operations.</P>
 
-      <P>Another (much weaker) reason is philosophical: many people say that exceptions should only ever be thrown in exceptional circumstances. These people often say that simple, common errors (e.g., user errors) should be handled by if statements instead. A similar philosophy states that exceptions should only handle programming errors (e.g., for development and debugging purposes)<Emdash/>not user errors or other runtime errors. Of course, philosophies must exist for a deeper reason, and the origin of these philosophies is likely performance, as explained in the previous paragrpah.</P>
+      <P>Another (weaker) reason is philosophical: many people say that exceptions should only ever be thrown in exceptional circumstances. These people often say that simple, common errors (e.g., user errors) should be handled by if statements instead. A similar philosophy states that exceptions should only handle programming errors (e.g., for development and debugging purposes)<Emdash/>not user errors or other runtime errors.</P>
 
       <P>All that being said, even the performance issue usually isn't a practical concern, and much of this debate is probably bikeshedding. Python 3.11 and C++, for example, both implement zero-cost exception handling, meaning that exceptions are only slower than if statements (to a degree that might matter) when an exception is <It>actually</It> thrown, so unless exceptions are being thrown hundreds or thousands of times per second (which is almost never the case when this debate comes up), it likely makes no difference whether you use try/except vs an if statement, and spending energy thinking about it is likely premature optimization.</P>
 
@@ -436,7 +528,7 @@ Cannot compute the log of 0!
     bar()`
       }</PythonBlock>
 
-      <P>Without carefully analyzing the <Code>foo()</Code> function's documentation, you have no way of knowing whether the above program will even <It>execute</It> the <Code>bar()</Code> function. Indeed, if the <Code>foo()</Code> function returns (terminates normally), then the <Code>bar()</Code> function will be executed in turn. But if the <Code>foo()</Code> function throws an exception, the program will suddenly start doing something else entirely<Emdash/>the <Code>main()</Code> function, which is not equipped with a try/except mechanism to catch and handle the exception, will propagate it further down the call stack until it's eventually caught. Perhaps that's fine, but that control flow<Emdash/>that manner in which the program moves from one instruction to the next<Emdash/>is not transparent. That's to say, looking at the above code, it seems reasonable to assume that it will execute <Code>foo()</Code> followed by <Code>bar()</Code>. But exceptions break this assumption. The fact that Python supports exceptions <It>at all</It> means there's no saying what the above program will do unless you're <It>certain</It> about whether <Code>foo()</Code> will or will not throw an exception. And you can't be certain of that without looking at the <Code>foo()</Code> function's documentation (assuming its exceptions are documented to begin with<Emdash/>hopefully they are!).</P>
+      <P>Without carefully analyzing the <Code>foo()</Code> function's documentation, you have no way of knowing whether the above program will even <It>execute</It> the <Code>bar()</Code> function. Indeed, if the <Code>foo()</Code> function returns (terminates normally), then the <Code>bar()</Code> function will be executed in turn. But if the <Code>foo()</Code> function throws an exception, the program will suddenly start doing something else entirely<Emdash/>the <Code>main()</Code> function, which is not equipped with a try/except mechanism to catch and handle the exception, will propagate it further down the call stack until it's eventually caught. Perhaps that's fine, but that control flow<Emdash/>that manner in which the program moves from one instruction to the next<Emdash/>is not transparent. That's to say, looking at the above code, it seems reasonable to assume that it will execute <Code>foo()</Code> followed by <Code>bar()</Code>, but exceptions break this assumption. The fact that Python supports exceptions <It>at all</It> means there's no saying what the above program will do unless you're <It>certain</It> about whether <Code>foo()</Code> will or will not throw an exception. And you can't be certain of that without looking at the <Code>foo()</Code> function's documentation (assuming its exceptions are documented to begin with<Emdash/>hopefully they are!).</P>
 
       <P>Of course, as in all good debates, there's a counterargument: exceptions are part of a function's interface, meaning that if you don't know what kinds of exceptions a function might throw, then you have no business calling that function whatsoever. For reference, a function's name, parameters and return type are also a part of its interface. You clearly can't call a function without knowing these things, and types of exceptions that the function might throw are no different.</P>
       
