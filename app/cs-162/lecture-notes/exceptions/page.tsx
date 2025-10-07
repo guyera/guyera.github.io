@@ -415,6 +415,8 @@ Cannot compute the log of 0!
 
       <P>Notice that <Code>print(e)</Code> simply prints the exception's message, which is the very same message as the one that was provided between the parentheses when the <Code>ValueError</Code> was created within the <Code>base_10_log()</Code> function.</P>
 
+      <P>Python has many types of built-in exceptions besides <Code>ValueError</Code>. A complete list of built-in exception types and their purposes can be found <Link href="https://docs.python.org/3/library/exceptions.html#concrete-exceptions">here</Link>.</P>
+
       <SectionHeading id="throwing-vs-returning">Throwing vs returning</SectionHeading>
 
       <P>Throwing an exception out of a function (i.e., raising an exception, or calling another function that raises an exception, and not immediately catching it within the same function body) is an <Ul>alternative</Ul> to returning a value from a function. That is, any given function may terminate in one of three ways: 1) reaching the end of its control block (body); 2) returning a value; or 3) throwing an exception.</P>
