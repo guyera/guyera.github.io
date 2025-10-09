@@ -69,6 +69,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
         <Item><Link href="#file-input">File input</Link></Item>
         <Item><Link href="#string-parsing">String parsing</Link></Item>
         <Item><Link href="#file-output">File output</Link></Item>
+        <Item><Link href="#join">The <Code>join()</Code> method</Link></Item>
       </Itemize>
 
       <SectionHeading id="file-input">File input</SectionHeading>
