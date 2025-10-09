@@ -565,6 +565,39 @@ World!
 
       <P>And that's the gist of file I/O in Python as we'll use it in this course. There are many details to file I/O that I skipped over, but this should be good enough for our purposes.</P>
 
+      <SectionHeading id="join">The <Code>join()</Code> string method</SectionHeading>
+
+      <P>(This isn't very closely related to file I/O, but you might find it to be helpful when formatting data into a string for file output).</P>
+
+      <P>A string can be split into a list of smaller strings based on a specified token separator using the <Code>split()</Code> method, but a list of strings can also be joined back into a single large string separated by a specified token separator using the <Code>join()</Code> method. That is, the <Code>join()</Code> method is sort-of the inverse of the <Code>split()</Code> method.</P>
+
+      <P>To use the <Code>join()</Code> method, first create a string containing the desired token separator. Then call the <Code>.join()</Code> method on it. As an argument to this method, pass a list of strings. It then returns a single large string containing all the smaller strings in the list concatenated together, separated by the token separator string.</P>
+      
+      <P>Here's an example:</P>
+
+      <PythonBlock fileName="join.py">{
+`def main() -> None:
+    list_of_strings = ['the', 'quick', 'brown', 'fox']
+    joined_string = ','.join(list_of_strings)
+    print(joined_string) # Prints the,quick,brown,fox
+
+    joined_string = '+-+'.join(list_of_strings)
+    print(joined_string) # Prints the+-+quick+-+brown+-+fox
+
+if __name__ == '__main__':
+    main()
+`
+      }</PythonBlock>
+
+      <P>Running the above program produces the following output:</P>
+
+      <TerminalBlock copyable={false}>{
+`$ python join.py 
+the,quick,brown,fox
+the+-+quick+-+brown+-+fox
+`
+      }</TerminalBlock>
+
     </>
   )
 }
