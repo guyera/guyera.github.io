@@ -565,7 +565,7 @@ World!
 
       <P>And that's the gist of file I/O in Python as we'll use it in this course. There are many details to file I/O that I skipped over, but this should be good enough for our purposes.</P>
 
-      <SectionHeading id="join">The <Code>join()</Code> string method</SectionHeading>
+      <SectionHeading id="join">The <Code>join()</Code> method</SectionHeading>
 
       <P>(This isn't very closely related to file I/O, but you might find it to be helpful when formatting data into a string for file output).</P>
 
