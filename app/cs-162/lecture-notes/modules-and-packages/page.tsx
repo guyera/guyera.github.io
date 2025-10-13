@@ -265,7 +265,7 @@ from dog import print_dog as pd`
 
       <SectionHeading id="defining-custom-packages">Defining custom packages</SectionHeading>
 
-      <P>You now know how to separate your code into multiple files, but what if you want to separate it into multiple <Code>directories</Code>? The simplest way to do this is via Python <Bold>packages</Bold>.</P>
+      <P>You now know how to separate your code into multiple files, but what if you want to separate it into multiple <It>directories</It>? The simplest way to do this is via Python <Bold>packages</Bold>.</P>
 
       <P>The Python import system is somewhat complicated, and this isn't meant to be a Python course (Python is just the tool through which we're learning about the fundamentals of computer science), so I'll try to keep it simple. For our purposes, a Python package is basically just a directory that contains one importable Python modules, along with a special file named <Code>__init__.py</Code>. This file, <Code>__init__.py</Code> (and yes, it must have that exact name), can even be completely empty if you want it to be. Its mere presence tells Mypy and the Python interpreter that the directory is not merely a directory, but rather a package, and therefore the Python modules contained within it can be imported into other Python modules that are <It>not</It> within that same directory.</P>
 
