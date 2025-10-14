@@ -316,6 +316,16 @@ if __name__ == '__main__':
 
       <P>Running <Code>python main.py</Code> does the same thing as before.</P>
 
+      <P>It's also possible to import an entire module that's nested within a package. But from that point on, in order to use the module, you must write out its fully qualified name. For example:</P>
+
+      <PythonBlock>{
+`import animals.dog # Import the entire dog module from the animals package
+
+# And then later, you can do this. Notice: it's animals.dog.Dog instead of
+# simply dog.Dog
+spot = animals.dog.Dog()`
+      }</PythonBlock>
+
       <P>Suppose you want to import the <Code>Dog</Code> class and the <Code>Cat</Code> class all at once in a single line of code. As it stands, there's no way to do that<Emdash/>the <Code>Dog</Code> class is provided by <Code>animals.dog</Code>, and the <Code>Cat</Code> class is provided by <Code>animals.cat</Code>. Yes, they're in the same package, but separate modules, so they must be imported separately:</P>
 
       <PythonBlock showLineNumbers={false}>{
@@ -323,7 +333,7 @@ if __name__ == '__main__':
 from animals.cat import Cat`
       }</PythonBlock>
 
-      <P>However, there is technically a way import them both in a single line of code: you can import them directly from the package rather than importing them from their respective modules. Although this is possible, it'd require more configuration. Currently, our <Code>__init__.py</Code> file is empty, but it doesn't have to be. The <Code>__init__.py</Code> file can be used to define package-level importables. That's to say, anything that is defined within a package's <Code>__init__.py</Code> file can then be imported from the package directly. For example, if <Code>main.py</Code> had a line of code written as <Code>from animals import xyz</Code>, that would import <Code>xyz</Code> directly from <Code>animals/__init__.py</Code>.</P>
+      <P>However, there is technically a way to import them both in a single line of code: you can import them directly from the package rather than importing them from their respective modules. Although this is possible, it'd require more configuration. Currently, our <Code>__init__.py</Code> file is empty, but it doesn't have to be. The <Code>__init__.py</Code> file can be used to define package-level importables. That's to say, anything that is defined within a package's <Code>__init__.py</Code> file can then be imported from the package directly. For example, if <Code>main.py</Code> had a line of code written as <Code>from animals import xyz</Code>, that would import <Code>xyz</Code> directly from <Code>animals/__init__.py</Code>.</P>
 
       <P>Moreover, anything that's imported <It>within</It> a package's <Code>__init__.py</Code> file can then be imported <It>from</It> that package within another module. For example, it's possible to have <Code>animals/__init__.py</Code> import the <Code>Dog</Code> and <Code>Cat</Code> classes from <Code>animals.dog</Code> and <Code>animals.cat</Code> (respectively), and then have <Code>main.py</Code> import these classes directly from the <Code>animals</Code> package (e.g., <Code>from animals import Dog, Cat</Code>).</P>
       
