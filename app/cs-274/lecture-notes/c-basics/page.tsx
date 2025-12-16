@@ -80,7 +80,11 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
         <Item><Link href="#type-casting">Type casting</Link></Item>
         <Item><Link href="#const"><Code>const</Code></Link></Item>
         <Item><Link href="#basic-standard-input">Basic standard input</Link></Item>
+        <Item><Link href="#relational-and-logical-operators">Relational and logical operators</Link></Item>
         <Item><Link href="#if-statements">If statements</Link></Item>
+        <Item><Link href="#scopes">Scopes</Link></Item>
+        <Item><Link href="#loops">Loops</Link></Item>
+        <Item><Link href="#functions">Functions</Link></Item>
       </Itemize>
 
       <SectionHeading id="include-and-preprocessing-directives"><Code>#include</Code> and preprocessing directives</SectionHeading>
@@ -337,7 +341,7 @@ The value of 1.0 / 3.0, rounded to two decimal places, is: 0.33
 
       <P>Because each argument after the format string corresponds to a format specifier within the format string, the number of arguments to <Code>printf()</Code> after the format string <Ul>must</Ul> match the number of format specifiers within the format string. Moreover, the types of the arguments must be compatible with their corresponding format specifiers. For example, the <Code>%d</Code> format specifier is a placeholder for an integer (as I explained earlier), which is why I used it as the format specifier for the integer argument <Code>2 + 2</Code>.</P>
 
-      <P>If you use the wrong format specifiers, such as <Code>%f</Code> for an integer argument or <Code>%d</Code> for a floating point argument, it will likely print the wrong value to the terminal (technically, it results in <Bold>undefined behavior</Bold>, which we'll discuss later in the term).</P>
+      <P>If you use the wrong format specifiers, such as <Code>%f</Code> for an integer argument or <Code>%d</Code> for a floating point argument, it will likely print the wrong value to the terminal (technically, it results in <Bold>undefined behavior</Bold>, which we'll discuss later).</P>
 
       <P><Code>printf()</Code> does not always <It>immediately</It> print the specified text to the terminal. Rather, it writes the specified text into C's internal standard output buffer. Only when that buffer is <Ul>flushed</Ul> will it be printed to the terminal.</P>
 
@@ -408,7 +412,7 @@ fflush(stdout); // Flush standard output to display the printed text immediately
         <Item><Code>float</Code>. This data type represents floating point values (i.e., numbers with decimal points in them).</Item>
         <Item><Code>long int</Code>, or simply <Code>long</Code>. This data type is similar to <Code>int</Code>, but it's usually capable of representing larger (i.e., greater magnitude) values. The tradeoff is that it usually consumes more memory than the <Code>int</Code> data type.</Item>
         <Item><Code>double</Code>. This data type is similar to <Code>float</Code>, but it's usually capable of representing larger (i.e., greater magnitude) values and with greater precision (i.e., more decimal places).</Item>
-        <Item><Code>char</Code>. This data type represents a single character.</Item>
+        <Item><Code>char</Code>. This data type represents a single character. Technically, a <Code>char</Code> value is just a whole number, usually between <Code>-128</Code> and <Code>127</Code>. However, the computer is capable of converting these numbers to and from character symbols (e.g., when printing them to the terminal). This works via a character encoding, specifically ASCII. We'll discuss this in greater detail later on in the term.</Item>
       </Itemize>
 
       <P>The simplest kinds of expressions are <Bold>literals</Bold>. A literal is just a hard-coded value. You can create literals for each of the primitive types that I just mentioned:</P>
@@ -1053,9 +1057,9 @@ x = y = 10;
 
       <P><Bold>Implicit type casting</Bold> happens implicitly and automatically. Specifically, whenever the compiler expects you to provide a certain type of expression in a certain place within your code, but you provide a different type of expression instead, the compiler will attempt to implicitly type-cast the provided expression into the required type. For example, consider <Code>int x = 3.14;</Code>. The compiler expects an <Code>int</Code>-typed expression to appear on the right side of the assignment operator since you're assigning a value to an <Code>int</Code> variable. But a <Code>double</Code>-typed expression is provided instead. The compiler will implicitly convert <Code>3.14</Code> into an <Code>int</Code>-typed expression (more on conversion rules in a moment).</P>
 
-      <P>Implicit type casting isn't always possible. There are cases where the compiler will refuse to implicitly type-cast an expression even when the conversion is technically possible (or, at the very least, there are cases where it will issue a warning, such as when type-casting a pointer-typed to another integral type).</P>
+      <P>Implicit type casting isn't always possible. There are cases where the compiler will refuse to implicitly type-cast an expression even when the conversion is technically possible (or, at the very least, there are cases where it will issue a warning, such as when type-casting a pointer-typed expression to another integral type).</P>
 
-      <P>But more importantly, implicit type casting can sometimes be a bit awkward. Suppose you want to divide two integers, but you don't want the result to be truncated. As we've discussed, a simple solution is to make one of those integers a <Code>double</Code> or a <Code>float</Code> instead, such as <Code>1.0 / 2</Code>, or <Code>1 / 2.0</Code>. But what if the two integers that you're trying to divide are variables or some other complicated kind of expression? Then you can't simply append a <Code>.0</Code> to the end of it to make it a <Code>double</Code> or <Code>float</Code> (e.g., <Code>x.0 / y</Code> makes no sense). This problem <It>could</It> be solved with implicit type casting:</P>
+      <P>Implicit type casting can also sometimes be a bit awkward. Suppose you want to divide two integers, but you don't want the result to be truncated. As we've discussed, a simple solution is to make one of those integers a <Code>double</Code> or a <Code>float</Code> instead, such as <Code>1.0 / 2</Code>, or <Code>1 / 2.0</Code>. But what if the two integers that you're trying to divide are variables or some other complicated kind of expression? Then you can't simply append a <Code>.0</Code> to the end of it to make it a <Code>double</Code> or <Code>float</Code> (e.g., <Code>x.0 / y</Code> makes no sense). This problem <It>could</It> be solved with implicit type casting:</P>
 
       <CBlock copyable={false} showLineNumbers={false}>{
 `double x_as_double = x; // Implicit type casting
@@ -1065,7 +1069,7 @@ printf("%lf\\n", x_as_double / y);`
 
       <P>But that's a bit awkward. It requires creating an extra variable, <Code>x_as_double</Code>, just to implicitly cast <Code>x</Code>'s value to a <Code>double</Code>-typed expression to facilitate the division without truncation.</P>
 
-      <P>This problem is better solved with <Bold>explicit type casting.</Bold> Any expression can be explicitly and manually casted to another type. Type write out the type that you want to cast the expression to in a pair of parentheses immediately before the expression itself:</P>
+      <P>This problem is better solved with <Bold>explicit type casting.</Bold> Any expression can be explicitly and manually casted to another type. Simply write out the type that you want to cast the expression to in a pair of parentheses immediately before the expression itself:</P>
 
       <CBlock copyable={false} showLineNumbers={false}>{
 `printf("%lf\\n", (double) x / y); // Prints 0.5`
@@ -1081,22 +1085,386 @@ printf("%lf\\n", x_as_double / y);`
 
       <P>In this case, <Code>x / y</Code> is computed, and <It>then</It> the result is casted to a <Code>double</Code>. And in this case, because <Code>x / y</Code> happens before the type cast, integer division is performed, so the result is truncated to 0 (and then that 0 is casted to a <Code>double</Code> value, <Code>0.0</Code>).</P>
 
-      
+      <P>Be careful when performing type-casting, especially explicit type-casting. In some cases, the compiler will let you type-cast an expression to another type even when the conversion doesn't make any sense. This can sometimes lead to undefined behavior, especially when casting between types of <Link href={`${PARENT_PATH}/${allPathData["pointers"].pathName}`}>pointers</Link>.</P>
+
+      <P>To avoid issues, only cast between types for which you're aware of and understand the conversion rules. Here are some such rules:</P>
+
+      <Itemize>
+        <Item>Type-casting a floating-point-typed (e.g., <Code>float</Code> or <Code>double</Code>) expression into an integral type (e.g., <Code>int</Code> or <Code>long int</Code>) performs truncation: the decimal point and everything after it is dropped. You can also think of this as "rounding toward zero". For example, the value of <Code>(int) -3.99</Code> is <Code>-3</Code>; the value of <Code>(int) 3.99</Code> is <Code>3</Code>; and the value of <Code>(int) 3.01</Code> is <Code>3</Code>.</Item>
+        <Item>Type-casting an integral-typed (e.g., <Code>int</Code> or <Code>long int</Code>) expression into a floating-point type (e.g., <Code>float</Code> or <Code>double</Code>) works by simply adding a <Code>.0</Code> to the end of the value. For example, the value of <Code>(float) 3</Code> is <Code>3.0f</Code>.</Item>
+        <Item>When the converted value is too large to be represented by the newly casted type, then it's "shrunk" to a smaller value in an implementation-defined manner (this is similar to undefined behavior, but usually less dangerous). For example, the value of <Code>(int) 999999999999l</Code> is usually implementation-defined because such a large value usually cannot be represented by the <Code>int</Code> type.</Item>
+        <Item>When casting from a high-precision floating-point type to a lower-precision floating-point type (e.g., <Code>double</Code> to <Code>float</Code>), even if the value is small enough to be represented by the new type, it may still lose some decimal places due to the reduced precision.</Item>
+        <Item>Remember that <Code>char</Code> values are technically whole numbers that are converted to character symbols by the computer when necessary (e.g., when printing them to the terminal). This means that <Code>char</Code> is an integral type, similar to <Code>int</Code> and <Code>long</Code>, so they tend to follow similar casting / conversion rules.</Item>
+      </Itemize>
+
       <SectionHeading id="const"><Code>const</Code></SectionHeading>
 
-      {/*TODO*/}
+      <P>C supports several <Bold>type qualifiers</Bold>, which are keywords that can be used to modify a data type, instructing the compiler to treat it in a special way. The most common type qualifier is <Code>const</Code>, which can be used to create constants (similar to variables, but they can't be modified after they're declared).</P>
+
+      <P>In the simplest case, a data type can be qualified as <Code>const</Code> by simply writing the <Code>const</Code> keyword immediately before the rest of the data type. For example:</P>
+
+      <CBlock fileName="const.c">{
+`int main() {
+        float x = 5; // x is a variable of type 'float'
+        const float pi = 3.14; // pi is a constant of type 'const float'
+}`
+      }</CBlock>
+
+      <P>The <Code>const</Code> keyword can alternatively appear immediately <It>after</It> the rest of the type (e.g., <Code>float const pi = 3.14</Code>).</P>
+      
+      <P>If a value's type is <Code>const</Code>-qualified, then it cannot be changed at any point in the program. For example:</P>
+
+      <CBlock fileName="const.c" highlightLines="{6}">{
+`int main() {
+        float x = 5; // x is a variable of type 'float'
+        const float pi = 3.14; // pi is a constant of type 'const float'
+
+        x = 10; // This is perfectly fine
+        pi = 10; // This causes a compilation error
+}`
+      }</CBlock>
+
+      <P>Attempting to compile the above program produces the following output:</P>
+
+      <TerminalBlock copyable={false}>{
+`$ gcc -g -o const const.c 
+const.c: In function ‘main’:
+const.c:6:11: error: assignment of read-only variable ‘pi’
+    6 |         pi = 10; // This causes a compilation error
+      |           ^`
+      }</TerminalBlock>
+
+      <P>Importantly, constants generally cannot be modified at any point after they're declared, so they must be initialized in the very same statement in which they're declared, or else they'll remain uninitialized forever. For example, this works just fine:</P>
+
+      <CBlock>{
+`const float pi = 3.14;`
+      }</CBlock>
+
+      <P>But this does <Ul>not</Ul> work (it fails to compile):</P>
+
+      <CBlock>{
+`const float pi;
+pi = 3.14; // Cannot modify pi after declaration!`
+      }</CBlock>
+
+      <P>You might have noticed that <Code>const</Code>-qualified types are more restrictive, and so in some sense "less powerful", than types that aren't <Code>const</Code>-qualified. For example, anything that can be done with <Code>pi</Code> can also be done with <Code>x</Code>, but the vice-versa is <Ul>not</Ul> true because <Code>x</Code> can be modified whereas <Code>pi</Code> cannot.</P>
+
+      <P>So, why use <Code>const</Code>-qualified types? Well, it's simple: suppose you have a value that should never be changed, but you (or the new intern / junior) accidentally change it anyways. That's a bug. If the value's type is <Code>const</Code>-qualified, then the mistake will be detected instantly by the compiler, the program will fail to build, and the compiler will generate a very nice message telling you what the error is and where in the code it can be found. However, if the value's type is not <Code>const</Code>-qualified, then the bug manifests as a logic error at runtime, which could propagate through thousands of lines of code before generating a fault or producing an incorrect value. Syntax errors at compile time are much easier to detect and diagnose than logic errors at runtime, so you should always prefer the former.</P>
+
+      <P>A simple rule of thumb is: if you're certain that a value will never need to be changed throughout the program's runtime after it's declared / initialized, then you should qualify its type with <Code>const</Code>.</P>
 
       <SectionHeading id="basic-standard-input">Basic standard input</SectionHeading>
 
-      {/*TODO*/}
+      <P>So far, I've only shown you how to write programs that <It>output</It> data to the terminal. But in most cases, programs also need to be able to receive data as <It>inputs</It> in order to be useful.</P>
+
+      <P>Recall that every process has a special file known as its standard output, and that, by default, standard output is typically linked to the terminal. Hence, anything written to standard output is automatically displayed in the terminal, and that's what <Code>printf()</Code> does.</P>
+
+      <P>Similarly, every process has a special file known as its <Bold>standard input</Bold>. Standard input files are also typically linked to the terminal by default, but they're input streams instead of output streams. That is, instead of writing data to standard input, processes <It>read</It> data <It>from</It> standard input. Assuming standard input is linked to the terminal, as it usually is, reading from standard input essentially reads whatever text the user types into the terminal.</P>
+
+      <P>There are a few ways to read the user's inputs from standard input. In this lecture, we'll just cover a single basic way: the <Code>scanf()</Code> function.</P>
+
+      <P>First, a disclaimer: using <Code>scanf()</Code> in a rigorously correct way is quite difficult. In most cases, a much better idea is to read entire lines of input using functions like <Code>fgets()</Code> or <Code>getline()</Code>, and then perform necessary conversions using functions like <Code>strtol()</Code>. However, using <Code>fgets()</Code>, <Code>getline()</Code>, and <Code>strtol()</Code> (and other similar functions) requires a deeper understanding C strings, which we aren't covering until later in the term. So we'll use <Code>scanf()</Code> for now, and we'll switch to those other functions later.</P>
+
+      <P>The <Code>scanf()</Code> function is provided by <Code>{'<stdio.h>'}</Code>. It accepts one or more arguments, but there will usually be at least two. The first argument must be a C string (e.g., a string literal) specifying the expected format of the user's input by using format specifiers (e.g., <Code>%d</Code>, <Code>%f</Code>, etc). Each format specifier represents a placeholder for a value that the user is expected to provide. For each format specifier in the string passed as the first argument to <Code>scanf()</Code>, an additional argument is required to specify the variable in which the user's provided value will be stored. These additional arguments<Emdash/>the second argument to <Code>scanf()</Code> and on<Emdash/>must be provided in the form of non-constant pointers. We'll cover pointers in greater detail <Link href={`${PARENT_PATH}/${allPathData["pointers"].pathName}`}>later on</Link>, but for now, this basically means that the second argument to <Code>scanf()</Code> and on must variables (not constants) with ampersands (<Code>&</Code>) before their names. <Code>scanf()</Code> will then pause until the user types their inputs into the terminal (separated by whitespace) and presses the enter key, at which point it will read the user's inputs through the process's standard input and store their values in the variables that were passed by pointer as the second argument and on to <Code>scanf()</Code> in left-to-right order.</P>
+
+      <P>That's a bit abstract, so here's an example:</P>
+
+      <CBlock fileName="scanf.c">{
+`#include <stdio.h>
+
+int main() {
+        // Prompt the user for some values
+        printf("Enter your age, followed by a space, followed by your "
+                "favorite number: ");
+
+        // Create variables in which to store the user's provided
+        // values
+        int age;
+        float favorite_number;
+
+        // The user is expected to provide their age and THEN their
+        // favorite number. The first is an int, and the second is a
+        // float, so the format specifiers for these inputs are %d
+        // followed by %f. Pause the program until the user enters
+        // these two values, then store the supplied values in the
+        // 'age' and 'favorite_number' variables, respectively:
+        scanf("%d %f", &age, &favorite_number);
+        // Notice the ampersands above (&age and &favorite_number)
+
+        // Just to prove it worked, add the two numbers together and
+        // print the result:
+        printf("The sum is %f\\n", age + favorite_number);
+}`
+      }</CBlock>
+
+      <P>Here's an example run of the above program:</P>
+
+      <TerminalBlock copyable={false}>{
+`$ gcc -g -o scanf scanf.c 
+$ valgrind ./scanf 
+==1127744== Memcheck, a memory error detector
+==1127744== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==1127744== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
+==1127744== Command: ./scanf
+==1127744== 
+Enter your age, followed by a space, followed by your favorite number: 27 9.81
+The sum is 36.810001
+==1127744== 
+==1127744== HEAP SUMMARY:
+==1127744==     in use at exit: 0 bytes in 0 blocks
+==1127744==   total heap usage: 2 allocs, 2 frees, 2,048 bytes allocated
+==1127744== 
+==1127744== All heap blocks were freed -- no leaks are possible
+==1127744== 
+==1127744== For lists of detected and suppressed errors, rerun with: -s
+==1127744== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)`
+      }</TerminalBlock>
+
+      <P>Let's break this down a bit. The first argument to <Code>scanf()</Code>, <Code>"%d %f"</Code>, states that we expect the user to enter a decimal integer (<Code>%d</Code>) followed by a floating point number (<Code>%f</Code>). The space between the two format specifiers is technically optional (i.e., the first argument to <Code>scanf()</Code> could equivalently be <Code>"%d%f"</Code>, with no spaces).</P>
+
+      <P>Because the user is expected to provide two inputs, there are two additional arguments after the format string. The first of those two arguments must specify a pointer to a variable in which the user's first input (the decimal integer input) will be stored. <Code>age</Code> is an integer variable, so we supply a pointer to the <Code>age</Code> variable (i.e., <Code>&age</Code>) as the first argument after the format string. The second argument after the format string must specify a pointer to a variable in which the user's second input (the floating point input) will be stored. <Code>favorite_number</Code> is a floating-point variable, so we supply a pointer to the <Code>favorite_number</Code> variable (i.e., <Code>&favorite_number</Code>) as the second argument after the format string.</P>
+
+      <P>(The ampersand is the "address-of" operator, and it's used to create pointers that point to variables. More on this in <Link href={`${PARENT_PATH}/${allPathData["pointers"].pathName}`}>a future lecture</Link>).</P>
+      
+      <P>When the program is executed and the control flow arrives at the <Code>scanf()</Code> function call, the program pauses until the user provides two inputs separated by whitespace (because the <Code>scanf()</Code> call's format string has two format specifiers and corresponding pointer arguments) and presses the enter key. It then stores the first input in the <Code>age</Code> variable and the second input in the <Code>favorite_number</Code> variable.</P>
+
+      <P>The user's two inputs may be separated by <Ul>any</Ul> kind of whitespace. The program specifically tells the user to separate them with a space ("Enter your age, followed by a space, followed by your favorite number"), but if the user separates their inputs with, say, a tab character instead of a space character, the program will still work in the exact same way. This is because <Code>scanf()</Code> treates any and all whitespace as delimiters (separators) between actual input values. Even if the user supplies a whole <It>bunch</It> of whitespace (e.g., they separate their two input values with several spaces, tabs, and other whitespace), the program will still work in the same way. Technically, even newline character sequences are considered whitespace and treated the same way, so the user could even choose to supply the two inputs on separate lines if they want (e.g., they could type "27", followed by the enter key, followed by "9.81", followed by the enter key again; the program would still do the exact same thing).</P>
+
+      <P>Now, what if the user's input doesn't match the expected format? In such a case, <Code>scanf()</Code> will stop scanning the user's input once it reaches the first incorrectly formatted value. For example, if the user enters "27 Hello", then it will store 27 inside the <Code>age</Code> variable and then immediately stop because "Hello" is not a valid floating-point value. The result is that <Code>age</Code> will be <Code>27</Code>, but <Code>favorite_number</Code> will still be uninitialized.</P>
+
+      <P>Moreover, if <Code>scanf()</Code> stops scanning early due to the user supplying an incorrect type of input, it will leave the remaining characters in the input buffer. For example, if the user types "27 Hello", then it will store the 27 inside the <Code>age</Code> variable but leave the "Hello" in the buffer. This means that the <It>next</It> time the program tries to read from standard input (e.g., via another call to <Code>scanf()</Code>), it will again try to read the word "Hello" (and again leave it in the input buffer if it's still not the correct type of input).</P>
+
+      <P>All of this means that it's very difficult to do proper error handling with <Code>scanf()</Code>. If you don't trust the user to supply values of the correct types (which, in most cases, you shouldn't), then you should not use <Code>scanf()</Code>. Again, a much better idea would be to use more advanced functions like <Code>fgets()</Code>, <Code>getline()</Code>, and <Code>strtol()</Code>. However, until we've covered those functions, we're going to use <Code>scanf()</Code> anyways, and we're just going to trust that the user will, indeed, supply values of valid types so that <Code>scanf()</Code> is capable of reading them.</P>
+
+      <P>(There are many other details about <Code>scanf()</Code> that we won't discuss, such as its return value and special cases where the user's inputs do not have to be whitespace-separated.)</P>
+
+      <P>Finally, you might have noticed that the sum of the age and favorite number in the previous example run is slightly off (36.810001 instead of 36.81). This is just a result of numerical imprecision. It actually has nothing to do with <Code>scanf()</Code>. Directly initializing <Code>favorite_number = 9.81</Code> without calling <Code>scanf()</Code> at all yields the same result on the ENGR servers.</P>
+
+      <SectionHeading id="relational-and-logical-operators">Relational and logical operators</SectionHeading>
+
+      <P>C has all the typical relational operators that you'd expect:</P>
+      
+      <Itemize>
+        <Item><Code>{'<'}</Code>: The less-than operator</Item>
+        <Item><Code>{'>'}</Code>: The greater-than operator</Item>
+        <Item><Code>{'<='}</Code>: The less-than-or-equal-to operator</Item>
+        <Item><Code>{'>='}</Code>: The greater-than-or-equal-to operator</Item>
+        <Item><Code>{'=='}</Code>: The equal-to operator</Item>
+        <Item><Code>{'!='}</Code>: The not-equal-to operator</Item>
+      </Itemize>
+
+      <P>To use a relational operator, simply place it between two values of comparable types, and it will produce a new value that's "true" if the relationship is true and "false" otherwise. For example, <Code>{'5 < 7'}</Code> will produce a "true" value since 5 is, indeed, less than 7.</P>
+
+      <P>However, I write "true" and "false" in quotation marks for a reason: as strange as it may sound, C does not have a dedicated boolean data type. Instead, C uses integers to represent true and false values. Relational operations will produce a value of 1 when the relationship is true, and a value of 0 when the relationship is false.</P>
+
+      <P>Here are some examples:</P>
+
+      <CBlock fileName="relationaloperators.c">{
+`#include <stdio.h>
+
+int main() {
+        printf("%d\\n", 5 < 10); // Prints 1 for true
+        printf("%d\\n", 5 >= 10); // Prints 0 for false
+
+        printf("%d\\n", 5 == 5); // Prints 1 for true
+        printf("%d\\n", 5 != 5); // Prints 0 for false
+
+        printf("%d\\n", 5 == 6); // Prints 0 for false
+        printf("%d\\n", 5 != 6); // Prints 1 for true
+
+        // Since relational operators just produce 0 or 1,
+        // you can store their values in int variables
+        int x;
+        scanf("%d", &x);
+        int x_is_less_than_10 = x < 10;
+
+        // If the user entered a value less than 10, then
+        // x_is_less_than_10 will be 1. Else, it'll be 0.
+}`
+      }</CBlock>
+
+      <P>C also has all the typical logical operators that you'd expect:</P>
+
+      <Itemize>
+        <Item><Code>&&</Code>: The <Bold>logical-and</Bold> operator</Item>
+        <Item><Code>||</Code>: The <Bold>logical-or</Bold> operator</Item>
+        <Item><Code>!</Code>: The <Bold>logical-not</Bold> operator</Item>
+      </Itemize>
+
+      <P>To use any of the above logical operators other than logical-not, simply place the operator between two integers that are each either 0 or 1. A logical-and operator will produce a value of 1 if and only if the operands to its left <Ul>and</Ul> right are both 1. If either operand is 0, the logical-and operator will produce a value of 0. A logical-or operator will produce a value of 1 if and only if the operand to its left <Ul>or</Ul> right is 1 (or both). If both operands are 0, the logical-or operator will produce a value of 0.</P>
+
+      <P>To use the logical-not operator, simply place it to the left of an integer value that's either 0 or 1, and it will negate it. That is, if placed to the left of an integer with value 0, it will produce a value of 1. If placed to the left of an integer with value 1, it will produce a value of 0.</P>
+
+      <P>Here are some examples:</P>
+
+      <CBlock fileName="logicaloperators.c">{
+`#include <stdio.h>
+
+int main() {
+        // Ask user for integer x
+        int x;
+        scanf("%d", &x);
+
+        // Check if x is between 5 and 10.
+        // Notice the use of parentheses to ensure that the
+        // relational operations are completely evaluated
+        // before evaluating the final logical-and operation.
+        int within_range = (x >= 5) && (x <= 10);
+
+        // If x is between 5 and 10 (inclusive), then
+        // within_range will be 1 ("true"). Else, it'll be
+        // 0 ("false").
+
+        // Check if x is negative or greater than 100
+        int negative_or_large = (x < 0) || (x > 100);
+
+        // If x is negative or greater than 100, then
+        // negative_or_large will be 1 ("true"). Else, it'll
+        // be 0 ("false").
+}`
+      }</CBlock>
+
+      <P>Technically, these logical operators can also be used with integer operands whose values are not 0 nor 1. Such values are treated as "true", just as values of 1 are treated as "true". However, these logical operators will always <It>produce</It> either 0 or 1 (that is, they will never produce, say, a value of 2 to represent "true", even though a value of 2 is treated as "true" when supplied as an operand).</P>
 
       <SectionHeading id="if-statements">If statements</SectionHeading>
+
+      <P>Unsurprisingly, C supports if statements. The syntax is as follows:</P>
+
+      <SyntaxBlock>{
+`if (<condition>) {
+    <body>
+}`
+      }</SyntaxBlock>
+
+      <P>Replace <Code>{'<condition>'}</Code> with an integer expression, and replace <Code>{'<body>'}</Code> with the if statement body. The if statement's body will be executed if and only if its condition is <Ul>any non-zero value</Ul>. If the condition's value is 0, then the body won't execute. Of course, this means that logical and relational operations, which produce integer values of either 0 or 1, can be used to construct if statement conditions.</P>
+
+      <P>(You can sometimes omit the curly braces around the if statement's body. In such a case, the single statement immediately following the if statement condition's closing parenthesis is treated as the entire if statement body. This is true regardless of the code's whitespace / indentation (recall: C is not whitespace-sensitive). This means that if you want your if statement body to have multiple statements in it, then it <Ul>must</Ul> have curly braces around the body. And, in fact, some programmers say that it's a bad idea to ever omit the curly braces because it often leads to mistakes. <Link href="https://www.imperialviolet.org/2014/02/22/applebug.html">Here's</Link> an example of a bug caused by one such mistake. To be safe, I recommend just always including the curly braces; there's no good reason to omit them.)</P>
+
+      <P>C also has "else if" and "else" statements. Here's an example of the syntax for an if-elseif-else chain:</P>
+
+      <SyntaxBlock>{
+`if (<condition 1>) {
+    <body A>
+} else if (<condition 2>) {
+    <body B>
+} else if (<condition 3>) {
+    <body C>
+} else {
+    <body D>
+}
+// More code here...`
+      }</SyntaxBlock>
+
+      <P>(This is just an example. There doesn't have to be exactly two else-if statements.)</P>
+
+      <P>Replace each <Code>{'<condition X>'}</Code> with a corresponding condition (i.e., integer expression, where 0 is treated as false and all nonzero values are treated as true), and replace each <Code>{'<body X>'}</Code> with a corresponding body of code.</P>
+
+      <P>In the above example syntax, if <Code>{'<condition 1>'}</Code> is true (i.e., a nonzero value), then the program will execute <Code>{'<body A>'}</Code>, and then it will jump all the way to the end of the chain (to the <Code>{'// More code here...'}</Code> line) and proceed to execute whatever comes next. However, if <Code>{'<condition 1>'}</Code> is false (i.e., 0), then the computer will move on to evaluate <Code>{'<condition 2>'}</Code>. If <Code>{'<condition 1>'}</Code> is false but <Code>{'<condition 2>'}</Code> is true, then the program will execute <Code>{'<body B>'}</Code>, and then it will jump all the way to the end of the chain (again, to the <Code>{'// More code here...'}</Code> line) and proceed to execute whatever comes next. And so on. If all the if and else-if statements' conditions are false (i.e., if <Code>{'<condition 1>'}</Code>, condition <Code>{'<condition 2>'}</Code>, <Ul>and</Ul> condition <Code>{'<condition 3>'}</Code> are all 0), then the program will execute the else statement's body (<Code>{'<body D>'}</Code>) before proceeding to the <Code>{'// More code here...'}</Code> line.</P>
+
+      <P>Remember that an else statement should not have any condition associated with it. It's just "else", followed by curly braces and a code body. This is because it appears at the very end of an if-elseif-else chain, and it represents the "catch all" scenario: it executes if and only if none of the previous bodies of code in the chain executed. Hence, its condition is implied.</P>
+
+      <P>Again, an if-elseif-else chain does not have to have exactly two else-if statements, nor does it have to have an else statement at all. In general, an if-elseif-else chain must start with a regular if statement, it can have zero or more (potentially infinitely many) else-if statements, and it can have at most one else statement at the end.</P>
+
+      <P>Here's a more concrete example:</P>
+
+      <CBlock fileName="ifstatement.c">{
+`#include <stdio.h>
+
+int main() {
+        printf("Enter your grade percentage: ");
+        float percent;
+        scanf("%f", &percent);
+
+        if (percent >= 92.5) {
+                printf("Your grade is an A\\n");
+        } else if (percent >= 89.5) {
+                printf("Your grade is an A-\\n");
+        } else if (percent >= 86.5) {
+                printf("Your grade is a B+\\n");
+        } else if (percent >= 82.5) {
+                printf("Your grade is a B\\n");
+        } else if (percent >= 79.5) {
+                printf("Your grade is a B-\\n");
+        } else if (percent >= 76.5) {
+                printf("Your grade is a C+\\n");
+        } else if (percent >= 72.5) {
+                printf("Your grade is a C\\n");
+        } else if (percent >= 69.5) {
+                printf("Your grade is a C-\\n");
+        } else if (percent >= 66.5) {
+                printf("Your grade is a D+\\n");
+        } else if (percent >= 62.5) {
+                printf("Your grade is a D\\n");
+        } else if (percent >= 59.5) {
+                printf("Your grade is a D-\\n");
+        } else {
+                printf("Your grade is an F\\n");
+        }
+}`
+      }</CBlock>
+
+      <P>And here's an example run:</P>
+
+      <TerminalBlock copyable={false}>{
+`$ gcc -g -o ifstatement ifstatement.c 
+$ valgrind ./ifstatement 
+==1162014== Memcheck, a memory error detector
+==1162014== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==1162014== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
+==1162014== Command: ./ifstatement
+==1162014== 
+Enter your grade percentage: 87.4
+Your grade is a B+
+==1162014== 
+==1162014== HEAP SUMMARY:
+==1162014==     in use at exit: 0 bytes in 0 blocks
+==1162014==   total heap usage: 2 allocs, 2 frees, 2,048 bytes allocated
+==1162014== 
+==1162014== All heap blocks were freed -- no leaks are possible
+==1162014== 
+==1162014== For lists of detected and suppressed errors, rerun with: -s
+==1162014== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)`
+      }</TerminalBlock>
+
+      <P>Don't forget that a pair of successive if statements is not the same thing as an if statement followed by an else-if statement. Consider the following code:</P>
+
+      <CBlock>{
+`if (x < 5) {
+    printf("Hello, ");
+} else if (x > 0) {
+    printf("World!");
+}`
+      }</CBlock>
+
+      <P>Suppose <Code>x</Code> stores the value <Code>3</Code>. Then the above code will print "Hello, ", but it will not print "World!", even though 3 is greater than 0. This is because bodies of code in an if-elseif-else chain are mutually exclusive (at most one of them will execute).</P>
+
+      <P>Now consider this alternative:</P>
+
+      <CBlock>{
+`if (x < 5) {
+    printf("Hello, ");
+} if (x > 0) {
+    printf("World!");
+}`
+      }</CBlock>
+
+      <P>Notice that the keyword "else" is missing before the second "if". This is now a sequence of two successive if statements rather than an if-elseif chain. That is, these two if statements are evaluated independently of one another. In this case, if <Code>x</Code> stores the value <Code>3</Code>, then the above code will print "Hello, World!" (3 is less than 5 but also greater than 0, so both if statements' bodies will execute).</P>
+
+      {/*TODO Common mistake of chaining relational operators*/}
+
+      {/*TODO Common mistake of = instead of == */}
+
+      <SectionHeading id="scopes">Scopes</SectionHeading>
+
+      {/*TODO*/}
+
+      <SectionHeading id="loops">Loops</SectionHeading>
 
       {/*TODO*/}
 
       <SectionHeading id="functions">Functions</SectionHeading>
 
-      {/*TODO Perhaps this section doesn't go here. I've just put it here so I can create anchor links to it.*/}
+      {/*TODO*/}
 
     </>
   )
