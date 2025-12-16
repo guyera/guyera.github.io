@@ -20,6 +20,6 @@ int main() {
 	// Notice the ampersands above (&age and &favorite_number)
 	
 	// Just to prove it worked, add the two numbers together and
-	// print the output:
+	// print the result:
 	printf("The sum is %f\n", age + favorite_number);
 }
