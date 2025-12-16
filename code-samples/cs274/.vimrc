@@ -1,4 +1,4 @@
 set colorcolumn=73
 
-imap <leader>main<Space> int<Space>main()<Space>{<CR><CR>}OA<Tab>
-imap <leader>stdio<Space> #include<Space><stdio.h>
+inoremap <leader>main<Space> int<Space>main()<Space>{<CR><CR>}<Up><Tab>
+inoremap <leader>stdio<Space> #include<Space><stdio.h>
