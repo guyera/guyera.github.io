@@ -22,6 +22,11 @@ imap <leader>p<Space> <P></P>ODODODOD
 " Map \` followed by a space to Code component
 imap <leader>`<Space> <Code></Code>ODODODODODODOD
 
+" Map \\` followed by a space to Code component with an empty javascript
+" string literal ({''}) inside it, allowing embedding of special XML characters
+" like <>
+inoremap <leader><leader>`<Space> <Code>{''}</Code><Left><Left><Left><Left><Left><Left><Left><Left><Left>
+
 " Map \img followed by a space to Image component
 imap <leader>img<Space> <Image src={} alt="TODO"/>ODODODODODODODODODODODODODOD
 
@@ -78,3 +83,6 @@ imap <leader>fn<Space> fileName=""<Left>
 
 " Map \todo followed by a space to {/*TODO*/}
 imap <leader>todo<Space> {/*TODO*/}
+
+" Map \lst followed by a space to listStyleType="decimal"
+inoremap <leader>lst<Space> listStyleType="decimal"

@@ -82,8 +82,10 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
         <Item><Link href="#basic-standard-input">Basic standard input</Link></Item>
         <Item><Link href="#relational-and-logical-operators">Relational and logical operators</Link></Item>
         <Item><Link href="#if-statements">If statements</Link></Item>
+        <Item><Link href="#if-statement-mistakes">Common mistakes with if statements</Link></Item>
         <Item><Link href="#scopes">Scopes</Link></Item>
         <Item><Link href="#loops">Loops</Link></Item>
+        <Item><Link href="#break-and-continue"><Code>break</Code> and <Code>continue</Code></Link></Item>
         <Item><Link href="#functions">Functions</Link></Item>
       </Itemize>
 
@@ -1291,7 +1293,7 @@ int main() {
         <Item><Code>!</Code>: The <Bold>logical-not</Bold> operator</Item>
       </Itemize>
 
-      <P>To use any of the above logical operators other than logical-not, simply place the operator between two integers that are each either 0 or 1. A logical-and operator will produce a value of 1 if and only if the operands to its left <Ul>and</Ul> right are both 1. If either operand is 0, the logical-and operator will produce a value of 0. A logical-or operator will produce a value of 1 if and only if the operand to its left <Ul>or</Ul> right is 1 (or both). If both operands are 0, the logical-or operator will produce a value of 0.</P>
+      <P>To use any of the above logical operators other than logical-not, simply place the operator between two integers that are each either 0 or 1. In such a case, a logical-and operator will produce a value of 1 if and only if the operands to its left <Ul>and</Ul> right are both 1. If either operand is 0, the logical-and operator will produce a value of 0. A logical-or operator will produce a value of 1 if and only if the operand to its left <Ul>or</Ul> right is 1 (or both). If both operands are 0, the logical-or operator will produce a value of 0.</P>
 
       <P>To use the logical-not operator, simply place it to the left of an integer value that's either 0 or 1, and it will negate it. That is, if placed to the left of an integer with value 0, it will produce a value of 1. If placed to the left of an integer with value 1, it will produce a value of 0.</P>
 
@@ -1306,9 +1308,8 @@ int main() {
         scanf("%d", &x);
 
         // Check if x is between 5 and 10.
-        // Notice the use of parentheses to ensure that the
-        // relational operations are completely evaluated
-        // before evaluating the final logical-and operation.
+        // The parentheses are technically optional in this case,
+        // but they provide some clarity as to the order of operations.
         int within_range = (x >= 5) && (x <= 10);
 
         // If x is between 5 and 10 (inclusive), then
@@ -1324,7 +1325,7 @@ int main() {
 }`
       }</CBlock>
 
-      <P>Technically, these logical operators can also be used with integer operands whose values are not 0 nor 1. Such values are treated as "true", just as values of 1 are treated as "true". However, these logical operators will always <It>produce</It> either 0 or 1 (that is, they will never produce, say, a value of 2 to represent "true", even though a value of 2 is treated as "true" when supplied as an operand).</P>
+      <P>Technically, these logical operators can also be used with integer operands whose values are not 0 nor 1. Such values are treated as true, just as values of 1 are treated as true. However, these logical operators will always <It>produce</It> either 0 or 1 (that is, they will never produce, say, a value of 2 to represent true, even though a value of 2 is treated as true when supplied as an operand).</P>
 
       <SectionHeading id="if-statements">If statements</SectionHeading>
 
@@ -1336,7 +1337,7 @@ int main() {
 }`
       }</SyntaxBlock>
 
-      <P>Replace <Code>{'<condition>'}</Code> with an integer expression, and replace <Code>{'<body>'}</Code> with the if statement body. The if statement's body will be executed if and only if its condition is <Ul>any non-zero value</Ul>. If the condition's value is 0, then the body won't execute. Of course, this means that logical and relational operations, which produce integer values of either 0 or 1, can be used to construct if statement conditions.</P>
+      <P>Replace <Code>{'<condition>'}</Code> with an integer expression, and replace <Code>{'<body>'}</Code> with the if statement body. The if statement's body will be executed if and only if its condition is <Ul>any nonzero value</Ul>. If the condition's value is 0, then the body won't execute. Of course, this means that logical and relational operations, which produce integer values of either 0 or 1, can be used to construct if statement conditions.</P>
 
       <P>(You can sometimes omit the curly braces around the if statement's body. In such a case, the single statement immediately following the if statement condition's closing parenthesis is treated as the entire if statement body. This is true regardless of the code's whitespace / indentation (recall: C is not whitespace-sensitive). This means that if you want your if statement body to have multiple statements in it, then it <Ul>must</Ul> have curly braces around the body. And, in fact, some programmers say that it's a bad idea to ever omit the curly braces because it often leads to mistakes. <Link href="https://www.imperialviolet.org/2014/02/22/applebug.html">Here's</Link> an example of a bug caused by one such mistake. To be safe, I recommend just always including the curly braces; there's no good reason to omit them.)</P>
 
@@ -1426,6 +1427,10 @@ Your grade is a B+
 ==1162014== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)`
       }</TerminalBlock>
 
+      <P>If statements can also be placed inside the bodies of other if statements (i.e., if statements can be <Bold>nested</Bold>).</P>
+
+      <SectionHeading id="if-statement-mistakes">Common mistakes with if statements</SectionHeading>
+
       <P>Don't forget that a pair of successive if statements is not the same thing as an if statement followed by an else-if statement. Consider the following code:</P>
 
       <CBlock>{
@@ -1450,17 +1455,609 @@ Your grade is a B+
 
       <P>Notice that the keyword "else" is missing before the second "if". This is now a sequence of two successive if statements rather than an if-elseif chain. That is, these two if statements are evaluated independently of one another. In this case, if <Code>x</Code> stores the value <Code>3</Code>, then the above code will print "Hello, World!" (3 is less than 5 but also greater than 0, so both if statements' bodies will execute).</P>
 
-      {/*TODO Common mistake of chaining relational operators*/}
+      <P>It's a common mistake to accidentally use <Code>if</Code> when you should've used <Code>else if</Code>, or vice-versa. Make sure you understand the difference.</P>
 
-      {/*TODO Common mistake of = instead of == */}
+      <P>Another common mistake is to chain relational operators. For example, it's common mathematical notation to represent ranges with chained equalities, such as {'0 < x < 10'} to declare that x's value is between 0 and 10. However, such notation does not work as one might expect in C.</P>
+
+      <P>Remember: relational operators compare values and produce integers. The C expression <Code>{'0 < x < 10'}</Code> is really two operations, and they're evaluated left-to-right. First, <Code>{'0 < x'}</Code> is evaluated. If 0 happens to be less than x, then it will evaluate to 1. Otherwise, it will evaluate to 0. Then, <It>that</It> value<Emdash/>which is either 0 or 1<Emdash/>will be compared to <Code>10</Code>. In other words, the C expression <Code>{'0 < x < 10'}</Code> is equivalent to <Code>{'(0 < x) < 10'}</Code>. And since the value of <Code>{'0 < x'}</Code> is always either 0 or 1, both of which are less than 10, the value of the entire C expression will always be 1 (for true). Indeed, even if x is 1000, the C expression <Code>{'0 < x < 10'}</Code> will evaluate to 1 (true).</P>
+
+      <P>The correct way to check whether x is between 0 and 10 (exclusive) would be to combine relational operators with logical operators, such as <Code>{'(0 < x) && (x < 10)'}</Code>.</P>
+
+      <P>Another common mistake is to forget that binary logical operators (i.e., logical-and and logical-or) must be placed between two complete boolean expressions. For example, if you want to check whether x is 1 or 2, you might mistakenly use the expression <Code>{'x == 1 || 2'}</Code>. But that doesn't work. Similar to the last mistake, this is equivalent to <Code>{'(x == 1) || 2'}</Code>. First, <Code>x == 1</Code> is evaluated. If x happens to be 1, then this expression will evaluate to 1. Otherwise, it will evaluate to 0. Then, that value will be passed as the left operand to the logical operator. In other words, if x is 1, then the whole expression is equivalent to <Code>{'1 || 2'}</Code>. But if x is anything other than 1, then the whole expression is equivalent to <Code>{'0 || 2'}</Code>. The issue occurs when the logical operation is performed: although logical operators are typically meant to be used on booleans (i.e., integers whose values are either 0 or 1), as stated earlier, they <It>can</It> be given integer operands whose values are not 0 nor 1. Such operands are treated as true (i.e., equivalently to 1). In other words, <Code>{'0 || 2'}</Code> is equivalent to <Code>{'0 || 1'}</Code>, and <Code>{'1 || 2'}</Code> is equivalent to <Code>{'1 || 1'}</Code>. Both of these expressions are clearly always 1 (true). Indeed, even if x is 1000, the C expression <Code>{'x == 1 || 2'}</Code> will evaluate to 1 (true).</P>
+
+      <P>The correct way to check whether x is either 1 or 2 is to place complete relational expressions on both sides of the logical operator: <Code>{'x == 1 || x == 2'}</Code>.</P>
+
+      <P>Finally, an infamous mistake with if statements is to accidentally use an assignment operator (<Code>=</Code>) when you intend to use an equality operator (<Code>==</Code>). For example, <Code>if (x = 2)</Code> instead of <Code>if (x == 2)</Code>. This mistake is particularly subtle because it's usually <Ul>not</Ul> treated as a syntax error, so it may not be detected by your compiler. Instead, it manifests as a logic error at runtime, which can be hard to detect and diagnose.</P>
+
+      <P>Particularly, assignment operations are expressions, meaning they have values. The value of an assignment operation is simply the new value of the variable after the assignment operation has completed (including after any implicit type casting, if necessary). For example, if you've declared an integer variable <Code>x</Code>, then <Code>printf("%d\n", x = 12)</Code> will 1) assign the value 12 to <Code>x</Code>, and then 2) print <Code>12</Code> to the terminal.</P>
+
+      <P>This means that <Code>if(x = 2)</Code> will assign the value 2 to <Code>x</Code>, and then the expression <Code>x = 2</Code> will evaluate to <Code>2</Code> (assuming <Code>x</Code> is an integral-typed variable, such as an <Code>int</Code> or <Code>long int</Code>). The program will then proceed to check <Code>if (2)</Code>. All nonzero values are treated as true when used as if statement conditions, so the if statement's body would then execute, regardless of the original value of <Code>x</Code>.</P>
+
+      <P>That is, <Code>if (x == 2)</Code> checks whether <Code>x</Code> is equal to 2 and, if so, executes the associated if statement body. In contrast, <Code>if (x = 2)</Code> <It>changes</It> <Code>x</Code> to 2 and then executes the associated if statement body no matter what.</P>
+
+      <P>So, make sure you understand the difference between the assignment operator (<Code>=</Code>) and the equality operator (<Code>==</Code>). A common trick to avoid these sorts of mistakes is to use "yoda notation": <Code>if (2 == x)</Code> instead of <Code>if (x == 2)</Code>. That way, if you accidentally use an assignment operator, you'll end up with <Code>if (2 = x)</Code>, which is a syntax error and fails to compile because only variables (not literals) may appear to the left of an assignment operator. This "yoda notation" trick only works when comparing variables to literals, though.</P>
 
       <SectionHeading id="scopes">Scopes</SectionHeading>
 
-      {/*TODO*/}
+      <P>A <Bold>scope</Bold> is a body of code in which a <Bold>symbol</Bold> is accessible (can be used). A symbol, in turn, is anything with a name, be it a variable, a constant, a function, etc.</P>
+
+      <P>In C, scopes are typically dictated by curly braces. For example, an if statement body is enclosed in curly braces, so an if statement body is also a scope. A function body is enclosed in curly braces, so a function body is also a scope. And so on.</P>
+
+      <P>Sometimes, though, scopes can be less salient. For example, as I wrote earlier, you can sometimes omit the curly braces around an if statement body if that body only has a single statement. However, even in that case, that single statement is still considered to have its own scope.</P>
+
+      <P>Whenever a symbol is declared, it's bound to the scope in which the declaration appears. From that point on, it's accessible (can be used), but only <Ul>within that scope, specifically in lines of code that appear <It>below</It> the line in which it was declared</Ul>. Here's some example code:</P>
+
+      <CBlock fileName="scope.c">{
+`#include <stdio.h>
+
+int main() {
+        int x; // Declaration. x is bound to the main function's scope
+
+        // This line of code is inside the main function's scope and
+        // appears below x's declaration, so x is accessible / can be
+        // used here. Here, we "use" / "access" x to store user input
+        // inside it
+        scanf("%d", &x);
+
+        // Check if the user entered 10. Again, we can do this because
+        // we're still in the main function's scope, so x is still
+        // accessible
+        if (x == 10) {
+                // Declaration. pi is bound to this if statement's scope
+                float pi = 3.14;
+
+                // This line of code is inside the if statement's scope
+                // and appears below pi's declaration, so pi is
+                // accessible / can be used here.
+                printf("%f\\n", pi);
+        }
+
+        // This is outside the if statement's scope (notice: it's
+        // outside the curly braces), so pi is not accessible here.
+}
+
+// This is outside the main function's scope, so x is not accessible /
+// cannot be used down here. But it's also not in ANY function's scope,
+// so there wouldn't be much sense in referencing x here anyways.
+// (In C, most* code needs to be inside some function body or another.)`
+      }</CBlock>
+
+      <P>Note that scopes can be nested inside other scopes. Indeed, the if statement's scope in the above program is nested inside the <Code>main</Code> function's scope. Suppose a scope B is nested inside a larger scope A. Then any lines of code within scope B are <It>also</It> said to be within scope A (because B is nested inside A). This means that code inside the above program's if statement body are allowed to access variables declared within the <Code>main</Code> function <It>above</It> the if statement:</P>
+
+      <CBlock fileName="scope.c" highlightLines="{24-29}">{
+`#include <stdio.h>
+
+int main() {
+        int x; // Declaration. x is bound to the main function's scope
+
+        // This line of code is inside the main function's scope and
+        // appears below x's declaration, so x is accessible / can be
+        // used here. Here, we "use" / "access" x to store user input
+        // inside it
+        scanf("%d", &x);
+
+        // Check if the user entered 10. Again, we can do this because
+        // we're still in the main function's scope, so x is still
+        // accessible
+        if (x == 10) {
+                // Declaration. pi is bound to this if statement's scope
+                float pi = 3.14;
+
+                // This line of code is inside the if statement's scope
+                // and appears below pi's declaration, so pi is
+                // accessible / can be used here.
+                printf("%f\\n", pi);
+
+                // This is perfectly fine. Technically, we're still
+                // inside the main function's scope (we're just inside
+                // a smaller scope nested within it), so we can still
+                // access all variables declared above this point within
+                // the main function's scope. That includes x.
+                printf("%d\\n", x);
+        }
+
+        // This is outside the if statement's scope (notice: it's
+        // outside the curly braces), so pi is not accessible here.
+}
+
+// This is outside the main function's scope, so x is not accessible /
+// cannot be used down here. But it's also not in ANY function's scope,
+// so there wouldn't be much sense in referencing x here anyways.
+// (In C, most* code needs to be inside some function body or another.)
+`
+      }</CBlock>
+
+      <P>Notice: <Code>x</Code> is accessible within the if statement body, but <Code>pi</Code> is not accessible below the if statement body. This is because <Code>x</Code> is bound to the <Code>main</Code> function's scope, and the if statement body is inside that scope, whereas <Code>pi</Code> is bound to the if statement's scope, and the <Code>main</Code> function's body is <Ul>not</Ul> inside that scope.</P>
+
+      <P>Suppose we attempt to access <Code>pi</Code> below the if statement body like so:</P>
+
+      <CBlock fileName="scope.c" highlightLines="{34}">{
+`#include <stdio.h>
+
+int main() {
+        int x; // Declaration. x is bound to the main function's scope
+
+        // This line of code is inside the main function's scope and
+        // appears below x's declaration, so x is accessible / can be
+        // used here. Here, we "use" / "access" x to store user input
+        // inside it
+        scanf("%d", &x);
+
+        // Check if the user entered 10. Again, we can do this because
+        // we're still in the main function's scope, so x is still
+        // accessible
+        if (x == 10) {
+                // Declaration. pi is bound to this if statement's scope
+                float pi = 3.14;
+
+                // This line of code is inside the if statement's scope
+                // and appears below pi's declaration, so pi is
+                // accessible / can be used here.
+                printf("%f\\n", pi);
+
+                // This is perfectly fine. Technically, we're still
+                // inside the main function's scope (we're just inside
+                // a smaller scope nested within it), so we can still
+                // access all variables declared above this point within
+                // the main function's scope. That includes x.
+                printf("%d\\n", x);
+        }
+
+        // This is outside the if statement's scope (notice: it's
+        // outside the curly braces), so pi is not accessible here.
+        printf("%f\\n", pi);
+}
+
+// This is outside the main function's scope, so x is not accessible /
+// cannot be used down here. But it's also not in ANY function's scope,
+// so there wouldn't be much sense in referencing x here anyways.
+// (In C, most* code needs to be inside some function body or another.)`
+      }</CBlock>
+
+      <P>The above program fails to compile because it attempts to access <Code>pi</Code> from outside the scope to which it was bound:</P>
+
+      <TerminalBlock copyable={false}>{
+`(env) guyera@flip2:c-basics$ gcc -g -o scope scope.c 
+scope.c: In function ‘main’:
+scope.c:34:24: error: ‘pi’ undeclared (first use in this function)
+   34 |         printf("%f\n", pi);
+      |                        ^~
+scope.c:34:24: note: each undeclared identifier is reported only once for each function it appears in
+`
+      }</TerminalBlock>
+
+      <P>Suppose we <It>want</It> to be able to access <Code>pi</Code> from below the if statement but also from within the if statement. How could we accomplish that? Well, we simply have to move <Code>pi</Code>'s declaration to be above the if statement but still inside the <Code>main</Code> function's body. That way, much like <Code>x</Code>, it will be bound to the <Code>main</Code> function's scope, accessible everywhere within the <Code>main</Code> function below its point of declaration (including within the nested if statement body):</P>
+
+      <CBlock fileName="scope.c" highlightLines="{30-33,19-20,12-13}">{
+`#include <stdio.h>
+
+int main() {
+        int x; // Declaration. x is bound to the main function's scope
+
+        // This line of code is inside the main function's scope and
+        // appears below x's declaration, so x is accessible / can be
+        // used here. Here, we "use" / "access" x to store user input
+        // inside it
+        scanf("%d", &x);
+
+        // Declaration. pi is bound to the main function's scope
+        float pi = 3.14;
+
+        // Check if the user entered 10. Again, we can do this because
+        // we're still in the main function's scope, so x is still
+        // accessible
+        if (x == 10) {
+                // pi is still accessible here, much like x
+                printf("%f\\n", pi);
+
+                // This is perfectly fine. Technically, we're still
+                // inside the main function's scope (we're just inside
+                // a smaller scope nested within it), so we can still
+                // access all variables declared above this point within
+                // the main function's scope. That includes x.
+                printf("%d\\n", x);
+        }
+
+        // pi is now accessible here as well since it's bound to the
+        // main function's scope in general instead of the if statement
+        // body.
+        printf("%f\\n", pi);
+}
+
+// This is outside the main function's scope, so x is not accessible /
+// cannot be used down here. But it's also not in ANY function's scope,
+// so there wouldn't be much sense in referencing x here anyways.
+// (In C, most* code needs to be inside some function body or another.)
+`
+      }</CBlock>
+
+      <P>Importantly, variables are bound to scopes based on their <It>declarations</It>, not their <It>initializations</It>. However, you should often try to keep declarations and initializations together when possible since, as mentioned earlier, attempting to use uninitialized variables results in undefined behavior. To illustrate, the below program is still syntactically valid, but there's an opporunity for undefined behavior:</P>
+      
+      <CBlock fileName="scope.c" highlightLines="{12-13,19-22,37-43}">{
+`#include <stdio.h>
+
+int main() {
+        int x; // Declaration. x is bound to the main function's scope
+
+        // This line of code is inside the main function's scope and
+        // appears below x's declaration, so x is accessible / can be
+        // used here. Here, we "use" / "access" x to store user input
+        // inside it
+        scanf("%d", &x);
+
+        // Declaration. pi is bound to the main function's scope
+        float pi;
+
+        // Check if the user entered 10. Again, we can do this because
+        // we're still in the main function's scope, so x is still
+        // accessible
+        if (x == 10) {
+                // Initialize pi, which is bound to the main function's
+                // scope (not this if statement's scope) but is still
+                // accessible here
+                pi = 3.14;
+
+                // pi is still accessible here, much like x
+                printf("%f\\n", pi);
+
+                // This is perfectly fine. Technically, we're still
+                // inside the main function's scope (we're just inside
+                // a smaller scope nested within it), so we can still
+                // access all variables declared above this point within
+                // the main function's scope. That includes x.
+                printf("%d\\n", x);
+        }
+
+        // pi is now accessible here as well since it's bound to the
+        // main function's scope in general instead of the if statement
+        // body. However, IMPORTANT: If the user enters something other
+        // than 10 for the value of x, then the above if statement
+        // body will not be executed, and pi will be uninitialized.
+        // In such a case, attempting to use its value, while
+        // syntactically valid, will invoke undefined behavior.
+        // This is a terrible idea, even though the compiler allows it.
+        printf("%f\\n", pi);
+}
+
+// This is outside the main function's scope, so x is not accessible /
+// cannot be used down here. But it's also not in ANY function's scope,
+// so there wouldn't be much sense in referencing x here anyways.
+// (In C, most* code needs to be inside some function body or another.)
+`
+      }</CBlock>
+
+      <P>Scopes can also be created at will. That is, they don't <It>have</It> to be associated with if statements, functions, loops, etc. Whenever you want, you can just create a pair of curly braces, and that creates a new scope:</P>
+
+      <CBlock showLineNumbers={false}>{
+`
+int x;
+{
+    // Nested / inner scope. x is accessible here.
+    int y;
+    // y is accessible here.
+}
+// y is not accessible here`
+      }</CBlock>
+
+      <P>Now, here's where things get a little tricky: although it's usually not legal to declare two variables with the exact same name in the exact same scope (attempting to do so is a syntax error, and the program will fail to compile), it <It>is</It> legal to declare a variable in a nested scope with the same name as another variable that was declared above it in a nesting (outer) scope. This is referred to as <Bold>shadowing</Bold>. The variable declared in the nested / inner scope is the <Bold>shadowing variable</Bold>, and the variable declared in the nesting / outer scope is the <Bold>shadowed variable</Bold>. For example:</P>
+
+      <CBlock fileName="shadowing.c">{
+`#include <stdio.h>
+
+int main() {
+        int x = 1; // Shadowed x
+
+        {
+                // Nested scope
+
+                int x = 100; // Shadowing x
+        }
+}`
+      }</CBlock>
+
+      <P>When a shadowing variable is declared, the shadowed variable becomes <It>temporarily</It> inaccessible, in the sense that any references to the variable's name will instead refer to the shadowing (inner-scope) variable:</P>
+
+      <CBlock fileName="shadowing.c">{
+`#include <stdio.h>
+
+int main() {
+        int x = 1; // Shadowed x
+
+        {
+                // Nested scope
+
+                // x is not yet shadowed, so this prints 1 (the value of
+                // the outer-scope x declared above)
+                printf("%d\\n", x);
+
+                int x = 2; // Shadowing x
+
+                // The original x is now shadowed by the new x, so this
+                // modifies the new x---the original x is left as value
+                // 1.
+                x = 100;
+
+                // The original x is still shadowed, so this prints
+                // the value of the new shadowing x (100)
+                printf("%d\\n", x);
+        }
+}
+`
+      }</CBlock>
+
+      <P>However, the shadowing variable's scope will eventually end, at which point it becomes inaccessible. When that happens, the original variable will become unshadowed, at which point it can again be accessed by name:</P>
+
+      <CBlock fileName="shadowing.c" highlightLines="{25-28}">{
+`#include <stdio.h>
+
+int main() {
+        int x = 1; // Shadowed x
+
+        {
+                // Nested scope
+
+                // x is not yet shadowed, so this prints 1 (the value of
+                // the outer-scope x declared above)
+                printf("%d\\n", x);
+
+                int x = 2; // Shadowing x
+
+                // The original x is now shadowed by the new x, so this
+                // modifies the new x---the original x is left as value
+                // 1.
+                x = 100;
+
+                // The original x is still shadowed, so this prints
+                // the value of the new shadowing x (100)
+                printf("%d\\n", x);
+        }
+
+        // The shadowing x is no longer accessible, so the original
+        // x (with value 1) is now unshadowed. This prints its value
+        // (1).
+        printf("%d\\n", x);
+}`
+      }</CBlock>
+
+      <P>So, scope dictates where a variable is accessible, but there's one other thing that it does: when a variable's scope ends<Emdash/>not just when the computer temporarily jumps to another scope before returning (e.g., due to a function call), but rather, when a scope actually completely ends, reaching the closing curly brace or equivalent<Emdash/>the variable is said to <Bold>fall out of scope</Bold>. If that variable is an <Ul>automatic</Ul> variable, then its associated memory may be released at that point, allowing the computer to reuse it for other purposes. That's to say, when an automatic variable falls out of scope, it doesn't just become inaccessible<Emdash/>it ceases to exist. This distinction doesn't matter a whole lot right now, but it will matter a ton when we discuss <Link href={`${PARENT_PATH}/${allPathData["pointers"].pathName}`}>pointers</Link>.</P>
+
+      <P>(Technically, an automatic variable's memory is not necessarily released immediately when it falls out of scope, but it might be, and it certainly won't be released <It>before</It> that.)</P>
 
       <SectionHeading id="loops">Loops</SectionHeading>
 
-      {/*TODO*/}
+      <P>There are three kinds of loops in C:</P>
+
+      <Enumerate>
+        <Item>While loops</Item>
+        <Item>Do-while loops</Item>
+        <Item>For loops</Item>
+      </Enumerate>
+
+      <P>We'll start with <Bold>while loops</Bold>. The syntax for a while loop is just like that of an if statement, except the keyword <Code>if</Code> is replaced with the keyword <Code>while</Code>:</P>
+
+      <SyntaxBlock>{
+`while (<condition>) {
+    <body>
+}`
+      }</SyntaxBlock>
+
+      <P>While loops also work exactly like if statements, except for one notable difference: whenever the program finishes executing the body of a while loop, it reevaluates the while loop's condition and, if it's still true (nonzero), executes the body again. This process repeats<Emdash/>evaluating the condition and executing the body<Emdash/>until, eventually, the program evaluates the while loop's condition and finds it to be false (i.e., 0). At that point, the program proceeds to execute whatever code appears below the while loop's body.</P>
+
+      <P>Here's an example:</P>
+
+      <CBlock fileName="while.c">{
+`#include <stdio.h>
+
+int main() {
+        int counter = 1;
+        while (counter <= 5) {
+                printf("%d\\n", counter);
+                ++counter;
+        }
+        // More code here...
+}`
+      }</CBlock>
+
+      <P>When the control flow reaches the while loop, the computer checks whether <Code>counter</Code> is less than or equal to 5. At this point, <Code>counter</Code> is currently 1, so the condition passes. It then executes the while loop's body, printing the current value of <Code>counter</Code> (1) to the terminal before incrementing it to 2. It then reevaluates the condition, again checking whether <Code>counter</Code> is less than or equal to 5. This time, its value is 2 instead of 1, but that's still less than or equal to 5, so it again executes the while loop's body, printing 2 and incrementing <Code>counter</Code> to 3. And so on. Eventually, <Code>counter</Code> reaches 5. The program will then print 5 to the terminal, increment counter to 6, and reevaluate the condition one last time. At this point, <Code>counter</Code>, with value 6, is <It>not</It> less than or equal to 5, so the loop will terminate, and the program will proceed to the <Code>// More code here...</Code> line.</P>
+
+      <P>Here's the output:</P>
+
+      <TerminalBlock copyable={false}>{
+`(env) guyera@flip2:c-basics$ gcc -g -o while while.c
+(env) guyera@flip2:c-basics$ valgrind ./while
+==1535879== Memcheck, a memory error detector
+==1535879== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==1535879== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
+==1535879== Command: ./while
+==1535879== 
+1
+2
+3
+4
+5
+==1535879== 
+==1535879== HEAP SUMMARY:
+==1535879==     in use at exit: 0 bytes in 0 blocks
+==1535879==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==1535879== 
+==1535879== All heap blocks were freed -- no leaks are possible
+==1535879== 
+==1535879== For lists of detected and suppressed errors, rerun with: -s
+==1535879== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)`
+      }</TerminalBlock>
+
+      <P>A close sibling to the while loop is the <Bold>do-while loop</Bold>. A do-while loop is exactly like a while loop, except when the program reaches the do-while loop, <Ul>it starts by executing the body</Ul>, and <It>then</It> it evaluates the do-while loop's condition. If the condition is true (nonzero), then it executes the body again, and so on.</P>
+
+      <P>This difference is reflected in the syntax:</P>
+
+      <SyntaxBlock>{
+`do {
+    <body>
+} while(<condition>);`
+      }</SyntaxBlock>
+
+      <P>(Heed the semicolon after the condition's closing parenthesis. It's required.)</P>
+
+      <P>Notice that the body appears <It>before</It> the condition. Hopefully that serves to remind you that the body is executed before the condition is evaluated for the first time.</P>
+
+      <P>Put another way, a do-while loop is essentially a while loop, except its body is always guaranteed to execute at least once. This is in contrast to a while loop where, if the condition is false (0) when it's first evaluated, then its body won't be executed even once. (This description is slightly wrong for pedantic reasons, but this is how many people like to think about do-while loops.)</P>
+
+      <P>Because a do-while loop's condition isn't evaluated until <It>after</It> its body has been executed, they're particularly useful when the loop condition is determined <It>during</It> the loop body. Consider this example:</P>
+
+      <CBlock fileName="dowhile.c">{
+`#include <stdio.h>
+
+int main() {
+        int user_choice;
+        do {
+                printf("It's your turn. Choose an option.\\n");
+                printf("1. Attack with your sword\\n");
+                printf("2. Cast vicious mockery\\n");
+                printf("3. Run away\\n");
+                printf("Enter your choice: ");
+
+                scanf("%d", &user_choice);
+
+                if (user_choice < 1 || user_choice > 3) {
+                        printf("\\nError: Your choice must be 1, 2, "
+                                "or 3\\n\\n");
+                }
+        } while(user_choice < 1 || user_choice > 3);
+
+        // ...Do something with the user's choice (e.g., check it with
+        // an if statement to decide how to proceed)...
+}`
+      }</CBlock>
+
+      <P>The goal of the above program is to repeatedly ask the user for an input until they provide a valid one (it assumes that they'll at least enter an integer, but it repeats the prompt until the provided integer is 1, 2, or 3). Hence, the loop's condition checks whether the user's last-supplied input was invalid (<Code>{'user_choice < 1 || user_choice > 3'}</Code>). However, this condition cannot possibly be evaluated until the user has supplied at least one input. Hence, the body of the loop must be executed before the condition can be evaluated. This is precisely how do-while loops work, hence why a do-while loop was chosen for this problem.</P>
+
+      <P>You could accomplish the above by using a while loop instead (or even a for loop), but that's just not what they're designed for, so getting it to work would be slightly messier.</P>
+
+      <P>Note that the condition of a do-while loop is <Ul>not</Ul> considered to be part of the scope of the do-while loop's body (perhaps that's obvious given that it's outside the curly braces of the body, but this is in contrast to how scope works with for loops, which we'll discuss in a moment). This means that any variables that you want to access within the condition of a do-while loop must be declared <Ul>before</Ul> (not within) that do-while loop. This is why I declared <Code>user_choice</Code> before the do-while loop in the above program<Emdash/>so that I could access it within the do-while loop's condition (and after the end of the do-while loop).</P>
+
+      <P>Finally, C has <Bold>for loops</Bold>. If you're only familiar with range-based for loops (e.g., Pythonic for loops, or C++'s "enhanced" for loops), then C's more primitive style of for loops may be confusing. Let's start with the syntax:</P>
+
+      <SyntaxBlock>{
+`for (<initialization>; <condition>; <iteration>) {
+    <body>
+}`
+      }</SyntaxBlock>
+
+      <P>Notice that the header of the for loop (i.e., the first line in the above syntax) has three placeholders separated by <Ul>semicolons</Ul> (not commas). When the control flow reaches a for loop, here's what the program does:</P>
+
+      <Enumerate listStyleType="decimal">
+        <Item>The initialization statement (<Code>{'<initialization>'}</Code>) is executed. Commonly, this will initialize a counting / iterating variable (either a preexisting variable, or one that's declared on the spot).</Item>
+        <Item>The loop condition (<Code>{'<condition>'}</Code>) is evaluated. If it's false (0), then the loop ends, proceeding to execute whatever code comes after the loop. But if it's true (nonzero), move on to step 3.</Item>
+        <Item>The loop body (<Code>{'<body>'}</Code>) is executed.</Item>
+        <Item>The iteration statement (<Code>{'<iteration>'}</Code>) is executed.</Item>
+        <Item>Repeat from step 2.</Item>
+      </Enumerate>
+
+      <P>Notice that the initialization statement (<Code>{'<initialize>'}</Code>) is only executed once. Indeed, it's not really part of the "loop" insofar as it's never repeated. In many cases, placing the initialization statement immediately before the for loop produces the same result.</P>
+
+      <P>After the initialization statement is executed, the program repeatedly evaluates the condition, executes the loop body, and then executes the iteration statement. It repeats these three steps in a cycle until it eventually evaluates the condition and finds it to be false (0), at which point the loop ends.</P>
+
+      <P>For loops are a good choice for iterating through a sequence (e.g., an array or other list). Actually, that's why they're called for loops<Emdash/>they're used to execute a body of code <Ul>for each</Ul> item in a collection.</P>
+
+      <P>We previously wrote a while loop that printed the values 1 through 5, but let's convert that to a for loop:</P>
+
+      <CBlock fileName="for.c">{
+`#include <stdio.h>
+
+int main() {
+        for (int counter = 1; counter <= 5; ++counter) {
+                printf("%d\\n", counter);
+        }
+}`
+      }</CBlock>
+
+      <P>When the control flow encounters the for loop in the above program, it declares <Code>counter</Code> and initializes it to 1. It then checks the loop condition and finds that <Code>counter</Code> (currently 1) is indeed less than or equal to 5. So it proceeds to execute the body, printing the value of <Code>counter</Code> (1) to the terminal. It then executes the iteration statement, incrementing <Code>counter</Code> to 2. It then reevaluates the condition, finding that <Code>counter</Code> (now 2) is still less than or equal to 5, and so on. It repeats until it eventually prints 5 and then increments <Code>counter</Code> to 6. It then reevaluates the condition one last time and finds that <Code>counter</Code> (6) is <It>not</It> less than or equal to 5, at which point the loop terminates.</P>
+
+      <P>Here's the output:</P>
+
+      <TerminalBlock copyable={false}>{
+`(env) guyera@flip2:c-basics$ gcc -g -o for for.c 
+(env) guyera@flip2:c-basics$ valgrind ./for
+==1553378== Memcheck, a memory error detector
+==1553378== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==1553378== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
+==1553378== Command: ./for
+==1553378== 
+1
+2
+3
+4
+5
+==1553378== 
+==1553378== HEAP SUMMARY:
+==1553378==     in use at exit: 0 bytes in 0 blocks
+==1553378==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==1553378== 
+==1553378== All heap blocks were freed -- no leaks are possible
+==1553378== 
+==1553378== For lists of detected and suppressed errors, rerun with: -s
+==1553378== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)`
+      }</TerminalBlock>
+
+      <P>More generally, for loops are a good choice for count-based repetition. If you want to execute a body of code a certain number of times, then for loops can accomplish that. Here's an extremely common pattern for a for loop:</P>
+
+      <SyntaxBlock>{
+`for (int i = 0; i < N; ++i) {
+    <body>
+}`
+      }</SyntaxBlock>
+
+      <P>The above for loop will execute <Code>{'<body>'}</Code> a total of <Code>N</Code> times, where <Code>N</Code> can be replaced with whatever (non-negative) integer you'd like.</P>
+
+      <P>(You might have to trace it carefully to convince yourself of this. Yes, the condition is <Code>{'i < N'}</Code> instead of <Code>{'i <= N'}</Code>, so it excludes <Code>N</Code>, but <Code>i</Code> is also initialized to 0 instead of 1, so everything adds up to a total of <Code>N</Code> iterations).</P>
+
+      <P>And yes, the iterator variable in the above pattern is named <Code>i</Code>. Although it's usually frowned-upon to name a variable a single letter since that's not very explanatory, every experienced C programmer knows full well that a variable named <Code>i</Code> declared within a for loop header is simply meant to serve as an iterator for that for loop, so no further explanation is really necessary.</P>
+
+      <P>Note that the iteration statement does not have to be an increment operation. You could very well put any valid C statement there, even a function call. Similarly, the condition does not have to be a less-than operation; it can be any valid condition (i.e., any expression with an integer value, where 0 is treated as false and all nonzero values are treated as true). For example, the following for loop prints the values from 10 to 1 in descending order:</P>
+
+      <CBlock showLineNumbers={false}>{
+`for (int i = 10; i > 0; --i) {
+    printf("%d\\n", i);
+}`
+      }</CBlock>
+
+      <P>Note that variables declared within the initialization statement of a for loop are accessible within the for loop's header and body, but <Ul>not</Ul> accessible outside the entire for loop. In some sense, these variables are scoped to the for loop as a whole. This is in contrast to variables declared within the for loop's body, which are accessible within the body but <It>not</It> within the header (nor outside the loop entirely, of course).</P>
+
+      <P>Understand that all three kinds of loops<Emdash/>while, do-while, and for<Emdash/>are in some sense interchangeable. Any problem that can be solved with one of these kinds of loops can also be solved with the others. However, each kind of loop is designed with certain kinds of repetition tasks in mind, so you should prefer to use whichever one is most appropriate for the task at hand.</P>
+
+      <P>Lastly, C supports nesting loops inside each other. If you nest for loops inside each other, it might be a good idea to give their iteration variables different names to avoid shadowing (e.g., the outer loop's variable might be named <Code>i</Code>, whereas the inner loop's variable might be named <Code>j</Code>). Nested for loops in particular are very useful for iterating through 2-dimensional structures (e.g., you have a list of people, each of which has a list of pets, and you need to print the names of all the pets across all people).</P>
+
+      <SectionHeading id="break-and-continue"><Code>break</Code> and <Code>continue</Code></SectionHeading>
+
+      <P>C has two special keywords that can be used to manipulate the control flow of loops: <Code>break</Code> and <Code>continue</Code>. These keywords can only be used within the scope of a loop, but they can be used in any kind of loop.</P>
+
+      <P>The <Code>break</Code> keyword causes the program to immediately jump all the way past the end of the loop, terminating the loop instantly. In other words, it causes the program to jump to whatever comes immediately after the closing curly brace of the loop body.</P>
+
+      <P>The <Code>continue</Code> keyword causes the program to immediately jump to the end of the loop body, but not <It>past</It> the end. In the case of a while loop or do-while loop, this means it jumps straight to the condition and reevaluates it. In the case of a for loop, this means it jumps to the iteration statement (and <It>then</It> the condition).</P>
+
+      <P>These keywords are typically used inside if statements that are in turn nested within loops. For example, a <Code>break</Code> statement within an if statement within a loop can be used to cause the loop to terminate early when a certain event occurs:</P>
+
+      <CBlock showLineNumbers={false}>{
+`for (int i = 0; i < 10; ++i) {
+    // ...
+    // A bunch of code
+    // ...
+    
+    if (some special thing has happened) {
+        // End the loop immediately, even if it hasn't executed 10
+        // times yet
+        break;
+    }
+        
+    // ...
+    // A bunch more code
+    // ...
+}`
+      }</CBlock>
+
+      <P>However, some people say that these keywords should generally be avoided since they mess with loops' control flow in not-very-salient ways. When a programmer looks at the above for loop's header, they might be led to think that the for loop will execute exactly 10 times. However, if you dig very deeply into the loop's body, nestled between a bunch of potentially complicated code, there's a <Code>break</Code> statement that can cause the loop to terminate early. One philosophy says that control flow should be as obvious as possible<Emdash/>not buried within if statements within loop bodies, but rather displayed up front in an obvious way. <Code>continue</Code> and <Code>break</Code> violate this philsophy by allowing a loop's control flow to be modified at arbitrary points within its body, making it difficult to understand the full conditions under which the loop might terminate.</P>
+
+      <P>But that's just one philosophy of many, and <Code>break</Code> and <Code>continue</Code> can be very useful in some cases. You may use these keywords in this course if you'd like.</P>
 
       <SectionHeading id="functions">Functions</SectionHeading>
 
