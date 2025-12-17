@@ -3,6 +3,10 @@
 // Prompts the user for an integer between two values, 'low' and
 // 'high' (inclusive), reprompting if they provide an integer outside
 // of this range.
+// Prototype:
+int prompt_for_integer_in_range(int low, int high);
+
+// Definition:
 int prompt_for_integer_in_range(int low, int high) {
 	int user_input;
 	do {
