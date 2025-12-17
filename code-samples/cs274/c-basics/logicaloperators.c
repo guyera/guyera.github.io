@@ -6,9 +6,8 @@ int main() {
 	scanf("%d", &x);
 
 	// Check if x is between 5 and 10.
-	// Notice the use of parentheses to ensure that the
-	// relational operations are completely evaluated
-	// before evaluating the final logical-and operation.
+	// The parentheses are technically optional in this case,
+	// but they provide some clarity as to the order of operations.
 	int within_range = (x >= 5) && (x <= 10);
 
 	// If x is between 5 and 10 (inclusive), then
