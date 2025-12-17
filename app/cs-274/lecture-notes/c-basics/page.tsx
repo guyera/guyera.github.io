@@ -524,7 +524,7 @@ $ valgrind ./printliterals
         <P>(If you're dividing integer variables and want to avoid integer division, you can employ type casting.)</P>
       </Itemize>
 
-      <P>Note that C does not have an operator for exponentiation. To raise a base to the power of an exponent, you must use the <Code>pow()</Code> function, which is provided by the standard library header file <Code>cmath.h</Code>. Importantly, this function's return type is <Code>double</Code>, so if you want to print its return value directly, you should use a <Code>%lf</Code> format specifier (using <Code>%d</Code> will not work, even if the arguments are integers):</P>
+      <P>Note that C does not have an operator for exponentiation. To raise a base to the power of an exponent, you must use the <Code>pow()</Code> function, which is provided by the standard library header file <Code>math.h</Code>. Importantly, this function's return type is <Code>double</Code>, so if you want to print its return value directly, you should use a <Code>%lf</Code> format specifier (using <Code>%d</Code> will not work, even if the arguments are integers):</P>
 
       <CBlock fileName="powexample.c">{
 `#include <stdio.h>
@@ -580,7 +580,9 @@ $ valgrind ./powexample
 
       <P>As you hopefully know, a <Bold>variable</Bold> is a named location in memory wherein a value can be stored. In C, variables can be stored in different sections of memory for different amounts of time depending on how and where they're created. In the most basic case, variables are stored on the stack and have automatic storage duration. We'll discuss what that means later in the term. For now, just know that I'll be referring to these basic variables as <Bold>automatic variables</Bold> (because of their automatic storage duration).</P>
 
-      <P>Before a variable can be used, in must be <Bold>declared</Bold> (i.e., created). To declare an automatic variable, write out its data type followed by its name. A variable declaration is a kind of statement, so it must be terminated with a semicolon. For example:</P>
+      <P>Before I show you any syntax, it's important that you understand the difference between <Bold>declaration</Bold> and <Bold>definition</Bold>. A declaration states the existence of a <Bold>symbol</Bold>, meaning something with a name. Variables are symbols, for example, because they're named locations in memory. A definition, on the other hand, states the value associated with a declared symbol. Symbols must be declared before they can be defined or referenced (used) in any way.</P>
+
+      <P>This means that before a variable can be defined (given a value) and / or used, in must first be declared. To declare an automatic variable, write out its data type followed by its name. A variable declaration is a kind of statement, so it must be terminated with a semicolon. For example:</P>
 
       <CBlock fileName="variables.c">{
 `int main() {
@@ -598,7 +600,7 @@ $ valgrind ./powexample
 `
       }</CBlock>
 
-      <P>Once a variable has been declared, it can be assigned a value. This is done with the assignment operator (<Code>=</Code>). Place the variable on the left, and an expression on the right. Most assignment operations are complete statements, so they must be terminated with a semicolon. When the program reaches the assignment operation, the computer will evaluate the entire expression on the right to produce a value, and then it will store that value in the variable on the left. Importantly, the type of the expression on the right must be compatible with the type of the variable on the left.</P>
+      <P>Once a variable has been declared, it can be defined (assigned a value). This is done with the assignment operator (<Code>=</Code>). Place the variable on the left, and an expression on the right. Most assignment operations are complete statements, so they must be terminated with a semicolon. When the program reaches the assignment operation, the computer will evaluate the entire expression on the right to produce a value, and then it will store that value in the variable on the left. Importantly, the type of the expression on the right must be compatible with the type of the variable on the left.</P>
 
       <P>For example:</P>
 
@@ -1202,7 +1204,7 @@ int main() {
       <P>Here's an example run of the above program:</P>
 
       <TerminalBlock copyable={false}>{
-`$ gcc -g -o scanf scanf.c 
+`$ gcc -Wall -g -o scanf scanf.c 
 $ valgrind ./scanf 
 ==1127744== Memcheck, a memory error detector
 ==1127744== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
@@ -1407,7 +1409,7 @@ int main() {
       <P>And here's an example run:</P>
 
       <TerminalBlock copyable={false}>{
-`$ gcc -g -o ifstatement ifstatement.c 
+`$ gcc -Wall -g -o ifstatement ifstatement.c 
 $ valgrind ./ifstatement 
 ==1162014== Memcheck, a memory error detector
 ==1162014== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
@@ -1617,7 +1619,7 @@ int main() {
       <P>The above program fails to compile because it attempts to access <Code>pi</Code> from outside the scope to which it was bound:</P>
 
       <TerminalBlock copyable={false}>{
-`(env) guyera@flip2:c-basics$ gcc -g -o scope scope.c 
+`$ gcc -Wall -g -o scope scope.c 
 scope.c: In function ‘main’:
 scope.c:34:24: error: ‘pi’ undeclared (first use in this function)
    34 |         printf("%f\n", pi);
@@ -1823,6 +1825,8 @@ int main() {
 
       <P>(Technically, an automatic variable's memory is not necessarily released immediately when it falls out of scope, but it might be, and it certainly won't be released <It>before</It> that.)</P>
 
+      {/*TODO Global scope */}
+
       <SectionHeading id="loops">Loops</SectionHeading>
 
       <P>There are three kinds of loops in C:</P>
@@ -1863,8 +1867,8 @@ int main() {
       <P>Here's the output:</P>
 
       <TerminalBlock copyable={false}>{
-`(env) guyera@flip2:c-basics$ gcc -g -o while while.c
-(env) guyera@flip2:c-basics$ valgrind ./while
+`$ gcc -Wall -g -o while while.c
+$ valgrind ./while
 ==1535879== Memcheck, a memory error detector
 ==1535879== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
 ==1535879== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
@@ -1976,8 +1980,8 @@ int main() {
       <P>Here's the output:</P>
 
       <TerminalBlock copyable={false}>{
-`(env) guyera@flip2:c-basics$ gcc -g -o for for.c 
-(env) guyera@flip2:c-basics$ valgrind ./for
+`$ gcc -Wall -g -o for for.c 
+$ valgrind ./for
 ==1553378== Memcheck, a memory error detector
 ==1553378== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
 ==1553378== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
@@ -2061,7 +2065,356 @@ int main() {
 
       <SectionHeading id="functions">Functions</SectionHeading>
 
-      {/*TODO*/}
+      <P>To conclude our C Basics lecture content, let's talk functions. As you hopefully know, a <Bold>function</Bold> is a reusable block of code. Functions provide useful abstractions, allowing you to think about simple interfaces instead of complicated implementation details (e.g., raising one number to the power of another involves extremely complicated low-level instructions, but you don't have to think about that if you just call the <Code>pow()</Code> function). Functions also help modularize scopes and reduce code duplication, both of which can reduce coupling.</P>
+
+      <P>To <Ul>declare</Ul> a function in C (i.e., to state its existence without fully defining it), write out the function's <Bold>prototype</Bold>. The syntax is as follows:</P>
+
+      <SyntaxBlock>{
+`<return type> <name>(<parameter 1>, <parameter 2>, ..., <parameter N>);`
+      }</SyntaxBlock>
+
+      <P>Some context: Functions are used by calling (invoking) them from within other functions, and when that happens, the two functions need to be able to communciate with one another. However, each function has its own scope (more on this in a moment), so they cannot directly access each others' automatic variables. Instead, functions pass values to each other in the form of <Bold>arguments</Bold>, <Bold>parameters</Bold>, and <Bold>return values </Bold>. Specifically, when a function A calls another function B, A supplies <Bold>arguments</Bold> (inputs) to B. These arguments are then substituted into B's pre-declared placeholders, which are called <Bold>parameters</Bold>. Finally, when B is done executing, it can send a value, known as a <Bold>return value</Bold>, back to A.</P>
+
+      <P>In the above syntax, <Code>{'<return type>'}</Code> is the data type of the value that the function being declared will return. <Code>{'<name>'}</Code> is simply the name of the function being declared. Each <Code>{'<parameter X>'}</Code> is a parameter declaration. Parameters are simply variables that serve as placeholders for arguments (inputs) that the function being declared will receive by its caller (i.e., by another function that uses it). The parameter declarations look just like any other variable declaration, except they're separated with commas instead of being terminated with semicolons.</P>
+
+      <P>For example, a prototype for the <Code>pow</Code> function might look something like this:</P>
+
+      <CBlock showLineNumbers={false}>{
+`double pow(double base, double exponent);`
+      }</CBlock>
+
+      <P>The return type is <Code>double</Code> because the <Code>pow()</Code> function produces a floating point number as an output. Its name is <Code>pow</Code>. Its parameters are <Code>double base</Code> and <Code>double exponent</Code> because, in order to be called (used), it needs to know what number (the base) should be raised to the power of what other number (the exponent). Hence, it has placeholders for these things (the <It>actual</It> base and exponent will be supplied as arguments by the caller).</P>
+
+      <P>In order to use a function within a translation unit (a <Code>.c</Code> source code file), it must be accessible. Recall that symbol accessibility is dicated by scope rules. However, functions have an additional rule in standard C: <Ul>they can only be declared (and defined) in global scope</Ul>. Since all scopes are nested within global scope, this doesn't limit their accessibility in any way; so long as a function is declared in global scope above any lines of code that use it, then everything should work.</P>
+      
+      <P>However, functions must not only be declared, but also defined. In particular, a function must be declared above any lines of code that try to use it, but it must additionally be defined exactly once <It>somewhere</It> in the program's global scope (the exact location of the definition is not important, so long as it's in global scope; a function may even be defined below the lines of code that try to use it, or even in another <Code>.c</Code> file entirely if you know how file separation works).</P>
+
+      <P>A function prototype, as in the above syntax, only declares a function<Emdash/>it does not define it. To define a function, use the following syntax:</P>
+
+      <SyntaxBlock>{
+`<return type> <name>(<parameter 1>, <parameter 2>, ..., <parameter N>) {
+    <body>
+}`
+      }</SyntaxBlock>
+
+      <P>Notice that this is the exact same syntax as that of a function prototype, except the semicolon has been replaced with curly braces containing <Code>{'<body>'}</Code>, which is the block of code that the function will execute when called. Critically, the return type, name, and parameter list in the header of a function definition <Ul>must</Ul> match the return type, name, and parameter list in the function's prototype. Otherwise, they may be considered to be two separate functions.</P>
+
+      <P>Since a function body is enclosed in curly braces, it also has its own scope. Although the parameters (which are a kind of variable) are technically outside the curly braces of the function body, they are still considered to be scoped to the function body. That is, they're accessible within the function body and will be released from memory shortly after the function body ends (more on this in <Link href={`${PARENT_PATH}/${allPathData["pointers"].pathName}`}>a future lecture</Link>).</P>
+
+      <P>With a few exceptions (e.g., <Code>void</Code> functions and <Code>main</Code>), every function body <Ul>must</Ul> return a value whose type matches the function's return type. To return a value, use a return statement like so:</P>
+
+      <SyntaxBlock>{
+`return <value>`
+      }</SyntaxBlock>
+
+      <P>Replace <Code>{'<value>'}</Code> with an expression whose value should be returned. When the program encounters a return statement within a function, the function <Ul>immediately</Ul> ends, and the computed return value is sent back to the function caller.</P>
+
+      <P>Let's make this more concrete. Here's a definition for a (quite silly) function that adds two numbers together and returns the computed sum:</P>
+
+      <CBlock showLineNumbers={false}>{
+`float add(float first_number, float second_number) {
+    return first_number + second_number;
+}`
+      }</CBlock>
+
+      <P><Code>first_number</Code> is a placeholder for a floating point number that will be supplied to this function when it's (eventually) called / used. <Code>second_number</Code> is a placeholder for another such floating point number. The function then adds these two numbers together and returns the result.</P>
+
+      <P>Remember: A return statement ends the function <Ul>immediately</Ul>. This means that any lines of code appearing directly below a return statement reflect <Bold>dead code</Bold> (or <Bold>unreachable code</Bold>; i.e., useless code that cannot possibly be executed). For example, the below function, if executed, would <Ul>not</Ul> print "Hello, World!" to the terminal because the function would terminate before reaching the <Code>printf()</Code> call:</P>
+
+      <CBlock showLineNumbers={false}>{
+`float add(float first_number, float second_number) {
+    return first_number + second_number;
+    printf("Hello, World!\\n"); // Useless / dead / unreachable code!
+}`
+      }</CBlock>
+
+      <P>If a function has been declared and defined in a <Code>.c</Code> file, then it can be called (used) within any other function body anywhere below its declaration (or even within its own body, as in recursion). To call a function, use the following syntax:</P>
+
+      <SyntaxBlock>{
+`<name>(<argument 1>, <argument 2>, ..., <argument N>)`
+      }</SyntaxBlock>
+
+      <P><Code>{'<name>'}</Code> is the name of the function you'd like to call, and each <Code>{'<argument X>'}</Code> is an argument<Emdash/>an expression whose value will be copied into the corresponding function parameter. The number of arguments in the function call usually must match the number of parameters in function's prototype and definition header. Moreover, arguments are copied into parameters in left-to-right order, so the types of the arguments must be compatible with the types of the parameters in left-to-right order.</P>
+
+      <P>For example, the above <Code>add</Code> function might be called (used) to add <Code>3.5</Code> to <Code>-8.1</Code> like so: <Code>add(3.5, -8.1)</Code>. In such a case, <Code>3.5</Code> will be copied into the <Code>first_number</Code> parameter, and <Code>-8.1</Code> will be copied into the <Code>second_number</Code> parameter.</P>
+
+      <P>Some terminology: The place where a function is called is referred to as the <Bold>call site</Bold>. And, more generally, when a function is called, the function that <It>called</It> it is referred to as the <Bold>function caller</Bold>.</P>
+
+      <P>When a program reaches a function call, the function caller effectively <It>pauses</It>, and the control flow jumps up to the body of the newly called function. At the same time, the arguments in the function call are evaluated, and their values are copied into the corresponding parameters. Again, this happens in left-to-right order. The newly called function body then begins executing. Eventually, it will reach a return statement, ending the function. When that happens, the return value is computed and sent back to the function caller. The function caller then resumes, and the entire function call itself is treated as an expression whose value is equal to the aforementioned return value. That's how functions communicate in C<Emdash/>when function A calls function B, arguments in the function call within A are copied into the parameters of function B, and the return value of function B is substituted into the entire function call as an expression within function A.</P>
+
+      <P>Putting that all together, assuming the <Code>add</Code> function has been properly declared and defined, the following line of code would print (roughly) <Code>-4.6</Code> to the terminal:</P>
+
+      <CBlock showLineNumbers={false}>{
+`printf("%f\\n", add(3.5, -8.1));`
+      }</CBlock>
+
+      <P>Let's trace it to understand why: when the program reaches the above line of code (wherever it is), the function that contains it will pause, and the <Code>add</Code> function's body will begin. At that moment, <Code>3.5</Code> is copied into the <Code>first_number</Code> parameter, and <Code>-8.1</Code> is copied into the <Code>second_number</Code> parameter. The <Code>add</Code> function then computes <Code>first_number + second_number</Code>, which is <Code>-4.6</Code>, and returns it. When the <Code>add</Code> function returns, the original function containing the above <Code>printf</Code> call resumes, and <Code>add(3.5, -8.1)</Code> is substituted with the return value, which, in this case, is <Code>-4.6</Code>. That value is then passed into the <Code>printf</Code> function, substituted into the <Code>%f</Code> format specifier, and printed to the terminal.</P>
+
+      <P>Of course, function call values do not have to be printed. You can do whatever you'd like with them. For example, you can store the value of a function call in a variable:</P>
+
+      <CBlock showLineNumbers={false}>{
+`float sum = add(3.5, -8.1);`
+      }</CBlock>
+
+      <P>Since function calls are expressions and therefore have values, they can also be used as arguments within other function calls. For example, <Code>add(add(3.5, -8.1), 5.2)</Code> will compute the inner call <Code>add(3.5, -8.1)</Code>, which is <Code>-4.6</Code> as we just discussed. It will then proceed to substitute in the <Code>-4.6</Code> and compute the outer call, <Code>add(-4.6, 5.2)</Code>. The final value would be (roughly) <Code>0.6</Code>.</P>
+
+      <P>Here's a complete program that illustrates a more useful example of a function:</P>
+
+      <CBlock fileName="functions.c">{
+`#include <stdio.h>
+
+// Prompts the user for an integer between two values, 'low' and
+// 'high' (inclusive), reprompting if they provide an integer outside
+// of this range.
+// Prototype:
+int prompt_for_integer_in_range(int low, int high);
+
+// Definition:
+int prompt_for_integer_in_range(int low, int high) {
+        int user_input;
+        do {
+                // Prompt user
+                printf(
+                        "Enter an integer between %d and %d: \\n",
+                        low,
+                        high
+                );
+
+                // Receive input
+                scanf("%d", &user_input);
+
+                // Print error message if invalid
+                if (user_input < low || user_input > high) {
+                        printf("\\nError: Provided input outside of "
+                                "specified range.\\n\\n");
+                }
+        } while (user_input < low || user_input > high);
+
+        // Loop terminated, meaning user_input is valid. Return it.
+        return user_input;
+}
+
+int main() {
+        // Ask the user for an integer between 1 and 10
+        int num_between_1_and_10 = prompt_for_integer_in_range(1, 10);
+
+        // Ask the user for an integer between 5 and 57
+        int num_between_5_and_57 = prompt_for_integer_in_range(5, 57);
+
+        // And so on...
+}`
+      }</CBlock>
+
+      <P>And here's an example output:</P>
+
+      <TerminalBlock copyable={false}>{
+`$ gcc -g -o functions functions.c 
+$ valgrind ./functions 
+==1691334== Memcheck, a memory error detector
+==1691334== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==1691334== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
+==1691334== Command: ./functions
+==1691334== 
+Enter an integer between 1 and 10: 
+0
+
+Error: Provided input outside of specified range.
+
+Enter an integer between 1 and 10: 
+11
+
+Error: Provided input outside of specified range.
+
+Enter an integer between 1 and 10: 
+1
+Enter an integer between 5 and 57: 
+4
+
+Error: Provided input outside of specified range.
+
+Enter an integer between 5 and 57: 
+58
+
+Error: Provided input outside of specified range.
+
+Enter an integer between 5 and 57: 
+17
+==1691334== 
+==1691334== HEAP SUMMARY:
+==1691334==     in use at exit: 0 bytes in 0 blocks
+==1691334==   total heap usage: 2 allocs, 2 frees, 2,048 bytes allocated
+==1691334== 
+==1691334== All heap blocks were freed -- no leaks are possible
+==1691334== 
+==1691334== For lists of detected and suppressed errors, rerun with: -s
+==1691334== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)`
+      }</TerminalBlock>
+
+      <P>In some cases, you'll find yourself wanting to create a function that doesn't return any value at all. For example, perhaps you want to create a function that just carefully formats and prints some data to the terminal; such a function does not compute any results, so it might not have anything useful to send back to the call site (or, put another way, the function sends its outputs to the terminal to be printed instead of sending them back to the function caller).</P>
+
+      <P>This is fully possible. All you have to do is specify the function's return type as <Code>void</Code>. A function with a <Code>void</Code> return type does not necessarily need to have any return statements whatsoever. It will simply end when the body reaches its closing curly brace. For example:</P>
+
+      <CBlock fileName="void.c">{
+`#include <stdio.h>
+
+// Prototype
+void print_quadratic_equation(float a, float b, float c);
+
+// Definition
+void print_quadratic_equation(float a, float b, float c) {
+        printf("%.1fx^2 + %.1fx + %.1f = 0\n", a, b, c);
+}
+
+int main() {
+        print_quadratic_equation(2, 4, 7);
+}
+`
+      }</CBlock>
+
+      <P>Notice that <Code>print_quadratic_equation</Code> has no return statements, but that's okay since its return type is <Code>void</Code>.</P>
+
+      <P>Running the above program produces the following output:</P>
+
+      <TerminalBlock copyable={false}>{
+`$ gcc -Wall -g -o void void.c 
+$ valgrind ./void
+==1695612== Memcheck, a memory error detector
+==1695612== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==1695612== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
+==1695612== Command: ./void
+==1695612== 
+2.0x^2 + 4.0x + 7.0 = 0
+==1695612== 
+==1695612== HEAP SUMMARY:
+==1695612==     in use at exit: 0 bytes in 0 blocks
+==1695612==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==1695612== 
+==1695612== All heap blocks were freed -- no leaks are possible
+==1695612== 
+==1695612== For lists of detected and suppressed errors, rerun with: -s
+==1695612== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)`
+      }</TerminalBlock>
+
+      <P>Although <Code>void</Code> functions do not have to have any return statements, they <It>may</It> have return statements. However, if they do, those return statements should be not be accompanied by a return value (since <Code>void</Code> functions, by definition, do not return values). Instead, to use a return statement in a <Code>void</Code> function, simply write <Code>return;</Code>. The purpose of such a return statement is just to end the function early (recall that return statements immediately end the function). For example, you might write such a return statement inside an if statement to end the function early if some special event occurs.</P>
+
+      <P>But keep in mind that this is a special property of <Code>void</Code> functions. Non-<Code>void</Code> functions usually must end by returning a value<Emdash/>not by reaching the closing curly brace. Similarly, non-<Code>void</Code> functions may not use return statements without return values (i.e., <Code>return;</Code>, with no value, is forbidden in non-<Code>void</Code> functions).</P>
+
+      <P>In fact, if a non-<Code>void</Code> function terminates without returning a value, then undefined behavior will ensue, at least if the return value is used at the call site. To avoid this mistake, make sure to compile your programs with the <Code>-Wall</Code> flag or similar. One of the warnings enabled by this flag notifies you whenever you accidentally write a non-<Code>void</Code> function that's theoretically capable of terminating without returning a value. <Code>gcc</Code> is particularly stringent about these particular warnings; even this example invokes a warning:</P>
+
+      <CBlock fileName="missingreturn.c">{
+`#include <stdio.h>
+
+float foo(int x);
+
+float foo(int x) {
+        if (x == 1) {
+                return 1.0;
+        }
+        if (x != 1) {
+                return 2.0;
+        }
+}
+
+int main() {
+        foo(5);
+}`
+      }</CBlock>
+
+      <P>If we compile the above program using <Code>gcc</Code> with the <Code>-Wall</Code> flag, we get the following result:</P>
+
+      <TerminalBlock copyable={false}>{
+`$ gcc -Wall -g -o missingreturn missingreturn.c 
+missingreturn.c: In function ‘foo’:
+missingreturn.c:12:1: warning: control reaches end of non-void function [-Wreturn-type]
+   12 | }
+      | ^`
+      }</TerminalBlock>
+
+      <P>This warning is saying that it might be possible for the <Code>foo</Code> function body to, in some context, reach its closing curly brace without returning a value. Of course, that's not <It>actually</It> possible (for the most part) given that any integer <Code>x</Code> must either be equal to 1, in which case it will return <Code>1.0</Code>, or not equal to 1, in which case it will return <Code>2.0</Code>. However, the compiler isn't "smart" enough to apply this logical reasoning and deduce that <Code>foo()</Code> will always return a value. (And, technically, if <Code>x</Code> is modified asynchronously between the two if statements, such as by another thread or signal handler, then <Code>foo</Code> actually might <It>not</It> return a value).</P>
+
+      <P>To make the compiler happy (and to be absolutely certain that our non-<Code>void</Code> function always returns a value, as it should), we could replace the second <Code>if</Code> statement with an <Code>else</Code> statement:</P>
+
+      <CBlock fileName="elsereturn.c" highlightLines="{7}">{
+`#include <stdio.h>
+
+float foo(int x);
+
+float foo(int x) {
+        if (x == 1) {
+                return 1.0;
+        }
+        else {
+                return 2.0;
+        }
+}
+
+int main() {
+        foo(5);
+}`
+      }</CBlock>
+
+      <P>Perhaps the compiler isn't <It>very</It> well informed, but even it knows that in an if-elseif-else chain, exactly one of the if / else-if / else statements will execute. If each one of them returns a value, then it can be certain that a value will always be returned by the function. And if the types of all those possible return values match the return type of the function, then the compiler will be happy.</P>
+
+      <P>There are other solutions as well. For example, we could have done this:</P>
+
+      <CBlock showLineNumbers={false}>{
+`
+float foo(int x) {
+        if (x == 1) {
+                return 1.0;
+        }
+        return 2.0;
+}`
+      }</CBlock>
+
+      <P>Or even this:</P>
+
+      <CBlock showLineNumbers={false}>{
+`float foo(int x) {
+        float result;
+        if (x == 1) {
+                result = 1.0;
+        }
+        else {
+                result = 2.0;
+        }
+        return result;
+}`
+      }</CBlock>
+
+      <P>Both are equivalent. In either of the above cases, the compiler sees an unconditional return statement at the end of the function, so it can be confident that the function will never terminate without returning a value.</P>
+
+      <P>As you might have just noticed, it's okay for a function to have several return statements (e.g., spread across several if statement bodies). However, keep in mind that at most one of them will execute (and, in the case of a non-<Code>void</Code> function, hopefully <It>exactly</It> one of them will execute) since, when a return statement executes, the entire function immediately ends.</P>
+
+      <P>Next, I should mention something that I glossed over earlier: a function prototype serves as declaration for a function, but not a definition. However, a function definition <It>also</It> serves as a form of declaration. That's to say, in some cases, function prototypes are unnecessary since the definition itself declares the function's existence. And maybe that doesn't surprise you; the headers in our function definitions are identical to the respective functions' prototypes, so it makes sense that the prototypes are sometimes redundant.</P>
+
+      <P>For example, we could delete or comment out the prototype in the previous program, and the program would still compile and run just fine:</P>
+
+      <CBlock fileName="elsereturn.c" highlightLines="{3,5}">{
+`#include <stdio.h>
+
+// float foo(int x); // Commented out the prototype; it's redundant.
+
+// This definition itself serves as a valid form of declaration
+float foo(int x) {
+        if (x == 1) {
+                return 1.0;
+        }
+        else {
+                return 2.0;
+        }
+}
+
+int main() {
+        foo(5);
+}`
+      }</CBlock>
+
+      <P>However, there are two important things to consider. First, since functions must be declared above any other lines of code that call / use them, omitting function prototypes requires <It>defining</It> functions in a very careful order (since the definitions are serving as your declarations, and the various defined functions will likely need to call / use each other). In contrast, if you write out prototypes explicitly, you can simply put <It>all</It> of your function prototypes at the very top of your <Code>.c</Code> file (in any order), and then the definitions can appear below that (again, in any order). So if you keep the function prototypes, you don't have to think too much about ordering<Emdash/>just put the prototypes at the top of the file, usually below all your <Code>#include</Code> directives, and put the definitions below that.</P>
+
+      <P>Second, function prototypes are crucial for file separation. That is, if you want to write a C program that consists of many source code files instead of putting all your code in one gigantic source code file, then you have to make use of function prototypes to accomplish that. You'll learn how to do this in a future lecture.</P>
+
+      <P>Finally, there's one last minor detail I should remind you about: I said that non-<Code>void</Code> functions must terminate by returning a value instead of by reaching the closing curly brace, but what about <Code>main</Code>? <Code>main</Code> is the entry point to a C program, but it's still a function nonetheless, and its return type is <Code>int</Code>. Well, remember that the <Code>main</Code> function has a special rule: its return value indicates the program's exit code, and if it reaches its closing curly brace without returning a value, it automatically returns 0, indicating the program's successful completion. This is why <Code>gcc</Code> does not issue any warnings about <Code>main</Code> failing to return a value<Emdash/>it <It>does</It> return a value, just implicitly and automatically. Though, as discussed earlier, you can optionally have it return a different exit code explicitly to indicate various kinds of errors.</P>
 
     </>
   )
