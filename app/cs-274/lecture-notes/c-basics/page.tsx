@@ -2414,7 +2414,54 @@ int main() {
 
       <P>Second, function prototypes are crucial for file separation. That is, if you want to write a C program that consists of many source code files instead of putting all your code in one gigantic source code file, then you have to make use of function prototypes to accomplish that. You'll learn how to do this in a future lecture.</P>
 
-      <P>Finally, there's one last minor detail I should remind you about: I said that non-<Code>void</Code> functions must terminate by returning a value instead of by reaching the closing curly brace, but what about <Code>main</Code>? <Code>main</Code> is the entry point to a C program, but it's still a function nonetheless, and its return type is <Code>int</Code>. Well, remember that the <Code>main</Code> function has a special rule: its return value indicates the program's exit code, and if it reaches its closing curly brace without returning a value, it automatically returns 0, indicating the program's successful completion. This is why <Code>gcc</Code> does not issue any warnings about <Code>main</Code> failing to return a value<Emdash/>it <It>does</It> return a value, just implicitly and automatically. Though, as discussed earlier, you can optionally have it return a different exit code explicitly to indicate various kinds of errors.</P>
+      <P>A couple more things. First, there's a minor detail I mentioned a while ago, but I should remind you since we're talking about functions: I said that non-<Code>void</Code> functions must terminate by returning a value instead of by reaching the closing curly brace, but what about <Code>main</Code>? <Code>main</Code> is the entry point to a C program, but it's still a function nonetheless, and its return type is <Code>int</Code>. Well, remember that the <Code>main</Code> function has a special rule: its return value indicates the program's exit code, and if it reaches its closing curly brace without returning a value, it automatically returns 0, indicating the program's successful completion. This is why <Code>gcc</Code> does not issue any warnings about <Code>main</Code> failing to return a value<Emdash/>it <It>does</It> return a value, just implicitly and automatically. Though, as discussed earlier, you can optionally have it return a different exit code explicitly to indicate various kinds of errors.</P>
+
+      <P>Finally, there's an extremely important rule that you should <Ul>always</Ul> remember when writing functions in C (and I'll remind you of this in the <Link href={`${PARENT_PATH}/${allPathData["pointers"].pathName}`}>lecture on pointers</Link>): <Ul>parameters are copies of their arguments</Ul>. (And, similarly, a function call expression value should be treated as a copy of the called function's return value... But that doesn't roll of the tongue as easily, and it's usually less important than the fact that <Ul>parameters are copies of their arguments</Ul>). Seriously, please remember this: <Ul>parameters are copies of their arguments.</Ul> Say it ten more times and let it sink in. Somehow, someone will forget this, and I'll have to remind them in office hours several weeks from now when their functions aren't working properly. Don't let that be you. Remember: <Ul>parameters are copies of their arguments</Ul>.</P>
+
+      <P>What does this mean? Well, let me show you:</P>
+
+      <CBlock fileName="parametersarecopiesofarguments.c">{
+`#include <stdio.h>
+
+void change_to_100(int x) {
+        x = 100;
+}
+
+int main() {
+        int x = 5;
+        change_to_100(x);
+        printf("The value of x is: %d\\n", x);
+}
+`
+      }</CBlock>
+
+      <P>What do you think will be printed when the above program is executed? Think about it for a moment, and as you do, remember: parameters are copies of their arguments.</P>
+
+      <P>Now, here's the output:</P>
+
+      <TerminalBlock copyable={false}>{
+`(env) guyera@flip1:c-basics$ gcc -Wall -g -o parametersarecopiesofarguments parametersarecopiesofarguments.c 
+(env) guyera@flip1:c-basics$ valgrind ./parametersarecopiesofarguments 
+==2468868== Memcheck, a memory error detector
+==2468868== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==2468868== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
+==2468868== Command: ./parametersarecopiesofarguments
+==2468868== 
+The value of x is: 5
+==2468868== 
+==2468868== HEAP SUMMARY:
+==2468868==     in use at exit: 0 bytes in 0 blocks
+==2468868==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==2468868== 
+==2468868== All heap blocks were freed -- no leaks are possible
+==2468868== 
+==2468868== For lists of detected and suppressed errors, rerun with: -s
+==2468868== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)`
+      }</TerminalBlock>
+
+      <P>It prints 5, not 100! There's a very simple reason for this. The parameter of the <Code>change_to_100</Code> function, <Code>x</Code>, is <Ul>not</Ul> the same thing as the argument that's supplied to it in the function call within <Code>main</Code>. The argument that's supplied to it is also coincidentally named <Code>x</Code>, but critically, these are two separate variables. Yes, they have the same name, but they're separate variables nonetheless. In fact, they're declared in two completely different scopes, so they must be separate variables.</P>
+
+      <P>Then what's the relationship between the parameter <Code>x</Code> and the argument <Code>x</Code>? Well, I already told you: <Ul>parameters are copies of their arguments</Ul>. The parameter <Code>x</Code> is a <Ul>copy</Ul> of the argument <Code>x</Code>. The argument <Code>x</Code> has value <Code>5</Code>, so the parameter <Code>x</Code> also has value <Code>5</Code><Emdash/>it's a copy. The value of the parameter <Code>x</Code> is then changed to <Code>100</Code>. But it's not the same variable as the argument; it's a <Ul>copy</Ul> of that variable. Hence, when the parameter <Code>x</Code> is changed to <Code>100</Code>, the argument <Code>x</Code>, which exists within the <Code>main</Code> function's scope, is left unchanged. It's still <Code>5</Code>. Back in <Code>main</Code>, we finish by printing the value of that original <Code>x</Code> variable. It's still <Code>5</Code>, so it prints <Code>5</Code> accordingly.</P>
 
     </>
   )
