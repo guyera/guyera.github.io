@@ -15,6 +15,7 @@ int main() {
 	// Store the address of x inside p2, which works because
 	// x is an int and p2 is an int pointer
 	p2 = &x;
+	p1 = &x;
 
 	// Of course, you can also declare and initialize a pointer
 	// in one statement:
