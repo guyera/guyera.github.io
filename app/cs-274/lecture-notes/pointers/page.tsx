@@ -28,6 +28,10 @@ import fs from 'fs'
 import sourcesConfig from '../sources.yaml'
 import TitleBlock from '../ui/titleblock'
 
+import MemoryArrangement1 from './assets/memory-arrangement-1.png'
+import MemoryArrangement2 from './assets/memory-arrangement-2.png'
+import PointerArrangement from './assets/pointer-arrangement.png'
+
 let sourcesByPathName: {[key: string]: { pageTitle: string, namedIdentifier: string }} = {}
 let sourcesByNamedIdentifier: {[key: string]: { pathName: string, pageTitle: string }} = {}
 for (let page of sourcesConfig.pages) {
@@ -111,29 +115,31 @@ int main() {
 `
       }</CBlock>
 
-      <P>When the above C program is executed, several things need to be stored in memory. The integers <Code>x</Code> and <Code>y</Code> each need some space in memory (an <Code>int</Code> often takes up 4 bytes of memory, but it depends on the platform), but that's not all. All the compiled machine instructions of the program need to be loaded into memory so that the CPU can readily access them and execute them. The string literals, <Code>"%d"</Code> and <Code>"2 * %d = %d\n"</Code>, both need to be stored some place in memory where they can be referenced by the <Code>scanf()</Code> and <Code>printf()</Code> calls and accessed within their implementations. In addition, <Code>{'stdio.h'}</Code> may provide all sorts of functions and constants that need to be stored in the process's memory.</P>
+      <P>When the above C program is executed, several things need to be stored in memory. The integers <Code>x</Code> and <Code>y</Code> each need some space in memory, but that's not all. All the compiled machine instructions of the program need to be loaded into memory so that the CPU can readily access them and execute them. The string literals, <Code>"%d"</Code> and <Code>"2 * %d = %d\n"</Code>, both need to be stored some place in memory where they can be referenced by the <Code>scanf()</Code> and <Code>printf()</Code> calls and accessed within their implementations. In addition, <Code>{'stdio.h'}</Code> may provide all sorts of functions and constants that need to be stored in the process's memory.</P>
 
       <P>While it's true that all of these things are stored in memory, let's just focus on the variables <Code>x</Code> and <Code>y</Code>. That will make our analysis a bit simpler. The computer's RAM is essentially a gigantic array of bytes, and while the program is executing, <It>somewhere</It> in that array, you'll find the values of <Code>x</Code> and <Code>y</Code>. Suppose that the <Code>scanf()</Code> call in the above program has executed, and the user entered <Code>5</Code> for the value of <Code>x</Code>, but the subsequent computation for <Code>y</Code> hasn't yet finished. At that point, the program's memory (the "array of bytes") might look something like this:</P>
 
-      {/*TODO diagram showing x=5 and y=????*/}
+      <Image src={MemoryArrangement1} alt="x occupies 4 bytes of memory, has value 5, and is located in memory starting at memory address 2. y occupies 4 bytes of memory, has an undefined value, and is located in memory starting at memory address 9."/>
 
-      <P>It's largely up to the compiler (and operating system) to decide exactly how to arrange <Code>x</Code> and <Code>y</Code> in memory, though we'll discuss some general memory models, such as the stack and the heap, in a future lecture.</P>
+      <P>The numbers underneath the "array of bytes" represent the indices of those bytes. I've only depicted 16 total bytes of memory, but keep in mind that most modern PCs have several billion bytes of memory (larger servers may even have trillions). I've depicted <Code>x</Code> and <Code>y</Code> as each taking up 4 bytes of memory because <Code>int</Code> values <It>often</It> take up 4 bytes (but that's not always the case; it depends on the platform). Also notice that I've depicted <Code>x</Code> and <Code>y</Code> as having some bytes of space between them. Perhaps those bytes are being used by the program for other purposes. This may or may not happen in practice; it's largely up to the compiler (and operating system) to decide exactly how to arrange these variables in memory. That said, we will discuss some memory models that programs use to generally arrange data in a future lecture.</P>
 
-      <P>Notice the <Code>???</Code> representation for <Code>y</Code>. Since <Code>y</Code> is still uninitialized, in practice, there will be some completely arbitrary bits / bytes stored in <Code>y</Code>'s allocated location in memory, hence why using it at this point would invoke undefined behavior. But after the next instruction is executed, and <Code>y</Code> is initialized to the value of <Code>2 * x</Code>, the program's memory will be updated to look like this:</P>
+      <P>Notice the <Code>???</Code> representation for <Code>y</Code>. Since <Code>y</Code> is still uninitialized, its value is undefined. Of course, each bit that occupies <Code>y</Code>'s allocated space in memory must either be a 0 or a 1, and the sequence of all 32 bits (4 bytes) in that space can surely be interpreted as a single integer value one way or another. However, since no specific integer value has been explicitly assigned to <Code>y</Code>, the exact values of those bits are currently arbitrary (i.e., unpredictable; perhaps those bits of memory were previously used by another program, in which case they might still store some leftover bits of data from that program).</P>
 
-      {/*TODO updated diagram*/}
+      <P>But after the next instruction is executed, and <Code>y</Code> is initialized to the value of <Code>2 * x</Code>, the program's memory will be updated to look like this:</P>
 
-      <P>Whenever the program needs to access one of these variables, such as for the above write operation, or to read their values for the upcoming <Code>printf()</Code> call, it needs to be able to locate them. Because RAM is essentially one gigantic array of bytes, each byte can be identified, or located, by its <Bold>index</Bold>: the first byte in RAM has index 0, the second byte has index 1, the third byte has index 2, and so on. These indices are referred to as <Bold>memory addresses</Bold>. To put it another way, a memory address is a non-negative integer (whole number) that represents the location of a single byte of data somewhere in RAM.</P>
+      <Image src={MemoryArrangement2} alt="x and y are in the same places in memory and take up the same amount of space, but y now has defined value 10"/>
 
-      <P>Every byte in RAM has its own unique memory address. After all, every element in an array has a unique index, and RAM is just a gigantic array of bytes, with the indices of those bytes being their memory addresses.</P>
+      <P>Whenever the program needs to access one of these variables, such as for the above write operation, or to read their values for the upcoming <Code>printf()</Code> call, it needs to be able to locate them. Because RAM is essentially one gigantic array of bytes, each byte can be identified, or located, by its index. The first byte in RAM has index 0, the second byte has index 1, the third byte has index 2, and so on, as depicted in the above diagrams.</P>
+
+      <P>The index of a byte in memory actually has a special name: it's referred to as a <Bold>memory address</Bold>. Memory addresses aren't often described as indices of bytes in a gigantic array of memory, but that's essentially all they are. More formally, a memory address is a non-negative integer (whole number) that represents the location of a single byte of data somewhere in RAM. Every byte in RAM has its own unique memory address.</P>
 
       <SectionHeading id="memory-addresses-of-variables">Memory addresses of variables</SectionHeading>
 
-      <P>Next, understand that, with some exceptions, a single object (e.g., a single <Code>int</Code> value, or a <Code>float</Code>, or a <Code>double</Code>, or a more complex structure) will generally occupy a single contiguous chunk of (virtual) memory. For example, although <Code>x</Code> might occupy 4 bytes of memory in the previous example, those 4 bytes are necessarily <It>right next to each other</It> (at least within the process's virtual address space).</P>
+      <P>Next, understand that, with some exceptions, a single object (e.g., a single <Code>int</Code> value, or a <Code>float</Code>, or a <Code>double</Code>, or a more complex structure) will often occupy a single contiguous chunk of memory. For example, although <Code>x</Code> might occupy 4 bytes of memory in the previous example, those 4 bytes are <It>right next to each other</It>, at least within the process's virtual address space.</P>
 
       <P>This is very important because it means that if the computer knows the memory address of, say, the <It>first</It> byte of <Code>x</Code>, then it can easily figure out the memory addresses of <It>all</It> the bytes of <Code>x</Code>. After all, the bytes of <Code>x</Code> are all right next to each other. If the memory address of the first byte of <Code>x</Code> is some integer <Code>b</Code>, then the memory address of the second byte of <Code>x</Code> is simply <Code>b+1</Code>, and the memory address of the third byte of <Code>x</Code> is <Code>b+2</Code>, and so on.</P>
 
-      <P>Indeed, all the bytes of memory that make up a given variable can be identified by the memory address of the first of those bytes. This is often referred to as the "memory address of the variable".</P>
+      <P>Indeed, all the bytes of memory that make up a given variable can be identified by the memory address of the first of those bytes. This is often referred to as the "memory address of the variable". In the previous diagrams, the memory address of <Code>x</Code> is 2, and the memory address of <Code>y</Code> is 9. In practice, real variables' memory address values tend to be much larger, say, in the millions or billions.</P>
 
       <P>As it turns out, C allows you to operate on memory addresses directly through special syntax. The simplest such operation is to retrieve the memory address of an existing variable. You can do this with the <Bold>address-of operator</Bold>: simply write out an ampersand (<Code>&</Code>) immediately to the left of the name of an existing variable, and it will retrieve the memory address of that variable. You can then, for example, print that memory address using a <Code>%p</Code> format specifier like so:</P>
 
@@ -151,8 +157,8 @@ int main() {
       <P>Here's an example output of the above program:</P>
 
       <TerminalBlock copyable={false}>{
-`(env) guyera@flip1:pointers$ gcc -Wall -g -o addressof addressof.c 
-(env) guyera@flip1:pointers$ valgrind ./addressof 
+`$ gcc -Wall -g -o addressof addressof.c 
+$ valgrind ./addressof 
 ==2454238== Memcheck, a memory error detector
 ==2454238== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
 ==2454238== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
@@ -195,8 +201,8 @@ int main() {
       <P>And here's an example output:</P>
 
       <TerminalBlock copyable={false}>{
-`(env) guyera@flip1:pointers$ gcc -Wall -g -o addressof addressof.c 
-(env) guyera@flip1:pointers$ valgrind ./addressof 
+`$ gcc -Wall -g -o addressof addressof.c 
+$ valgrind ./addressof 
 ==2455085== Memcheck, a memory error detector
 ==2455085== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
 ==2455085== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
@@ -218,7 +224,7 @@ The memory address of y is: 0x1ffefff9e8
 `
       }</TerminalBlock>
 
-      <P>Recall from an earlier lecture that an automatic variable is a named location in memory (i.e., a named memory address). When you declare an automatic variable, all you're really doing is assigning a name to a memory address. When you write <Code>y = 10</Code>, you're not actually changing <Code>y</Code>; rather, you're going to the location in memory that <Code>y</Code> refers to, and then changing the bytes in memory at that location to match the new value of <Code>10</Code>. <Code>y</Code> itself remains the same<Emdash/>a constant name for a constant location in memory (this is very different from Python's object model, if you're familiar with that).</P>
+      <P>Recall from an earlier lecture that an automatic variable is a named location in memory (i.e., a named memory address). When you declare an automatic variable, all you're really doing is associating a name with a fixed memory address. When you write <Code>y = 10</Code>, you're essentially going to the location in memory that <Code>y</Code> is associated with, and then changing the bytes in memory at that location to match the new value of <Code>10</Code>. <Code>y</Code> itself does not move around; it continues to be associated with the same location in memory. This is very different from Python's object model, if you're familiar with that.</P>
 
       <P>Think of the variable <Code>y</Code> as a metal box that's bolted down some place in memory. You can open the box to see what's inside it or replace its contents with something else. But the box is bolted down, so you can't move / change the box itself.</P>
 
@@ -281,9 +287,15 @@ int main() {
 
       <P>So, <Code>p2</Code> stores the address of <Code>x</Code>, which in turn stores the integer value <Code>10</Code>. In memory, this might look something like the following:</P>
 
-      {/*TODO diagram*/}
+      <Image src={PointerArrangement} alt="x occupies 4 bytes of memory, has value 10, and is located in memory starting at memory address 2. p occupies 8 bytes of memory, has value 2, and is located in memory starting at memory address 7."/>
 
-      <P>We could print out the value of <Code>p2</Code>, meaning the address of <Code>x</Code>, like so:</P>
+      <P>In the above diagram, <Code>p</Code> stores the value <Code>2</Code> since that's the memory address ("byte index") at which <Code>x</Code> is located. If you follow the blue arrow to memory address 2, you'll find the start of <Code>x</Code>, which in turn stores the integer value <Code>10</Code>.</P>
+
+      <P>Notice that <Code>p</Code> itself also takes up some memory (indeed, it even has its own memory address, which is 7 in the above diagram). After all, pointers store memory addresses, which are just numbers, and those numbers have to be stored somewhere. I've specifically depicted <Code>p</Code> as having 8 bytes of memory. The reason is that on a 64-bit operating system running on a 64-bit CPU, memory addresses are typically represented as 64-bit (8-byte) values. This allows them to represent fairly large numbers, which is important since they're meant to represent memory addresses, and a modern computer can have a <It>ton</It> of bytes of memory (e.g., trillions), meaning some bytes will have very large memory addresses.</P>
+
+      <P>(On a 32-bit platform, memory addresses are represented as 32-bit, meaning 4-byte, values. That's problematic since the largest number that can be stored in a 4-byte unsigned space is just a little over 4 billion. This means that if a computer has more than 4GiB of memory (which many do), a 32-bit platform would not be capable of accessing all its memory).</P>
+
+      <P>Moving on. We could print out the value of <Code>p2</Code>, meaning the address of <Code>x</Code>, like so:</P>
 
       <CBlock showLineNumbers={false}>{
 `printf("%p\\n", p2);`
@@ -343,8 +355,8 @@ int main() {
       <P>Here's an example output:</P>
 
       <TerminalBlock copyable={false}>{
-`(env) guyera@flip1:pointers$ gcc -g -o pointers pointers.c 
-(env) guyera@flip1:pointers$ valgrind ./pointers 
+`$ gcc -g -o pointers pointers.c 
+$ valgrind ./pointers 
 ==2465686== Memcheck, a memory error detector
 ==2465686== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
 ==2465686== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
@@ -373,9 +385,15 @@ int main() {
 
       <P>Particularly, suppose you have a pointer <Code>p</Code> that points to some sort of variable <Code>x</Code>. You can of course use <Code>x</Code> to access its underlying value directly, but you can also <It>indirectly</It> access that same exact value through <Code>p</Code>. This is done by <Bold>dereferencing</Bold> <Code>p</Code>. To dereference a pointer, simply write out an asterisk (<Code>*</Code>) immediately to the left of the pointer variable. For example, if you have a pointer <Code>p</Code>, then you can dereference it via <Code>*p</Code>.</P>
 
-      <P>(Notice that I've mentioned two different use cases of the asterisk (<Code>*</Code>) symbol: 1) it's used in the type specifier of a new pointer when declaring it, and 2) it can be placed to the left of an existing pointer to dereference it. Yes, that's one symbol with two different use cases. For a given asterisk, you have to analyze the context of the surrounding code to figure out what it's being used for.)</P>
+      <P>Remember the diagram from earlier with <Code>p</Code>, <Code>x</Code>, and the blue arrow? Here it is again for your convenience:</P>
 
-      <P>Dereferencing a pointer gives you access to the value of the variable that the pointer points to. So if <Code>p</Code> points to <Code>x</Code>, and <Code>x</Code> stores the value <Code>3.14</Code>, then <Code>printf("%f\n", *p)</Code> would print <Code>3.14</Code> to the terminal:</P>
+      <Image src={PointerArrangement} alt="x occupies 4 bytes of memory, has value 10, and is located in memory starting at memory address 2. p occupies 8 bytes of memory, has value 2, and is located in memory starting at memory address 7."/>
+
+      <P>Considering the above diagram, dereferencing <Code>p</Code> (i.e., <Code>*p</Code>) essentially means to follow the blue arrow to find the thing that <Code>p</Code> is pointing to. In this case, that thing is <Code>x</Code>, which stores the value <Code>10</Code>. Indeed, dereferencing <Code>p</Code> gives you indirect access to that value of <Code>10</Code>.</P>
+
+      <P>(Keep in mind that I've mentioned two different use cases of the asterisk (<Code>*</Code>) symbol: 1) it's used in the type specifier of a new pointer when declaring it, and 2) it can be placed to the left of an existing pointer to dereference it. Yes, that's one symbol with two different use cases. For a given asterisk, you have to analyze the context of the surrounding code to figure out what it's being used for.)</P>
+
+      <P>Let's illustrate dereferencing with an example:</P>
 
       <CBlock fileName="dereference.c">{
 `#include <stdio.h>
@@ -393,8 +411,8 @@ int main() {
       <P>Here's the output:</P>
 
       <TerminalBlock copyable={false}>{
-`(env) guyera@flip1:pointers$ gcc -Wall -g -o dereference dereference.c 
-(env) guyera@flip1:pointers$ valgrind ./dereference 
+`$ gcc -Wall -g -o dereference dereference.c 
+$ valgrind ./dereference 
 ==2467620== Memcheck, a memory error detector
 ==2467620== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
 ==2467620== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
@@ -436,8 +454,8 @@ int main() {
       <P>Here's the output:</P>
 
       <TerminalBlock copyable={false}>{
-`(env) guyera@flip1:pointers$ gcc -Wall -g -o accessingarguments accessingarguments.c
-(env) guyera@flip1:pointers$ valgrind ./accessingarguments 
+`$ gcc -Wall -g -o accessingarguments accessingarguments.c
+$ valgrind ./accessingarguments 
 ==2470618== Memcheck, a memory error detector
 ==2470618== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
 ==2470618== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
@@ -459,21 +477,21 @@ The value of x is: 100
 
       <P>Yes, parameters are copies of their arguments. But in this case, the parameter is not an integer; it's a pointer to an integer. And the argument is not an integer; it's the memory address of an integer. So in this case, the thing being copied is not the integer value of <Code>x</Code>, but rather the memory address of <Code>x</Code>. This copied memory address is stored inside the parameter <Code>p</Code>. The operation <Code>*p = 100</Code> dereferences <Code>p</Code>, meaning it goes to the location referenced by the memory address stored within <Code>p</Code>, and it changes the value at that location to <Code>100</Code>. Yes, the memory address stored inside <Code>p</Code> is a copy of <Code>&x</Code>, but that doesn't mean that it doesn't still point to the <It>actual, original</It> variable <Code>x</Code>.</P>
 
-      <P>Here's a fun analogy: suppose I create an identical copy of my entire house and all my belongings. You then go into that copy of my house and rob it. That's fine with me<Emdash/>that wasn't <It>my</It> house, after all. It was only a copy of my house.</P>
+      <P>Here's a fun analogy: suppose I create an identical copy of my entire house and all my belongings. You then go into that copy of my house and rob it. That's fine with me<Emdash/>that's not <It>my</It> house, after all. It's only a copy of my house.</P>
 
-      <P>Now consider this alternative: I write down my address on a sheet of paper. I then run that sheet of paper through a copier. I hand it to you. You go to the house whose address is written on that copied piece of paper, and when you get to that house, you rob it. That's <It>not</It> fine with me. That's <It>my</It> house!</P>
+      <P>Now consider this alternative: I write down my address on a sheet of paper. I then run that sheet of paper through a copier. I hand the copy to you. You go to the house whose address is written on that copied piece of paper, and when you get to that house, you rob it. That's <It>not</It> fine with me. That's <It>my</It> house!</P>
 
       <P>This is the difference between <Code>change_to_100(x)</Code>, as we saw in the previous lecture, and <Code>change_to_100(&x)</Code>, as you saw in the above example. The former copies <Code>x</Code>'s value and stores the copy in the parameter. Modifications to the parameter do not affect the original argument <Code>x</Code>. But the latter copies the <It>address</It> of <Code>x</Code> into the parameter. If the function then chooses to go to the variable at that address, that will indeed be the original variable <Code>x</Code>. Hence, indirection allows the <Code>change_to_100</Code> function to modify the original <Code>x</Code> variable declared within <Code>main</Code>.</P>
 
       <P>There are plenty of examples where it's useful for functions to be able to modify each others' variables. A common example is when a single function needs to be able to produce potentially many outputs. A given function can only return a single value, but it can have as many parameters as it wants. Hence, if a function has several outputs, it can possibly return one of them, and for the rest of them, it can require the caller to supply memory addresses of pre-existing variables as arguments. The function can then dereference the corresponding pointer parameters and modify those underlying variables to store the outputs back at the call site.</P>
 
-      <P>In fact, you've seen this in action. The <Code>scanf()</Code> function reads inputs from the user and stores them in a bunch of variables. But in order for it to be useful, those variables have to be accessible to the rest of the program. Hence, the interface of the <Code>scanf()</Code> function requires the program to declare the variables and then pass their addresses in as arguments, which get stored inside pointer parameters. The <Code>scanf()</Code> function then dereferences those pointer parameters and modifies the underlying variables' values to store the user's supplied inputs. That's why you have to put ampersands next to the arguments in your <Code>scanf()</Code> calls; you're retrieving their addresses so that the <Code>scanf()</Code> function can access the variables themselves, rather than just copies of their values, via indirection.</P>
+      <P>In fact, you've seen this in action. The <Code>scanf()</Code> function reads inputs from the user and stores them in a bunch of variables. But in order for it to be useful, those variables have to be accessible to the rest of the program. Hence, the interface of the <Code>scanf()</Code> function requires the program to declare the variables beforehand and pass their addresses in as arguments, which get stored inside pointer parameters. The <Code>scanf()</Code> function then dereferences those pointer parameters and modifies the underlying variables' values to store the user's supplied inputs. That's why you have to put ampersands next to the arguments in your <Code>scanf()</Code> calls; you're retrieving their addresses so that the <Code>scanf()</Code> function can access the variables themselves, rather than just copies of their values, via indirection.</P>
 
       <P>There are plenty of other very practical use cases involving pointers as well, particularly when dealing with data structures and heap-allocated memory. But we'll save that for future lectures.</P>
 
       <SectionHeading id="undefined-behavior-with-pointers">Undefined behavior with pointers</SectionHeading>
 
-      <P>Now that I've introduced pointers, I have to tell you an unfortunate truth about them: if you're not extremely careful when using pointers, it's very easy to use them incorrectly, and that will almost always result in undefined behavior. As you hopefully remember, undefined behavior often can't be caught by the compiler or other static analysis tools, and it causes the program to do undefined things at runtime. But what's worse is that the things that programs tend to <It>actually</It> do in the face of undefined behavior invoked by incorrect pointer usage is particularly bad. In some of the worst cases, undefined behavior resulting from incorrect pointer usage can even lead to extremely dangerous security vulnerabilities, such as arbitrary code execution (ACE) exploits. And since static analysis tools like compilers often can't catch these mistakes, you should 1) be extremely cautious whenever using pointers, especially in safety- and security-critical applications (if you can, you should probably avoid using C in new safety- and security-critical applications entirely<Emdash/>consider using a memory-safe language instead); and 2) <Ul>always</Ul> run your C programs through dynamic analysis tools like Valgrind, which won't catch all undefined behavior but might help catch the common cases.</P>
+      <P>Now that I've introduced pointers, I have to tell you an unfortunate truth about them: if you're not extremely careful when using pointers, it's very easy to use them incorrectly, and that will almost always result in undefined behavior. As you hopefully remember, undefined behavior sometimes can't be caught by the compiler or other static analysis tools, and it causes the program to do undefined things at runtime. But what's worse is that the things that programs tend to <It>actually</It> do in the face of undefined behavior invoked by incorrect pointer usage is particularly bad. In some of the worst cases, undefined behavior resulting from incorrect pointer usage can even lead to extremely dangerous security vulnerabilities, such as arbitrary code execution (ACE) exploits. And since static analysis tools like compilers sometimes can't catch these mistakes, you should 1) be extremely cautious whenever using pointers, especially in safety- and security-critical applications (if you can, you should probably avoid using C in new safety- and security-critical applications entirely<Emdash/>consider using a memory-safe language instead); and 2) <Ul>always</Ul> run your C programs through dynamic analysis tools like Valgrind, which won't catch all undefined behavior but might help catch the common cases.</P>
 
       <P>So that's my disclaimer. To qualify it, let's consider some cases where incorrect pointer usage can invoke undefined behavior.</P>
 
@@ -494,7 +512,7 @@ int main() {
       <P>Luckily, the compiler is capable of detecting and warning us about this particular mistake when <Code>-Wall</Code> is supplied:</P>
 
       <TerminalBlock copyable={false}>{
-`(env) guyera@flip1:pointers$ gcc -Wall -g -o uninitializedpointer uninitializedpointer.c 
+`$ gcc -Wall -g -o uninitializedpointer uninitializedpointer.c 
 uninitializedpointer.c: In function ‘main’:
 uninitializedpointer.c:6:9: warning: ‘p’ is used uninitialized [-Wuninitialized]
     6 |         printf("p points to a double with the value: %lf\\n", *p);
@@ -505,7 +523,7 @@ uninitializedpointer.c:6:9: warning: ‘p’ is used uninitialized [-Wuninitiali
       <P>Just for fun, let's see what happens when we run the program through valgrind anyways:</P>
 
       <TerminalBlock copyable={false}>{
-`(env) guyera@flip1:pointers$ valgrind ./uninitializedpointer 
+`$ valgrind ./uninitializedpointer 
 ==2473902== Memcheck, a memory error detector
 ==2473902== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
 ==2473902== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
@@ -544,9 +562,9 @@ Segmentation fault (core dumped)`
 
       <P>This kind of error is referred to as a <Bold>segmentation fault</Bold>. It means that the process (program) attempted to access an invalid location in memory (e.g., outside all the mapped pages in the process's virtual address space). The operating system then sent the process a signal (signal 11, SIGSEGV) notifying it of its mistake. The process was not equipped to handle that signal, so it terminated / crashed immediately.</P>
 
-      <P>Also notice: just before all that happened, Valgrind printed out some nice error messages to help us diagnose the issue. First, it says <Code>Use of uninitialized value of size 8</Code>, followed by <Code>Invalid read of size 8</Code>. These both occured on line 6 of our source code file (<Code>uninitializedpointer.c:6</Code>). The first error is referring to the fact that we're trying to use an uninitialized pointer. The second error is referring to the fact that we're trying to read the (invalid) data that that pointer coincidentally points to. In this particular case, <Code>p</Code>'s garbage value happens to be 0 (as it turns out, 0 is a fairly common garbage value), and nothing is stored at memory address 0. In fact, 0 is a protected memory address; <Link href="#NULL">nothing may <It>ever</It> be stored there</Link>.</P>
+      <P>Also notice: just before all that happened, Valgrind printed out some nice error messages to help us diagnose the issue. First, it says <Code>Use of uninitialized value of size 8</Code>, followed by <Code>Invalid read of size 8</Code>. These both occured on line 6 of our source code file (<Code>uninitializedpointer.c:6</Code>). The first error is referring to the fact that we're trying to use an uninitialized pointer. The second error is referring to the fact that we're trying to read the (invalid) data that that pointer coincidentally points to. In this particular case, <Code>p</Code>'s garbage value happens to be 0 (as it turns out, 0 is a fairly common garbage value), and nothing is stored at memory address 0. In fact, 0 is usually a protected memory address, meaning <Link href="#null">nothing may <It>ever</It> be stored there</Link>.</P>
 
-      <P>To be clear, this is often one of the best things that can possibly happen as a result of undefined behavior: the program crashes immediately, and Valgrind tells us exactly where the error occurred and why. In much worse cases, the program may <It>appear</It> to work just fine, and Valgrind may fail to notice any issues whatsoever, despite the fact that the program does, in fact, contain undefined behavior. If that undefined behavior can be exploited for malicious purposes (e.g., ACE exploits), and we have no way of knowing about it, that can often be far worse than a crash with nice diagnostics. (But of course, it depends on the context. If this program is running the flight computer in an airplane or rocket, then a sudden crash could be catastrophic.)</P>
+      <P>To be clear, this is often one of the best things that can happen as a result of undefined behavior: the program crashes immediately, and Valgrind tells us exactly where the error occurred and why. In much worse cases, the program may <It>appear</It> to work just fine, and Valgrind may fail to notice any issues whatsoever, despite the fact that the program does, in fact, contain undefined behavior. If that undefined behavior can be exploited for malicious purposes (e.g., ACE exploits), and we have no way of knowing about it, that can often be far worse than a crash with nice diagnostics. Or perhaps the undefined behavior simply propagates to a logic error that causes the program to work incorrectly in subtle ways, which could also be a massive issue, especially if this is a safety-critical application.</P>
 
       <P>Besides dereferencing uninitialized pointers, another common mistake is <Bold>use-after-free errors</Bold>. These errors occur when you dereference a <Bold>dangling pointer</Bold>, meaning a pointer that points to data that has since been deleted. These errors are sometimes more dangerous than dereferencing an uninitialized pointer. Here's a somewhat contrived example:</P>
 
@@ -579,12 +597,12 @@ int main() {
       <P>Again, we're lucky in that <Code>gcc</Code> and <Code>valgrind</Code> are both capable of catching this particular mistake on this particular platform:</P>
 
       <TerminalBlock copyable={false}>{
-`(env) guyera@flip1:pointers$ gcc -Wall -g -o useafterfree useafterfree.c 
+`$ gcc -Wall -g -o useafterfree useafterfree.c 
 useafterfree.c: In function ‘add’:
 useafterfree.c:6:16: warning: function returns address of local variable [-Wreturn-local-addr]
     6 |         return &sum; // Notice we return &sum instead of sum
       |                ^~~~
-(env) guyera@flip1:pointers$ valgrind ./useafterfree 
+$ valgrind ./useafterfree 
 ==2479083== Memcheck, a memory error detector
 ==2479083== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
 ==2479083== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
@@ -619,21 +637,252 @@ Segmentation fault (core dumped)`
 
       <P>If we ignore <Code>gcc</Code>'s warnings (which you should never do!), Valgrind also detects the error in this case. It prints <Code>Invalid read of size 4</Code>. The program then crashes due to a segmentation fault.</P>
 
-      <P>(Funny enough, analyzing the accompanying details reveals that <Code>p</Code> stores memory address 0 rather than the old address of <Code>sum</Code>. This is because <Code>gcc</Code> embedded an instruction in the program that force-sets the return value to 0 automatically. This is likely a security feature; it prevents the undefined behavior from being exploited. And if it hadn't done that, the program likely wouldn't have crashed due to a segmentation fault.)</P>
+      <P>(Funny enough, analyzing the error message more carefully reveals that <Code>p</Code> stores memory address 0 rather than the old address of <Code>sum</Code>. This is because <Code>gcc</Code> embedded an instruction in the program that force-sets the return value to 0 automatically. This may be a security feature; it prevents the undefined behavior from being exploited. It also ensures that dereferencing it will reliably produce a segmentation fault, since that's what generally happens when dereferencing <Link href="#null">memory address 0</Link>, rather than some other more subtle, unpredictable incorrect behavior.)</P>
 
-      <P>Although <Code>gcc</Code> and Valgrind have been able to detect the undefined behavior in these examples, do not rely on them to always do so. There are more complicated examples where these tools will fail to detect the issue.</P>
+      <P>Although <Code>gcc</Code> and Valgrind have been able to detect the undefined behavior in these examples, do not rely on them to always do so. There are more complicated examples where these tools will fail to detect the undefined behavior. We'll explore such exmaples in future lectures.</P>
 
-      <P>There are other ways of invoking undefined behavior with improper pointer usage as well, but they're less common and typically easier to catch. For example, attempting to store the address of a <Code>float</Code> inside a pointer of type <Code>int*</Code> (or any other non-float pointer) will typically lead to undefined behavior. But the compiler is basically always capable of detecting such a mistake, and it will usually at least issue a warning.</P>
+      <P>There are a few other ways of invoking undefined behavior with improper pointer usage as well. For example, attempting to store the address of a <Code>float</Code> inside a non-float pointer (e.g., a pointer of type <Code>int*</Code>) will often lead to undefined behavior. To avoid issues with pointers:</P>
 
-      <SectionHeading id="NULL"><Code>NULL</Code></SectionHeading>
+      <Enumerate listStyleType="decimal">
+        <Item>Never dereference an uninitialized pointer</Item>
+        <Item>Never dereference a dangling pointer</Item>
+        <Item>Only store addresses in the appropriate types of pointers</Item>
+        <Item>Avoid type-casting pointers except when absolutely necessary. Upcasting in C++ is fine, and casting to <Code>void*</Code> is often necessary in C since it doesn't support proper subtype polymorphism. But never type-cast, say, an int pointer to a float pointer.</Item>
+        <Item>Make sure to never dereference <Link href="#null">a <Code>NULL</Code> pointer</Link></Item>
+        <Item>Be careful when conducting pointer arithmetic (i.e., when computing memory addresses by performing arithmetic on other memory addresses; we'll discuss this more when we cover arrays in a future lecture)</Item>
+      </Enumerate>
 
-      {/*TODO*/}
-      {/*TODO DON'T FORGET ABOUT THE DIAGRAMS FROM EARLIER. THERE ARE TODO ITEMS FOR THEM.*/}
+      <SectionHeading id="null"><Code>NULL</Code></SectionHeading>
+
+      <P>Memory addresses are just numbers that represent locations of bytes within memory, and one particular memory address is special: 0. On most platforms, no actual data is ever allowed be stored at memory address 0. Its entire purpose is to represent an "empty" place in memory<Emdash/>a sort of "dummy" memory address. This provides a way of explicitly defining a pointer that doesn't point to anything: simply initialize the pointer to memory address 0 instead of the actual address of an existing variable.</P>
+
+      <P>This is so common that there's a special constant called <Code>NULL</Code> that simply evaluates to 0 (or, at least, it usually does). When a pointer stores the value of <Code>NULL</Code> (i.e., the memory address 0), that indicates that the pointer does not currently point to anything.</P>
+
+      <P>This is particularly helpful when writing functions with "optional" inputs. For example, suppose I want to write a function that can optionally be supplied a floating point number as an argument, but if you want, you can choose not to supply it (e.g., because some data might be missing / unavailable at the time the function is called). I might give that function a parameter of type <Code>float*</Code>. When the function's called, the corresponding argument can either be a) an actual adress of an existing <Code>float</Code> variable, or b) <Code>NULL</Code> . Inside the function, I can use an if statement to check whether the pointer parameter is <Code>NULL</Code>. If so, that indicates that the caller opted out of supplying the optional input. Otherwise<Emdash/>if the pointer isn't <Code>NULL</Code><Emdash/>it must point to an actual <Code>float</Code> variable, in which case I can dereference the pointer to access the underlying <Code>float</Code> value and use it.</P>
+
+      <P>Below is a fairly contrived example of this. More realistic examples abound, but they're usually a bit more complicated, so it's too early to discuss them now.</P>
+
+      <CBlock fileName="nullexample.c">{
+`#include <stdio.h>
+
+void print_info_about_person(int* age, float* favorite_number) {
+        if (age != NULL) {
+                printf("Age: %d. ", *age);
+        } else {
+                printf("Age: Unknown. ");
+        }
+
+        if (favorite_number != NULL) {
+                // (Recall: %.2f rounds float to 2 decimal places for
+                // printing)
+                printf("Favorite #: %.2f.\\n", *favorite_number);
+        } else {
+                printf("Favorite #: Unknown.\\n");
+        }
+}
+
+int main() {
+        int age = 27;
+        float favorite_number = 3.14;
+
+        // If you know the person's age and favorite number, you can
+        // provide both of them.
+        // Prints Age: 27. Favorite #: 3.14
+        print_info_about_person(&age, &favorite_number);
+
+        // Suppose you know their favorite number but not their age:
+        // Prints Age: Unknown. Favorite #: 3.14
+        print_info_about_person(NULL, &favorite_number);
+
+        // Or maybe the other way around:
+        // Prints Age: 27. Favorite #: Unknown
+        print_info_about_person(&age, NULL);
+
+        // Or maybe you know nothing about the person:
+        // Prints Age: Unknown. Favorite #: Unknown
+        print_info_about_person(NULL, NULL);
+}`
+      }</CBlock>
+
+      <P>Here's the output:</P>
+
+      <TerminalBlock copyable={false}>{
+`$ gcc -Wall -g -o nullexample nullexample.c 
+$ valgrind ./nullexample 
+==1019813== Memcheck, a memory error detector
+==1019813== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==1019813== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
+==1019813== Command: ./nullexample
+==1019813== 
+Age: 27. Favorite #: 3.14.
+Age: Unknown. Favorite #: 3.14.
+Age: 27. Favorite #: Unknown.
+Age: Unknown. Favorite #: Unknown.
+==1019813== 
+==1019813== HEAP SUMMARY:
+==1019813==     in use at exit: 0 bytes in 0 blocks
+==1019813==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==1019813== 
+==1019813== All heap blocks were freed -- no leaks are possible
+==1019813== 
+==1019813== For lists of detected and suppressed errors, rerun with: -s
+==1019813== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)`
+      }</TerminalBlock>
+
+      <P>By the way, because <Code>NULL</Code> generally evaluates to 0, the C standard guarantees that a pointer with value <Code>NULL</Code> will always be treated as "false" when used as a condition in an if statement or loop. In contrast, a pointer that stores an actual memory address will always be treated as "true". This means that the <Code>print_info_about_person</Code> function in the above program can be rewritten like so:</P>
+
+      <CBlock fileName="nullexample.c" showLineNumbers={false} highlightLines="{2,8}">{
+`void print_info_about_person(int* age, float* favorite_number) {
+        if (age) {
+                printf("Age: %d. ", *age);
+        } else {
+                printf("Age: Unknown. ");
+        }
+
+        if (favorite_number) {
+                // (Recall: %.2f rounds float to 2 decimal places for
+                // printing)
+                printf("Favorite #: %.2f.\\n", *favorite_number);
+        } else {
+                printf("Favorite #: Unknown.\\n");
+        }
+}
+`
+      }</CBlock>
+
+      <P>Three more notes about <Code>NULL:</Code></P>
+
+      <Enumerate listStyleType="decimal">
+        <Item>A pointer will only ever be <Code>NULL</Code> if you explicitly assign it the value of <Code>NULL</Code> (e.g., <Code>int* p = NULL</Code>, or by explicitly supplying a <Code>NULL</Code> argument to a pointer parameter). Dangling pointers and uninitialized pointers are <Ul>not</Ul> the same thing as <Code>NULL</Code> pointers. While it's possible to use an if statement to check if a pointer is <Code>NULL</Code> (as above), it's <Ul>not</Ul> possible to use an if statement to check if a pointer is dangling or uninitialized.</Item>
+        <Item>You should <Ul>never</Ul> dereference a pointer that might be <Code>NULL</Code>. Since memory address 0 (or however <Code>NULL</Code> is represented) is never allowed to store any actual data, dereferencing it invokes undefined behavior. In most cases, it will trigger a segmentation fault and crash the program. This is important; <Code>NULL</Code> is an extremely common value for pointers (any pointer can be set to <Code>NULL</Code>, and programmers set pointers to <Code>NULL</Code> all the time), so if there's <Ul>any</Ul> chance that a given pointer might be <Code>NULL</Code>, check it with an if statement before trying to dereference it.</Item>
+      </Enumerate>
 
       <SectionHeading id="constness-with-pointers">Constness with pointers</SectionHeading>
 
-      {/*TODO*/}
-      {/*TODO DON'T FORGET ABOUT THE DIAGRAMS FROM EARLIER. THERE ARE TODO ITEMS FOR THEM.*/}
+      <P>Remember how the <Code>const</Code> keyword can be used to create constants? It can be used to create constant pointers as well, but you have to be congizant about how you use it.</P>
+
+      <P>In particular, there are two different notions of constness with respect to pointers:</P>
+
+      <Enumerate listStyleType="decimal">
+        <Item>Constant pointers</Item>
+        <Item>Pointers to constant data</Item>
+      </Enumerate>
+
+      <P>If a pointer itself is qualified constant (case 1), then that means the pointer itself must be initialized when it's declared, and it can't be changed after the fact. That's to say, you can't change "where it points to". You must immediately store a memory address inside it, and you cannot change that memory address afterward.</P>
+
+      <P>If a pointer is qualified as a pointer-to-constant-data (case 2), then the pointer itself can be modified whenever you want, but when you dereference it, the underlying value is retrieved in the form of a constant. That's to say, you can't change "the value of the thing that it points to". Or, at least, you can't change the value of that thing <It>through the pointer</It> (you might be able to change it through other pointers, or through the original variable storing its value).</P>
+
+      <P>To create a constant pointer (case 1), use the following syntax:</P>
+
+      <SyntaxBlock>{
+`<type>* const <name> = &<variable>`
+      }</SyntaxBlock>
+
+      <P>Replace <Code>{'<type>'}</Code> with the type of variable that the pointer will point to, replace <Code>{'<name>'}</Code> with the name of the pointer, and replace <Code>{'<variable>'}</Code> with the variable that you want the pointer to point to. Importantly, since this is a constant pointer, it must be initialized the moment that it's declared, hence the assignment operator.</P>
+
+      <P>To declare a pointer-to-constant-data (case 2), use either of the following syntaxes:</P>
+
+      <SyntaxBlock>{
+`const <type>* <name>;
+OR
+<type> const * <name>;`
+      }</SyntaxBlock>
+
+      <P>In this case, the pointer itself is not constant, so it can be initialized later. Or, if you want, you can initialize it as you're declaring it. However, whenever such a pointer is dereferenced, the retrieved value is treated as a constant, so it cannot be modified through the dereferenced pointer.</P>
+
+      <P>Here's an example to illustrate:</P>
+
+      <CBlock fileName="constpointers.c">{
+`int main() {
+        int x = 1;
+        int y = 2;
+
+        // A constant pointer. It points to x.
+        int* const p = &x;
+
+        // p may not be modified. This would be a syntax error
+        // p = &y; // NOT ALLOWED! p CANNOT BE CHANGED!
+
+        // However, x can be modified THROUGH p:
+        *p = 3; // x is now 3. This is allowed.
+
+        // A pointer-to-constant-data. It points to x.
+        int const * p2 = &x;
+        // Or, equivalently:
+        // const int* p2 = &x;
+
+        // p2 is not a constant, so it may be modified.
+        p2 = &y; // p2 now points to y. This is allowed.
+
+        // However, when p2 is dereferenced, the underlying value is
+        // treated as a constant, so this would be a syntax error
+        // *p2 = 4; // NOT ALLOWED! *p2 CANNOT BE CHANGED!
+}`
+      }</CBlock>
+      
+      <P>To be clear, if you have a pointer-to-constant-data, that only means the underlying data cannot be modified <It>through the pointer</It>. In the above program, <Code>*p2</Code> cannot be modified, but <Code>y</Code> <It>can</It> be modified directly. For example, <Code>*p2 = 4</Code> is not allowed, but <Code>y = 4</Code> is allowed. This might seem unintuitive given that <Code>p2</Code> points to <Code>y</Code>, so <Code>*p2</Code> is, essentially, <Code>y</Code>. But the <Code>const</Code> qualifier on <Code>p2</Code> states that, even if <Code>p2</Code> does point to a non-constant integer, it may not be modified <It>through</It> <Code>p2</Code> in any way (basically, the type of <Code>y</Code> is simply <Code>int</Code>, but the type of <Code>*p2</Code> is treated as <Code>const int</Code>).</P>
+
+      <P>A neat way to remember the difference between the syntax for constant-pointer and pointer-to-constant-data is as follows:</P>
+
+      <Enumerate listStyleType="decimal">
+        <Item>If the keyword <Code>const</Code> appears at the very left of the type specifier, move it to the right of the data type (but before the first asterisk). For example, if the full declaration is <Code>const int* p;</Code>, then change it to <Code>int const * p;</Code>. These syntaxes are equivalent, so this doesn't affect the meaning of the type.</Item>
+        <Item>From there, read the fully qualified type from right to left. For example, <Code>int const * p</Code> would be read as "<Code>p</Code> is a pointer to a constant integer". Hence, <Code>p</Code> is a pointer-to-constant-data. In contrast, <Code>int* const p</Code> would be read as "<Code>p</Code> is a constant pointer to an integer". Hence, <Code>p</Code> is a constant pointer.</Item>
+      </Enumerate>
+
+      <P>Let's take it one step further. Suppose you want to create a <It>constant pointer to constant data</It>. You can do that by combining the above syntaxes:</P>
+
+      <SyntaxBlock>{
+`const <type>* const <name> = &<variable>
+OR
+<type> const * const <name> = &<variable>`
+      }</SyntaxBlock>
+
+      <P>Since such pointers are constant pointers, they must be initialized the moment they're declared and cannot be modified afterward. But in addition, dereferencing them retrieves the underlying value as a constant, so the values that they point to also cannot be modified through them. For example:</P>
+
+      <CBlock fileName="constpointers.c" highlightLines="{26-37}">{
+`int main() {
+        int x = 1;
+        int y = 2;
+
+        // A constant pointer. It points to x.
+        int* const p = &x;
+
+        // p may not be modified. This would be a syntax error
+        // p = &y; // NOT ALLOWED! p CANNOT BE CHANGED!
+
+        // However, x can be modified THROUGH p:
+        *p = 3; // x is now 3. This is allowed.
+
+        // A pointer-to-constant-data. It points to x.
+        int const * p2 = &x;
+        // Or, equivalently:
+        // const int* p2 = &x;
+
+        // p2 is not a constant, so it may be modified.
+        p2 = &y; // p2 now points to y. This is allowed.
+
+        // However, when p2 is dereferenced, the underlying value is
+        // treated as a constant, so this would be a syntax error
+        // *p2 = 4; // NOT ALLOWED! *p2 CANNOT BE CHANGED!
+
+        // Constant pointer to constant data. It points to x.
+        int const * const p3 = &x;
+        // Or, equivalently:
+        // const int * const p3 = &x;
+
+        // p3 may not be modified. This would be a syntax error
+        // p3 = &y; // NOT ALLOWED! p3 CANNOT BE CHANGED!
+
+        // In addition, when p3 is dereferenced, the underlying value is
+        // treated as a constant, so this would be a syntax error as
+        // well
+        // *p3 = 4; // NOT ALLOWED! *p3 CANNOT BE CHANGED!
+}`
+      }</CBlock>
+
+      <P>Again, we can parse this syntax using the right-to-left logic. <Code>int const * const p3</Code> can be read as "<Code>p3</Code> is a constant pointer to a constant integer". Hence, it's a constant-pointer-to-constant-data.</P>
+
+      <P>In a future lecture, we'll introduce higher-dimensional pointers (i.e., pointers that point to pointers, and so on). But as it turns out, everything you've learned in this lecture applies directly to higher-dimensional pointers as well, including the above right-to-left parsing rule for constness.</P>
 
     </>
   )
