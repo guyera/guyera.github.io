@@ -1,4 +1,4 @@
-import CBlock from '../ui/pythonblock'
+import CBlock from '../ui/cblock'
 import SyntaxBlock from '../ui/syntaxblock'
 import ShellBlock from '../ui/shellblock'
 import TerminalBlock from '../ui/terminalblock'
