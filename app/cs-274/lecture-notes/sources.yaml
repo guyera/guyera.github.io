@@ -1,4 +1,13 @@
 pages:
+  - pathName: 'terminals-shells-and-ssh'
+    pageTitle: 'Terminals, Shells, and SSH'
+    namedIdentifier: 'terminals-shells-and-ssh'
+  - pathName: 'basic-bash-commands'
+    pageTitle: 'Basic Bash Commands'
+    namedIdentifier: 'basic-shell-commands'
+  - pathName: 'vim'
+    pageTitle: 'Vim'
+    namedIdentifier: 'terminal-based-text-editing'
   - pathName: 'c-in-context'
     pageTitle: 'C in Context'
     namedIdentifier: 'c-in-context'
