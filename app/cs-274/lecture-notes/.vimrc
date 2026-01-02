@@ -30,6 +30,9 @@ inoremap <leader><leader>`<Space> <Code>{''}</Code><Left><Left><Left><Left><Left
 " Map \img followed by a space to Image component
 imap <leader>img<Space> <Image src={} alt="TODO"/>ODODODODODODODODODODODODODOD
 
+" Map \\img followed by a space to Image component with a caption
+imap <leader><leader>img<Space> <Image src={} alt="TODO" caption={<Caption>TODO</Caption>}/>ODODODODODODODODODODODODODODODODODODODODODODODODODODODODODODODODODODODODODODODODODODODODODODODOD
+
 " Map \shell followed by a space to a copyable ShellBlock component
 imap <leader>shell<Space> <ShellBlock>{<CR><CR>}</ShellBlock>OA``OD
 
