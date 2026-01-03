@@ -20,3 +20,6 @@ pages:
   - pathName: 'pointers'
     pageTitle: 'Pointers'
     namedIdentifier: 'pointers'
+  - pathName: 'strings'
+    pageTitle: 'Strings'
+    namedIdentifier: 'strings'
