@@ -507,30 +507,22 @@ if __name__ == '__main__':
 
       <P>Remember how I said that the only meaningful difference between the <Code>FurnitureVendor</Code> class and the <Code>AutomobileVendor</Code> class was in the type of their inventory? Imagine if we could create a single class that has an inventory of <It>some</It> type T, without having to specify the exact type of T up front. In other words, imagine if T could be a sort of placeholder for the name of a type that will be specified later on. Then we could create a single generic class <Code>Vendor</Code> that has an inventory of type <Code>list[T]</Code>. It would have a generic method called <Code>add_to_stock()</Code> that accepts an argument of type <Code>T</Code>, adding it to the inventory. Finally, when we want to create <Code>john</Code> within <Code>main()</Code>, we just specify that, in the case of <Code>john</Code>, <Code>T</Code> should be replaced with <Code>FurnitureItem</Code> (because John sells furniture). Similarly, when we want to create <Code>samantha</Code>, we just specify that, in the case of <Code>samantha</Code>, <Code>T</Code> should be replaced with <Code>Automobile</Code> (because Samantha sells automobiles).</P>
 
-      <P>To do this, we first have to create <Code>T</Code>, which will serve as a placeholder for the kind of product that a given vendor will sell. A variable that serves as a placeholder for the name of a type (i.e., <Code>T</Code>) is, itself, a <Code>TypeVar</Code> variable. We can do this like so:</P>
+      <P>To do this, we first have to create <Code>T</Code>, which will serve as a placeholder for the kind of product that a given vendor will sell. We can do this like so:</P>
 
       <PythonBlock copyable={false} showLineNumbers={false} fileName="vendor.py" highlightLines="{3,4}">{
 `from item import Item
 
-from typing import TypeVar
-T = TypeVar('T')
-
-class Vendor:
+class Vendor[T]:
     ... # Class body is the same as before; omitted for brevity
 `
       }</PythonBlock>
 
-      <P>This is getting a bit meta (hence why generics are referred to as a kind of "metaprogramming"); <Code>TypeVar</Code> is a class, but it's used to represent <It>placeholders for other types</It>. It has a constructor that accepts a single argument specifying the name of the placeholder (e.g., for printing / internal purposes). So, <Code>TypeVar('T')</Code> constructs a <Code>TypeVar</Code> object for a type placeholder named "T". We then store that object in a <Code>TypeVar</Code> variable <It>also</It> named <Code>T</Code> (it's very common for the name of the <Code>TypeVar</Code> variable to match the name passed as a string to the <Code>TypeVar</Code> constructor when constructing said variable).</P>
-
-      <P>Since <Code>TypeVar</Code> objects are meant to be used as placeholders for other types, this means that <Code>T</Code> can be used as a placeholder for other types. In our case, we want <Code>T</Code> to be used as a placeholder for the type of product sold by a given vendor. To do this, we make the following changes to <Code>vendor.py</Code>:</P>
+      <P>In our case, we want <Code>T</Code> to be used as a placeholder for the type of product sold by a given vendor. To do this, we make the following changes to <Code>vendor.py</Code>:</P>
 
       <PythonBlock fileName="vendor.py" highlightLines="{3,6,9,16}">{
 `from item import Item
 
-from typing import Generic, TypeVar
-T = TypeVar('T')
-
-class Vendor(Generic[T]):
+class Vendor[T]:
     _name: str # The vendor's name
     _profit: float # Total profit made
     _inventory: list[T] # Inventory
@@ -562,7 +554,7 @@ class Vendor(Generic[T]):
 `
       }</PythonBlock>
 
-      <P>Let's break down the above changes. First, we import the <Code>Generic</Code> class from the <Code>typing</Code> package (alongside the <Code>TypeVar</Code> class). Next, we modify the <Code>Vendor</Code> class to have it inherit from <Code>Generic[T]</Code>. This is new syntax; it means that the <Code>Vendor</Code> class is now a <Ul>generic class</Ul>, and that uses <Code>T</Code> as a placeholder for the type of one or more objects throughout its definition (again, a generic class is just a class that's allowed to have type placeholders). Finally, we modify the <Code>Vendor</Code> class to do just that: throughout its definition, whenever we want to refer to the type of product that a vendor might sell, we use <Code>T</Code> to represent that type. Again: <Code>T</Code> is a <Ul>placeholder</Ul> at this stage. It does not represent a specific type of product that might be sold, but rather a <Ul>placeholder</Ul> for a type of product that might be sold.</P>
+      <P>First, we modify the <Code>Vendor</Code> class to define a generic type named <Code>T</Code>in its class definition. This is new syntax; it means that the <Code>Vendor</Code> class is now a <Ul>generic class</Ul>, and that uses <Code>T</Code> as a placeholder for the type of one or more objects throughout its definition (again, a generic class is just a class that's allowed to have type placeholders). Finally, we modify the <Code>Vendor</Code> class to do just that: throughout its definition, whenever we want to refer to the type of product that a vendor might sell, we use <Code>T</Code> to represent that type. Again: <Code>T</Code> is a <Ul>placeholder</Ul> at this stage. It does not represent a specific type of product that might be sold, but rather a <Ul>placeholder</Ul> for a type of product that might be sold.</P>
 
       <P>Since <Code>T</Code> is a placeholder, we must, at some point, specify what exactly should be filled into that placeholder. We do <Ul>not</Ul> do this in the generic <Code>Vendor</Code> class. The entire point is that the <Code>Vendor</Code> class is "generic" rather than "specific"; it represents a "generic kind of vendor"<Emdash/>not a "specific kind of vendor", such as a furniture vendor or an automobile vendor.</P>
 
@@ -631,7 +623,7 @@ Found 2 errors in 1 file (checked 5 source files)
       <PythonBlock copyable={false} fileName="vendor.py" showLineNumbers={false} highlightLines="{9,22}">{
 `...
 
-class Vendor(Generic[T]):
+class Vendor[T]:
     ...
 
     def sell(self, idx: int) -> None:
@@ -664,15 +656,12 @@ class Vendor(Generic[T]):
       <PythonBlock showLineNumbers={false} highlightLines="{4}">{
 `from item import Item
 
-from typing import Generic, TypeVar
-T = TypeVar('T', bound=Item)
-
-class Vendor(Generic[T]):
+class Vendor[T: Item]:
     ... # Class body is the same as before; omitted for brevity
 `
       }</PythonBlock>
 
-      <P>The <Code>TypeVar</Code> constructor accepts an optional keyword argument named <Code>bound</Code> that specifies a base class. If provided, then the constructed <Code>TypeVar</Code> object (<Code>T</Code>, in this case) may only be "filled in" by classes that inherit from that specified base class. So the above change tells Mypy that our program will only ever fill in the placeholder <Code>T</Code> with classes that inherit from the <Code>Item</Code> class. The <Code>Item</Code> class does, indeed, provide a <Code>get_price()</Code> method as well as an (abstract) <Code>print()</Code> method. So now, Mypy can be confident that <Code>self._inventory[idx].get_price()</Code> and <Code>item.print()</Code> will work just fine, regardless of what type is substituted for <Code>T</Code>. Mypy now produces no errors, and the program works just fine.</P>
+      <P>We can restrict placeholder types by defining them the same way we define types elsewhere, with a colon and the type definitions. If provided, then <Code>T</Code> may only be "filled in" by classes that inherit from that specified base class. So the above change tells Mypy that our program will only ever fill in the placeholder <Code>T</Code> with classes that inherit from the <Code>Item</Code> class. The <Code>Item</Code> class does, indeed, provide a <Code>get_price()</Code> method as well as an (abstract) <Code>print()</Code> method. So now, Mypy can be confident that <Code>self._inventory[idx].get_price()</Code> and <Code>item.print()</Code> will work just fine, regardless of what type is substituted for <Code>T</Code>. Mypy now produces no errors, and the program works just fine.</P>
 
       <P>Suppose we try to fill in the placeholder <Code>T</Code> with a class that does <It>not</It> inherit from the <Code>Item</Code> class:</P>
 
@@ -693,12 +682,21 @@ if __name__ == '__main__':
 
       <TerminalBlock copyable={false}>{
 `(env) $ mypy .
-badtypeargument.py:6: error: Value of type variable "T" of "Vendor" cannot be "int"  [type-var]
-Found 1 error in 1 file (checked 5 source files)
+badtypeargument.py:72: error: "T" has no attribute "get_price"  [attr-defined]
+badtypeargument.py:84: error: "T" has no attribute "print"  [attr-defined]
+Found 2 errors in 1 file (checked 1 source file)
 `
       }</TerminalBlock>
 
-      <P>It's sometimes a bit difficult to understand the difference between using generics and <Code>TypeVar</Code> versus polymorphism. To highlight the difference, recall that, earlier, our polymorphic solution had a problem: there was no way to prevent a single vendor from selling both furniture and automobiles. For example, <Code>samantha.add_to_stock(FurnitureItem('Couch', 200.00))</Code> was a perfectly legal line of code (in that it would not result in any errors reported by Mypy nor the interpreter) even though it <It>shouldn't</It> have been legal given that it reflects a bug in the program. Now, with generics, that problem is solved. Suppose we attempt to add furniture to Samantha's inventory:</P>
+      <P>If you actually wanted to support both <Code>int</Code> and <Code>Item</Code> types, you would use the standard union syntax and define your type with the following, which would again give mypy errors since <Code>int</Code> does not implement <Code>get_price()</Code> or <Code>print()</Code>:</P>
+
+      <PythonBlock>{
+`class Vendor[T: Item | int]:
+    ... # Class body is the same as before; omitted for brevity
+`
+      }</PythonBlock>
+
+      <P>It's sometimes a bit difficult to understand the difference between using generics versus polymorphism. To highlight the difference, recall that, earlier, our polymorphic solution had a problem: there was no way to prevent a single vendor from selling both furniture and automobiles. For example, <Code>samantha.add_to_stock(FurnitureItem('Couch', 200.00))</Code> was a perfectly legal line of code (in that it would not result in any errors reported by Mypy nor the interpreter) even though it <It>shouldn't</It> have been legal given that it reflects a bug in the program. Now, with generics, that problem is solved. Suppose we attempt to add furniture to Samantha's inventory:</P>
 
       <PythonBlock fileName="badusage.py" highlightLines="{10}">{
 `from vendor import Vendor
@@ -735,6 +733,14 @@ badusage.py:10: error: Argument 1 to "add_to_stock" of "Vendor" has incompatible
 Found 1 error in 1 file (checked 5 source files)
 `
       }</TerminalBlock>
+
+      <P>Classes are no the only place we can define generics. You can define generic types for a function with similar syntax by defining the placeholder as part of the function definition:</P>
+
+      <PythonBlock>{
+`def print_values[T](input: T) -> None:
+    print(input)
+`
+      }</PythonBlock>
 
       <SectionHeading id="data-structures-as-generics">Data structures as generics</SectionHeading>
 

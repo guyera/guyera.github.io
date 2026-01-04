@@ -63,6 +63,110 @@ export async function generateMetadata({ params } : { params: Promise<any> }) {
 async function LectureNotes({ allPathData }: { allPathData: any }) {
   return (
     <>
+      <SectionHeading>Enums</SectionHeading>
+      <P>We've seen how classes can be a useful way to organize our code and related data. When we create a new instance of an object, we can change its attributes without affecting other instances. We can even encapsulate changes to our object attributes to ensure that all the data remains consistent. But sometimes it makes sense to restrict the possible instances that a class can be. For example, let's say we are building a calendar. You might create a class to store days of the week:</P>
+
+      <PythonBlock copyable={false} showLineNumbers={false}>{
+`class DayOfWeek:
+    name: str
+     
+    def __init__(self, name) -> None:
+        self.name = name
+ `}</PythonBlock>
+
+      <P>The calendar can instantiate a day for Monday with <Code>monday = DayOfWeek("Monday")</Code>. But it doesn't make sense to support any aribtrary day, because there are only 7 possible days in a week. We also probably want our <Code>monday</Code> instance to work for languages other than English. </P>
+
+      <P>For cases where a class should only have specific possible instances, we use a special type called an <Code>Enum</Code>. An enum is an class which can be instantiated like any other class, with one big exception: the class can only have predefined instances. Defining our DayOfWeek class as an enum looks like:</P>
+
+      <PythonBlock copyable={false} showLineNumbers={false}>{
+`from enum import Enum
+
+class DayOfWeek(Enum):
+    MONDAY = "Monday"
+ 
+print(DayOfWeek.MONDAY)
+ `}</PythonBlock>
+
+      <P>First we import the <Code>Enum</Code> class from Python's standard enum module. Next, when defining our class, we make it a subclass of <Code>Enum</Code>. Any attribute defined inside this enum will be an instance of DayOfWeek. We can't reassign these attributes to other values, or create new DayOfweek objects. Since they are essentially constants, we write their names in all uppercase like other constant values. Also note that each attribute has a string value, which is mostly to have a nice value to print. To complete the example with all days of the week:</P>
+
+      <PythonBlock copyable={false} showLineNumbers={false}>{
+`from enum import Enum
+
+class DayOfWeek(Enum):
+    MONDAY = "Monday"
+    TUESDAY = "Tuesday"
+    WEDNESDAY = "Wednesday"
+    THURSDAY = "Thursday"
+    FRIDAY = "Friday"
+    SATURDAY = "Saturday"
+    SUNDAY = "Sunday"
+ 
+print(DayOfWeek.MONDAY)
+ `}</PythonBlock>
+
+      <P>You can use any string value you want for each enum as long as it is unique. You can write <Code>MONDAY = "Lundi"</Code> and your code will still work, because the MONDAY instance still exists. Python will raise an error if you try to create an instance with any value other than these 7. Enums are especially useful when you are writing functions that take parameters, because you can use enums to restrict the possible values that can be passed to your function. For example, let's say we are building a game and need to allow users to choose one possible action:</P>
+
+      <PythonBlock copyable={false} showLineNumbers={false}>{
+`def do_action(user_input: str) -> None
+    if user_input is None:
+        raise ValueError("Invalid input")
+    elif user_input.lower() == "start":
+        start_game()
+    elif user_input == "continue":
+        do_next_turn()
+    elif user_input.lower() == "stop":
+        end_game()
+ `}</PythonBlock>
+
+      <P>While the above code isn't wrong, it's also redundant and error-prone. Did you catch the bug processing <Code>continue</Code>? The underlying cause of the code complexity is that a string can contain values other than the allowed input. There are only 3 valid user actions: start, continue, stop. Let's code it as an enum instead:</P>
+
+      <PythonBlock copyable={false} showLineNumbers={false}>{
+`from enum import Enum
+
+class Action(Enum):
+    START = "start"
+    CONTINUE = "continue"
+    STOP = "stop"
+
+def do_action(user_action: Action) -> None
+  elif user_action == Action.START:
+      start_game()
+  elif user_action == Action.CONTINUE:
+      do_next_turn()
+  elif user_action == Action.STOP
+      end_game()
+ `}</PythonBlock>
+
+      <P>Using enums to manage our game state made the code shorter, easier to read, and helps avoid bugs because we guarantee that the input must be one of the specific values. While the examples we have seen map a string value to each enum value (<Code>"start" for Action.START</Code>), but we haven't really used the string for anything. Sometimes it's useful to associate some data to each enum value, whether that data is a string label or an integer:</P>
+
+      <PythonBlock copyable={false} showLineNumbers={false}>{
+`from enum import Enum
+
+class Action(Enum):
+    START = 1
+    CONTINUE = 2
+    STOP = 3
+
+class DayOfWeek(Enum):
+    MONDAY = 1
+    TUESDAY = 2
+    WEDNESDAY = 3
+    THURSDAY = 4
+    FRIDAY = 5
+    SATURDAY = 6
+    SUNDAY = 7
+
+print(DayOfWeek(1)) # will print DayOfWeek.MONDAY
+`
+ }</PythonBlock>
+
+      <P>We have changed our previous examples to use integer values intead of strings. The actual enum values are the same (<Code>Action.START</Code>, <Code>DayOfWeek.MONDAY</Code>), but now we have an integer associated with each one. This integer can be used for determining order of values, or looking up a value by index, or other things your code might find useful. To access an enum's value, call it's <Code>value</Code> attribute:</P>
+
+      <PythonBlock copyable={false} showLineNumbers={false}>{
+`print(DayOfWeek.MONDAY.value)
+`}</PythonBlock>
+
+      <SectionHeading>Optionals</SectionHeading>
       <P>There's a special primitive data type in Python that we haven't covered yet: <Code>NoneType</Code>. <Code>NoneType</Code> is the type of the <Code>None</Code> literal (in the same way that <Code>boolean</Code> is the type of the <Code>True</Code> and <Code>False</Code> literals, and <Code>int</Code> is the type of the literal <Code>100</Code>). <Code>NoneType</Code> is special in that <Code>None</Code> is the <Ul>only</Ul> value in all of Python whose type is <Code>NoneType</Code> (whereas there are two valid boolean values, billions of valid integer values, and so on).</P>
 
       <P>The purpose of the value <Code>None</Code> is to indicate the absence of data. This can be helpful for constructing variables that sometimes store actual values but sometimes don't. As a simple example, suppose you have a list of <Code>Person</Code> objects and want to retrieve the age of a person with a given name from the list. Naively, you might try something like this:</P>
@@ -112,26 +216,27 @@ if found_age is not None:
 
       <P>The above code works while avoiding many of the issues with magic numbers and other dummy values. It also passes through Mypy without errors.</P>
 
-      <P>The fact that it passes through Mypy without errors might surprise you. In the past, I've said that Mypy does not allow a variable's (static) type to change during the duration of a program. And yet, <Code>found_age</Code> clearly changes types throughout the above code: it starts out as <Code>None</Code>, which is of the special type <Code>NoneType</Code>, and then it changes to <Code>p.age</Code>, which is (presumably) of type <Code>int</Code>. The reason that Mypy is okay with this in this particular case is a bit complicated. For now, I'll just explain a small part of the reason: Mypy treats <Code>found_age</Code> to be of a special type known as an <Bold>optional</Bold>. An optional is a special data type that's allowed to store either a) a value of a certain, specific type, or b) the value <Code>None</Code>. In particular, the actual type of <Code>found_age</Code> is not <Code>int</Code>, nor is it <Code>NoneType</Code>, but rather <Code>typing.Optional[int]</Code>. This indicates that <Code>found_age</Code> is allowed to store either a) an integer value, or b) the value <Code>None</Code>.</P>
+      <P>The fact that it passes through Mypy without errors might surprise you. In the past, I've said that Mypy does not allow a variable's (static) type to change during the duration of a program. And yet, <Code>found_age</Code> clearly changes types throughout the above code: it starts out as <Code>None</Code>, which is of the special type <Code>NoneType</Code>, and then it changes to <Code>p.age</Code>, which is (presumably) of type <Code>int</Code>. The reason that Mypy is okay with this in this particular case is a bit complicated. Mypy treats <Code>found_age</Code> to be of a special case that can be <Code>None</Code>, or another value. In particular, the actual type of <Code>found_age</Code> is either an <Code>int</Code> or is it <Code>NoneType</Code>. This indicates that <Code>found_age</Code> is allowed to store either a) an integer value, or b) the value <Code>None</Code>.</P>
 
-      <P>(Similarly, a value of type <Code>typing.Optional[str]</Code> would be allowed to store either a) a string value, or b) the value <Code>None</Code>. You can put any type you want between the square brackets to create an optional type that wraps around that specific type.)</P>
+      <P>Python variables are not limited to a single type, like some other languages. In Python a variable can be one of many different types. For example, to define the type of <Code>found_age</Code> explicity by separating the different types with the <Code>|</Code> operator:</P>
 
-      <P>Mypy is able to infer that <Code>found_age</Code> is an optional by analyzing the code. It sees that, sometimes (/ in some cases), <Code>found_age</Code> stores the value <Code>None</Code>, and at other times (/ in other cases), it stores an integer value (<Code>p.age</Code>). It then infers that <Code>found_age</Code> must be of a type that supports that usage pattern, so it concludes that the type must be <Code>typing.Optional[int]</Code>.</P>
+      <PythonBlock copyable={false} showLineNumbers={false}>{
+`found_age: None | int = None`
+      }</PythonBlock>
 
-      <P>You can also use <Code>typing.Optional</Code> for explicit type annotations. For example, suppose you want to write a function that returns the age of a person with a given name from a given list, returning <Code>None</Code> in the case that no such person is found (i.e., we want to move some of the above code into its own function). This means that the return type must be able to support both a) int values, and b) the value <Code>None</Code>. Hence, its return type should be <Code>typing.Optional[int]</Code>, so that's how it should be explicitly annotated:</P>
+      <P>We call this type a <Code>Union</Code>, because it is a union of multiple other types. You can union any types, and as many types, as you want. Generally, defining a variable as a union type is a design mistake and you can usually come up with a better approach, but <Code>None</Code> is a unique case. It is often useful to indicate that a variable may be <Code>None</Code> (in which case it needs to be checked) or will never be None (in which case you don't have to check for None because the static analyzer will enforce it).</P>
+
+      <P>You can also use union for explicit type annotations. For example, suppose you want to write a function that returns the age of a person with a given name from a given list, returning <Code>None</Code> in the case that no such person is found (i.e., we want to move some of the above code into its own function). This means that the return type must be able to support both a) int values, and b) the value <Code>None</Code>. Hence, its return type should be <Code>int | None</Code>, so that's how it should be explicitly annotated:</P>
 
       <PythonBlock fileName="main.py">{
-`import typing # Necessary in order to use typing.Optional
+`from person import Person # A POD type
 
-from person import Person # A POD type
-
-# Return type is typing.Optional[int], meaning the return value
-# will either be an integer or None. If the person with the given
+# Return type is int | None. If the person with the given
 # name is found in the given list, this function returns their age
 # as an integer. Otherwise, it returns None.
 def age_of_person(
         name: str,
-        list_of_people: list[Person]) -> typing.Optional[int]:
+        list_of_people: list[Person]) -> int | None:
     for p in list_of_people:
         if p.name == name:
             return p.age
@@ -146,8 +251,7 @@ def main() -> None:
 
     chosen_name = input('Whose age would you like to search for?: ')
 
-    # found_age's type is typing.Optional[int], meaning it's either
-    # an integer or None
+    # found_age's type is either an integer or None
     found_age = age_of_person(chosen_name, my_people)
 
     if found_age is None:
@@ -164,7 +268,7 @@ if __name__ == '__main__':
 `
       }</PythonBlock>
 
-      <P>The above program passes through Mypy with no errors, assuming <Code>Person</Code> is properly defined in <Code>person.py</Code>. Here are some example runs:</P>
+      <P>Notice we also defined our parameter as <Code>list[Person]</Code>, rather than <Code>list[Person | None]</Code>, so we know that every element in the list will be valid <Code>Person</Code> instance. The above program passes through Mypy with no errors, assuming <Code>Person</Code> is properly defined in <Code>person.py</Code>. Here are some example runs:</P>
 
       <TerminalBlock copyable={false}>{
 `(env) $ python main.py 
@@ -179,66 +283,18 @@ Sorry, I don't know Sally's age.
 `
       }</TerminalBlock>
 
-      <P>One improvement we could make to the above code would be to import <Code>Optional</Code> from the <Code>typing</Code> package using the alternative <Code>{'from <x> import <y>'}</Code> syntax:</P>
-
-      <PythonBlock fileName="main.py" highlightLines="{1,11}">{
-`from typing import Optional
-
-from person import Person # A POD type
-
-# Return type is Optional[int], meaning the return value
-# will either be an integer or None. If the person with the given
-# name is found in the given list, this function returns their age
-# as an integer. Otherwise, it returns None.
-def age_of_person(
-        name: str,
-        list_of_people: list[Person]) -> Optional[int]:
-    for p in list_of_people:
-        if p.name == name:
-            return p.age
-
-    # Person was not found. Return None
-    return None
-
-def main() -> None:
-    my_people = []
-    my_people.append(Person('Joe', 42))
-    my_people.append(Person('Amanda', 17))
-
-    chosen_name = input('Whose age would you like to search for?: ')
-
-    # found_age's type is Optional[int], meaning it's either
-    # an integer or None
-    found_age = age_of_person(chosen_name, my_people)
-
-    if found_age is None:
-        # found_age is None, meaning the person couldn't be found
-        print(f"Sorry, I don't know {chosen_name}'s age.")
-    else:
-        # found_age is not None, meaning the person was found.
-        # Print their age.
-        print(f"{chosen_name}'s age is {found_age}.")
-    
-
-if __name__ == '__main__':
-    main()
-`
-      }</PythonBlock>
-
-      <P>As I mentioned earlier, you can put whatever you want between the square brackets in <Code>Optional[]</Code>. It doesn't even have to be a primitive type, such as <Code>int</Code>. It can be any valid type. Knowing that, another improvement we could make to the above program's design is to have the function return the entire <Code>Person</Code> object with the given name rather than just returning their age. That would make the function support more flexible use cases:</P>
+      <P>As I mentioned earlier, you can put whatever types you want in the type definition. They don't even have to be a primitive type, such as <Code>int</Code>. It can be any valid type. Knowing that, another improvement we could make to the above program's design is to have the function return the entire <Code>Person</Code> object with the given name rather than just returning their age. That would make the function support more flexible use cases:</P>
 
       <PythonBlock fileName="main.py" highlightLines="{11,14,28,30,36}">{
-`from typing import Optional
+`from person import Person # A POD type
 
-from person import Person # A POD type
-
-# Return type is Optional[Person], meaning the return value
+# Return type Person | None, meaning the return value
 # will either be an Person or None. If the person with the given
 # name is found in the given list, this function returns the Person
 # object. Otherwise, it returns None.
 def age_of_person(
         name: str,
-        list_of_people: list[Person]) -> Optional[Person]:
+        list_of_people: list[Person]) -> Person | None:
     for p in list_of_people:
         if p.name == name:
             return p
@@ -253,8 +309,7 @@ def main() -> None:
 
     chosen_name = input('Whose age would you like to search for?: ')
 
-    # found_person's type is Optional[Person], meaning it's either
-    # a Person or None
+    # found_person's type is either a Person or None
     found_person = age_of_person(chosen_name, my_people)
 
     if found_person is None:
