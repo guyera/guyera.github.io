@@ -8,7 +8,7 @@ export default async function Image({ src, alt, caption, srcDarkMode, width, hei
     return (
       <>
         <picture>
-          <source srcSet={srcDarkMode.src} alt={alt} className={`ml-auto mr-auto max-w-[100%] ${caption ? 'mb-1' : 'mb-7'}`} media="(prefers-color-scheme: dark)" />
+          <source srcSet={srcDarkMode.src} media="(prefers-color-scheme: dark)" />
           <NextImage src={src} alt={alt} className={`ml-auto mr-auto max-w-[100%] ${caption ? 'mb-1' : 'mb-7'}`} width={width} height={height}/>
         </picture>
         {caption}
