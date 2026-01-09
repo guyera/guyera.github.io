@@ -26,6 +26,8 @@ import path from 'path'
 import fs from 'fs'
 
 import AsciiTable from './assets/ascii-table.png'
+import CharArrayDiagram from './assets/char-array-diagram.png'
+import CharArrayDiagramDarkMode from './assets/char-array-diagram-dark-mode.png'
 
 // @ts-ignore
 import sourcesConfig from '../sources.yaml'
@@ -103,9 +105,11 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
 
       <P>Suppose you want to store a string literal inside a variable in C. In that case, you need some sort of string data type to represent the variable. But as it turns out, C doesn't have a string data type. Instead, in C, a string is considered to be <Ul>any array of characters whose content ends with one or more <Bold>null terminator</Bold> characters</Ul>. We'll discuss arrays in greater detail later, but for now, just understand that an array is a fixed-size, homogeneous sequence of values (if you're familiar with Python, think of arrays as being like Python's <Code>List</Code> objects, except arrays are homogeneous and fixed-size). C defines the null terminator character to be whatever character has the encoded value of 0 (regardless of the compiler's chosen character encoding). And, indeed, if you look back at the above ASCII table, you'll see that the character with the ASCII value of 0 is labeled "NULL". Null terminators are not printable / visible; they're "invisible" characters whose purpose is to mark the end of a C string. (The ASCII table supports several other non-printable characters as well, such as control characters like carriage returns, end-of-text, backspace, and so on).</P>
 
-      <P>For example, suppose you construct an array of 8 characters: <Code>'H'</Code>, <Code>'e'</Code>, <Code>'l'</Code>, <Code>'l'</Code>, <Code>'o'</Code>, followed by two null terminator characters, and finally a capital <Code>'Z'</Code>. Such an array would be a valid C string<Emdash/>it's an array of characters, and its content ends in one or more null terminators (two, in this case). Based on that description, you might have noticed that the last character, <Code>'Z'</Code>, is <Ul>not</Ul> considered to be part of the string's content. Indeed, it's a part of the array of characters, but not really part of the <It>string</It>. This is precisely what null terminators do: they mark the end of the string's content, so anything appearing after them is ignored by functions that operate on strings (e.g., <Code>printf()</Code>). If this string were to be printed to the terminal, the output would simply be <Code>Hello</Code>. The null terminators would not be printed (they're non-printable), nor would the <Code>'Z'</Code> that comes after them.</P>
+      <P>For example, suppose you construct an array of 8 characters: <Code>'H'</Code>, <Code>'e'</Code>, <Code>'l'</Code>, <Code>'l'</Code>, <Code>'o'</Code>, followed by two null terminator characters, and finally a lowercase <Code>'z'</Code>:</P>
 
-      {/*TODO diagram of H, e, l, l, o, two null terminators, Z*/}
+      <Image src={CharArrayDiagram} alt="TODO" srcDarkMode={CharArrayDiagramDarkMode} width={400}/>
+
+      <P>Such an array would be a valid C string<Emdash/>it's an array of characters, and its content ends in one or more null terminators (two, in this case). Based on that description, you might have noticed that the last character, <Code>'z'</Code>, is <Ul>not</Ul> considered to be part of the string's content. Indeed, it's a part of the array of characters, but not really part of the <It>string</It>. This is precisely what null terminators do: they mark the end of the string's content, so anything appearing after them is ignored by functions that operate on strings (e.g., <Code>printf()</Code>). If this string were to be printed to the terminal, the output would simply be <Code>Hello</Code>. The null terminators would not be printed (they're non-printable), nor would the <Code>'z'</Code> that comes after them.</P>
 
       <P>We'll discuss this all in greater detail when we cover arrays. For now, I just want to show you how to store string literals inside of variables in C. Well, there are actually a few ways to do it, but here's one of them: </P>
 
