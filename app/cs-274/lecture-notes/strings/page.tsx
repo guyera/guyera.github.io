@@ -107,7 +107,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
 
       <P>For example, suppose you construct an array of 8 characters: <Code>'H'</Code>, <Code>'e'</Code>, <Code>'l'</Code>, <Code>'l'</Code>, <Code>'o'</Code>, followed by two null terminator characters, and finally a lowercase <Code>'z'</Code>:</P>
 
-      <Image src={CharArrayDiagram} alt="TODO" srcDarkMode={CharArrayDiagramDarkMode} width={400}/>
+      <Image src={CharArrayDiagram} alt="H, e, l, l, o, two null terminators, and a lowercase z are arranged into an array" srcDarkMode={CharArrayDiagramDarkMode} width={400}/>
 
       <P>Such an array would be a valid C string<Emdash/>it's an array of characters, and its content ends in one or more null terminators (two, in this case). Based on that description, you might have noticed that the last character, <Code>'z'</Code>, is <Ul>not</Ul> considered to be part of the string's content. Indeed, it's a part of the array of characters, but not really part of the <It>string</It>. This is precisely what null terminators do: they mark the end of the string's content, so anything appearing after them is ignored by functions that operate on strings (e.g., <Code>printf()</Code>). If this string were to be printed to the terminal, the output would simply be <Code>Hello</Code>. The null terminators would not be printed (they're non-printable), nor would the <Code>'z'</Code> that comes after them.</P>
 
