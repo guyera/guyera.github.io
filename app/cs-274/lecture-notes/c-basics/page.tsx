@@ -1259,7 +1259,7 @@ The sum is 36.810001
 
       <P>To use a relational operator, simply place it between two values of comparable types, and it will produce a new value that's "true" if the relationship is true and "false" otherwise. For example, <Code>{'5 < 7'}</Code> will produce a "true" value since 5 is, indeed, less than 7.</P>
 
-      <P>However, I write "true" and "false" in quotation marks for a reason: as strange as it may sound, older versions of C do not have a dedicated boolean data type (the <Code>_Bool</Code> type was introduced later in C99, along with some convenience macros provided by <Code>stdbool.h</Code>; and many legacy codebases still use C89). The type of a relational operation expression (e.g., <Code>5 < 7</Code>) is actually <Code>int</Code>. In particular, relational operations will produce a value of 1 when the relationship is true, and a value of 0 when the relationship is false.</P>
+      <P>However, I write "true" and "false" in quotation marks for a reason: as strange as it may sound, older versions of C do not have a dedicated boolean data type (the <Code>_Bool</Code> type was introduced later in C99, along with some convenience macros provided by <Code>stdbool.h</Code>; and many legacy codebases still use C89). The type of a relational operation expression (e.g., <Code>{'5 < 7'}</Code>) is actually <Code>int</Code>. In particular, relational operations will produce a value of 1 when the relationship is true, and a value of 0 when the relationship is false.</P>
 
       <P>Here are some examples:</P>
 
