@@ -107,6 +107,10 @@ int main() {
 }
 `
       }</CBlock>
+      
+      <P><Ul>Important</Ul>: In many cases, the size of an automatic array is technically allowed be an integral variable with a positive value (e.g., <Code>float some_numbers[x]</Code>, where <Code>x</Code> is an <Code>int</Code> variable storing some positive integer). Arrays declared with a variable size are referred to as <Bold>variable-length arrays (VLAs)</Bold>. <Ul>However</Ul>, although VLAs are technically allowed in many cases, using them is often discouraged. They have a lot of peculiarities to them that make them quite bug-prone (e.g., they can overflows the stack if the stack is too small to store the potentially large number of elements; they can (perhaps surprisingly) evoke side effects of the <Code>sizeof()</Code> operator; they behave differently when they decay into pointers; etc). Moreover, there are portability issues with VLAs: some C compilers don't support them at all (e.g., MSVC); they weren't introduced in the C standard until C99; and they were officially treated as an optional language feature in C11 and C17 (then made mandatory again in C23).</P>
+
+      <P>That's all to say, you should avoid VLAs. Instead, make sure that the sizes of your automatic arrays are <Ul>hardcoded constants</Ul> (e.g., <Code>100</Code>) instead of variables. Of course, being able to use a variable to specify the size of an array can be quite useful. But there's a way to do that <It>without</It> VLAs, which is by using dynamic arrays instead. We'll cover dynamic arrays in a future lecture. For now, your arrays will all be of hardcoded sizes.</P>
 
       <P>An array is a variable like any other variable (though they do behave a bit differently in some contexts, as we'll see). When an array is first declared as above, the elements of the array are uninitialized (garbage) by default. That is, the above array contains 100 floating point numbers, but each of those floating point numbers is uninitialized. Attempting to do anything with them (other than initialize them) would invoke undefined behavior.</P>
 
@@ -424,7 +428,7 @@ He
 
       <P>If all this talk of memory addresses reminds you of our lecture on <Link href={`${PARENT_PATH}/${allPathData["pointers"].pathName}`}>pointers</Link>, that's because it should. Arrays work entirely by pointer arithmetic.</P>
 
-      <P>In fact, in many contexts, the name of an array will <It>dissolve</It> into a pointer. For example, an automatic array variable can be directly printed using a <Code>%p</Code> format specifier, just like a pointer. When you do that, it prints out the array's base address:</P>
+      <P>In fact, in many contexts, the name of an array will <It>decay</It> into a pointer. For example, an automatic array variable can be directly printed using a <Code>%p</Code> format specifier, just like a pointer. When you do that, it prints out the array's base address:</P>
 
       <CBlock fileName="baseaddress.c">{
 `#include <stdio.h>
@@ -508,7 +512,7 @@ $ valgrind ./baseaddress
 
       <SectionHeading id="pointers-to-arrays">Pointers to arrays</SectionHeading>
 
-      <P>Because an array often dissolves to its base address, and because array indexing is ultimately just a bunch of pointer arithmetic, C supports a very useful feature: if you have an explicit pointer variable that happens to store the base address of an array, you can index that pointer with square brackets <It>as if it were the array</It>.</P>
+      <P>Because an array often decays into its base address, and because array indexing is ultimately just a bunch of pointer arithmetic, C supports a very useful feature: if you have an explicit pointer variable that happens to store the base address of an array, you can index that pointer with square brackets <It>as if it were the array</It>.</P>
 
       <P>Here's your proof:</P>
 
@@ -519,7 +523,7 @@ int main() {
         int my_array[] = {27, 7, -9};
 
         // Store the array's base address in an integer pointer
-        // (the array's name dissolves to the base address, so this
+        // (the array's name decays into the base address, so this
         // syntax works just fine)
         int* ptr = my_array;
         // Or, equivalently:
@@ -666,8 +670,6 @@ $ valgrind ./pointerarithmetic
       }</TerminalBlock>
       
       <P>Earlier, I said that if a pointer points to an array, then you can index it with square brackets as if it were that array. But actually, you can index <It>any</It> pointer with square brackets as if it were an array. Indeed, all the subscript operator (<Code>[]</Code>) does when used on a pointer is this: it multiplies the given index by the size of the type of object that the pointer points to, and then it adds that product to the memory address stored in the pointer. Finally, it dereferences the computed address to retrieve the underlying value.</P>
-
-      <P>(When the subscript operator is used on an array, it simply dissolves the array into a pointer to its base address and then does the exact same thing as above).</P>
 
       <P>This is useful. For example, suppose you have an array of 10 characters named <Code>str</Code>. Then suppose you initialize <Code>char* ptr = str + 3</Code><Emdash/>a pointer to the fourth character in the array. If you were to index <Code>ptr</Code> with square brackets, supplying an index of 0 would give you the fourth element in the array (because <Code>ptr[0]</Code> is equivalent to <Code>*ptr</Code>). Supplying an index of 1 would give you the fifth element in the array (because <Code>ptr[1]</Code> is equivalent to <Code>*(ptr + 1)</Code>). And so on. This can be used for, say, extracting substrings from a larger C string (among other things). Here's a demonstration:</P>
 
@@ -956,7 +958,7 @@ $ valgrind ./arrayinfunction
 `
       }</TerminalBlock>
 
-      <P>Recall that an array's name usually dissolves into the array's base address. Perhaps it doesn't surprise you, then, that when calling the <Code>print_numbers</Code> function above, it's legal to pass a <Code>double</Code> <It>pointer</It> for the first argument instead of a <Code>double</Code> <It>array</It>. For example, if you had a pointer <Code>ptr</Code> that stored the base address of <Code>my_numbers</Code>, then you could pass it as an alternative to <Code>my_numbers</Code>. Moreover, we could pass a pointer that points to some element in the <It>middle</It> of the array and adjust the size argument accordingly, allowing us to print just a "slice" of the array:</P>
+      <P>Recall that an array's name often decays into the array's base address. Perhaps it doesn't surprise you, then, that when calling the <Code>print_numbers</Code> function above, it's legal to pass a <Code>double</Code> <It>pointer</It> for the first argument instead of a <Code>double</Code> <It>array</It>. For example, if you had a pointer <Code>ptr</Code> that stored the base address of <Code>my_numbers</Code>, then you could pass it as an alternative to <Code>my_numbers</Code>. Moreover, we could pass a pointer that points to some element in the <It>middle</It> of the array and adjust the size argument accordingly, allowing us to print just a "slice" of the array:</P>
 
       <CBlock fileName="arrayinfunction.c" highlightLines="{26-32}">{
 `#include <stdio.h>
@@ -1019,9 +1021,9 @@ $ valgrind ./arrayinfunction
 `
       }</TerminalBlock>
 
-      <P>Now, here's the critical part: because array names generally dissolve to their base addresses (pointers), when an array is passed as an argument to a function, it's treated just like any other pointer argument.</P>
+      <P>The reverse is also true. If a function has a pointer parameter, it's legal to pass an appropriately typed array as the corresponding argument. In such a case, the array argument decays into its base address, which is stored in the corresponding pointer parameter. The parameter, then, will point to the first element in the given array argument.</P>
 
-      <P>Recall that a function can dereference a pointer parameter so as to access the underlying value that that pointer points to, which could potentially be a variable in a different function:</P>
+      <P>Now, let's discuss something critical. Recall that a function can dereference a pointer parameter so as to access the underlying value that that pointer points to, which could potentially be a variable in a different function:</P>
 
       <CBlock fileName="accessingarguments.c">{
 `#include <stdio.h>
@@ -1040,7 +1042,7 @@ int main() {
 
       <P>The above <Code>main</Code> function passes the memory address of <Code>x</Code> to the <Code>change_to_100</Code> function. That memory address is copied and stored inside <Code>p</Code>, which is then dereferenced to change the underlying value (that of <Code>x</Code>) to 100. The program then prints 100.</P>
 
-      <P>The same principles apply for array parameters. When a function reaches inside its array parameter and modifies the values of its elements, that also modifies the corresponding elements in the array that was provided as the corresponding argument:</P>
+      <P>As it turns out, <Ul>the same principles apply to array parameters</Ul>. When a function reaches inside its array parameter and modifies the values of its elements, that also modifies the corresponding elements in the array that was provided as the corresponding argument:</P>
 
       <CBlock fileName="modifyarrayinfunction.c">{
 `#include <stdio.h>
@@ -1083,11 +1085,11 @@ int main() {
 `
       }</TerminalBlock>
 
-      <P>The reason for this is the same as it is with other kinds of pointers: when an array is passed to a function as an argument, the array itself is not copied. Rather, only a <It>memory address</It> is copied, specifically the array's base address. When the function indexes the array parameter, all it's doing is conducting pointer arithmetic starting from the given array's base address. That's to say, there's only actually one array in the above program: <Code>my_numbers</Code>, created in the <Code>main</Code> function. The parameter in the <Code>change_values</Code> function is not <It>really</It> its own, separate array. Internally, it's nothing more than a copy of the base address of <Code>my_numbers</Code>.</P>
+      <P>The reason for this is simple: arrays always decay into their base addresses when passed as arguments to functions, hence they work the same as all other pointer arguments. That is, when an array is passed to a function as an argument, the array itself is not copied. Rather, only a <It>memory address</It> is copied, specifically the array's base address. When the function indexes the array parameter, all it's doing is conducting pointer arithmetic starting from the given array's base address. This means that there's only actually one array in the above program: <Code>my_numbers</Code>, created in the <Code>main</Code> function. The parameter in the <Code>change_values</Code> function is not <It>really</It> its own, separate array. Internally, it's nothing more than a copy of the base address of <Code>my_numbers</Code>.</P>
 
       <P>One more detail about array arguments. First, recall that when passing <Ul>non-array</Ul> arguments in a function call, the type of the argument does not need to match the type of the corresponding parameter exactly. If the types don't match, the argument will be implicitly type-casted to the parameter's type just before the pass, assuming such a type cast is possible (if it's not possible, the compiler will issue an error or warning). For example, a <Code>float</Code> can be passed as an argument to a function that expects a <Code>double</Code> (the other way around would be a bad idea, given that the <Code>double</Code> type can represent larger and more precise values than the <Code>float</Code> type).</P>
 
-      <P>However, that's <Ul>not</Ul> the case for array arguments. For example, a <Code>float</Code> array <Ul>cannot</Ul> be passed as the argument to a function where the corresponding parameter is a <Code>double</Code> array. Or, rather, doing so invokes a warning from the compiler and undefined behavior if the array is accessed within the function at runtime. This is because arrays dissolve their base addresses (pointers), so passing a <Code>float</Code> array as an argument to a <Code>double</Code> parameter is essentially like casting a value of type <Code>float*</Code> to a value of type <Code>double*</Code>. As mentioned in <Link href={`${PARENT_PATH}/${allPathData["pointers"].pathName}`}>our lecture on pointers</Link>, type-casting pointers is usually a bad idea.</P>
+      <P>However, that's <Ul>not</Ul> the case for array arguments. For example, a <Code>float</Code> array <Ul>cannot</Ul> be passed as the argument to a function where the corresponding parameter is a <Code>double</Code> array. Or, rather, doing so invokes a warning from the compiler and undefined behavior if the array is accessed within the function at runtime. This is because arrays decay into their base addresses (pointers), so passing a <Code>float</Code> array as an argument to a <Code>double</Code> parameter is essentially like casting a value of type <Code>float*</Code> to a value of type <Code>double*</Code>. As mentioned in <Link href={`${PARENT_PATH}/${allPathData["pointers"].pathName}`}>our lecture on pointers</Link>, type-casting pointers is usually a bad idea as it often invokes undefined behavior.</P>
         
       <SectionHeading id="returning-arrays">Returning arrays?</SectionHeading>
 
