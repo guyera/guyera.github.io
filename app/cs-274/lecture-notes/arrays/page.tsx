@@ -73,8 +73,13 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
         <Item><Link href="#arrays">Arrays</Link></Item>
         <Item><Link href="#aggregate-initialization">Aggregate initialization</Link></Item>
         <Item><Link href="#arrays-in-memory">Arrays in memory</Link></Item>
+        <Item><Link href="#pointers-to-arrays">Pointers to arrays</Link></Item>
+        <Item><Link href="#more-on-c-strings">More on C strings</Link></Item>
         <Item><Link href="#buffer-overflows">Buffer over-reads and overflows</Link></Item>
         <Item><Link href="#passing-arrays-to-functions">Passing arrays to functions</Link></Item>
+        <Item><Link href="#sizeof"><Code>sizeof</Code></Link></Item>
+        <Item><Link href="#copying-arrays">Copying arrays</Link></Item>
+        <Item><Link href="#returning-arrays">Returning arrays?</Link></Item>
       </Itemize>
 
       <SectionHeading id="arrays">Arrays</SectionHeading>
@@ -248,79 +253,63 @@ Element 9: 3.140000
       <P>Automatic arrays cannot be resized because they're allocated on the stack. The stack is the special place in memory where all automatic local variables go. It's very carefully structured, which makes it efficient, but resizing data on the stack would require breaking that structure, hence it's generally not possible.</P>
 
       <P>To be clear, the stack isn't the only place where you can allocate arrays. Arrays can be allocated on the heap as well, and heap-allocated arrays are (sort of) resizable. But we'll talk about the stack and the heap in a future lecture.</P>
-
+      
       <SectionHeading id="aggregate-initialization">Aggregate initialization</SectionHeading>
 
       <P>Suppose you want to create a fairly small array, say 5 elements. In such a case, you can initialize all the elements in the array at once via <Bold>aggregate initialization</Bold>, which is done at the time the array is declared. The syntax looks like this:</P>
 
       <SyntaxBlock>{
-`<name>[<size>] = {<values>};`
+`<type> <name>[<size>] = {<values>};`
       }</SyntaxBlock>
 
-      <P>Replace <Code>{'<name>'}</Code> with the name of the array, <Code>{'<size>'}</Code> with the number of elements in the array, and <Code>{'<values>'}</Code> with a <Ul>comma-separated list</Ul> of values to be contained within the array. The elements of the array will be initialized to the specified values in left-to-right order. For example:</P>
+      <P>Replace <Code>{'<type>'}</Code> with the type of elements stored in the array, <Code>{'<name>'}</Code> with the name of the array, <Code>{'<size>'}</Code> with the number of elements in the array, and <Code>{'<values>'}</Code> with a <Ul>comma-separated list</Ul> of values to be contained within the array. The elements of the array will be initialized to the specified values in left-to-right order. For example:</P>
 
       <CBlock fileName="aggregateinit.c">{
 `#include <stdio.h>
 
 int main() {
-        // Note: \\0 is an escape sequence for a null terminator.
-        char hello[8] = {'H', 'e', 'l', 'l', 'o', '\\0', '\\0', 'z'};
+        int numbers[5] = {1, 4, 7, -9, 2};
+
+        // Prints 7
+        printf("%d\\n", numbers[2]);
 }
 `
       }</CBlock>
 
-      <P>Look familiar? This is the array from the diagram in our <Link href={`${PARENT_PATH}/${allPathData["strings"].pathName}`}>lecture on strings</Link>.</P>
-
-      <P>Recall that a C string is simply an array of characters whose content ends in at least one null terminator. Hence, the above array is a C string. It can be printed accordingly:</P>
-
-      <CBlock fileName="aggregateinit.c" highlightLines="{7-8}">{
-`#include <stdio.h>
-
-int main() {
-        // Note: \\0 is an escape sequence for a null terminator.
-        char hello[8] = {'H', 'e', 'l', 'l', 'o', '\\0', '\\0', 'z'};
-
-        // Print the above C string, followed by \\n
-        printf("%s\\n", hello);
-}
-`
-      }</CBlock>
-
-      <P>Here's the output (it does exactly as I said it would in the strings lecture):</P>
+      <P>Here's the output:</P>
 
       <TerminalBlock copyable={false}>{
-`$ gcc -Wall -g -o aggregateinit aggregateinit.c 
+`$ gcc -g -Wall -o aggregateinit aggregateinit.c 
 $ valgrind ./aggregateinit 
-==2025762== Memcheck, a memory error detector
-==2025762== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
-==2025762== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
-==2025762== Command: ./aggregateinit
-==2025762== 
-Hello
-==2025762== 
-==2025762== HEAP SUMMARY:
-==2025762==     in use at exit: 0 bytes in 0 blocks
-==2025762==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
-==2025762== 
-==2025762== All heap blocks were freed -- no leaks are possible
-==2025762== 
-==2025762== For lists of detected and suppressed errors, rerun with: -s
-==2025762== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==3844558== Memcheck, a memory error detector
+==3844558== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==3844558== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
+==3844558== Command: ./aggregateinit
+==3844558== 
+7
+==3844558== 
+==3844558== HEAP SUMMARY:
+==3844558==     in use at exit: 0 bytes in 0 blocks
+==3844558==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==3844558== 
+==3844558== All heap blocks were freed -- no leaks are possible
+==3844558== 
+==3844558== For lists of detected and suppressed errors, rerun with: -s
+==3844558== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
 `
       }</TerminalBlock>
 
       <P>A neat thing about aggregate initialization is that you can optionally omit the array's size. The compiler will infer the size of the array based on the number of values in the comma-separated list:</P>
 
-      <CBlock fileName="aggregateinit.c" highlightLines="{5-6}">{
+      <CBlock fileName="aggregateinit.c" highlightLines="{4-5}">{
 `#include <stdio.h>
 
 int main() {
-        // Note: \\0 is an escape sequence for a null terminator.
-        // Notice: no size in the square brackets. Inferred to be 8.
-        char hello[] = {'H', 'e', 'l', 'l', 'o', '\\0', '\\0', 'z'};
+        // Notice: no size in the square brackets. Inferred to be 5.
+        int numbers[] = {1, 4, 7, -9, 2};
 
-        // Print the above C string, followed by \\n
-        printf("%s\\n", hello);
+        // Prints 7
+        printf("%d\\n", numbers[2]);
 }
 `
       }</CBlock>
@@ -330,7 +319,7 @@ int main() {
       <P>Now, suppose the size in the square brackets doesn't match the number of values in the comma-separated list in an aggregate initialization of an array. What happens? Well, the rule might surprise you:</P>
 
       <Itemize>
-        <Item>If the number of values in the comma-separated list is <Ul>greater</Ul> than the size specified in the square brackets, then the program is ill-formed. Some compilers will issue an error. Some will just issue a warning, and undefined behavior will ensue when the array is initialized.</Item>
+        <Item>If the number of values in the comma-separated list is <Ul>greater</Ul> than the size specified in the square brackets, then the program is ill-formed. Some compilers may issue an error. Many will just issue a warning, and undefined behavior will ensue when the array is initialized.</Item>
         <Item>However, if the number of values in the comma-separated list is <Ul>less</Ul> than the size specified in the square brackets, then the remaining elements are <Bold>zero-initialized</Bold>. That is, the bytes that make up their memory are initialized to a bunch of zeros.</Item>
       </Itemize>
 
@@ -351,64 +340,7 @@ int main() {
 
       <P>This works for more than just integers. If you replace <Code>int</Code> with <Code>float</Code> in the above program, it will create an array of 1000 floats, each with value <Code>0.0f</Code>.</P>
 
-      <P>Even cooler: if you replace <Code>int</Code> with <Code>char</Code>, it will create an array of 1000 null terminators (remember: a null terminator is just a character whose encoded integral value is 0), which is particularly useful for creating an oversized buffer to represent a C string whose content might be decided, and even <It>extended</It>, later on. For example:</P>
-
-      <CBlock fileName="zeroinitialization.c">{
-`#include <stdio.h>
-
-int main() {
-        // Allocate an array of 1000 null terminators
-        // (an "empty string")
-        char my_string[1000] = {0};
-
-        // Replace the first element with 'H'. The array is now an 'H'
-        // followed by 999 null terminators. That is, it represents the
-        // string "H".
-        my_string[0] = 'H';
-
-        // This prints an H to the terminal, followed by \\n
-        printf("%s\\n", my_string);
-
-        // Add an 'e' after the 'H'
-        my_string[1] = 'e';
-
-        // This prints He to the terminal, followed by \\n
-        printf("%s\\n", my_string);
-
-        // And so on...
-
-        // my_string can be extended to up to 999 characters of content
-        // (the 1000th character must be reserved for a null terminator
-        // since every C string must have at least one null terminator)
-}
-`
-      }</CBlock>
-
-      <P>Here's the output:</P>
-
-      <TerminalBlock copyable={false}>{
-`$ gcc -Wall -g -o zeroinitialization zeroinitialization.c 
-$ valgrind ./zeroinitialization 
-==2037308== Memcheck, a memory error detector
-==2037308== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
-==2037308== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
-==2037308== Command: ./zeroinitialization
-==2037308== 
-H
-He
-==2037308== 
-==2037308== HEAP SUMMARY:
-==2037308==     in use at exit: 0 bytes in 0 blocks
-==2037308==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
-==2037308== 
-==2037308== All heap blocks were freed -- no leaks are possible
-==2037308== 
-==2037308== For lists of detected and suppressed errors, rerun with: -s
-==2037308== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-`
-      }</TerminalBlock>
-
-      <P>Indeed, if you know how to work with arrays, you can do just about anything you want with C strings. That said, there are lots of powerful functions provided by <Code>{'<string.h>'}</Code> that can do all sorts of things with C strings with very little effort on your part, so no need to reinvent the wheel. We'll cover these functions later.</P>
+      <P>Even cooler: if you replace <Code>int</Code> with <Code>char</Code>, it will create an array of 1000 null terminators (remember: a null terminator is just a character whose encoded integral value is 0), which is particularly useful for creating an oversized buffer to represent a C string whose content might be decided, and even <It>extended</It>, later on. I'll show you an example of this in a bit.</P>
 
       <SectionHeading id="arrays-in-memory">Arrays in memory</SectionHeading>
 
@@ -746,6 +678,198 @@ ell
 
       <P>Make sure you have a good grasp on pointer arithmetic, base addresses, and offsets. These things are fundamental when working with arrays in C.</P>
 
+      <SectionHeading id="more-on-c-strings">More on C strings</SectionHeading>
+
+      <P>Consider the following line of code:</P>
+
+      <CBlock showLineNumbers={false}>{
+`const char* sentence = "Hello, World!";`
+      }</CBlock>
+
+      <P>Recall that when the program first starts, it will create and populate a null-terminated character array in the read-only section of the process's data segment to represent each string literal used throughout the entire program. Then, when the above line of code is encountered, <Code>sentence</Code> is simply initialized to store the base address of that character array.</P>
+
+      <P>As we just discussed, if you have a pointer that stores the base address of an array, then you can generally treat that pointer as if it were the array. For example, you could access and print a single character from the above C string like so:</P>
+
+      <CBlock fileName="printstringchar.c">{
+`#include <stdio.h>
+
+int main() {
+        const char* sentence = "Hello, World!";
+
+        // Print the first character of the string (%c is the format
+        // specifier for a single character)
+        printf("%c\\n", sentence[0]);
+
+        // Print the fifth character
+        printf("%c\\n", sentence[4]);
+
+        // Print every character until the null terminator (equivalent
+        // to printf("%s", sentence))
+        int i = 0;
+        while (sentence[i] != '\\0') {
+                printf("%c", sentence[i]);
+                ++i;
+        }
+        printf("\\n");
+}
+`
+      }</CBlock>
+
+      <P>Here's the output:</P>
+
+      <TerminalBlock copyable={false}>{
+`$ gcc -g -Wall -o printstringchar printstringchar.c 
+$ valgrind ./printstringchar
+==3835973== Memcheck, a memory error detector
+==3835973== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==3835973== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
+==3835973== Command: ./printstringchar
+==3835973== 
+H
+o
+Hello, World!
+==3835973== 
+==3835973== HEAP SUMMARY:
+==3835973==     in use at exit: 0 bytes in 0 blocks
+==3835973==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==3835973== 
+==3835973== All heap blocks were freed -- no leaks are possible
+==3835973== 
+==3835973== For lists of detected and suppressed errors, rerun with: -s
+==3835973== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+`
+      }</TerminalBlock>
+
+      <P>Importantly, remember that character arrays representing C strings such as the above are stored in the <Ul>read-only</Ul> section of the data segment of the process's memory, meaning that attempting to modify any of the characters contained within them results in undefined behavior (hence why we use <Code>const char*</Code> instead of <Code>char*</Code>, turning that undefined behavior into a syntax error instead).</P>
+
+      <P>Suppose you want to create a C string whose characters <It>can</It> be modified. To do that, simply create an array of characters directly (e.g., <Code>char sentence[128]</Code>). You can then proceed to modify the contained characters however you'd like.</P>
+
+      <P>Of course, modifying characters in an array one at a time just to construct a C string sounds like a lot of work. It's also error-prone; if you forget to manually put in a null terminator, your character array won't be a valid C string, and passing it to various string functions (e.g., <Code>strlen</Code>) will invoke undefined behavior. Luckily, C provides a special syntax that makes it easy to initialize the elements of an automatic (stack-allocated, modifiable) character array to the contents of a string literal, complete with a null terminator:</P>
+
+      <SyntaxBlock>{
+`char <name>[<size>] = "<contents>";`
+      }</SyntaxBlock>
+
+      <P>The <Code>{'<size>'}</Code> is actually optional, just as with aggregate initialization. If the size is omitted, the program will automatically make the array large enough to store the contents of the string literal followed by at least one null terminator (and it will indeed populate it with those characters, including the null terminator). Otherwise, the size of the array will match the specified size, in which case the specified size <Ul>must</Ul> be large enough to store the contents of the specified C string plus at least one null terminator. If the size is specified, but it's too small to store the contents of the C string plus at least one null terminator, undefined behavior ensues.</P>
+
+      <P>Here's an example program:</P>
+
+      <CBlock fileName="modifiablecstring.c">{
+`#include <stdio.h>
+
+int main() {
+        // sentence1's characters are NOT modifiable!
+        const char* sentence1 = "Hello, World!";
+
+        // However, sentence2's characters ARE modifiable!
+        //char sentence2[] = "Hello, World!";
+
+        // The number of characters in the sentence2 array is AT LEAST
+        // 14---large enough to store the characters of "Hello, World!"
+        // followed by a null terminator. It may be larger than that,
+        // but don't count on it. Attempting to access an element of the
+        // array at an index greater than or equal to 14 may invoke
+        // undefined behavior.
+
+        // You may optionally put a size in between the square brackets
+        // above, but it MUST be at least 14. e.g.:
+        // char sentence2[14] = "Hello, World!";
+        // 
+        // If you want, you can make sentence2 bigger than necessary.
+        // This will give it extra "buffer" characters, making it easy
+        // to expand its contents to represent longer strings later on.
+        // char sentence2[100] = "Hello, World!";
+
+        // sentence2, being a regular automatic stack-allocated array,
+        // is modifiable:
+        sentence2[0] = 'J';
+        sentence2[5] = ' ';
+        printf("%s\\n", sentence2); // Prints "Jello  World!"
+}`
+      }</CBlock>
+
+      <P>Here's the output:</P>
+
+      <TerminalBlock copyable={false}>{
+`$ gcc -g -o modifiablecstring modifiablecstring.c 
+$ valgrind ./modifiablecstring 
+==3837892== Memcheck, a memory error detector
+==3837892== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==3837892== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
+==3837892== Command: ./modifiablecstring
+==3837892== 
+Jello  World!
+==3837892== 
+==3837892== HEAP SUMMARY:
+==3837892==     in use at exit: 0 bytes in 0 blocks
+==3837892==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==3837892== 
+==3837892== All heap blocks were freed -- no leaks are possible
+==3837892== 
+==3837892== For lists of detected and suppressed errors, rerun with: -s
+==3837892== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+`
+      }</TerminalBlock>
+
+      <P>Now, I said earlier that zero-initialization can be used to create an array of null terminators<Emdash/>an empty C string that can be "extended" later on. Here's a simple example of that:</P>
+
+      <CBlock fileName="zeroinitialization.c">{
+`#include <stdio.h>
+
+int main() {
+        // Allocate an array of 1000 null terminators
+        // (an "empty string")
+        char my_string[1000] = {0};
+
+        // Replace the first element with 'H'. The array is now an 'H'
+        // followed by 999 null terminators. That is, it represents the
+        // string "H".
+        my_string[0] = 'H';
+
+        // This prints an H to the terminal, followed by \\n
+        printf("%s\\n", my_string);
+
+        // Add an 'e' after the 'H'
+        my_string[1] = 'e';
+
+        // This prints He to the terminal, followed by \\n
+        printf("%s\\n", my_string);
+
+        // And so on...
+
+        // my_string can be extended to up to 999 characters of content
+        // (the 1000th character must be reserved for a null terminator
+        // since every C string must have at least one null terminator)
+}
+`
+      }</CBlock>
+
+      <P>Here's the output:</P>
+
+      <TerminalBlock copyable={false}>{
+`$ gcc -Wall -g -o zeroinitialization zeroinitialization.c 
+$ valgrind ./zeroinitialization 
+==2037308== Memcheck, a memory error detector
+==2037308== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==2037308== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
+==2037308== Command: ./zeroinitialization
+==2037308== 
+H
+He
+==2037308== 
+==2037308== HEAP SUMMARY:
+==2037308==     in use at exit: 0 bytes in 0 blocks
+==2037308==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==2037308== 
+==2037308== All heap blocks were freed -- no leaks are possible
+==2037308== 
+==2037308== For lists of detected and suppressed errors, rerun with: -s
+==2037308== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+`
+      }</TerminalBlock>
+
+      <P>Indeed, if you know how to work with arrays, you can do just about anything you want with C strings. That said, there are lots of powerful functions provided by <Code>{'<string.h>'}</Code> that can do all sorts of things with C strings with very little effort on your part, so no need to reinvent the wheel. We'll cover these functions later.</P>
+
       <SectionHeading id="buffer-overflows">Buffer over-reads and overflows</SectionHeading>
 
       <P>A <Bold>buffer over-read</Bold> is the name of the error that occurs when you attempt to read (use) a value from an array at an out-of-bounds index. Similarly, a <Bold>buffer overflow</Bold> is the name of the error that occurs when you attempt to write (modify) a value in an array at an out-of-bounds index. Both buffer over-reads and buffer overflows invoke undefined behavior.</P>
@@ -833,7 +957,9 @@ $ valgrind ./bufferoverflow
 
       <SectionHeading id="passing-arrays-to-functions">Passing arrays to functions</SectionHeading>
       
-      <P>Arrays can be passed to functions. The syntax for declaring an array parameter is the same as the syntax for declaring a regular automatic array variable, except the array's size can optionally be omitted, leaving the square brackets empty. This allows the function to work with arrays of arbitrary sizes (but a single, fixed type). However, the function will most likely still need to know the size of the array <It>somehow</It>, so it's usually received as an additional parameter. The type of that additional parameter should be <Code>size_t</Code>, which is similar to <Code>int</Code> and <Code>long</Code> (etc) except it's specifically designed to store sizes of objects and arrays (and is guaranteed to be capable of storing the size of any possible object).</P>
+      <P>Arrays can be passed to functions (sort of... there's a caveat to that statement, as we'll soon learn). The common syntax for declaring an array parameter is the same as the syntax for declaring a regular automatic array variable, except the array's size can optionally be omitted, leaving the square brackets empty. Actually, if a size <It>is</It> a specified in the array parameter declaration, it's largely <Ul>ignored</Ul> by the compiler. Maybe this makes sense. A function that operates on arrays should be able to work with arrays of various sizes; the size should not have to be specified in the parameter declaration.</P>
+
+      <P>That said, a function that receives an array as an input will most likely still need to know the size of that array <It>somehow</It> (e.g., in order to iterate through the elements and stop when it reaches the end), so it's usually received as an additional parameter. The type of that additional parameter should be <Code>size_t</Code>, which is similar to <Code>int</Code> and <Code>long</Code> (etc) except it's specifically designed to store sizes of objects and arrays (and is guaranteed to be capable of storing the size of any possible object).</P>
 
       <P>Here's an example:</P>
 
@@ -855,7 +981,7 @@ void print_numbers(double numbers[], size_t array_size) {
 `
       }</CBlock>
 
-      <P>To call this function, simply provide an array <Code>double</Code> values as the first argument, and the number of elements in that array as the second argument:</P>
+      <P>To call this function, simply provide an array of <Code>double</Code> values as the first argument, and the number of elements in that array as the second argument:</P>
 
       <CBlock fileName="arrayinfunction.c" highlightLines="{16-19}">{
 `#include <stdio.h>
@@ -1021,9 +1147,21 @@ $ valgrind ./arrayinfunction
 `
       }</TerminalBlock>
 
-      <P>The reverse is also true. If a function has a pointer parameter, it's legal to pass an appropriately typed array as the corresponding argument. In such a case, the array argument decays into its base address, which is stored in the corresponding pointer parameter. The parameter, then, will point to the first element in the given array argument.</P>
+      <P>But actually, the reverse is also true. If a function has a pointer parameter, it's legal to pass an appropriately typed array as the corresponding argument. For example, we could change the above function's signature to the following:</P>
 
-      <P>Now, let's discuss something critical. Recall that a function can dereference a pointer parameter so as to access the underlying value that that pointer points to, which could potentially be a variable in a different function:</P>
+      <CBlock showLineNumbers={false}>{
+`void print_numbers(double* numbers, size_t array_size)`
+      }</CBlock>
+
+      <P>When calling the function, we could then pass <Code>ptr</Code> as above, or we could pass <Code>my_numbers</Code> as we originally did. This would not modify the behavior of the function, nor the program in general, whatsoever. When the function starts, it simply assumes that <Code>numbers</Code> stores the base address of an array and treats it accordingly.</P>
+
+      <P>That's to say, it doesn't matter whether a parameter is declared using the array-style syntax (e.g., <Code>double numbers[]</Code>) or pointer syntax (e.g., <Code>double* numbers</Code>), and when calling a function, it doesn't matter whether you pass an array directly (such as <Code>my_numbers</Code>) or a pointer that stores the base address of an array (such as <Code>ptr</Code>). All of these things make no difference; they all produce the same result.</P>
+
+      <P>The reason for this is quite simple: array parameters do not <It>technically</It> exist, and arrays cannot <It>really</It> be passed to functions. Rather, an array-style parameter, such as <Code>double numbers[]</Code>, is <It>actually</It> just an alternative syntax for a pointer parameter. When you supply an array as a corresponding argument in a function call, that array itself is not <It>actually</It> passed to the function. Rather, it decays into its base address, which is then stored inside the parameter.</P>
+
+      <P>To be clear, arrays are not pointers, and pointers are not arrays. Rather, array <It>parameters</It> simply do not exist; attempting to create an array parameter actually just results in a pointer parameter; and attempting to pass an array to a function actually just passes the array's base address to the function.</P>
+
+      <P>This has very important implications. Recall that a function can dereference a pointer parameter so as to access the underlying value that that pointer points to, which could potentially be a variable in a different function:</P>
 
       <CBlock fileName="accessingarguments.c">{
 `#include <stdio.h>
@@ -1042,7 +1180,7 @@ int main() {
 
       <P>The above <Code>main</Code> function passes the memory address of <Code>x</Code> to the <Code>change_to_100</Code> function. That memory address is copied and stored inside <Code>p</Code>, which is then dereferenced to change the underlying value (that of <Code>x</Code>) to 100. The program then prints 100.</P>
 
-      <P>As it turns out, <Ul>the same principles apply to array parameters</Ul>. When a function reaches inside its array parameter and modifies the values of its elements, that also modifies the corresponding elements in the array that was provided as the corresponding argument:</P>
+      <P>Because array parameters are really just pointers, and because array arguments always decay into their base addresses, <Ul>the same principle applies when passing arrays to functions</Ul>. That is, when a function reaches inside its array parameter and modifies the values of its elements, that also modifies the corresponding elements in the array that was provided as the corresponding argument:</P>
 
       <CBlock fileName="modifyarrayinfunction.c">{
 `#include <stdio.h>
@@ -1065,8 +1203,8 @@ int main() {
       <P>Here's the output:</P>
 
       <TerminalBlock copyable={false}>{
-`(env) guyera@flip1:arrays$ gcc -g -Wall -o modifyarrayinfunction modifyarrayinfunction.c 
-(env) guyera@flip1:arrays$ valgrind ./modifyarrayinfunction 
+`$ gcc -g -Wall -o modifyarrayinfunction modifyarrayinfunction.c 
+$ valgrind ./modifyarrayinfunction 
 ==363694== Memcheck, a memory error detector
 ==363694== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
 ==363694== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
@@ -1085,11 +1223,204 @@ int main() {
 `
       }</TerminalBlock>
 
-      <P>The reason for this is simple: arrays always decay into their base addresses when passed as arguments to functions, hence they work the same as all other pointer arguments. That is, when an array is passed to a function as an argument, the array itself is not copied. Rather, only a <It>memory address</It> is copied, specifically the array's base address. When the function indexes the array parameter, all it's doing is conducting pointer arithmetic starting from the given array's base address. This means that there's only actually one array in the above program: <Code>my_numbers</Code>, created in the <Code>main</Code> function. The parameter in the <Code>change_values</Code> function is not <It>really</It> its own, separate array. Internally, it's nothing more than a copy of the base address of <Code>my_numbers</Code>.</P>
+      <P>As we discussed, the subscript operator (i.e., square brackets) simply goes to an array's base address (or the address stored in a pointer), shifts over by a number of "spaces" equal to the specified index (where a "space" is the size of a single element in bytes), and accesses whatever data is stored there. That's to say, the subscript operator dereferences memory addresses, just like the dereference operator<Emdash/>it goes to a place in memory specified by some address, and it accesses the underlying data stored there. This is why modifying an element of <Code>values</Code> also modifies the corresponding element of <Code>my_numbers</Code> in the above program. There's really only one arrayin the above program: <Code>my_numbers</Code>. The parameter, <Code>values</Code>, is not an array, but rather a pointer to <Code>my_numbers</Code>.</P>
 
-      <P>One more detail about array arguments. First, recall that when passing <Ul>non-array</Ul> arguments in a function call, the type of the argument does not need to match the type of the corresponding parameter exactly. If the types don't match, the argument will be implicitly type-casted to the parameter's type just before the pass, assuming such a type cast is possible (if it's not possible, the compiler will issue an error or warning). For example, a <Code>float</Code> can be passed as an argument to a function that expects a <Code>double</Code> (the other way around would be a bad idea, given that the <Code>double</Code> type can represent larger and more precise values than the <Code>float</Code> type).</P>
+      <SectionHeading id="sizeof"><Code>sizeof</Code></SectionHeading>
 
-      <P>However, that's <Ul>not</Ul> the case for array arguments. For example, a <Code>float</Code> array <Ul>cannot</Ul> be passed as the argument to a function where the corresponding parameter is a <Code>double</Code> array. Or, rather, doing so invokes a warning from the compiler and undefined behavior if the array is accessed within the function at runtime. This is because arrays decay into their base addresses (pointers), so passing a <Code>float</Code> array as an argument to a <Code>double</Code> parameter is essentially like casting a value of type <Code>float*</Code> to a value of type <Code>double*</Code>. As mentioned in <Link href={`${PARENT_PATH}/${allPathData["pointers"].pathName}`}>our lecture on pointers</Link>, type-casting pointers is usually a bad idea as it often invokes undefined behavior.</P>
+      <P>In C, the builtin <Code>sizeof()</Code> operator can be used to determine the size of something in bytes. In between the parentheses, you may write either a) a type, or b) an expression. If a type is provided, then <Code>sizeof</Code> will simply return the size of a single object of that type, in bytes (e.g., <Code>sizeof(int)</Code> yields 4 on the ENGR servers since, on the ENGR servers, each <Code>int</Code> is allocated 4 bytes of space). If an expression is provided, then <Code>sizeof</Code> will determine the type of that expression, and then it will yield the size of that type, in bytes (e.g., <Code>sizeof(1000 * 7)</Code> also yields 4 on the ENGR servers since <Code>1000 * 7</Code> is an <Code>int</Code> value, and <Code>int</Code> objects occupy 4 bytes each on the ENGR servers).</P>
+
+      <P>Note: when the <Code>sizeof</Code> operator is given an expression, it usually doesn't actually evaluate that expression. Rather, it only determines the expression's <It>type</It>, and it does this at compile time<Emdash/>not runtime. This means that expressions given to the <Code>sizeof</Code> operator will never produce side effects (e.g., <Code>sizeof(++i)</Code> doesn't actually increment <Code>i</Code>). There are some niche exceptions to this rule, though, such as when the expression contains VLAs.</P>
+
+      <P>When an automatic array is provided directly to the <Code>sizeof</Code> operator, it will return the size of the <Ul>entire array</Ul>, in bytes. <Ul>However</Ul>, when a pointer storing the base address of an array (even an automatic array) is provided to the <Code>sizeof</Code> operator, it will simply return the size of a pointer, which is always 8 on the ENGR servers (and on basically any other 64-bit system):</P>
+
+      <CBlock fileName="sizeof.c">{
+`#include <stdio.h>
+
+int main() {
+        // Note: %ld is used as format specifier for size_t values
+        // (similar to long int values), which is the type of value
+        // returned by sizeof
+        printf("%ld\\n", sizeof(int)); // Prints 4 on the ENGR servers
+        printf("%ld\\n", sizeof(1000)); // Prints 4 on the ENGR servers
+
+        int values[20] = {0};
+        // Prints 80 on the ENGR servers (20 integers, each with 4 bytes
+        // of storage)
+        printf("%ld\\n", sizeof(values));
+
+        int* array = values;
+        printf("%ld\\n", sizeof(array)); // Prints 8 on the ENGR servers
+
+        const char* str = "Hello";
+        printf("%ld\\n", sizeof(str)); // Prints 8 on the ENGR servers
+}
+`
+      }</CBlock>
+
+      <P>Here's the output:</P>
+
+      <TerminalBlock copyable={false}>{
+`$ gcc -g -Wall -o sizeof sizeof.c 
+$ valgrind ./sizeof 
+==3864231== Memcheck, a memory error detector
+==3864231== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==3864231== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
+==3864231== Command: ./sizeof
+==3864231== 
+4
+4
+80
+8
+8
+==3864231== 
+==3864231== HEAP SUMMARY:
+==3864231==     in use at exit: 0 bytes in 0 blocks
+==3864231==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==3864231== 
+==3864231== All heap blocks were freed -- no leaks are possible
+==3864231== 
+==3864231== For lists of detected and suppressed errors, rerun with: -s
+==3864231== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+`
+      }</TerminalBlock>
+
+      <P>Moreover, because an array parameter is <It>really</It> just a pointer that stores the base address of its given array argument, array parameters are treated exactly like pointers when supplied to the <Code>sizeof</Code> operator. That is, if <Code>arr</Code> is an array parameter, then <Code>sizeof(arr)</Code> will always return 8 on the ENGR servers. This is even the case when a hardcoded size is specified in the array parameter's declaration (as I said, such sizes are largely ignored by the compiler):</P>
+
+      <CBlock fileName="sizeof.c" highlightLines="{2-13}">{
+`#include <stdio.h>
+
+void foo1(int arr[]) {
+        printf("%ld\\n", sizeof(arr)); // Prints 8 on the ENGR servers
+}
+
+void foo2(int arr[20]) {
+        // Prints 8 on the ENGR servers, even though the size is
+        // explicitly specified as 20 in the parameter (remember:
+        // this size is largely ignored by the compiler; the parameter
+        // is really just treated as a pointer)
+        printf("%ld\\n", sizeof(arr));
+}
+
+int main() {
+        // Note: %ld is used as format specifier for size_t values
+        // (similar to long int values), which is the type of value
+        // returned by sizeof
+        printf("%ld\\n", sizeof(int)); // Prints 4 on the ENGR servers
+        printf("%ld\\n", sizeof(1000)); // Prints 4 on the ENGR servers
+
+        int values[20] = {0};
+        // Prints 80 on the ENGR servers (20 integers, each with 4 bytes
+        // of storage)
+        printf("%ld\\n", sizeof(values));
+
+        int* array = values;
+        printf("%ld\\n", sizeof(array)); // Prints 8 on the ENGR servers
+
+        const char* str = "Hello";
+        printf("%ld\\n", sizeof(str)); // Prints 8 on the ENGR servers
+
+        foo1(values); // Prints 8 on the ENGR servers
+        foo2(values); // Prints 8 on the ENGR servers
+}
+`
+      }</CBlock>
+
+      <P>Because many programmers often forget that using <Code>sizeof</Code> on an array parameter always just retrieves the size of a pointer, the compiler will even issue a warning to remind you. Here's the output:</P>
+
+      <TerminalBlock copyable={false}>{
+`$ gcc -g -Wall -o sizeof sizeof.c 
+sizeof.c: In function ‘foo1’:
+sizeof.c:4:31: warning: ‘sizeof’ on array function parameter ‘arr’ will return size of ‘int *’ [-Wsizeof-array-argument]
+    4 |         printf("%ld\\n", sizeof(arr)); // Prints 8 on the ENGR servers
+      |                               ^
+sizeof.c:3:15: note: declared here
+    3 | void foo1(int arr[]) {
+      |           ~~~~^~~~~
+sizeof.c: In function ‘foo2’:
+sizeof.c:12:31: warning: ‘sizeof’ on array function parameter ‘arr’ will return size of ‘int *’ [-Wsizeof-array-argument]
+   12 |         printf("%ld\\n", sizeof(arr));
+      |                               ^
+sizeof.c:7:15: note: declared here
+    7 | void foo2(int arr[20]) {
+      |           ~~~~^~~~~~~
+$ valgrind ./sizeof 
+==3867918== Memcheck, a memory error detector
+==3867918== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==3867918== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
+==3867918== Command: ./sizeof
+==3867918== 
+4
+4
+80
+8
+8
+8
+8
+==3867918== 
+==3867918== HEAP SUMMARY:
+==3867918==     in use at exit: 0 bytes in 0 blocks
+==3867918==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==3867918== 
+==3867918== All heap blocks were freed -- no leaks are possible
+==3867918== 
+==3867918== For lists of detected and suppressed errors, rerun with: -s
+==3867918== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+`
+      }</TerminalBlock>
+
+      <P>One takeaway of all this is that it's technically possible to determine the number of elements in an array with a little bit of arithmetic: <Code>{'sizeof(my_array) / sizeof(<type>)'}</Code>, where <Code>{'<type>'}</Code> is the type of elements stored in the array. Perhaps this seems like a neat trick. However, it only works when <Code>my_array</Code> is actually an array. It does <Ul>not</Ul> work when <Code>my_array</Code> is a pointer that stores the base address of an array. Hence, this trick does <Ul>not</Ul> work when <Code>my_array</Code> is a parameter in a function (since array parameters are really just pointers, and array arguments always decay into their base addresses). Yes, that means this trick is rarely useful; you still have to pass array sizes into functions as separate arguments.</P>
+
+      <P>This is why it's very important to understand that arrays are not pointers. Rather, arrays often <It>decay</It> into pointers (their base addresses), but the two types themselves are not strictly the same. There are some cases where they behave slightly differently, and the <Code>sizeof</Code> operator is one such case.</P>
+
+      <SectionHeading id="copying-arrays">Copying arrays</SectionHeading>
+
+      <P>Given that arrays often decay into their base addresses, it's not possible to copy an array via direct assignment (nor by passing it as an argument to a function, as we just discussed). For example, this is not legal C code:</P>
+
+      <CBlock showLineNumbers={false}>{
+`float cool_values[] = {3.14, 9.81, 2.71};
+float copy[] = cool_values;`
+      }</CBlock>
+
+      <P>To create a copy of an array, you have two options:</P>
+
+      <Itemize listStyleType="lower-alpha">
+        <Item>Create a new array that's big enough to store all the values from the original array. Then copy each value from the original array into the new array one at a time using a loop (e.g., a for loop).</Item>
+
+        <CBlock fileName="copyarray.c">{
+`int main() {
+        float cool_values[] = {3.14, 9.81, 2.71};
+        float copy[3];
+        for (int i = 0; i < 3; ++i) {
+                copy[i] = cool_values[i];
+        }
+
+        printf("%f\\n", copy[2]); // Prints 2.71
+}
+`
+        }</CBlock>
+
+        <Item>Include <Code>string.h</Code>. Create a new array that's big enough to store all the values from the original array. Then, use the <Code>memcpy</Code> function, provided by <Code>string.h</Code>, to copy all the bytes from the original array's buffer into the new array's buffer.</Item>
+
+        <P><Code>memcpy</Code> accepts three arguments: 1) a pointer to the base address of the buffer into which you're trying to copy data; 2) a pointer to the base address of the buffer from which you're trying to copy data; and 3) the number of <Ul>bytes</Ul> that you want to be copied. When using <Code>memcpy</Code> to copy an array, the first argument is typically the base address of the new array, the second argument is typically the base address of the original array (being copied).</P>
+        
+        <CBlock fileName="copyarray.c">{
+`#include <stdio.h>
+#include <string.h>
+
+int main() {
+        float cool_values[] = {3.14, 9.81, 2.71};
+        float copy[3];
+
+        // Copy using memcpy
+        memcpy(copy, cool_values, 3 * sizeof(float));
+
+        printf("%f\\n", copy[2]); // Prints 2.71
+}
+`
+        }</CBlock>
+      </Itemize>
+
+      <P>(By the way, if <Code>cool_values</Code> had many more than just 3 elements in its initializer (comma-separated value list), and you didn't want to count them all, then this is actually one of those rare cases where the <Code>sizeof</Code> trick to compute an array's number of elements could be helpful. The new array could be declared via <Code>float copy[sizeof(cool_values) / sizeof(float)]</Code>, and the last argument to <Code>memcpy</Code> could simply be written as <Code>sizeof(cool_values)</Code>. But be careful to only do this with arrays<Emdash/>not pointers to arrays.)</P>
         
       <SectionHeading id="returning-arrays">Returning arrays?</SectionHeading>
 
