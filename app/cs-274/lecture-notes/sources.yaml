@@ -26,3 +26,6 @@ pages:
   - pathName: 'arrays'
     pageTitle: 'Arrays'
     namedIdentifier: 'arrays'
+  - pathName: 'multidimensional-arrays'
+    pageTitle: 'Multidimensional Arrays'
+    namedIdentifier: 'multidimensional-arrays'
