@@ -54,6 +54,9 @@ imap <leader><leader>c<Space> <CBlock copyable={false}>{<CR><CR>}</CBlock>OA``
 " Map \syntax followed by a space to a SyntaxBlock component
 imap <leader>syntax<Space> <SyntaxBlock>{<CR><CR>}</SyntaxBlock>OA``OD
 
+" Map \verb followed by a space to a Verbatim component
+imap <leader>verb<Space> <Verbatim>{<CR><CR>}</Verbatim>OA``OD
+
 " Map \l followed by a space to an internal link
 imap <leader>l<Space> <Link href={`${PARENT_PATH}/${allPathData[""].pathName}`}>TEXT</Link>ODODODODODODODODODODODODODODODODODODODODODODODODODOD
 
