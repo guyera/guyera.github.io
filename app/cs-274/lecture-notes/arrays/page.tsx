@@ -752,6 +752,8 @@ Hello, World!
 
       <P>The <Code>{'<size>'}</Code> is actually optional, just as with aggregate initialization. If the size is omitted, the program will automatically make the array large enough to store the contents of the string literal followed by at least one null terminator (and it will indeed populate it with those characters, including the null terminator). Otherwise, the size of the array will match the specified size, in which case the specified size <Ul>must</Ul> be large enough to store the contents of the specified C string plus at least one null terminator. If the size is specified, but it's too small to store the contents of the C string plus at least one null terminator, undefined behavior ensues.</P>
 
+      <P>(Technically, if <Code>{'<size>'}</Code> is exactly equal to the length of the string's contents, meaning there just <It>barely</It> isn't enough room to fit a null terminator, the behavior is still well-defined: it simply creates a character array containing the contents of the string <Ul>without</Ul> a null terminator at the end. Such a character array is <Ul>not</Ul> a proper C string, so proceeding to treat it like a C string (e.g., pass it to various functions provided by <Code>string.h</Code> will typically invoke undefined behavior due to a buffer over-read / overflow.)</P>
+
       <P>Here's an example program:</P>
 
       <CBlock fileName="modifiablecstring.c">{
