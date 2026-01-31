@@ -29,3 +29,6 @@ pages:
   - pathName: 'multidimensional-arrays'
     pageTitle: 'Multidimensional Arrays'
     namedIdentifier: 'multidimensional-arrays'
+  - pathName: 'dynamic-memory'
+    pageTitle: 'Dynamic Memory'
+    namedIdentifier: 'dynamic-memory'
