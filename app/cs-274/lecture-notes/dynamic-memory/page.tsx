@@ -80,9 +80,9 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
 
       <SectionHeading id="resizing-automatic-arrays">Resizing arrays?</SectionHeading>
 
-      <P>I've told you that, in the general case, arrays cannot simply be resized in memory. For example, in the general case, an array of 10 integers cannot simply be expanded to fit an 11th integer.</P>
+      <P>I've told you that, in the general case, arrays cannot simply be resized in memory. At least, they can't simply be expanded (shrinking is easier). For example, an array of 10 integers cannot simply be expanded to fit an 11th integer. There exist certain kinds of arrays that can <It>sort of</It> be expanded, but automatic arrays (the kinds of arrays we've discussed so far) can't be expanded (or shrunk) whatsoever.</P>
 
-      <P>There are various reasons for this limitation, but most or all of them have to do with how arrays are stored in memory. In particular, arrays are contiguous by definition. There exist non-contiguous data structures (e.g., linked lists, graphs, trees, etc), but those structures simply aren't arrays. Contiguous structures such as arrays cannot simply be expanded in the general case because there might not be sufficient adjacent space in memory <It>to</It> expand them.</P>
+      <P>There are various reasons for this limitation, and they have to do with how arrays are stored in memory. In particular, arrays are contiguous by definition. There exist non-contiguous data structures (e.g., linked lists, graphs, trees, etc), but those structures simply aren't arrays. Contiguous structures such as arrays cannot simply be expanded in the general case because there might not be sufficient adjacent space in memory <It>to</It> expand them.</P>
 
       <P>For example, consider the following function:</P>
 
@@ -96,11 +96,11 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
 
       <P>Suppose a <Code>float</Code> is allocated 4 bytes of space in our platform. Then <Code>array2</Code> is backed by an 80-byte block of allocated memory. Suppose I want to add a 21st element to <Code>array2</Code>. I'd need to expand that 80-byte block into a 84-byte block. That is, I need to allocate 4 more bytes for it to fit the additional <Code>float</Code> element.</P>
 
-      <P>But <It>where</It> should I acquire those 4 bytes? Well, an array is contiguous by definition, so those 4 bytes <Ul>must</Ul> be adjacent to the existing 80-byte block that makes up <Code>array2</Code>. Here in lies the problem: what if there are no free bytes adjacent to the current 80-byte block that constitutes <Code>array2</Code> in memory?</P>
+      <P>But <It>where</It> should I acquire those 4 bytes? Well, an array is contiguous by definition, so those 4 bytes <Ul>must</Ul> be adjacent to the existing 80-byte block that makes up <Code>array2</Code>. Here in lies the problem: what if there are no free bytes adjacent to the current 80-byte block that constitutes <Code>array2</Code> in memory? Then we can't expand the array as-is.</P>
 
-      <P>In this case, the only solution would be to <It>move</It> the entire array to some other place in memory where there <It>is</It> sufficient unallocated space to dedicate an 84-byte block.</P>
+      <P>So, what can we do? Well, a clever solution might be to <It>move</It> the entire array to some other place in memory where there <It>is</It> sufficient unallocated space to dedicate an 84-byte block. To "move" an object essentially means to copy it to a new location in memory, and then free the original instance.</P>
 
-      <P>Of course, it's often possible to move objects (data) around in memory, but not in the <It>general case</It>. In particular, <Bold>automatic variables</Bold> (i.e., regular function-local variables) cannot be moved around in memory during the program's execution. Why is that?</P>
+      <P>Some kinds of objects can, actually, be moved around in memory. And this is precisely what I meant earlier when I said that certain kinds of arrays can <It>sort of</It> be resized<Emdash/>they can be moved to a new place with more available unallocated space, and then expanded in the process. However, automatic arrays<Emdash/>and automatic variables in general (i.e., regular function-local variables)<Emdash/>cannot be moved around in memory. Why is that?</P>
 
       <P>For one, any movement of an object through memory requires careful consideration because any existing pointers / references to that object will become invalid the moment it's moved. After all, those pointers refer to the <It>old</It> location of the object in memory, prior to it being moved elsewhere (that is, they'd essentially become dangling pointers). There could be countless such pointers spread throughout the entire application. Keeping track of all of them, let alone updating all of them appropriately, might be difficult from a program design perspective.</P>
 
@@ -780,14 +780,19 @@ int main() {
 
       <P>In addition to <Code>malloc</Code> and <Code>realloc</Code>, there's a third low-level dynamic memory allocation function provided by <Code>stdlib.h</Code>: <Code>calloc</Code>. The <Code>calloc</Code> function is similar to <Code>malloc</Code>, except it automatically initializes all the bytes of allocated memory to a bunch of zeroes. This is useful for the same reasons that zero-initialization of automatic arrays is useful (e.g., <Code>{'char my_str[100] = {\'\\0\'};'}</Code>).</P>
 
-      <P><Code>calloc</Code> also has a slightly different interface to <Code>malloc</Code>: it operates in terms of array element sizes and counts instead of raw byte counts. It takes two arguments: 1) the number of array elements to be stored in the newly allocated dynamic array, and 2) the size of a <Ul>single element</Ul> in that array. It then allocates a block of dynamic memory whose size (in bytes) is the product of those two values, initializes all of its bytes to zero, and returns its base address as a <Code>void*</Code>.</P>
+      <P><Code>calloc</Code> also has a slightly different interface to <Code>malloc</Code>: it operates in terms of array element sizes and counts instead of raw byte counts. It takes two arguments: 1) the number of array elements to be stored in the newly allocated dynamic array, and 2) the size of a <Ul>single element</Ul> in that array. It then attempts to allocate a contiguous block of dynamic memory whose size (in bytes) is the product of those two values, initializes all of its bytes to zero, and returns its base address as a <Code>void*</Code>. If it fails to find a sufficiently large contiguous unallocated block, it returns <Code>NULL</Code>.</P>
 
       <P>For example:</P>
 
       <CBlock showLineNumbers={false}>{
 `// Allocate a dynamic array of one million integers, initializing
 // all of the bytes to zero
-int* array = (int*) calloc(1000000, sizeof(int));`
+int* array = calloc(1000000, sizeof(int));
+if (!array) {
+    printf("Error on calloc()\\n");
+    exit(1); // Or handle accordingly
+}
+`
       }</CBlock>
 
       <P>Importantly, <Code>calloc</Code> only initializes the <Ul>bytes</Ul> to zero, which is not necessarily the same thing as initializing the <Ul>values</Ul> of the array elements to 0. Well, for <Code>int</Code> values, these two ideas actually <It>are</It> the same. But for other numeric types, that might not be the case. For example, on some niche systems, it's possible that the <Code>float</Code> value <Code>0.0f</Code> isn't <It>actually</It> represented by a bitstring comprised entirely of zeroes. On such systems, a bitstring comprised entirely of zeroes might represent some other nonzero value when interpreted as a <Code>float</Code>. If <Code>calloc</Code> were to be used to create an array of <Code>float</Code> values on that system, the elements would all be initialized to that nonzero value, whatever it is.</P>
