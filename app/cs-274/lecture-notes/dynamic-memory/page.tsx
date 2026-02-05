@@ -250,14 +250,14 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
       <P>Now, I've just said that allocating and freeing data on the heap must be done "manually" by calling certain functions. Let's start there. Memory that's allocated on the heap is referred to as <Bold>dynamic memory</Bold>, or <Bold>dynamically allocated memory</Bold>. Dynamic memory is allocated in individual contiguous blocks. In the simplest case, a block of dynamic memory can be allocated via the <Code>malloc</Code> function, which is provided by <Code>stdlib.h</Code>. In most cases, you should call it like so:</P>
 
       <SyntaxBlock>{
-`<type>* <ptr_name> = (<type>*) malloc(<size>);`
+`<type>* <ptr_name> = malloc(<size>);`
       }</SyntaxBlock>
 
-      <P>Replace both instances of <Code>{'<type>'}</Code> with the type of data that you'd like to store in this block of bytes on the heap (e.g., if you're allocating a single <Code>int</Code> on the heap, <Ul>or</Ul> an array of <Code>int</Code> elements on the heap, then replace <Code>{'<type>'}</Code> with <Code>int</Code>). Replace <Code>{'<ptr_name>'}</Code> with the name of a pointer (which is declared by this line of code; more on this in a moment). Replace <Code>{'<size>'}</Code> with the size in bytes that you'd like this dynamically allocated block to be. In basically all cases, you must use the <Code>sizeof</Code> operator, and perhaps a bit of arithmetic, to compute the appropriate size.</P>
+      <P>Replace <Code>{'<type>'}</Code> with the type of data that you'd like to store in this block of bytes on the heap (e.g., if you're allocating a single <Code>int</Code> on the heap, <Ul>or</Ul> an array of <Code>int</Code> elements on the heap, then replace <Code>{'<type>'}</Code> with <Code>int</Code>). Replace <Code>{'<ptr_name>'}</Code> with the name of a pointer (which is declared by this line of code; more on this in a moment). Replace <Code>{'<size>'}</Code> with the size in bytes that you'd like this dynamically allocated block to be. In basically all cases, you must use the <Code>sizeof</Code> operator, and perhaps a bit of arithmetic, to compute the appropriate size.</P>
 
-      <P>So, what exactly does this do? Well, the <Code>malloc</Code> function accepts a size in bytes. It then attempts to find a contiguous unallocated block on the heap that's <It>at least</It> that big. If it succeeds in finding such a block, it will mark it (or part of it) as allocated, and then it will return the base address of that allocated block. If it fails to find a sufficiently large contiguous unallocated block on the heap, it will instead allocate nothing and return <Code>NULL</Code>.</P>
+      <P>So, what exactly does this do? Well, the <Code>malloc</Code> function accepts a size in bytes. It then attempts to find a contiguous unallocated block on the heap that's <It>at least</It> that big. If it succeeds in finding such a block, it will mark it (or part of it) as allocated, and then it will return the base address of that allocated block. If it fails to find a sufficiently large contiguous unallocated block on the heap, it will instead allocate nothing and return <Code>NULL</Code>. A robust C program will always check to see if the return value is <Code>NULL</Code> and, if so, attempt to handle the error accordingly (or, at the very least, log the error somewhere and force-terminate the program to support diagnostics and prevent would-be undefined behavior as a result of dereferencing the <Code>NULL</Code> pointer).</P>
 
-      <P>However, the return type of <Code>malloc</Code> is <Code>void*</Code>: a <Code>void</Code> pointer. We'll discuss <Code>void</Code> pointers later in the term, but for now, just understand that a <Code>void</Code> pointer can be a pointer to <It>anything</It>. And maybe that makes sense; <Code>malloc</Code> can be used to allocate dynamic memory for any kind of data, hence when it returns the base address of that allocated block, it must be very loosely typed. <Code>void</Code> pointers are very flexible, but they can't really be used or dereferenced as-is. Before you can use them, you must cast them into the appropriate type. If you intend to store one or more <Code>int</Code> values in the dynamically allocated block of bytes, then you must cast it to an <Code>int*</Code>. If you intend to store <Code>float</Code> values in that block of bytes, then you must cast it to a <Code>float*</Code>. And so on.</P>
+      <P>The return type of <Code>malloc</Code> is <Code>void*</Code>: a <Code>void</Code> pointer. We'll discuss <Code>void</Code> pointers later in the term, but for now, just understand that a <Code>void</Code> pointer can be a pointer to <It>anything</It>. And maybe that makes sense; <Code>malloc</Code> can be used to allocate dynamic memory for any kind of data, hence when it returns the base address of that allocated block, it must be very loosely typed. <Code>void</Code> pointers are very flexible, but they can't really be used or dereferenced as-is. Before you can use them, you must cast them into the appropriate type. If you intend to store one or more <Code>int</Code> values in the dynamically allocated block of bytes, then you must cast it to an <Code>int*</Code>. If you intend to store <Code>float</Code> values in that block of bytes, then you must cast it to a <Code>float*</Code>. And so on.</P>
 
       <P>Here's a simple (but very silly) example:</P>
 
@@ -269,7 +269,29 @@ int main() {
         // Allocate a block of dynamic memory that's just big enough to
         // store a single float. Store the base address of that block
         // of bytes in an float* variable, ptr.
-        float* ptr = (float*) malloc(sizeof(float));
+        float* ptr = malloc(sizeof(float));
+
+        // Check to see if malloc() failed to find a sufficiently large
+        // block of unallocated memory on the heap
+        if (!ptr) { // i.e., if (ptr == NULL)
+                // If your program is truly capable of handling this error
+                // somehow, (e.g., returning NULL or some sort of error code
+                // back to the call site), now is when you'd do it.
+
+                // Otherwise, log the error and force-terminate the entire
+                // program, lest we encounter undefined behavior when we
+                // attempt to dereference ptr later.
+                printf("Error! Failed to allocate dynamic memory!\\n");
+
+                // Provided by stdlib.h, exits the whole program with the
+                // provided exit code (essentially returns out of the main
+                // function, even if it's not called from within the main
+                // function). Use a nonzero exit code to indicate an error.
+                exit(1);
+        }
+
+        // If the program is still running, then it must have successfully
+        // allocated the dynamic memory.
 
         // ptr now stores the memory address of a block of bytes on the
         // heap that's just big enough to contain a single float. We can
@@ -299,10 +321,6 @@ $ valgrind ./dynmem
 ==2074094== HEAP SUMMARY:
 ==2074094==     in use at exit: 4 bytes in 1 blocks
 ==2074094==   total heap usage: 2 allocs, 1 frees, 1,028 bytes allocated
-==2074094== 
-==2074094== 4 bytes in 1 blocks are definitely lost in loss record 1 of 1
-==2074094==    at 0x484682F: malloc (vg_replace_malloc.c:446)
-==2074094==    by 0x401147: main (dynmem.c:8)
 ==2074094== 
 ==2074094== LEAK SUMMARY:
 ==2074094==    definitely lost: 4 bytes in 1 blocks
@@ -343,7 +361,11 @@ int main() {
         // (sizeof(float) * n), passing that size to
         // malloc(), and treating the returned address as the base
         // address of an array of floats.
-        float* numbers = (float*) malloc(sizeof(float) * n);
+        float* numbers = malloc(sizeof(float) * n);
+        if (!numbers) {
+                printf("Error on malloc()\\n");
+                exit(1);
+        }
 
         // numbers stores the base address of a block of bytes on the
         // heap that's big enough to store n floats. We can indeed treat
@@ -393,7 +415,7 @@ How many floats should the array have?: 172
 
       <P>But first, let's address the elephant in the room: freeing dynamic memory. Dynamic memory has <Bold>dynamic storage duration</Bold>, which means it must be freed manually by calling specific functions, namely <Code>free</Code>, at runtime. This is in contrast to the stack's automatic storage duration, wherein objects are freed automatically when they fall out of scope or when their functions end (and their stack frames are popped off the stack).</P>
 
-      <P>Failing to call the <Code>free</Code> function (or similar) to free your dynamic memory results in a <Bold>memory leak</Bold>. Basically, dynamic memory isn't freed until you choose to free it via the <Code>free</Code> function. If you never free it, then it simply won't be freed.</P>
+      <P>Failing to call the <Code>free</Code> function (or similar) to free your dynamic memory results in a <Bold>memory leak</Bold>. A memory leak is simply any memory that the program fails to free after it's done using it. Dynamic memory isn't freed until you choose to free it via the <Code>free</Code> function, so if you don't call the <Code>free</Code> function to free it, then it won't be freed.</P>
       
       <P>On most modern operating systems, a process's lingering dynamic memory will be freed automatically by the OS when the entire process (program) ends. However, you shouldn't count on that. For one, some niche realtime operating systems do not free lingering dynamic memory at the end of the process. More importantly, though: even if lingering dynamic memory is freed when the process ends, that still means <It>it isn't freed until the process ends</It>. If your program builds up memory leaks over time (e.g., because it allocates dynamic memory in a loop but fails to free it properly in some or all iterations), it could eventually run out of available space on the heap. This is sometimes called a <Bold>heap overflow</Bold> (though this term can also refer to heap smashing, meaning a heap-based buffer overflow). Subsequent calls to <Code>malloc</Code> will return <Code>NULL</Code>. The program will almost surely be unable to handle that in the long term; it'll likely crash.</P>
 
@@ -455,11 +477,11 @@ How many floats should the array have?: 172
 
       <P>Notice: immediately below the heap summary, it says <It>where</It> the leaked block of dynamic memory was allocated: <Code>dynarray.c</Code>, line <Code>15</Code>. Sure enough, that was this line of code, where we allocated the dynamic array of <Code>float</Code>'s:</P>
 
-      <P><Code>{'float* numbers = (float*) malloc(sizeof(float) * n);'}</Code></P>
+      <P><Code>{'float* numbers = malloc(sizeof(float) * n);'}</Code></P>
 
       <P>Now that we've found our leaked memory (not that we had any doubt as to where it was), we can free it. To free dynamic memory, call the <Code>free</Code> function, provided by <Code>stdlib.h</Code>. As the argument, provide a pointer storing the base address of the dynamically allocated block that you'd like to free. Yes, this is the exact same address that was returned by <Code>malloc</Code> and stored in <Code>numbers</Code> when the block was allocated. In other words:</P>
 
-      <CBlock fileName="dynarray.c" highlightLines="{28-29}">{
+      <CBlock fileName="dynarray.c" highlightLines="{32-33}">{
 `#include <stdio.h>
 #include <stdlib.h>
 
@@ -474,7 +496,11 @@ int main() {
         // (sizeof(float) * n), passing that size to
         // malloc(), and treating the returned address as the base
         // address of an array of floats.
-        float* numbers = (float*) malloc(sizeof(float) * n);
+        float* numbers = malloc(sizeof(float) * n);
+        if (!numbers) {
+                printf("Error on malloc()\\n");
+                exit(1);
+        }
 
         // numbers stores the base address of a block of bytes on the
         // heap that's big enough to store n floats. We can indeed treat
@@ -572,9 +598,13 @@ int main() {
                 // Step 1: Allocate new, bigger array, big enough to
                 // store all the current values AND the new value
                 // (# elements = list_size + 1)
-                float* new_array = (float*) malloc(
+                float* new_array = malloc(
                         sizeof(float) * (list_size + 1)
                 );
+                if (!new_array) {
+                    printf("Error on malloc()\\n");
+                    exit(1);
+                }
 
                 // Step 2. Copy elements from old array to new array.
                 // Could use a for loop. I'll use memcpy.
@@ -640,9 +670,11 @@ Do you want to supply another number? Enter 1 for yes, 0 for no: 0
 
       <P>(Creating resizable arrays is perhaps one of the most fundamental use cases of dynamic memory. As an exercise, I encourage you to try reimplementing the above program using just the stack. Regardless of how you go about doing it, you'll run into some fundamental issue or another. Mainly, if <Code>new_array</Code> were an automatic / stack-allocated array, then it'd be automatically freed at the end of each loop iteration, causing <Code>list</Code> to become a dangling pointer and invoking use-after-free errors in the subsequent iteration. Using the heap allows us to control exactly when memory gets allocated and freed, avoiding that issue.)</P>
 
-      <P>Now, there's a lot of steps involved in expanding our dynamic array in the above program. Luckily, the C standard library offers another function that does all of these steps for us in one fell swoop: <Code>realloc</Code>. The <Code>realloc</Code> function, which stands for "reallocate" and is provided by <Code>stdlib.h</Code>, accepts two arguments: 1) a pointer to the base address of the block of dyanmic memory that you want to resize (expand or shrink), and 2) the new size that you want it to have post-resizing. In the <It>general case</It>, it does the following: it creates a new block of dynamic memory of the size specified in the second argument; it copies the first N bytes over from the old block to the new block (where N is the smaller of the two blocks' sizes); it frees the old block; and finally it returns the base address of the new block. That is, we can rewrite the above program like so:</P>
+      <P>Now, there's a lot of steps involved in expanding our dynamic array in the above program. Luckily, the C standard library offers another function that does all of these steps for us in one fell swoop: <Code>realloc</Code>. The <Code>realloc</Code> function, which stands for "reallocate" and is provided by <Code>stdlib.h</Code>, accepts two arguments: 1) a pointer to the base address of the block of dyanmic memory that you want to resize (expand or shrink), and 2) the new size that you want it to have post-resizing. In general, it does the following: it creates a new block of dynamic memory of the size specified in the second argument; it copies the first N bytes over from the old block to the new block (where N is the smaller of the two blocks' sizes); it frees the old block; and finally it returns the base address of the new block (or <Code>NULL</Code> if it failed to allocate the new block). As a special case, you can pass a <Code>NULL</Code> pointer as the first argument, in which case it does the same thing as <Code>malloc(size)</Code>, where <Code>size</Code> is the second argument passed to <Code>realloc</Code>.</P>
 
-      <CBlock fileName="resizearray.c" highlightLines="{24-39}">{
+      <P>Knowing that, we can rewrite the above program like so:</P>
+
+      <CBlock fileName="resizearray.c" highlightLines="{24-43}">{
 `#include <stdlib.h>
 #include <string.h> // For memcpy
 #include <stdio.h>
@@ -670,10 +702,14 @@ int main() {
                 // steps 1, 2, 3, and part of step 5 from the previous
                 // implementation. It also means we don't need the
                 // new_array pointer anymore; we can just reuse list
-                list = (float*) realloc(
+                list = realloc(
                         list,
                         sizeof(float) * (list_size + 1)
                 );
+                if (!list) {
+                    printf("Error on realloc()\\n");
+                    exit(1);
+                }
 
                 // The new array (which list now points to) has an
                 // extra slot at the end of it, currently uninitialized.
@@ -710,8 +746,12 @@ int main() {
       <CBlock fileName="returnarray.c">{
 `#include<stdlib.h>
 
+// If it fails to allocate an array via malloc(), it returns NULL
 double* create_array_of_zeroes(size_t size) {
-        double* array = (double*) malloc(sizeof(double) * size);
+        double* array = malloc(sizeof(double) * size);
+        if (!array) {
+                return NULL;
+        }
         for (int i = 0; i < size; ++i) {
                 array[i] = 0.0;
         }
@@ -722,13 +762,16 @@ int main() {
         // Creates an array of 100 doubles, each initialized to 0.0,
         // storing its base address in the 'array' pointer.
         double* array = create_array_of_zeroes(100);
+        if (!array) {
+                printf("Error! Failed to allocate array on the heap!\\n");
+                exit(1);
+        }
 
         // ...
 
         // Don't forget to free it when you're done with it!
         free(array);
-}
-`
+}`
       }</CBlock>
 
       <P>In the past, I've said that you generally can't return arrays from functions. The above program demonstrates a sort of exception to this rule. Although we can't return arrays, we <It>can</It> return base addresses of arrays, so long as those arrays aren't freed when the function returns. Dynamic arrays aren't freed until you call the <Code>free</Code> function, so they satisfy this requirement.</P>
@@ -761,7 +804,11 @@ int* array = (int*) calloc(1000000, sizeof(int));`
 `#include <stdlib.h>
 
 int main() {
-        double* array = (double*) malloc(sizeof(double) * 100);
+        double* array = malloc(sizeof(double) * 100);
+        if (!array) {
+                printf("Error on malloc()\\n");
+                exit(1);
+        }
 
         // Copies the POINTER array into the POINTER array2. This does
         // NOT copy the underlying array. We now have two pointers that
@@ -778,7 +825,8 @@ int main() {
         // It's your responsibility to know when two pointers point to
         // the same dynamic memory! If they do, only call free() on one
         // of them.
-}`
+}
+`
       }</CBlock>
 
       <P>Here's the Valgrind output:</P>
@@ -824,7 +872,11 @@ $ valgrind ./doublefree
 
 int main() {
         // Allocate dynamic array of 5 booleans
-        _Bool* array = (_Bool*) malloc(sizeof(_Bool) * 5);
+        _Bool* array = malloc(sizeof(_Bool) * 5);
+        if (!array) {
+            printf("Error on malloc()\\n");
+            exit(1);
+        }
 
         // Free the dynamic array
         free(array);
@@ -873,7 +925,11 @@ $ valgrind ./useafterfree
 
 int main() {
         // Allocate dynamic array of 5 booleans
-        _Bool* array = (_Bool*) malloc(sizeof(_Bool) * 5);
+        _Bool* array = malloc(sizeof(_Bool) * 5);
+        if (!array) {
+            printf("Error on malloc()\\n");
+            exit(1);
+        }
         _Bool* array2 = array; // Copy of address stored in array
 
         // Free the dynamic array
