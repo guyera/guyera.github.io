@@ -1,7 +1,11 @@
 #include <stdlib.h>
 
 int main() {
-	double* array = (double*) malloc(sizeof(double) * 100);
+	double* array = malloc(sizeof(double) * 100);
+	if (!array) {
+		printf("Error on malloc()\n");
+		exit(1);
+	}
 
 	// Copies the POINTER array into the POINTER array2. This does
 	// NOT copy the underlying array. We now have two pointers that

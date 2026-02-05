@@ -25,10 +25,14 @@ int main() {
 		// steps 1, 2, 3, and part of step 5 from the previous
 		// implementation. It also means we don't need the
 		// new_array pointer anymore; we can just reuse list
-		list = (float*) realloc(
+		list = realloc(
 			list,
 			sizeof(float) * (list_size + 1)
 		);
+		if (!list) {
+			printf("Error on realloc()\n");
+			exit(1);
+		}
 		
 		// The new array (which list now points to) has an
 		// extra slot at the end of it, currently uninitialized.

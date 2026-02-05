@@ -12,7 +12,11 @@ int main() {
 	// (sizeof(float) * n), passing that size to
 	// malloc(), and treating the returned address as the base
 	// address of an array of floats.
-	float* numbers = (float*) malloc(sizeof(float) * n);
+	float* numbers = malloc(sizeof(float) * n);
+	if (!numbers) {
+		printf("Error on malloc()\n");
+		exit(1);
+	}
 
 	// numbers stores the base address of a block of bytes on the
 	// heap that's big enough to store n floats. We can indeed treat

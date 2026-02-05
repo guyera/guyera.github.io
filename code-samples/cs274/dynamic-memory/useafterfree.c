@@ -2,7 +2,11 @@
 
 int main() {
 	// Allocate dynamic array of 5 booleans
-	_Bool* array = (_Bool*) malloc(sizeof(_Bool) * 5);
+	_Bool* array = malloc(sizeof(_Bool) * 5);
+	if (!array) {
+		printf("Error on malloc()\n");
+		exit(1);
+	}
 	_Bool* array2 = array; // Copy of address stored in array
 
 	// Free the dynamic array
