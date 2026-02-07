@@ -76,6 +76,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
         <Item><Link href="#returning-pointers-to-dynamic-memory">Returning pointers to dynamic memory</Link></Item>
         <Item><Link href="#calloc"><Code>calloc</Code></Link></Item>
         <Item><Link href="#common-dynamic-memory-mistakes">Common mistakes with dynamic memory</Link></Item>
+        <Item><Link href="#stack-size">Stack size</Link></Item>
       </Itemize>
 
       <SectionHeading id="resizing-automatic-arrays">Resizing arrays?</SectionHeading>
@@ -957,6 +958,18 @@ int main() {
       <P>The Valgrind output is essentially the same as before.</P>
 
       <P>Clearly, dealing with dynamic memory can be quite difficult. You'll find this to be especially true when writing large, complicated programs that allocate tons of dynamic memory at various times for various purposes. This is one reason why memory debugging tools like Valgrind are so important: to help you catch your dynamic memory mistakes.</P>
+
+      <SectionHeading id="stack-size">Stack size</SectionHeading>
+
+      <P>The largest data structures in most programs are ones that are dynamically resized and are therefore stored on the heap. Moreover, the stack has structural constraints, particularly being that it must be contiguous in memory and always operate in a LIFO fashion. As we've learned, contiguous structures are hard to resize since that often requires moving them around, and the entire stack itself cannot be moved around arbitrarily since that would invalidate any pointers that point into it. (Processes also need to be able to create additional stacks on-the-fly whenever new kernel threads are started).</P>
+
+      <P>For all these reasons, and perhaps some others that I've neglected, the stack is allocated a fixed amount of space in memory when it's first created at the start of the program (or, more generally, the start of a kernel thread). This space is usually fairly small, on the order of a few megabytes.</P>
+
+      <P>In contrast, the heap expands dynamically as needed by the process. <Code>malloc()</Code> and related functions will only fail if there's simply no more available memory on the entire system (or perhaps if some soft resource limit imposed on the process is reached; such soft limits can be dynamically imposed on the stack as well).</P>
+
+      <P>A practical consequence of all this is that <Ul>large objects and data structures should not be stored on the stack</Ul>. Otherwise, you may quickly run out of memory on the stack, which usually spells immediate doom for the process. Such an error is referred to as a <Bold>stack overflow</Bold> (yes, the popular programming stack exchange was named after this error). This is actually one of several reasons why VLAs (automatic variable-length arrays) should be avoided<Emdash/>if the variable length happens to be extremely large, the allocation of the VLA might immediately overflow the stack.</P>
+
+      <P>(You might also know that deeply nested recursive calls can often invoke a stack overflow. This is because each function call gets its own stack frame, so recursion builds up stack frames until a base case is hit and the calls start returning. Since the stack is fairly limited in size, recursion can invoke a stack overflow <It>quite quickly</It>, perhaps with just a few thousand nested recursive calls).</P>
 
     </>
   )
