@@ -32,3 +32,6 @@ pages:
   - pathName: 'dynamic-memory'
     pageTitle: 'Dynamic Memory'
     namedIdentifier: 'dynamic-memory'
+  - pathName: 'string-input-and-manipulation'
+    pageTitle: 'String Input and Manipulation'
+    namedIdentifier: 'string-input-and-manipulation'
