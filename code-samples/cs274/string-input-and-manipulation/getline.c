@@ -28,6 +28,6 @@ int main() {
 	// it
 	free(line);
 
-	// I know, this program is boring. We'll make it more interesting
-	// soon.
+	// I know, this program is boring. We'll learn how to do more
+	// interesting things with strings soon.
 }
