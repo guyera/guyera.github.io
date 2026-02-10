@@ -73,6 +73,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
         <Item><Link href="#how-the-stack-works">How the stack works</Link></Item>
         <Item><Link href="#dynamic-storage-duration-and-the-heap">Dynamic storage duration and the heap</Link></Item>
         <Item><Link href="#resizing-dynamic-arrays">Resizing arrays!</Link></Item>
+        <Item><Link href="#on-moving-data">On moving data</Link></Item>
         <Item><Link href="#returning-pointers-to-dynamic-memory">Returning pointers to dynamic memory</Link></Item>
         <Item><Link href="#calloc"><Code>calloc</Code></Link></Item>
         <Item><Link href="#common-dynamic-memory-mistakes">Common mistakes with dynamic memory</Link></Item>
@@ -740,7 +741,75 @@ int main() {
 
       <P>This program does the same thing as before, but the resizing logic is much simpler since <Code>realloc</Code> is doing most of the heavy lifting.</P>
 
-      <P>So, I've explained what <Code>realloc</Code> does in the <It>general case</It>, but in some cases, it actually behaves a bit differently: when possible, <Code>realloc</Code> will actually avoid creating a new block of dynamic memory altogether. Particularly, the <Code>realloc</Code> function looks into the heap to see if there's some unallocated bytes of memory next to the existing block (the block whose base address is provided by the first argument). If there <It>is</It> some empty space there, and it's sufficiently large, <Code>realloc</Code> will simply expand the allocated block into that empty space (and return the same base address that was passed into it). This avoids allocating an entirely separate block of memory, copying bytes of data over, <It>and</It> freeing the original block. That is, it avoids the "move" operation. Moving blocks of memory around can be expensive, especially if those blocks are large, so this can yield big performance gains. Of course, <Code>realloc</Code> can only <It>sometimes</It> do this. If there isn't enough available space to simply expand the existing block, then it does, indeed, move the block elsewhere (i.e., allocate a new block, copy the bytes over, and free the original block).</P>
+      <P>So, I've explained what <Code>realloc</Code> does in the <It>general case</It>, but in some cases, it behaves a bit differently: when possible, <Code>realloc</Code> will actually avoid creating a new block of dynamic memory altogether. Particularly, the <Code>realloc</Code> function looks into the heap to see if there's some unallocated bytes of memory next to the existing block (the block whose base address is provided by the first argument). If there <It>is</It> some empty space there, and it's sufficiently large, <Code>realloc</Code> will simply expand the allocated block into that empty space (and return the same base address that was passed into it). This avoids allocating an entirely separate block of memory, copying bytes of data over, <It>and</It> freeing the original block. That is, it avoids the "move" operation. Moving blocks of memory around can be expensive, especially if those blocks are large, so this can yield big performance gains. Of course, <Code>realloc</Code> can only <It>sometimes</It> do this. If there isn't enough available space to simply expand the existing block, then it does, indeed, move the block elsewhere (i.e., allocate a new block, copy the bytes over, and free the original block).</P>
+
+      <SectionHeading id="on-moving-data">On moving data</SectionHeading>
+
+      <P>Regardless of how you do it, expanding an array generally requires moving it to a new place in memory (unless you get lucky with <Code>realloc</Code>). You must always be very cognizant of when and how data is moved around in memory because, whenever data is moved, any existing pointers that point to that data become dangling pointers. Dereferencing them will then invoke undefined behavior.</P>
+
+      <P>Such errors are especially common in programs that maintain multiple copies of pointers to the same data. For example:</P>
+
+      <CBlock fileName="append.c">{
+`#include <stdlib.h>
+#include <stdio.h>
+
+// Appends a new value to the end of the given dynamic array,
+// expanding the array in the process
+void append(int* array, size_t size, int new_value) {
+        // Realloc array to contain (size + 1) elements. Note:
+        // if array is NULL and size is 0 (i.e., if the array is
+        // currently "empty" / nonexistent), then this is equivalent
+        // to malloc((1) * sizeof(int)).
+        array = realloc(array, (size + 1) * sizeof(int));
+
+        // Increment size
+        ++size;
+
+        // Append new_value to the end of it, in the extra unused
+        // slot
+        array[size - 1] = new_value;
+}
+
+int main() {
+        // Create an int array, initially with a single element in
+        // it (7) (Arguably, it's not even really an array; just
+        // a pointer to a single integer on the heap. But you can
+        // treat it like an array with 1 element).
+        int* my_array = malloc(sizeof(int));
+        my_array[0] = 7;
+
+        size_t s = 1; // Keep track of my_array's size (number of
+                                  // elements)
+
+        // Append the value -5 to the array
+        append(my_array, s, -5);
+
+        // Issue: the append function updates 'array' and 'size'
+        // (its parameters), but it does NOT update 'my_array' nor
+        // 's' (the arguments). Parameters are copies of arguments.
+        // So 'my_array' still points to the old array, and 's' is
+        // still 1. The old array that 'my_array' points to may
+        // no longer exist (realloc may have freed it), making it
+        // a dangling pointer.
+
+        // If realloc moved the array (and so my_array is dangling),
+        // then these will both invoke use-after-free errors.
+        // Otherwise, they'll work fine. But there's no guarantee
+        // as to which of those things will happen. This is
+        // undefined behavior.
+        printf("%d\\n", my_array[0]);
+        printf("%d\\n", my_array[1]);
+
+        // This may also be an issue. If realloc moved the array
+        // (and so my_array is dangling), this will invoke a
+        // double-free error (and the new array will be leaked).
+        // Otherwise, it'll work fine. Again, this is undefined
+        // behavior.
+        free(my_array);
+}`
+      }</CBlock>
+
+      <P>The proper solution would be to either a) have the <Code>append</Code> function <Link href="#returning-pointers-to-dynamic-memory">return the pointer to the new array</Link>, and then update <Code>my_array</Code> to store a copy of that return value at the call site; or b) have the <Code>append</Code> function receive double-pointer (<Code>int**</Code>) and <Code>size_t*</Code> arguments instead of just <Code>int*</Code> and <Code>size_t</Code> arguments, enabling it to dereference its parameters and modify the underlying variables at the call site itself.</P>
 
       <SectionHeading id="returning-pointers-to-dynamic-memory">Returning pointers to dynamic memory</SectionHeading>
 
