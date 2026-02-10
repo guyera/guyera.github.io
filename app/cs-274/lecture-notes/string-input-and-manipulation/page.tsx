@@ -73,13 +73,14 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
         <Item><Link href="#getline"><Code>getline</Code></Link></Item>
         <Item><Link href="#fgets"><Code>fgets</Code></Link></Item>
         <Item><Link href="#string-h"><Code>string.h</Code></Link></Item>
-        <Item><Link href="#str"><Code>strcmp</Code></Link></Item>
+        <Item><Link href="#strcmp"><Code>strcmp</Code></Link></Item>
         <Item><Link href="#strcpy"><Code>strcpy</Code></Link></Item>
         <Item><Link href="#strcat"><Code>strcat</Code></Link></Item>
         <Item><Link href="#sprintf"><Code>sprintf</Code></Link></Item>
         <Item><Link href="#strstr"><Code>strstr</Code></Link></Item>
         <Item><Link href="#strtol-strtod"><Code>strtol</Code> and <Code>strtod</Code></Link></Item>
         <Item><Link href="#strtok_r"><Code>strtok_r</Code></Link></Item>
+        <Item><Link href="#pointer-to-middle">Pointer to the middle of a string</Link></Item>
         <Item><Link href="#and-more">And more!</Link></Item>
       </Itemize>
 
@@ -240,8 +241,6 @@ getline(&line, &n, stdin);`
       <P>However, there's a convenience tradeoff: any call to <Code>getline</Code> can allocate dynamic memory, and <Ul>you're responsible for freeing it</Ul>. That's to say, once the program is done with the C string containing the user's supplied line of text, it must use the <Code>free()</Code> function to free it, or else your program will have a memory leak.</P>
 
       <P>Here's an example:</P>
-
-      {/*TODO*/}
 
       <CBlock fileName="getline.c">{
 `#include <stdlib.h> // For free()
@@ -628,7 +627,7 @@ Enter another line of text no more than 30 characters in length: You entered: sc
 
       <P>That doesn't work. C strings are just null-terminated character arrays, and arrays tend to decay to their base addresses. Indeed, the above if statement would compare the <It>base addresses</It> of the two C strings' character arrays<Emdash/>not the <It>contents</It> of the two C strings.</P>
 
-      <P>To compare the strings' contents, you'd have to iterate through them both simultaneously (e.g., with a for loop) and compare their characters one at a time. Luckily, the <Code>strcmp</Code> function is already implemented for you, and it does exactly that. It accepts two C strings as inputs and returns an <Code>int</Code> value. If the two C strings contain the exact same contents (case-sensitive), it returns 0. Otherwise, it returns a nonzero value. Specifically, it returns a positive value if the first string comes after the second string in lexicographical order (like alphabetical order, but based on the characters' integer encodings (e.g., ASCII values)), and it returns a negative value if the first string comes before the second string in lexicographical order.</P>
+      <P>To compare the strings' contents, you'd have to iterate through them both simultaneously (e.g., with a for loop) and compare their characters one at a time. Luckily, the <Code>strcmp</Code> function (provided by <Code>string.h</Code>) is already implemented for you, and it does exactly that. It accepts two C strings as inputs and returns an <Code>int</Code> value. If the two C strings contain the exact same contents (case-sensitive), it returns 0. Otherwise, it returns a nonzero value. Specifically, it returns a positive value if the first string comes after the second string in lexicographical order (like alphabetical order, but based on the characters' integer encodings (e.g., ASCII values)), and it returns a negative value if the first string comes before the second string in lexicographical order.</P>
 
       <P>Here's an example:</P>
 
@@ -717,7 +716,7 @@ Wrong password!
 
       <P>This <It>is</It> syntactically legal, but it doesn't achieve the goal of copying the contents of <Code>old_string</Code>. Rather, it copies the <It>base address</It> of <Code>old_string</Code> and stores it in the newly declared pointer named <Code>copy</Code>.</P>
 
-      <P>Again, if you want to copy the <It>contents</It> of a C string, in the general case, you'd have to use a loop and copy one character at a time until you encounter a null terminator. The <Code>strcpy</Code> function does exactly that. It accepts two arguments: 1) the base address of a character array into which you would like to store a copy of an existing C string; and 2) the existing C string that you would like to copy. That is, the argument order is 1) the <It>destination</It>, then 2) the <It>source</It>.</P>
+      <P>Again, if you want to copy the <It>contents</It> of a C string, in the general case, you'd have to use a loop and copy one character at a time until you encounter a null terminator. The <Code>strcpy</Code> function, provided by <Code>string.h</Code>, does exactly that. It accepts two arguments: 1) the base address of a character array into which you would like to store a copy of an existing C string; and 2) the existing C string that you would like to copy. That is, the argument order is 1) the <It>destination</It>, then 2) the <It>source</It>.</P>
 
       <P>The second argument <Ul>must</Ul> be a properly null-terminated character array. Moreover, the first argument <Ul>must</Ul> point to a character array that is sufficiently large enough to store the copied contents. If either of these conditions is violated, undefined behavior will ensue.</P>
 
@@ -787,6 +786,8 @@ Your modified sentence is: Zhe epic highs and lows of high school football
 `
       }</TerminalBlock>
 
+      <P>There's also a function named <Code>strncpy</Code>. It works exactly like <Code>strcpy</Code>, except it accepts a third argument <Code>n</Code>, and it only copies up to the first <Code>n</Code> characters from the source into the destination. If the first <Code>n</Code> characters in the source string does not include a null terminator, then no null terminator is copied (be careful of that<Emdash/>you may need to null-terminate the destination string yourself).</P>
+
       <SectionHeading id="strcat"><Code>strcat</Code></SectionHeading>
 
       <P>Suppose you want to concatenate two C strings together (i.e., "glue" their contents together, one after another). It's actually possible to do this by using <Code>strcpy</Code> with a little bit of pointer arithmetic. For example:</P>
@@ -799,7 +800,7 @@ Your modified sentence is: Zhe epic highs and lows of high school football
 
       <P>Of course, this only works if the array underlying <Code>string_1</Code> is big enough to store the current contents of <Code>string_1</Code> as well as the contents of <Code>string_2</Code> (plus a null terminator). You're responsible for making sure that's the case. Otherwise, you'll get a buffer overflow and undefined behavior.</P>
 
-      <P>The above works perfectly fine, but there's another function that does the pointer arithmetic for you: <Code>strcat</Code>. It accepts two C strings as arguments. It then concatenates ("glues") the contents of the second argument onto the end of the contents of the first argument (and appends a null terminator). Again, this requires that the first string's underlying array be big enough to store the concatenated contents, plus one null terminator.</P>
+      <P>The above works perfectly fine, but <Code>string.h</Code> provides another function that does the pointer arithmetic for you: <Code>strcat</Code>. It accepts two C strings as arguments. It then concatenates ("glues") the contents of the second argument onto the end of the contents of the first argument (and appends a null terminator). Again, this requires that the first string's underlying array be big enough to store the concatenated contents, plus one null terminator.</P>
 
       <P>Here's a complete example:</P>
 
@@ -881,7 +882,7 @@ The concatenated result is: Hello. World!
 
       <P>The previous program worked fine, but we can do a bit better. Consider that when printing text to the terminal via <Code>printf</Code>, you can write out a format string with as many placeholders (format specifiers) as you'd like, and then supply additional arguments to inject into those placeholders. This is a very nice way of combining lots of data together into a single string and printing it to the terminal.</P>
 
-      <P>But what if you want to combine lots of data together into a single string but <It>not</It> print it to the terminal? For example, what if you want to combine the contents of a bunch of pre-existing strings in some carefully formatted way, and simply store the result in another string? In the previous program, we hacked our way through this by calling <Code>strcpy</Code> and <Code>strcat</Code> a bunch of times. But as it turns out, there exists another function, <Code>sprintf</Code>, that makes these tasks much easier. It's exactly like <Code>printf</Code>, except instead of printing formatted string contents to standard output, it prints formated string contents <It>into a character array</It> as a C string (and properly null-terminates it).</P>
+      <P>But what if you want to combine lots of data together into a single string but <It>not</It> print it to the terminal? For example, what if you want to combine the contents of a bunch of pre-existing strings in some carefully formatted way, and simply store the result in another string? In the previous program, we hacked our way through this by calling <Code>strcpy</Code> and <Code>strcat</Code> a bunch of times. But as it turns out, <Code>string.h</Code> provides another function, <Code>sprintf</Code>, that makes these tasks much easier. It's exactly like <Code>printf</Code>, except instead of printing formatted string contents to standard output, it prints formated string contents <It>into a character array</It> as a C string (and properly null-terminates it).</P>
 
       <P><Code>sprintf</Code> accepts two or more arguments. The first argument is the base address of the character array (or the middle of the character array, etc) where you'd like to store the formatted C string. The second argument and on follow the same semantics as the arguments of <Code>printf</Code>. That is, the second argument of <Code>sprintf</Code> is the format string, and the third argument and on are the values that you'd like to substitute into the format specifiers within the format string.</P>
       
@@ -949,19 +950,571 @@ sprintf(x_as_string, "%d", x);`
 
       <SectionHeading id="strstr"><Code>strstr</Code></SectionHeading>
 
-      {/*TODO*/}
+      <P>Another useful function provided by <Code>string.h</Code> is <Code>strstr</Code>. It accepts two C strings as arguments. It then checks to see if the second string is a substring of the first. If so, it returns a <Code>char*</Code> that points to the first character of the first occurrence of the substring within the larger string. If not, it returns <Code>NULL</Code>.</P>
+
+      <P>For example:</P>
+
+      <CBlock fileName="strstr.c">{
+`#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+        printf("Enter a sentence: ");
+        char* line = NULL;
+        size_t n = 0;
+        ssize_t len = getline(&line, &n, stdin);
+        line[len - 1] = '\\0';
+        if (line[len - 2] == '\\r') {
+                line[len - 2] = '\\0';
+        }
+
+        // Find the first occurrence of the word "pizza" in the
+        // user's sentence
+        char* ptr = strstr(line, "pizza");
+        if (ptr) {
+                // i.e., if (ptr != NULL)
+                // The sentence does, indeed, contain the word pizza
+                // AT LEAST once. ptr now points to the 'p' in the
+                // FIRST occurrence of the word pizza within the
+                // character array that line points to.
+
+                // Replace "pizza" in the line with "tacos" (note:
+                // they're both the same number of characters)
+                const char* tacos = "tacos";
+                for (size_t i = 0; i < strlen(tacos); ++i) {
+                        // Recall: if a pointer ptr points to a character in
+                        // the MIDDLE of a string, then ptr[0] will be that
+                        // character, ptr[1] will be the next character, and
+                        // so on. So ptr[0] is 'p', ptr[1] is 'i', ptr[2]
+                        // is 'z', ptr[3] is 'z', and ptr[4] is 'a'.
+                        // Replace those 5 characters with the 5 characters
+                        // of "tacos".
+                        ptr[i] = tacos[i];
+                }
+
+                // Tip: An easier way to do the above would be to
+                // use the strncpy function (not strcpy, but strncpy),
+                // which copies the first n characters of one string
+                // into another string (possibly excluding the null
+                // terminator if desired, as is the case here)
+        }
+
+        // Print the modified sentence back to the user:
+        printf("%s\\n", line);
+
+        free(line);
+}
+`
+      }</CBlock>
+
+      <P>Here's an example output:</P>
+
+      <TerminalBlock copyable={false}>{
+`$ gcc -g -Wall -o strstr strstr.c 
+$ valgrind ./strstr
+==3860135== Memcheck, a memory error detector
+==3860135== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==3860135== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
+==3860135== Command: ./strstr
+==3860135== 
+Enter a sentence: I like pineapple on my pizza 
+I like pineapple on my tacos
+==3860135== 
+==3860135== HEAP SUMMARY:
+==3860135==     in use at exit: 0 bytes in 0 blocks
+==3860135==   total heap usage: 3 allocs, 3 frees, 2,168 bytes allocated
+==3860135== 
+==3860135== All heap blocks were freed -- no leaks are possible
+==3860135== 
+==3860135== For lists of detected and suppressed errors, rerun with: -s
+==3860135== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+`
+      }</TerminalBlock>
+
+      <P>Importantly, <Code>strstr</Code> returns a pointer to the first character of the <Ul>first</Ul> occurrence of the given substring (second argument) within the given string (first argument). The above program only replaces the <Ul>first</Ul> occurrence of the word "pizza" in the line with the word "tacos". If you wanted to replace all occurrences, you'd have to call <Code>strstr</Code> in a loop (or do something more clever).</P>
+
+      <P>Also, <Code>strstr</Code> is case-sensitive, just like <Code>strcmp</Code>.</P>
       
       <SectionHeading id="strtol-strtod"><Code>strtol</Code> and <Code>strtod</Code></SectionHeading>
 
-      {/*TODO*/}
+      <P>We discussed how <Code>sprintf</Code> can convert numeric data into strings (and, more generally, can construct formatted strings from various kinds of data). But what about the other way around? What if you have a string containing the characters "172.5", and you want to convert it to a <Code>double</Code> with value <Code>172.5</Code>?</P>
+
+      <P>If a string's contents contain a valid floating point number, you can convert it to a <Code>double</Code> value by passing it as the first argument to the <Code>strtod</Code> function and passing <Code>NULL</Code> as the second argument. <Code>strtod</Code> stands for "string to double". It parses the string given by the first argument, extracts a <Code>double</Code> value from it, and returns said value. Importantly, <Code>strtod()</Code> is provided by <Code>stdlib.h</Code><Emdash/>not <Code>string.h</Code>.</P>
+
+      <P>I said to pass <Code>NULL</Code> as the second argument to <Code>strtod</Code>. It actually doesn't <It>have</It> to be <Code>NULL</Code>. The second parameter is referred to as the <Code>endptr</Code>. If its value is <Code>NULL</Code>, it's effectively ignored. If it isn't <Code>NULL</Code>, then the <Code>strtod</Code> function will use it in a very specific way. It's a bit complicated, so we'll circle back to it.</P>
+
+      <P>Similarly, <Code>stdlib.h</Code> provides a <Code>strtol</Code> function, which stands for "string to long". It accepts three arguments, though<Emdash/>not two. The first is the C string from which a <Code>long</Code> (i.e., potentially large integer value) should be extracted. The second is the <Code>endptr</Code> argument, similar to <Code>strtod</Code> (again, we'll circle back to it; just leave it <Code>NULL</Code> for now). The third argument is the <Code>base</Code>; it specifies the base (i.e., the numbering system) in which the integer value is represented inside the C string. For example, using <Code>strtol</Code> on the string <Code>"11"</Code> with a base of <Code>10</Code> (i.e., the decimal numbering system) will return a <Code>long</Code> with the value <Code>11</Code>. However, using <Code>strtol</Code> on the string <Code>"11"</Code> with a base of <Code>2</Code> (i.e., the binary numbering system) will return a <Code>long</Code> with the value <Code>3</Code> (because <Code>11</Code> is the number three represented in binary).</P>
+
+      <P>Here's an extended example:</P>
+
+      <CBlock fileName="conversion.c">{
+`#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+        printf("Enter any decimal number: ");
+        char* line = NULL;
+        size_t n = 0;
+        ssize_t len = getline(&line, &n, stdin);
+        line[len - 1] = '\\0';
+        if (line[len - 2] == '\\r') {
+                line[len - 2] = '\\0';
+        }
+
+        double as_double = strtod(line, NULL);
+        printf("Your value multiplied by 2 is: %lf\\n", as_double * 2);
+        // Free the line immediately so that we can reuse the
+        // pointer
+        free(line);
+
+        printf("Enter a WHOLE number: ");
+        line = NULL;
+        n = 0;
+        len = getline(&line, &n, stdin);
+        line[len - 1] = '\\0';
+        if (line[len - 2] == '\\r') {
+                line[len - 2] = '\\0';
+        }
+
+        long as_long = strtol(line, NULL, 10);
+        printf(
+                "The remainder after dividing your value by 7 is: %ld\\n",
+                as_long % 7
+        );
+        // Free the line immediately so that we can reuse the
+        // pointer
+        free(line);
+
+        printf("Enter a bitstring: ");
+        line = NULL;
+        n = 0;
+        len = getline(&line, &n, stdin);
+        line[len - 1] = '\\0';
+        if (line[len - 2] == '\\r') {
+                line[len - 2] = '\\0';
+        }
+
+        // Base 2 = interpret string as binary expression (bitstring)
+        as_long = strtol(line, NULL, 2);
+        printf(
+                "The value of your bitstring converted to the "
+                        "decimal system is: %ld\\n",
+                as_long
+        );
+        // Free the final line
+        free(line);
+}`
+      }</CBlock>
+
+      <P>Here's an example output:</P>
+
+      <TerminalBlock copyable={false}>{
+`$ gcc -g -Wall -o conversion conversion.c 
+$ valgrind ./conversion 
+==3879286== Memcheck, a memory error detector
+==3879286== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==3879286== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
+==3879286== Command: ./conversion
+==3879286== 
+Enter any decimal number: 3.14
+Your value multiplied by 2 is: 6.280000
+Enter a WHOLE number: 12
+The remainder after dividing your value by 7 is: 5
+Enter a bitstring: 0110
+The value of your bitstring converted to the decimal system is: 6
+==3879286== 
+==3879286== HEAP SUMMARY:
+==3879286==     in use at exit: 0 bytes in 0 blocks
+==3879286==   total heap usage: 5 allocs, 5 frees, 2,408 bytes allocated
+==3879286== 
+==3879286== All heap blocks were freed -- no leaks are possible
+==3879286== 
+==3879286== For lists of detected and suppressed errors, rerun with: -s
+==3879286== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+`
+      }</TerminalBlock>
+
+      <P>Now, about the second parameter in these functions (i.e., the <Code>endptr</Code>). Its actual type is <Code>char**</Code>; it stores the address of a pre-declared <Code>char*</Code> variable, similar to how the first parameter of <Code>getline</Code> works. <Code>strtol</Code> and <Code>strtod</Code> can then modify that <Code>char*</Code> variable by dereferencing the <Code>char**</Code> parameter (<Code>endptr</Code>). Specifically, when <Code>strtol</Code> or <Code>strtod</Code> extract a <Code>long</Code> or <Code>double</Code> from a string, they actually extract it from the <It>beginning</It> of the string. The string may very well contain additional characters after the value being extracted. After the extraction, these functions will then modify the <Code>char*</Code> that <Code>endptr</Code> (the <Code>char**</Code> argument) points to, storing the address of the first character <It>not</It> involved in the extraction inside it.</P>
+
+      <P>For instance:</P>
+
+      <CBlock fileName="endptr.c">{
+`#include <stdlib.h>
+#include <stdio.h>
+
+int main() {
+        char* endptr = NULL;
+
+        // Note: Passing the address of a pointer storing NULL is
+        // NOT the same thing as simply passing NULL for the
+        // second argument.
+        double val = strtod("3.14 Hello, World!", &endptr);
+
+        // The above call is perfectly valid. It extracts the
+        // 3.14 from the beginning of the string. It returns that
+        // value (now stored in val), but just before that, it
+        // updates endptr to store the address of the space
+        // character (' ') immediately after the "3.14" in the
+        // string (just before the H in Hello)
+
+        printf("%lf\\n", val); // Prints 3.14
+
+        // Prints the memory address of the ' ' between "3.14" and
+        // "Hello" in the string literal (which is in the readonly
+        // section of the data segment, since that's where literals
+        // are stored)
+        printf("%p\\n", endptr);
+
+        // Prints the space character that endptr points to (with
+        // apostrophes on either side to make it visually clear)
+        printf("'%c'\\n", *endptr);
+}
+`
+      }</CBlock>
+
+      <P>Here's the output:</P>
+
+      <TerminalBlock copyable={false}>{
+`$ gcc -g -Wall -o endptr endptr.c
+$ valgrind ./endptr 
+==3915273== Memcheck, a memory error detector
+==3915273== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==3915273== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
+==3915273== Command: ./endptr
+==3915273== 
+3.140000
+0x402014
+' '
+==3915273== 
+==3915273== HEAP SUMMARY:
+==3915273==     in use at exit: 0 bytes in 0 blocks
+==3915273==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==3915273== 
+==3915273== All heap blocks were freed -- no leaks are possible
+==3915273== 
+==3915273== For lists of detected and suppressed errors, rerun with: -s
+==3915273== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+`
+      }</TerminalBlock>
+
+      <P>You must be very cognizant about where <Code>endptr</Code> points to. In this case, it points to the space between "3.14" and "Hello" in the string literal, which is stored in the readonly section of the data segment and is therefore <Ul>not</Ul> writable. If the above program attempted to modify the contents pointed to by <Code>endptr</Code>, it would invoke undefined behavior. Unfortunately, <Code>endptr</Code> can't simply be qualified as <Code>const char*</Code> (or, equivalently, <Code>char const *</Code>) because the type of the second parameter of <Code>strtol</Code> and <Code>strtod</Code> is <Ul>not</Ul> const-qualified, and constness can't be implicitly casted away. That is, if <Code>endptr</Code> was declared as <Code>const char* endptr</Code>, then the compiler would issue warnings (and possibly errors) when trying to pass its address to <Code>strtod</Code>.</P>
+
+      <P>(There's a complicated but interesting reason why the <Code>endptr</Code> parameter isn't const-qualified. See <Link href="https://stackoverflow.com/questions/3874196/why-is-the-endptr-parameter-to-strtof-and-strtod-a-pointer-to-a-non-const-char-p">here</Link> if you're curious.)</P>
 
       <SectionHeading id="strtok_r"><Code>strtok_r</Code></SectionHeading>
 
       {/*TODO*/}
 
+      <P>Let's discuss one final string function: <Code>strtok_r</Code>. This one's much more complicated than the ones we've discussed so far, so strap in.</P>
+
+      <P>The purpose of <Code>strtok_r</Code> is to <Bold>tokenize</Bold> a string. To tokenize a string means to break it up into individual parts, known as <Bold>tokens</Bold>, and extract them.</P>
+
+      <P>For example, consider the string <Code>"3.7,4.2,1.5"</Code>. If we interpret the commas as token separators, then this string has three tokens: <Code>3.7</Code>, <Code>4.2</Code>, and <Code>1.5</Code>. Imagine if we could extract those three tokens and store them in three separate C string variables (or in an array of character pointers, each element of which will point to one of the respective tokens). This is what <Code>strtok_r</Code> is designed to do.</P>
+
+      <P>Before you can use it, you must first declare a <Code>char*</Code> variable. Let's call it <Code>saveptr</Code>. Conventionally, you should initialize it to <Code>NULL</Code>. We will be passing its address (i.e., a <Code>char**</Code>) as the <Ul>third</Ul> argument to <Code>strtok_r</Code>, which will then update it. The purpose of this pointer is to keep track of where the most recent call to <Code>strtok_r</Code> left off in the tokenization process. That way, when we call <Code>strtok_r</Code> again, it can refer to <Code>saveptr</Code> to pick up where it left off at the end of the previous call, extracting one token per call. That will make more sense in a moment.</P>
+
+      <P>Second, before you can call <Code>strtok_r</Code>, you must have a <Ul>writable copy</Ul> of the string that you want to tokenize. This means that if you want to tokenize a string represented via a <Code>const char*</Code> variable, or a string that's stored in the readonly section of the data segment, you must first create a writable character array (on the stack or the heap, whatever makes sense for your use case) and copy the contents of the target string into it. You might use <Code>strcpy</Code> to do this. This is necessary since, as we'll see, <Code>strtok_r</Code> actually <Ul>modifies</Ul> the string that it's tokenizing. (Even if the string that you want to tokenize is already writable, you may still want to tokenize a copy of it given the fact that <Code>strtok_r</Code> will modify it).</P>
+
+      <P>You can then begin tokenizing the [writable copy of the] string. On the first call to <Code>strtok_r</Code>, to kick off the tokenization process, pass three arguments: 1) the [writable copy of the] string that you want to tokenize, 2) a separate string (often a literal) representing a list of the valid token separators (e.g., <Code>","</Code> if you're tokenizing a comma-separated list of values, such as <Code>"3.7,4.2,1.5"</Code>), and 3) the address of <Code>saveptr</Code> (the <Code>char*</Code> variable that you pre-declared). It will return a <Code>char*</Code> value representing the <Ul>first</Ul> token of the string.</P>
+
+      <P>So, this is what we have so far:</P>
+
+      <CBlock showLineNumbers={false}>{
+`const char* my_string = "3.7,4.2,1.5"; // The string to tokenize
+
+char* saveptr = NULL; // To keep track of where strtok_r left off
+
+// Create a writable copy of the string to tokenize (add 1 to the
+// string length to account for the null terminator)
+char* copy = malloc((strlen(my_string) + 1) * sizeof(char));
+strcpy(copy, my_string);
+
+// I'm going to store the three tokens in an array of three char*
+// values (yes, an array of three character POINTERS, each of
+// which will point to one of the three tokens in the string
+// being tokenized):
+char* tokens[3];
+
+// Now we call strtok_r for the first time, storing the first
+// token in tokens[0]
+tokens[0] = strtok_r(copy, ",", &saveptr);`
+      }</CBlock>
+
+      <P>I'll explain more about how <Code>strtok_r</Code> works in a moment. Let's complete this demo first.</P>
+
+      <P>To extract the two remaining tokens from the string (<Code>copy</Code>), we have to call <Code>strtok_r</Code> two more times. That is, it extracts one token per call. However, the remaining calls will be slightly different: rather than passing <Code>copy</Code> for the first argument, we're going to pass <Code>NULL</Code> for the first argument. Indeed, to <Ul>start</Ul> tokenizing a string, you must supply that string as the first argument, but to <Ul>continue</Ul> tokenizing a string, you must instead supply <Code>NULL</Code> as the first argument.</P>
+
+      <P>So, here's the completed demo:</P>
+
+      <CBlock showLineNumbers={false} highlightLines="{20-1000}">{
+`const char* my_string = "3.7,4.2,1.5"; // The string to tokenize
+
+char* saveptr = NULL; // To keep track of where strtok_r left off
+
+// Create a writable copy of the string to tokenize (add 1 to the
+// string length to account for the null terminator)
+char* copy = malloc((strlen(my_string) + 1) * sizeof(char));
+strcpy(copy, my_string);
+
+// I'm going to store the three tokens in an array of three char*
+// values (yes, an array of three character POINTERS, each of
+// which will point to one of the three tokens in the string
+// being tokenized):
+char* tokens[3];
+
+// Now we call strtok_r for the first time, storing the first
+// token in tokens[0]
+tokens[0] = strtok_r(copy, ",", &saveptr);
+
+// Call strtok_r for the second time, storing the token in
+// tokens[1]. But this time, we pass NULL as the first argument.
+tokens[1] = strtok_r(NULL, ",", &saveptr);
+
+// And the third time:
+tokens[2] = strtok_r(NULL, ",", &saveptr);
+
+// At this point, tokens[0] represents the string "3.7",
+// tokens[1] represents "4.2", and tokens[2] represents "1.5".
+// You can now do whatever you want with those tokens (e.g.,
+// iterate through them with a loop, using strtod to convert
+// them to doubles and add them up, or whatever...)
+
+// Don't forget to free the copy (but be careful about when
+// you free it. Read on!)
+free(copy);`
+      }</CBlock>
+
+      <P>Now, how exactly does <Code>strtok_r</Code> work? Well, here's what it does in the simplest cases:</P>
+
+      <Enumerate listStyleType="decimal">
+        <Item>If the first argument is not <Code>NULL</Code>, then it must point to the beginning of a C string to be tokenized. In such a case, the token extraction process will start from the beginning of said string. Otherwise, if it <It>is</It> <Code>NULL</Code>, then the token extraction process will pick up from the character where it left off in the previous call to <Code>strtok_r</Code>. The address of this character must be stored in <Code>saveptr</Code> (i.e., the <Code>char*</Code> variable that the third argument points to).</Item>
+        <Item>It searches the string (starting from the beginning, or from where it left off in a previous call, depending on the values of the first and third arguments) for a token separator. The list of token separators to be considered is specified as a C string via the second argument to <Code>strtok_r</Code> (<Code>","</Code> in the above demo).</Item>
+        <Item>If it finds a token separator, it <Ul>modifies</Ul> it, changing it into a null terminator. It then updates <Code>saveptr</Code> (the <Code>char*</Code> variable that the third argument points to) to store the address of the character that appears immediately <It>after</It> that token separator.</Item>
+        <Item>It returns the address of the character from where it started the token extraction process (i.e., the beginning of the extracted token).</Item>
+      </Enumerate>
+
+      <P>For example, let's again consider the string <Code>"3.7,4.2,1.5\0"</Code> (I've denoted the null terminator with <Code>\0</Code>). The first call, <Code>tokens[0] = strtok_r(copy, ",", &saveptr)</Code>, specifies the string to be tokenized, replaces the first token separator in the string with a null terminator, updates <Code>saveptr</Code> to point to the character immediately <It>following</It> that first token separator, and returns the base address of the entire string, storing it in <Code>tokens[0]</Code>. That is, after the first call to <Code>strtok_r</Code>, the string being tokenized (<Code>copy</Code>) now looks like <Code>"3.7\04.2,1.5\0"</Code> because the first token separator (comma) has been replaced with a null terminator. Moreover, after the first call to <Code>strtok_r</Code>, <Code>saveptr</Code> has been updated to point to the character <Code>'4'</Code> immediately following the token separator that was just replaced with a null terminator.</P>
+
+      {/*TODO Diagram here, and after each of the next couple paragraphs, to show how strtok_r modifies the 'copy' string, and how the elements of 'tokens' point to the various parts of the modified string.*/}
+
+      <P>(There's an implication here: If you were to execute <Code>printf("%s\n", copy);</Code> after the first call to <Code>strtok_r</Code>, it would simply print <Code>3.7</Code> to the terminal since there's now a null terminator immediatley after the <Code>'7'</Code> character. This is why it's important to tokenize a writable copy of the string<Emdash/>the string is modified as it's tokenized.)</P>
+
+      <P>The second call, <Code>tokens[1] = strtok_r(NULL, ",", &saveptr)</Code>, picks up where the first call left off. The <Code>NULL</Code> value for the first argument simply tells it to do exactly that (pick up where it left off, rather than starting from the beginning of some string). At the start of the call, <Code>saveptr</Code> stores the address of the <Code>'4'</Code> character (since the first call to <Code>strtok_r</Code> updated it to store that address), which tells it where to start the token extraction process from. It then searches through the string, starting from the <Code>'4'</Code>, until it finds the next token separator (comma). It replaces that token separator with another null terminator, updates <Code>saveptr</Code> to point to the character immediately <It>following</It> that token separator, and returns the address of the <Code>'4'</Code> character (from where it started the token extraction process), storing it in <Code>tokens[1]</Code>. The string being tokenized (<Code>copy</Code>) now looks like <Code>"3.7\04.2\01.5\0"</Code>, and <Code>saveptr</Code> now stores the address of the <Code>'1'</Code> character immediately following the second token separator (which is now a null terminator).</P>
+
+      <P>Now, there's a detail I left out in my previous description of <Code>strtok_r</Code>: as you call it over and over again, eventually it will reach the last token, and that token might <It>not</It> end in a token separator. Instead, that token will often be the very last thing in the string, meaning it will end in a null terminator. That's actually fine. In the third call, <Code>tokens[2] = strtok_r(NULL, ",", &saveptr)</Code>, <Code>strtok_r</Code> picks up where it left off (at the <Code>'1'</Code> character) and searches for a token separator. But it doesn't find one. Instead, it finds the null terminator denoting the end of the entire string being tokenized. When that happens, it does something slightly special: 1) updates <Code>saveptr</Code> to <It>somehow</It> record the fact that the tokenization process has concluded (on the ENGR servers, it seems to update it to just store the address of the null terminator at the end of the string, but other reasonable implementations might exist), and then 2) it returns the address of the character where it started the last token extraction process, as per usual (the address of the <Code>'1'</Code> character, in this case).</P>
+
+      <P>So, by the time all three calls are done, <Code>copy</Code> looks like <Code>"3.7\04.2\01.5\0"</Code>, <Code>tokens[0]</Code> stores the address of the <Code>'3'</Code> character, <Code>tokens[1]</Code> stores the address of the <Code>'4'</Code> character, and <Code>tokens[2]</Code> stores the address of the <Code>'1'</Code> character. Since the token separators were replaced with null terminators, each element of <Code>tokens</Code> is essentially like a pointer to its own small null-terminated C string. Lastly, <Code>saveptr</Code> was updated to somehow record the fact that the tokenization process has concluded (e.g., by storing the address of the null terminator at the very end of the string being tokenized).</P>
+
+      <P>Importantly, <Code>strtok_r</Code> is capable of recognizing when you call it too many times. In such a case, it simply does nothing and returns <Code>NULL</Code>. For example, if we tried to call it a fourth time even though there were only three tokens in the string, it'd return <Code>NULL</Code> on the fourth call:</P>
+
+      <CBlock showLineNumbers={false} highlightLines="{33-39}">{
+`const char* my_string = "3.7,4.2,1.5"; // The string to tokenize
+
+char* saveptr = NULL; // To keep track of where strtok_r left off
+
+// Create a writable copy of the string to tokenize (add 1 to the
+// string length to account for the null terminator)
+char* copy = malloc((strlen(my_string) + 1) * sizeof(char));
+strcpy(copy, my_string);
+
+// I'm going to store the three tokens in an array of three char*
+// values (yes, an array of three character POINTERS, each of
+// which will point to one of the three tokens in the string
+// being tokenized):
+char* tokens[3];
+
+// Now we call strtok_r for the first time, storing the first
+// token in tokens[0]
+tokens[0] = strtok_r(copy, ",", &saveptr);
+
+// Call strtok_r for the second time, storing the token in
+// tokens[1]. But this time, we pass NULL as the first argument.
+tokens[1] = strtok_r(NULL, ",", &saveptr);
+
+// And the third time:
+tokens[2] = strtok_r(NULL, ",", &saveptr);
+
+// At this point, tokens[0] represents the string "3.7",
+// tokens[1] represents "4.2", and tokens[2] represents "1.5".
+// You can now do whatever you want with those tokens (e.g.,
+// iterate through them with a loop, using strtod to convert
+// them to doubles and add them up, or whatever...)
+
+// If we called it a fourth time, it would analyze saveptr and
+// notice that it (somehow) indicates that the tokenization
+// process has already concluded. It simply returns NULL in
+// such a case.
+char* fourth_token = strtok_r(NULL, ",", &save_ptr);
+
+// fourth_token is now NULL. saveptr is unmodified.
+
+// Don't forget to free the copy (but be careful about when
+// you free it. Read on!)
+free(copy);`
+      }</CBlock>
+
+      <P>Of course, if you want to start a <It>fresh</It> tokenization process to tokenize an entirely different string, you can do that<Emdash/>just pass said string as the first argument to <Code>strtok_r</Code> to kick off the new tokenization process. (You can even tokenize two or more strings concurrently by keeping track of separate save pointers for each of the tokenization processes.)</P>
+
+      <P>Now, I should bring something to your attention: <Code>strtok_r</Code> does <Ul>not</Ul> allocate any memory in which to store the extracted tokens. That's to say, it doesn't create <It>new</It> strings and copy the tokens into them. Rather, it simply modifies the string being tokenized, replacing its token separators with null terminators, and returns pointers that point to the beginnings of the tokens within said string.</P>
+
+      <P>This strategy is very efficient. However, if you don't understand it, there can be disastrous consequences. Consider the above demo. <Code>tokens[0]</Code> stores the address of the <Code>'3'</Code> character at the beginning of the tokenized string. <Code>copy</Code> also points to that <Code>'3'</Code> (i.e., <Code>tokens[0]</Code> and <Code>copy</Code> store the exact same address). That character is part of a heap-allocated character array (see the <Code>malloc</Code> call where <Code>copy</Code> was initialized). This means that once that character array is freed, <Code>tokens[0]</Code> will become a dangling pointer<Emdash/>it will point to a character in an array that has been freed from memory. But it's not just <Code>tokens[0]</Code>; it's also <Code>tokens[1]</Code> and <Code>tokens[2]</Code>. None of these character pointers point to their own separate arrays in memory. Rather, they all point to various <It>parts</It> of the tokenized string's character array, after replacing the token separators with null terminators.</P>
+
+      <P>Indeed, when <Code>free(copy)</Code> is called at the end of the above demo, thereby freeing the underlying dynamic character array, <Ul>all</Ul> of the character pointers in <Code>tokens</Code> become dangling pointers. If you don't want that to happen, then it's absolutely critical that you create additional, separate character arrays (e.g., on the heap) in which to store each of the tokens, and then use, say, <Code>strcpy</Code> to copy the tokens into them. For example:</P>
+
+      <CBlock showLineNumbers={false}>{
+`char* token = strtok_r(copy, ",", &saveptr);
+tokens[0] = malloc((strlen(token) + 1) * sizeof(char));
+strcpy(tokens[0], token);`
+      }</CBlock>
+
+      <P>You'd have to do this for each of the tokens. This strategy<Emdash/>copying the tokens into their own separate character arrays on the heap<Emdash/>separates the "ownership" of the tokens from that of the string being tokenized. That is, it allows you to free the string that you tokenized (<Code>copy</Code>) without freeing the tokens that were extracted from it.</P>
+
+      <P>In such a case, you'd have to call <Code>free(copy)</Code> once you're done tokenizing it (as we did), but you'd <It>also</It> have to free each of the tokens one at a time when you're done using them later on in the program (e.g., <Code>free(tokens[i])</Code> in a for loop that runs three times).</P>
+
+      <P>I mentioned that the second argument to <Code>strtok_r</Code> specifies a <It>list</It> of viable token separators. In the previous example, there was just a single token separator (commas). But if a given token separator is allowed to be one of <It>several</It> characters, then you can specify all those characters in the C string passed as the second argument. For example, if a string contains some tokens each separated by <It>either</It> a comma or a semicolon, then you could pass <Code>",;"</Code> as the second argument to <Code>strtok_r</Code>. Importantly, this does not mean that <Code>",;"</Code> is a token separator. Rather, it means that commans <It>and</It> semicolons are each viable token separators in their own right. Unfortunately, <Code>strtok_r</Code> is not capable of handling multi-character token separators (e.g., if each token truly is separated by a comma followed by a semicolon, <Code>strtok_r</Code> can't handle that out of the box).</P>
+
+      <P>Finally, there were exactly three tokens in the previous example, but what if you don't know how many tokens there are in the string that you want to tokenize? In that case, you can call <Code>strtok_r</Code> in a while loop until it returns <Code>NULL</Code>, indicating that the tokenization process has concluded and that there are no more tokens to extract. In a particularly complex program, you might even need to create a dynamic array of character pointers (handled by a <Code>char**</Code> variable) in which to store pointers to all those tokens, expanding it with <Code>realloc</Code> over and over again as necessary. However, this would essentially be a non-contiguous dynamic multidimensional character array, and we'll be covering such things in a future lecture.</P>
+
+      <P>I do want to give you an example of a program that can deal with an arbitrary number of tokens, though, so here's one where the tokens aren't stored in an array at all, but rather they're converted to <Code>double</Code> values via <Code>strtod</Code> on-the-fly and added up to compute a running sum:</P>
+
+      <CBlock fileName="strtokr.c">{
+`#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+        printf("Enter a comma-separated list of numbers: ");
+        char* line = NULL;
+        size_t n = 0;
+        ssize_t len = getline(&line, &n, stdin);
+        line[len - 1] = '\\0';
+        if (line[len - 2] == '\\r') {
+                line[len - 2] = '\\0';
+        }
+
+        // We'll compute the sum of all the values the user entered
+        // (e.g., if they entered 3.7,4.2,1.5 then we'll compute
+        // 3.7 + 4.2 + 1.5 = 9.4)
+        char* saveptr = NULL; // For third argument to strtok_r
+        double sum = 0.0;
+        char* current_token;
+
+        // Call strtok_r, passing line as the first argument since
+        // this is the first call. Second argument is "," since
+        // it's a comma-separated list of numbers. Third argument
+        // is &saveptr, so saveptr will keep track of where the
+        // most recent call to strtok_r left off (so that the next
+        // call can pick up from there).
+        current_token = strtok_r(line, ",", &saveptr);
+
+        // While the most recent call to strtok_r returned an
+        // actual token (not NULL)
+        while (current_token) {
+                // Extract double value with strtod and add to sum
+                double value = strtod(current_token, NULL);
+                sum += value;
+
+                // Call strtok_r again. This time, pass NULL as the
+                // first argument. Signals that strtok_r should pick
+                // up where it left off in a previous call (and that
+                // location where it left off is stored in saveptr,
+                // whose address we again pass as the third argument).
+                current_token = strtok_r(NULL, ",", &saveptr);
+        }
+
+        // Once the final token has been extracted, the subsequent
+        // call to strtok_r returns NULL, and the loop ends.
+        // That has now happened. Print the computed sum.
+        printf("The sum is %lf\\n", sum);
+
+        // Remember: every call to strtok_r actually MODIFIES the
+        // string that it's currently tokenizing (i.e., the string
+        // that was passed as the first argument to the FIRST call
+        // to strtok_r, which started the tokenization process).
+        // Specifically, it replaces token separators (commas, in
+        // this case) with null terminators (and updates the char*
+        // that saveptr points to) as it goes. To prove it, I'll
+        // print the line string again. But now, the first comma
+        // has been replaced with a null terminator, so this will
+        // just print the first token in the user's entered string.
+        printf("%s\\n", line);
+
+        free(line);
+}
+`
+      }</CBlock>
+
+      <P>And here's an example output:</P>
+
+      <TerminalBlock copyable={false}>{
+`(env) guyera@flip1:string-input-and-manipulation$ gcc -g -Wall -o strtokr strtokr.c 
+(env) guyera@flip1:string-input-and-manipulation$ valgrind ./strtokr 
+==3966429== Memcheck, a memory error detector
+==3966429== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==3966429== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
+==3966429== Command: ./strtokr
+==3966429== 
+Enter a comma-separated list of numbers: 3.7,4.2,1.5
+The sum is 9.400000
+3.7
+==3966429== 
+==3966429== HEAP SUMMARY:
+==3966429==     in use at exit: 0 bytes in 0 blocks
+==3966429==   total heap usage: 3 allocs, 3 frees, 2,168 bytes allocated
+==3966429== 
+==3966429== All heap blocks were freed -- no leaks are possible
+==3966429== 
+==3966429== For lists of detected and suppressed errors, rerun with: -s
+==3966429== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+`
+      }</TerminalBlock>
+
+      <P>This program works with an arbitrarily long list of comma-separated values<Emdash/>not just three.</P>
+
+      <SectionHeading id="pointer-to-middle">Pointer to the middle of a string</SectionHeading>
+
+      <P>I've mentioned in the past that if you have a pointer that points to an element somewhere in the middle of an array, you can treat it as if it were the base address of an array whose first element is the value that the pointer points to. For example:</P>
+
+      <CBlock showLineNumbers={false}>{
+`int vals[] = {1, 7, 2, 4, 6};
+int* ptr = vals + 1; // Points to the 7
+printf("%d\\n", ptr[0]); // Prints 7
+printf("%d\\n", ptr[1]); // Prints 2
+printf("%d\\n", ptr[2]); // Prints 4
+printf("%d\\n", ptr[3]); // Prints 6`
+      }</CBlock>
+
+      <P>Similarly, a <Code>char*</Code> that points to a character in the middle of a C string's contents can be treated as if it were the base address of a C string whose contents started at that character. You can combine this idea with many of the functions that we've discussed throughout this lecture to do lots of useful things. For example:</P>
+
+      <CBlock showLineNumbers={false}>{
+`// Find the first occurrence of the substring "cat" within
+// my_string that starts ON OR AFTER the 13th character of
+// my_string (i.e., skip the first 12 characters of my_string
+// when searching for "cat")
+char* ptr = strstr(my_string + 12, "cat");
+
+// Check if the last 4 characters of my_string is ".csv"
+if (strcmp(my_string + strlen(my_string) - 4, ".csv") == 0) {
+    // ...
+}
+
+// Extract the substring from my_string starting at the 7th character
+// and going through the 10th character, storing it in the dest array
+// (uses strncpy, mentioned earlier). In case this substring doesn't
+// contain a null terminator, we should prefill dest with a bunch of
+// null terminators.
+char dest[256] = {0};
+strncpy(dest, my_string + 6, 4);
+`
+      }</CBlock>
+
+      <P>As always, you must be very careful when doing pointer arithmetic like this. If <Code>my_string</Code> contains a bunch of contents followed by a single null terminator, and <Code>my_string + N</Code> (for some value <Code>N</Code>) points to some character that comes <It>after</It> the null terminator (even if it's still a valid element in the underlying character array), then passing <Code>my_string + N</Code> to any of these string functions will invoke undefined behavior. That's because these functions will interpret <Code>my_string + N</Code> as the base address of a C string, but such a C string wouldn't be properly null-terminated (and therefore not a valid C string) since <Code>my_string + N</Code> points to some character <It>after</It> the null terminator.</P>
+
       <SectionHeading id="and-more">And more!</SectionHeading>
 
-      {/*TODO*/}
+      <P>There are many other string functions provided by <Code>string.h</Code>, and some in <Code>stdlib.h</Code>, that weren't discussed in this lecture. I encourage you to take a look through <Link href="https://man7.org/linux/man-pages/man0/string.h.0p.html">the documentation</Link> to see what's available before reinventing the wheel.</P>
 
     </>
   )
