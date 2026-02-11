@@ -79,6 +79,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
         <Item><Link href="#sprintf"><Code>sprintf</Code></Link></Item>
         <Item><Link href="#strstr"><Code>strstr</Code></Link></Item>
         <Item><Link href="#strtol-strtod"><Code>strtol</Code> and <Code>strtod</Code></Link></Item>
+        <Item><Link href="#islower-and-isupper"><Code>islower</Code> and <Code>isupper</Code></Link></Item>
         <Item><Link href="#strtok_r"><Code>strtok_r</Code></Link></Item>
         <Item><Link href="#pointer-to-middle">Pointer to the middle of a string</Link></Item>
         <Item><Link href="#and-more">And more!</Link></Item>
@@ -1203,11 +1204,54 @@ $ valgrind ./endptr
 
       <P>(There's a complicated but interesting reason why the <Code>endptr</Code> parameter isn't const-qualified. See <Link href="https://stackoverflow.com/questions/3874196/why-is-the-endptr-parameter-to-strtof-and-strtod-a-pointer-to-a-non-const-char-p">here</Link> if you're curious.)</P>
 
+      <SectionHeading id="islower-and-isupper"><Code>islower</Code> and <Code>isupper</Code></SectionHeading>
+
+      <P>The <Code>islower</Code> and <Code>isupper</Code> functions, which are actually provided by <Code>ctype.h</Code>, can be used to check whether a given character is a lowercase or uppercase letter (respectively) in the current <Link href="https://man7.org/linux/man-pages/man7/locale.7.html">locale</Link>. To check if a character is a lowercase letter, simply pass it as the one only argument to the <Code>islower</Code> function. If the character is indeed a lowercase letter, <Code>islower</Code> will return a nonzero integer (i.e., true). Otherwise, it will return zero (i.e., false). The <Code>isupper</Code> function works the same way, but it checks if the character is an uppercase letter instead.</P>
+
+      <P>Here's a simple example:</P>
+
+      <CBlock fileName="islower.c">{
+`#include <stdio.h>
+#include <ctype.h> // islower and isupper
+
+int main() {
+        if (islower('A')) {
+                printf("'A' is a lowercase letter\\n");
+        }
+
+        if (islower('a')) {
+                printf("'a' is a lowercase letter\\n");
+        }
+}
+`
+      }</CBlock>
+
+      <P>Here's the output:</P>
+
+      <TerminalBlock copyable={false}>{
+`$ gcc -g -Wall -o islower islower.c 
+$ valgrind ./islower 
+==1323101== Memcheck, a memory error detector
+==1323101== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==1323101== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
+==1323101== Command: ./islower
+==1323101== 
+'a' is a lowercase letter
+==1323101== 
+==1323101== HEAP SUMMARY:
+==1323101==     in use at exit: 0 bytes in 0 blocks
+==1323101==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==1323101== 
+==1323101== All heap blocks were freed -- no leaks are possible
+==1323101== 
+==1323101== For lists of detected and suppressed errors, rerun with: -s
+==1323101== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+`
+      }</TerminalBlock>
+
       <SectionHeading id="strtok_r"><Code>strtok_r</Code></SectionHeading>
 
-      {/*TODO*/}
-
-      <P>Let's discuss one final string function: <Code>strtok_r</Code>. This one's much more complicated than the ones we've discussed so far, so strap in.</P>
+      <P>Let's discuss one final string function: <Code>strtok_r</Code>, provided by <Code>string.h</Code>. This one's much more complicated than the ones we've discussed so far, so strap in.</P>
 
       <P>The purpose of <Code>strtok_r</Code> is to <Bold>tokenize</Bold> a string. To tokenize a string means to break it up into individual parts, known as <Bold>tokens</Bold>, and extract them.</P>
 
@@ -1449,8 +1493,8 @@ int main() {
       <P>And here's an example output:</P>
 
       <TerminalBlock copyable={false}>{
-`(env) guyera@flip1:string-input-and-manipulation$ gcc -g -Wall -o strtokr strtokr.c 
-(env) guyera@flip1:string-input-and-manipulation$ valgrind ./strtokr 
+`$ gcc -g -Wall -o strtokr strtokr.c 
+$ valgrind ./strtokr 
 ==3966429== Memcheck, a memory error detector
 ==3966429== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
 ==3966429== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
