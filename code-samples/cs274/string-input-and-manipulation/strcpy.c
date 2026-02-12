@@ -7,8 +7,14 @@ int main() {
 	char* line = NULL;
 	size_t n = 0;
 	ssize_t len = getline(&line, &n, stdin);
-	line[len - 1] = '\0';
-	if (line[len - 2] == '\r') {
+	if (len == -1) {
+		printf("Error on getline()\n");
+		exit(1);
+	}
+	if (len >= 1 && line[len - 1] == '\n') {
+		line[len - 1] = '\0';
+	}
+	if (len >= 2 && line[len - 2] == '\r') {
 		line[len - 2] = '\0';
 	}
 
@@ -17,6 +23,10 @@ int main() {
 	// one for a null terminator).
 	len = strlen(line);
 	char* copy = malloc((len + 1) * sizeof(char));
+	if (!copy) {
+		printf("Error on malloc()\n");
+		exit(1);
+	}
 
 	// Now use strcpy
 	strcpy(copy, line);

@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <string.h> // For strlen
 #include <stdio.h>
 
@@ -59,7 +60,15 @@ int main() {
 	// Ask the user for another line
 	printf("Enter another line of text no more than 30 "
 		"characters in length: ");
-	fgets(line, 33, stdin); // We can reuse the same array
+	
+	// We can reuse the same array
+	char* fgets_result = fgets(line, 33, stdin);
+	if (!fgets_result) {
+		printf("Error on fgets()\n");
+		exit(1);
+	}
+
+
 
 	// Trim it
 	len = strlen(line);

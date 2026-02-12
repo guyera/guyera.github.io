@@ -7,8 +7,14 @@ int main() {
 	char* line = NULL;
 	size_t n = 0;
 	ssize_t len = getline(&line, &n, stdin);
-	line[len - 1] = '\0';
-	if (line[len - 2] == '\r') {
+	if (len == -1) {
+		printf("Error on getline()\n");
+		exit(1);
+	}
+	if (len >= 1 && line[len - 1] == '\n') {
+		line[len - 1] = '\0';
+	}
+	if (len >= 2 && line[len - 2] == '\r') {
 		line[len - 2] = '\0';
 	}
 
@@ -16,8 +22,14 @@ int main() {
 	char* line2 = NULL;
 	n = 0;
 	len = getline(&line2, &n, stdin);
-	line2[len - 1] = '\0';
-	if (line2[len - 2] == '\r') {
+	if (len == -1) {
+		printf("Error on getline()\n");
+		exit(1);
+	}
+	if (len >= 1 && line2[len - 1] == '\n') {
+		line2[len - 1] = '\0';
+	}
+	if (len >= 2 && line2[len - 2] == '\r') {
 		line2[len - 2] = '\0';
 	}
 
@@ -27,6 +39,10 @@ int main() {
 	size_t len1 = strlen(line);
 	size_t len2 = strlen(line2);
 	char* concatenated = malloc((len1 + len2 + 3) * sizeof(char));
+	if (!concatenated) {
+		printf("Error on malloc()\n");
+		exit(1);
+	}
 
 	// Print the first line, then ". ", then the second line,
 	// all into 'concatenated'
