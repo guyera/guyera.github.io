@@ -215,26 +215,34 @@ Your second word was: World!
 
       <SectionHeading id="getline"><Code>getline</Code></SectionHeading>
 
-      <P>A much better way<Emdash/>perhaps the best way<Emdash/>to read string user inputs is via the <Code>getline</Code> function, provided by <Code>stdio.h</Code>. It reads an entire line of text from a specified file stream (e.g., standard input). It accepts three arguments: 1) A pointer that stores the address <It>of a character pointer</It> (yes, a <Code>char**</Code> value); 2) A pointer that stores the address of a <Code>size_t</Code> variable (i.e., a <Code>size_t*</Code> value); and 3) a pointer to a file stream from which you'd like to read a line of text. In most cases, when the goal is to read from standard input (the terminal), the character pointer <It>that the first argument points to</It> should be initialized to <Code>NULL</Code>; the <Code>size_t</Code> variable that the second argument points to should be initialized to 0, and the third argument should simply be the builtin constant <Code>stdin</Code> (it's a file stream pointer that refers to the process's standard input).</P>
+      <P>A much better way<Emdash/>perhaps the best way<Emdash/>to read string user inputs is via the <Code>getline</Code> function, provided by <Code>stdio.h</Code>. It reads an entire line of text from a specified file stream (e.g., standard input). It accepts three arguments: 1) A pointer that stores the address <It>of a character pointer</It> (yes, a <Code>char**</Code> value); 2) A pointer that stores the address of a <Code>size_t</Code> variable (i.e., a <Code>size_t*</Code> value); and 3) a pointer to a file stream from which you'd like to read a line of text. In most cases, when the goal is to read from standard input (the terminal), the character pointer <It>that the first argument points to</It> should be initialized to <Code>NULL</Code>; the <Code>size_t</Code> variable that the second argument points to should be initialized to 0, and the third argument should simply be the builtin constant <Code>stdin</Code> (it's a file stream pointer that refers to the process's standard input). Finally, its return type is <Code>ssize_t</Code> (which stands for "signed size type").</P>
 
-      <P>In other words, you can call <Code>getline()</Code> to read a line of text from the user like so:</P>
+      <P>(The <Code>ssize_t</Code> type is provided indirectly by <Code>stdio.h</Code>, but you may need to additionally include <Code>sys/types.h</Code> in order to make LSP systems (e.g., intellisense) happy in Windows development environments).</P>
+
+      <P>In other words, you can call <Code>getline</Code> to read a line of text from the user like so (for example):</P>
 
       <CBlock showLineNumbers={false}>{
-`// We will pass the ADDRESS of this as the first arg to getline
+`#include <stdio.h>
+#include <sys/types.h>
+
+// We will pass the ADDRESS of this as the first arg to getline
 char* line = NULL;
 
 // We will pass the ADDRESS of this as the second arg to getline
 size_t n = 0;
 
-// Now we call getline, passing stdin (standard input) as the third arg
-getline(&line, &n, stdin);`
+// Now we call getline, passing stdin (standard input) as the third arg,
+// storing its return value in a variable of type ssize_t (called len here,
+// which will be explained shortly).
+ssize_t len = getline(&line, &n, stdin);`
       }</CBlock>
 
-      <P>As you might've guessed, the reason that <Code>line</Code> and <Code>n</Code> are passed by pointer is so that the <Code>getline</Code> function can <Ul>modify</Ul> them (this is a very common reason for passing things around by pointer). And, indeed, <Code>getline</Code> will do precisely that. When the above <Code>getline</Code> call is done executing:</P>
+      <P>As you might've guessed, the reason that <Code>line</Code> and <Code>n</Code> are passed by pointer is so that the <Code>getline</Code> function can <Ul>modify</Ul> them (this is a very common reason for passing things around by pointer). And, indeed, <Code>getline</Code> will do precisely that. On success, when the above <Code>getline</Code> call is done executing:</P>
 
       <Enumerate listStyleType="decimal">
         <Item><Code>line</Code> will store the base address of a brand new <Ul>dynamically allocated</Ul> character array containing a (null-terminated) C string representing an entire line of text that was read from standard input (e.g., supplied by the user).</Item>
-        <Item><Code>n</Code> will store the size (in bytes) of the dynamically allocated character array that <Code>line</Code> now points to.</Item>
+        <Item><Code>n</Code> will store the size (number of bytes; equivalently, number of characters) of the dynamically allocated character array that <Code>line</Code> now points to.</Item>
+        <Item><Code>len</Code> (the stored return value) will store the length of the <Ul>contents</Ul> of the C string that <Code>line</Code> now points to (i.e., the number of characters in the line of text entered by the user, not including the injected null terminator). This will always be strictly less than <Code>n</Code>. This saves you a call to <Code>strlen</Code> if you subsequently need to know the length of the string (and you often do).</Item>
       </Enumerate>
 
       <P><Code>getline</Code> is a very clever function. It determines the amount of characters contained in the line of text entered by the user, and it dynamically allocates a character array that's big enough to store all of those characters as well as at least one null terminator. It stores said characters in the array, and then it then updates the character pointer whose address was supplied as the first argument, causing to point to that dynamically allocated array. The dynamic sizing of the character array according to the length of the line of text means that there's no chance of a buffer overflow occurring as a result of the user typing in a large number of characters (unlike with <Code>scanf</Code>).</P>
@@ -246,13 +254,14 @@ getline(&line, &n, stdin);`
       <CBlock fileName="getline.c">{
 `#include <stdlib.h> // For free()
 #include <stdio.h>
+#include <sys/types.h>
 
 int main() {
         char* line = NULL;
         size_t n = 0;
         printf("Give me a fun quote: ");
 
-        getline(&line, &n, stdin);
+        ssize_t len = getline(&line, &n, stdin);
 
         printf("Your quote was: %s\\n", line);
         printf("%ld bytes were allocated to the character array to store "
@@ -292,56 +301,26 @@ Your quote was: The epic highs and lows of high school football
 `
       }</TerminalBlock>
 
-      <P>Now, you might have noticed a couple funny things about the above program. First of all, the quote <Code>The epic highs and lows of high school football</Code> has a total of 47 characters (including the letters and spaces), and a single <Code>char</Code> always occupies a single byte of space, and yet a whopping 120 bytes were allocated for the array. Indeed, <Code>getline</Code> can, and often does, allocate more memory than is technically necessary to store the user's provided line of text. There are good reasons for this (e.g., to prioritize runtime efficiency over memory efficiency in its dynamic allocation strategy), but we won't get into the details.</P>
+      <P>Before we move on, we should discuss error handling. <Code>getline</Code> can fail. And maybe that's obvious; for one, it allocates dynamic memory, which can fail if there isn't a sufficiently large contiguous unallocated block on the heap. There are other reasons that it can fail as well (which we won't get into right now). In any case, <Code>getline</Code> will return <Code>-1</Code> and leave the input stream as-is if it fails to read a line of text from it. This is why the return type is <Code>ssize_t</Code> instead of just <Code>size_t</Code>; the former can represent negative values, but the latter can't. It's a good idea to always check the return value for errors:</P>
 
-      <P>More importantly, take a close look at the program's output:</P>
-
-      <TerminalBlock copyable={false}>{
-`Give me a fun quote: The epic highs and lows of high school football
-Your quote was: The epic highs and lows of high school football
-
-120 bytes were allocated to the character array to store the line of text`
-      }</TerminalBlock>
-
-      <P>Notice: There's an extra empty line between the printed quote and the subsequent printout about the number of allocated bytes. There's a good reason for this. Earlier, I mentioned that <Code>scanf</Code> skips leading whitespace and leaves trailing whitespace in the buffer. <Code>getline</Code>, in contrast, reads and retrieves all whitespace that it encounters, <Ul>including the newline character sequence (<Code>\n</Code>) at the end of the user's line of text.</Ul></P>
-
-      <P>The result? In the above program run, the dynamic array that <Code>line</Code> points to actually has 48 characters of string content: the 47 characters of letters and spaces in the user's provided quote, and a single <Code>\n</Code> character. (There's also a null terminator, <Code>\0</Code>, in the character array following the <Code>\n</Code>, but that's not part of the string's "contents" by definition).</P>
-
-      <P>(Also, on Windows and other platforms that use DOS-style line endings, the string would actually have 49 characters of string content. More on this in a moment.</P>
-
-      <P>When the program then calls <Code>printf("Your quote was: %s\n", line)</Code>, it ends up printing <Ul>two</Ul> newline character sequences: 1) the one stored in the C string that <Code>line</Code> points to, and 2) the one at the end of the format string supplied as the first argument to <Code>printf</Code>.</P>
-
-      <P>Of course, if we just wanted to get rid of the extra empty line in the program's output, we could just omit the <Code>\n</Code> from the end of our format string in the <Code>printf</Code> call. But often times, the program needs to do more to the user's input than just print it back out to them. For instance, programs often need to parse the user's input and respond accordingly. In such a case, the newline character sequence at the end of the C string can confuse the parsing code.</P>
-
-      <P>For this reason, it's often a good idea to trim the newline character sequence at the end of the C string by replacing it with a null terminator. The trouble, though, is that different platforms represent newline character sequences in different ways. On Unix-like systems, a newline character sequence is simply a single line feed character. But on Windows, which uses DOS-style line endings, a newline character sequence is a sequence of two characters: a carriage return character, followed by a line feed character.</P>
-
-      <P>So, to properly trim the newline character sequence at the end of the C string in a platform-independent way, you have to be a bit clever:</P>
-
-      <CBlock fileName="getline.c" highlightLines="{3,12-25}">{
+      <CBlock fileName="getline.c" highlightLines="{11-18}">{
 `#include <stdlib.h> // For free()
 #include <stdio.h>
-#include <string.h>
+#include <sys/types.h>
 
 int main() {
         char* line = NULL;
         size_t n = 0;
         printf("Give me a fun quote: ");
 
-        getline(&line, &n, stdin);
-
-        // Remember strlen? Determines length of C string's contents
-        size_t len = strlen(line);
-
-        // Replace the last character of the string's contents with a
-        // null terminator, shortening it by one character:
-        line[len - 1] = '\\0';
-
-        // But if this is Windows or a similar platform, then there will
-        // additionally be a carriage return (\\r) before the line feed
-        // character. Let's check for that with an if statement and trim
-        // it as well if necessary
-        if (line[len - 2] == '\\r') {
-                line[len - 2] = '\\0';
+        ssize_t len = getline(&line, &n, stdin);
+        if (len == -1) {
+                printf("Error on getline()\\n");
+                // Provided by stdlib.h; ends the entire program with
+                // exit status 1. Obviously, this isn't what you should
+                // ALWAYS do when getline() fails, but this is just a
+                // demo.
+                exit(1);
         }
 
         printf("Your quote was: %s\\n", line);
@@ -356,6 +335,78 @@ int main() {
         // interesting things with strings soon.
 }
 `
+      }</CBlock>
+
+      <P>Now, you might have noticed a couple funny things about the above program's output. First of all, the quote <Code>The epic highs and lows of high school football</Code> has a total of 47 characters (including the letters and spaces), and a single <Code>char</Code> always occupies a single byte of space, and yet a whopping 120 bytes were allocated for the array. Indeed, <Code>getline</Code> can, and often does, allocate more memory than is technically necessary to store the user's provided line of text. There are good reasons for this (e.g., to prioritize runtime efficiency over memory efficiency in its dynamic allocation strategy), but we won't get into the details.</P>
+
+      <P>More importantly, take a close look at the program's output:</P>
+
+      <TerminalBlock copyable={false}>{
+`Give me a fun quote: The epic highs and lows of high school football
+Your quote was: The epic highs and lows of high school football
+
+120 bytes were allocated to the character array to store the line of text`
+      }</TerminalBlock>
+
+      <P>Notice: There's an extra empty line between the printed quote and the subsequent printout about the number of allocated bytes. There's a good reason for this. Earlier, I mentioned that <Code>scanf</Code> skips leading whitespace and leaves trailing whitespace in the buffer. <Code>getline</Code>, in contrast, reads and retrieves all whitespace that it encounters, <Ul>including the newline character sequence (<Code>\n</Code>) at the end of the user's line of text.</Ul></P>
+
+      <P>The result? In the above program run, the dynamic array that <Code>line</Code> points to actually has 48 characters of string content: the 47 characters of letters and spaces in the user's provided quote, and a single <Code>\n</Code> character. Indeed, if we were to print the value of <Code>len</Code> (e.g., <Code>printf("%ld\n", len)</Code>, it would print <Code>48</Code>. There's also a null terminator, <Code>\0</Code>, in the character array following the <Code>\n</Code>, but that's not part of the string's "contents" by definition.</P>
+
+      <P>(Windows and other platforms that use DOS-style line endings, the string would actually have 49 characters of string content. More on this in a moment.)</P>
+
+      <P>When the program then calls <Code>printf("Your quote was: %s\n", line)</Code>, it ends up printing <Ul>two</Ul> newline character sequences: 1) the one stored in the C string that <Code>line</Code> points to, and 2) the one at the end of the format string supplied as the first argument to <Code>printf</Code>.</P>
+
+      <P>Of course, if we just wanted to get rid of the extra empty line in the program's output, we could just omit the <Code>\n</Code> from the end of our format string in the <Code>printf</Code> call. But often times, the program needs to do more to the user's input than just print it back out to them. For instance, programs often need to parse the user's input and respond accordingly. In such a case, the newline character sequence at the end of the C string can confuse the parsing code.</P>
+
+      <P>Hence, it's often a good idea to trim the newline character sequence at the end of the C string by replacing it with a null terminator. The trouble, though, is that different platforms represent newline character sequences in different ways. On Unix-like systems, a newline character sequence is simply a single line feed character. But on Windows, which uses DOS-style line endings, a newline character sequence is a sequence of two characters: a carriage return character, followed by a line feed character.</P>
+
+      <P>So, to properly trim the newline character sequence at the end of the C string in a platform-independent way, you have to be a bit clever:</P>
+
+      <CBlock fileName="getline.c" highlightLines="{20-32}">{
+`#include <stdlib.h> // For free()
+#include <stdio.h>
+#include <sys/types.h>
+
+int main() {
+        char* line = NULL;
+        size_t n = 0;
+        printf("Give me a fun quote: ");
+
+        ssize_t len = getline(&line, &n, stdin);
+        if (len == -1) {
+                printf("Error on getline()\\n");
+                // Provided by stdlib.h; ends the entire program with
+                // exit status 1. Obviously, this isn't what you should
+                // ALWAYS do when getline() fails, but this is just a
+                // demo.
+                exit(1);
+        }
+
+        // Double-check that the last character is a line feed
+        // ('\\n'). If so, replace it with a null terminator.
+        if (len >= 1 && line[len - 1] == '\\n') {
+                line[len - 1] = '\\0';
+        }
+
+        // But if this is Windows or a similar platform, then there will
+        // additionally be a carriage return (\\r) before the line feed
+        // character. Let's check for that with an if statement and trim
+        // it as well if necessary
+        if (len >= 2 && line[len - 2] == '\\r') {
+                line[len - 2] = '\\0';
+        }
+
+        printf("Your quote was: %s\\n", line);
+        printf("%ld bytes were allocated to the character array to store "
+                "the line of text\\n", n);
+
+        // The program is done with the line of text, so we should free
+        // it
+        free(line);
+
+        // I know, this program is boring. We'll learn how to do more
+        // interesting things with strings soon.
+}`
       }</CBlock>
 
       <P>And here's the output:</P>
@@ -386,51 +437,6 @@ Your quote was: The epic highs and lows of high school football
       <P>Much better.</P>
 
       <P>There are other clever ways of trimming <It>all</It> whitespace characters from the end of a C string (e.g., by using a loop and <Link href="https://man7.org/linux/man-pages/man3/isspace.3p.html">the <Code>isspace</Code> function</Link>), but that's beyond the scope of this course.</P>
-
-      <P>There's something that I glossed over: <Code>getline</Code> actually produces a return value. Specifically, it returns an <Code>ssize_t</Code> value (i.e., a "signed size-type" value) representing the length of the string contents of the user's entered line of text. In other words, in the above program, <Code>strlen(line)</Code> can be replaced with the return value of the <Code>getline</Code> call that retrieved the line of next. Note that this is different from the value that <Code>n</Code> is updated to store, which is the size (in bytes) of the dynamic character array <It>containing</It> the C string (which is often much larger than the string itself, as in the above example runs).</P>
-
-      <P>The reason that the return type is <Code>ssize_t</Code> instead of <Code>size_t</Code> is that <Code>getline</Code> can be used to read from arbitrary file input streams<Emdash/>not just standard input<Emdash/>and when reading from a regular file instead of standard input, you'll eventually reach the <It>end</It> of the file. When that happens, subsequent calls to <Code>getline</Code> return <Code>-1</Code>. But since this is a negative value, it can't be represented by a <Code>size_t</Code> return type. Hence, it uses <Code>ssize_t</Code><Emdash/>"signed size type"<Emdash/>which is capable of storing signed (positive <It>or</It> negative) values.</P>
-
-      <P>Here's an updated version of our code that makes use of the <Code>getline</Code> call's return value:</P>
-
-      <CBlock fileName="getline.c" highlightLines="{9}">{
-`#include <stdlib.h> // For free()
-#include <stdio.h>
-
-int main() {
-        char* line = NULL;
-        size_t n = 0;
-        printf("Give me a fun quote: ");
-
-        ssize_t len = getline(&line, &n, stdin);
-
-        // Replace the last character of the string's contents with a
-        // null terminator, shortening it by one character:
-        line[len - 1] = '\\0';
-
-        // But if this is Windows or a similar platform, then there will
-        // additionally be a carriage return (\\r) before the line feed
-        // character. Let's check for that with an if statement and trim
-        // it as well if necessary
-        if (line[len - 2] == '\\r') {
-                line[len - 2] = '\\0';
-        }
-
-        printf("Your quote was: %s\\n", line);
-        printf("%ld bytes were allocated to the character array to store "
-                "the line of text\\n", n);
-
-        // The program is done with the line of text, so we should free
-        // it
-        free(line);
-
-        // I know, this program is boring. We'll learn how to do more
-        // interesting things with strings soon.
-}
-`
-      }</CBlock>
-
-      <P>Notice: We no longer need a <Code>strlen()</Code> call (which saves the program some time, since <Code>strlen</Code> fundamentally just counts characters in a loop until it encounters a null terminator), and we were even able to omit the <Code>string.h</Code> include in turn.</P>
 
       <P>I mentioned that, when reading from standard input, the character pointer and <Code>size_t</Code> value that are both passed by pointer as the first two arguments to <Code>getline</Code> should typically be initialized to <Code>NULL</Code> and 0, respectively, prior to the call. This is actually very important. If the character pointer whose address is passed as the first arugment to <Code>getline</Code> (i.e., <Code>line</Code>, in the above program) <It>isn't</It> <Code>NULL</Code>, then it <Ul>must</Ul> store the base address of a pre-allocated dynamic array of characters, and the <Code>size_t</Code> value passed by pointer as the second argument (i.e., <Code>n</Code>, in the above program) <Ul>must</Ul> store the size (in bytes) of that character array. In such a case, <Code>getline</Code> will attempt to use that pre-allocated character array to store the user's entered line of text. If the line of text doesn't fit in that character array, it will reallocate the character array via <Code>realloc</Code>.</P>
 
@@ -604,7 +610,23 @@ Enter another line of text no more than 30 characters in length: You entered: sc
 
       <P>Notice: Both inputs were properly trimmed, even though the first input didn't contain a line feed (<Code>\n</Code>) but the second input did. Yes, all of those if statements are really necessary to handle the trimming in a robust way.</P>
 
-      <P>To be clear, you should usually just use <Code>getline</Code> to read text inputs, especially when those inputs are coming from the user. But again, <Code>fgets</Code> can yield some performance advantages over <Code>getline</Code> in contexts where it's safe to make assumptions about the maximum length of a line.</P>
+      <P>As with <Code>getline</Code>, <Code>fgets</Code> can fail for various reasons, and it communicates errors through its return value. However, its return type is not <Code>ssize_t</Code>. Rather, its return type is <Code>char*</Code>. On success, it simply returns whatever memory address was passed to it as the first argument. On failure, it returns <Code>NULL</Code>. It's a good idea to always check the return value of <Code>fgets</Code> for errors:</P>
+
+      <CBlock showLineNumbers={false} fileName="fgets.c" highlightLines="{5-9}">{
+`// ...
+
+printf("Enter another line of text no more than 30 "
+        "characters in length: ");
+char* fgets_result = fgets(line, 33, stdin); // We can reuse the same array
+if (!fgets_result) {
+        printf("Error on fgets()\\n");
+        exit(1); // Or some other appropriate error handling
+}
+
+// ...`
+      }</CBlock>
+
+      <P>To reiterate, you should usually just use <Code>getline</Code> to read text inputs, especially when those inputs are coming from the user. But again, <Code>fgets</Code> can yield some performance advantages over <Code>getline</Code> in contexts where it's safe to make assumptions about the maximum length of a line.</P>
 
       <SectionHeading id="string-h"><Code>string.h</Code></SectionHeading>
 
@@ -642,8 +664,14 @@ int main() {
         char* line = NULL;
         size_t n = 0;
         ssize_t len = getline(&line, &n, stdin);
-        line[len - 1] = '\\0';
-        if (line[len - 2] == '\\r') {
+        if (len == -1) {
+                printf("Error on getline()\\n");
+                exit(1);
+        }
+        if (len >= 1 && line[len - 1] == '\\n') {
+                line[len - 1] = '\\0';
+        }
+        if (len >= 2 && line[len - 2] == '\\r') {
                 line[len - 2] = '\\0';
         }
 
@@ -733,8 +761,14 @@ int main() {
         char* line = NULL;
         size_t n = 0;
         ssize_t len = getline(&line, &n, stdin);
-        line[len - 1] = '\\0';
-        if (line[len - 2] == '\\r') {
+        if (len == -1) {
+                printf("Error on getline()\\n");
+                exit(1);
+        }
+        if (len >= 1 && line[len - 1] == '\\n') {
+                line[len - 1] = '\\0';
+        }
+        if (len >= 2 && line[len - 2] == '\\r') {
                 line[len - 2] = '\\0';
         }
 
@@ -743,6 +777,10 @@ int main() {
         // one for a null terminator).
         len = strlen(line);
         char* copy = malloc((len + 1) * sizeof(char));
+        if (!copy) {
+                printf("Error on malloc()\\n");
+                exit(1);
+        }
 
         // Now use strcpy
         strcpy(copy, line);
@@ -758,8 +796,7 @@ int main() {
         // copy, since both were dynamically allocated
         free(copy);
         free(line);
-}
-`
+}`
       }</CBlock>
 
       <P>Here's an example output:</P>
@@ -815,8 +852,14 @@ int main() {
         char* line = NULL;
         size_t n = 0;
         ssize_t len = getline(&line, &n, stdin);
-        line[len - 1] = '\\0';
-        if (line[len - 2] == '\\r') {
+        if (len == -1) {
+                printf("Error on getline()\\n");
+                exit(1);
+        }
+        if (len >= 1 && line[len - 1] == '\\n') {
+                line[len - 1] = '\\0';
+        }
+        if (len >= 2 && line[len - 2] == '\\r') {
                 line[len - 2] = '\\0';
         }
 
@@ -824,8 +867,14 @@ int main() {
         char* line2 = NULL;
         n = 0;
         len = getline(&line2, &n, stdin);
-        line2[len - 1] = '\\0';
-        if (line2[len - 2] == '\\r') {
+        if (len == -1) {
+                printf("Error on getline()\\n");
+                exit(1);
+        }
+        if (len >= 1 && line2[len - 1] == '\\n') {
+                line2[len - 1] = '\\0';
+        }
+        if (len >= 2 && line2[len - 2] == '\\r') {
                 line2[len - 2] = '\\0';
         }
 
@@ -835,6 +884,10 @@ int main() {
         size_t len1 = strlen(line);
         size_t len2 = strlen(line2);
         char* concatenated = malloc((len1 + len2 + 3) * sizeof(char));
+        if (!concatenated) {
+                printf("Error on malloc()\\n");
+                exit(1);
+        }
 
         // Copy the first line into it
         strcpy(concatenated, line);
@@ -891,7 +944,7 @@ The concatenated result is: Hello. World!
 
       <P>Let's rewrite our previous program using <Code>sprintf</Code> instead of <Code>strcpy</Code> and <Code>strcat</Code>:</P>
 
-      <CBlock fileName="sprintf.c" highlightLines="{31-33}">{
+      <CBlock fileName="sprintf.c" highlightLines="{47-49}">{
 `#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -901,8 +954,14 @@ int main() {
         char* line = NULL;
         size_t n = 0;
         ssize_t len = getline(&line, &n, stdin);
-        line[len - 1] = '\\0';
-        if (line[len - 2] == '\\r') {
+        if (len == -1) {
+                printf("Error on getline()\\n");
+                exit(1);
+        }
+        if (len >= 1 && line[len - 1] == '\\n') {
+                line[len - 1] = '\\0';
+        }
+        if (len >= 2 && line[len - 2] == '\\r') {
                 line[len - 2] = '\\0';
         }
 
@@ -910,8 +969,14 @@ int main() {
         char* line2 = NULL;
         n = 0;
         len = getline(&line2, &n, stdin);
-        line2[len - 1] = '\\0';
-        if (line2[len - 2] == '\\r') {
+        if (len == -1) {
+                printf("Error on getline()\\n");
+                exit(1);
+        }
+        if (len >= 1 && line2[len - 1] == '\\n') {
+                line2[len - 1] = '\\0';
+        }
+        if (len >= 2 && line2[len - 2] == '\\r') {
                 line2[len - 2] = '\\0';
         }
 
@@ -921,6 +986,10 @@ int main() {
         size_t len1 = strlen(line);
         size_t len2 = strlen(line2);
         char* concatenated = malloc((len1 + len2 + 3) * sizeof(char));
+        if (!concatenated) {
+                printf("Error on malloc()\\n");
+                exit(1);
+        }
 
         // Print the first line, then ". ", then the second line,
         // all into 'concatenated'
@@ -931,8 +1000,7 @@ int main() {
         free(concatenated);
         free(line2);
         free(line);
-}
-`
+}`
       }</CBlock>
 
       <P>It does exactly the same thing as <Code>strcat.c</Code>, but the code is a bit simpler.</P>
@@ -965,8 +1033,14 @@ int main() {
         char* line = NULL;
         size_t n = 0;
         ssize_t len = getline(&line, &n, stdin);
-        line[len - 1] = '\\0';
-        if (line[len - 2] == '\\r') {
+        if (len == -1) {
+                printf("Error on getline()\\n");
+                exit(1);
+        }
+        if (len >= 1 && line[len - 1] == '\\n') {
+                line[len - 1] = '\\0';
+        }
+        if (len >= 2 && line[len - 2] == '\\r') {
                 line[len - 2] = '\\0';
         }
 
@@ -1005,8 +1079,7 @@ int main() {
         printf("%s\\n", line);
 
         free(line);
-}
-`
+}`
       }</CBlock>
 
       <P>Here's an example output:</P>
@@ -1059,8 +1132,14 @@ int main() {
         char* line = NULL;
         size_t n = 0;
         ssize_t len = getline(&line, &n, stdin);
-        line[len - 1] = '\\0';
-        if (line[len - 2] == '\\r') {
+        if (len == -1) {
+                printf("Error on getline()\\n");
+                exit(1);
+        }
+        if (len >= 1 && line[len - 1] == '\\n') {
+                line[len - 1] = '\\0';
+        }
+        if (len >= 2 && line[len - 2] == '\\r') {
                 line[len - 2] = '\\0';
         }
 
@@ -1074,8 +1153,14 @@ int main() {
         line = NULL;
         n = 0;
         len = getline(&line, &n, stdin);
-        line[len - 1] = '\\0';
-        if (line[len - 2] == '\\r') {
+        if (len == -1) {
+                printf("Error on getline()\\n");
+                exit(1);
+        }
+        if (len >= 1 && line[len - 1] == '\\n') {
+                line[len - 1] = '\\0';
+        }
+        if (len >= 2 && line[len - 2] == '\\r') {
                 line[len - 2] = '\\0';
         }
 
@@ -1092,8 +1177,14 @@ int main() {
         line = NULL;
         n = 0;
         len = getline(&line, &n, stdin);
-        line[len - 1] = '\\0';
-        if (line[len - 2] == '\\r') {
+        if (len == -1) {
+                printf("Error on getline()\\n");
+                exit(1);
+        }
+        if (len >= 1 && line[len - 1] == '\\n') {
+                line[len - 1] = '\\0';
+        }
+        if (len >= 2 && line[len - 2] == '\\r') {
                 line[len - 2] = '\\0';
         }
 
@@ -1200,6 +1291,10 @@ $ valgrind ./endptr
 `
       }</TerminalBlock>
 
+      <P>This can be useful if you want to extract several values out of the string in a left-to-right order; you can use <Code>endptr</Code> to figure out where the previous extraction left off, and then pick up from there in a subsequent call. <Code>endptr</Code> can also be useful for (a weak form of) error-handling: if <It>none</It> of the characters in the string are valid given the target conversion, <Code>endptr</Code> will end up pointing to the first character in the string. Assuming the base address of the string being converted is stored in some <Code>char*</Code> variable, you can check this with an if statement (e.g., <Code>{'if (endptr == the_string) {...}'}</Code>).</P>
+
+      <P>(All that being said, a better idea is usually to <Link href="#strtok_r">tokenize manually with <Code>strtok_r</Code></Link> and then parse one token at a time; this provides much better opportunities for error-handling).</P>
+
       <P>You must be very cognizant about where <Code>endptr</Code> points to. In this case, it points to the space between "3.14" and "Hello" in the string literal, which is stored in the readonly section of the data segment and is therefore <Ul>not</Ul> writable. If the above program attempted to modify the contents pointed to by <Code>endptr</Code>, it would invoke undefined behavior. Unfortunately, <Code>endptr</Code> can't simply be qualified as <Code>const char*</Code> (or, equivalently, <Code>char const *</Code>) because the type of the second parameter of <Code>strtol</Code> and <Code>strtod</Code> is <Ul>not</Ul> const-qualified, and constness can't be implicitly casted away. That is, if <Code>endptr</Code> was declared as <Code>const char* endptr</Code>, then the compiler would issue warnings (and possibly errors) when trying to pass its address to <Code>strtod</Code>.</P>
 
       <P>(There's a complicated but interesting reason why the <Code>endptr</Code> parameter isn't const-qualified. See <Link href="https://stackoverflow.com/questions/3874196/why-is-the-endptr-parameter-to-strtof-and-strtod-a-pointer-to-a-non-const-char-p">here</Link> if you're curious.)</P>
@@ -1273,6 +1368,10 @@ char* saveptr = NULL; // To keep track of where strtok_r left off
 // Create a writable copy of the string to tokenize (add 1 to the
 // string length to account for the null terminator)
 char* copy = malloc((strlen(my_string) + 1) * sizeof(char));
+if (!copy) {
+        printf("Error on malloc()\\n");
+        exit(1);
+}
 strcpy(copy, my_string);
 
 // I'm going to store the three tokens in an array of three char*
@@ -1292,7 +1391,7 @@ tokens[0] = strtok_r(copy, ",", &saveptr);`
 
       <P>So, here's the completed demo:</P>
 
-      <CBlock showLineNumbers={false} highlightLines="{20-1000}">{
+      <CBlock showLineNumbers={false} highlightLines="{24-1000}">{
 `const char* my_string = "3.7,4.2,1.5"; // The string to tokenize
 
 char* saveptr = NULL; // To keep track of where strtok_r left off
@@ -1300,6 +1399,10 @@ char* saveptr = NULL; // To keep track of where strtok_r left off
 // Create a writable copy of the string to tokenize (add 1 to the
 // string length to account for the null terminator)
 char* copy = malloc((strlen(my_string) + 1) * sizeof(char));
+if (!copy) {
+        printf("Error on malloc()\\n");
+        exit(1);
+}
 strcpy(copy, my_string);
 
 // I'm going to store the three tokens in an array of three char*
@@ -1353,7 +1456,7 @@ free(copy);`
 
       <P>Importantly, <Code>strtok_r</Code> is capable of recognizing when you call it too many times. In such a case, it simply does nothing and returns <Code>NULL</Code>. For example, if we tried to call it a fourth time even though there were only three tokens in the string, it'd return <Code>NULL</Code> on the fourth call:</P>
 
-      <CBlock showLineNumbers={false} highlightLines="{33-39}">{
+      <CBlock showLineNumbers={false} highlightLines="{37-43}">{
 `const char* my_string = "3.7,4.2,1.5"; // The string to tokenize
 
 char* saveptr = NULL; // To keep track of where strtok_r left off
@@ -1361,6 +1464,10 @@ char* saveptr = NULL; // To keep track of where strtok_r left off
 // Create a writable copy of the string to tokenize (add 1 to the
 // string length to account for the null terminator)
 char* copy = malloc((strlen(my_string) + 1) * sizeof(char));
+if (!copy) {
+        printf("Error on malloc()\\n");
+        exit(1);
+}
 strcpy(copy, my_string);
 
 // I'm going to store the three tokens in an array of three char*
@@ -1410,6 +1517,10 @@ free(copy);`
       <CBlock showLineNumbers={false}>{
 `char* token = strtok_r(copy, ",", &saveptr);
 tokens[0] = malloc((strlen(token) + 1) * sizeof(char));
+if (!tokens[0]) {
+        printf("Error on malloc()\\n");
+        exit(1);
+}
 strcpy(tokens[0], token);`
       }</CBlock>
 
@@ -1433,14 +1544,21 @@ int main() {
         char* line = NULL;
         size_t n = 0;
         ssize_t len = getline(&line, &n, stdin);
-        line[len - 1] = '\\0';
-        if (line[len - 2] == '\\r') {
+        if (len == -1) {
+                printf("Error on getline()\\n");
+                exit(1);
+        }
+        if (len >= 1 && line[len - 1] == '\\n') {
+                line[len - 1] = '\\0';
+        }
+        if (len >= 2 && line[len - 2] == '\\r') {
                 line[len - 2] = '\\0';
         }
 
         // We'll compute the sum of all the values the user entered
         // (e.g., if they entered 3.7,4.2,1.5 then we'll compute
         // 3.7 + 4.2 + 1.5 = 9.4)
+
         char* saveptr = NULL; // For third argument to strtok_r
         double sum = 0.0;
         char* current_token;
