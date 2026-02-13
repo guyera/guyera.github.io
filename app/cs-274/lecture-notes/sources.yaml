@@ -35,3 +35,6 @@ pages:
   - pathName: 'string-input-and-manipulation'
     pageTitle: 'String Input and Manipulation'
     namedIdentifier: 'string-input-and-manipulation'
+  - pathName: 'dynamic-multidimensional-arrays'
+    pageTitle: 'Dynamic Multidimensional Arrays'
+    namedIdentifier: 'dynamic-multidimensional-arrays'
