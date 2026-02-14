@@ -38,3 +38,6 @@ pages:
   - pathName: 'dynamic-multidimensional-arrays'
     pageTitle: 'Dynamic Multidimensional Arrays'
     namedIdentifier: 'dynamic-multidimensional-arrays'
+  - pathName: 'c-preprocessor'
+    pageTitle: 'C Preprocessor'
+    namedIdentifier: 'c-preprocessor'
