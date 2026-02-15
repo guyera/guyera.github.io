@@ -84,7 +84,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
         <Item><Bold>Linking</Bold>: All the compiled translation units' object code, along with the object code of any libraries the program uses (including the C standard library), is <Bold>linked</Bold> together into a final product (e.g., an executable, or a library).</Item>
       </Enumerate>
 
-      <P><Code>gcc</Code> does all of these things and more.</P>
+      <P><Code>gcc</Code> does all these things and more.</P>
 
       <P>In this lecture, we'll learn a bit more about the first step: <Bold>preprocessing</Bold>. As stated above, the job of the preprocessor is to analyze the program's C source code and modify it according to its <Bold>preprocessing directives</Bold>. A preprocessing directive is any line of code starting with a hashtag (<Code>#</Code>).</P>
 
@@ -121,7 +121,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
 
       <P>Replace <Code>{'<name>'}</Code> with the name of the macro that you want to define, and replace <Code>{'[value]'}</Code> with the value that you want it to have. I write <Code>{'[value]'}</Code> in square brackets because the value is actually <Ul>optional</Ul>. Indeed, you can define valueless macros. These are useful for representing flags, whose existence might be checked for <Link href="#conditionals">conditional compilation</Link>. More on that shortly.</P>
 
-      <P>When the preprocessor is analyzing the source code of a given translation unit (e.g., a given <Code>.c</Code> file) and it encounters a <Code>#define</Code> directive, it records the name of the defined macro and its corresponding value (if one is specified). From that point on, if the preprocessor ever encounters the name of the macro (as a valid token) <Ul>anywhere</Ul> else in the translation unit's source code (or in other files included within it via the <Code>#include</Code> directive), it will automatically replace the macro's name with its specified textual value. If the macro is not given a value, then all instances of its name are simply removed from the source code (i.e., replaced with nothing).</P>
+      <P>When the preprocessor is analyzing the source code of a given translation unit (e.g., a given <Code>.c</Code> file) and it encounters a <Code>#define</Code> directive, it records the name of the defined macro and its corresponding value (if one is specified). From that point on, if the preprocessor ever encounters the name of the macro (as a complete identifier) <Ul>anywhere</Ul> else in the translation unit's source code (or in other files included within it via the <Code>#include</Code> directive), it will automatically replace the macro's name with its specified textual value. If the macro is not given a value, then all instances of its name are simply removed from the source code (i.e., replaced with nothing).</P>
 
       <P>For example:</P>
 
@@ -235,11 +235,11 @@ int main() {
 
       <P>After all, the idea is that each instance of <Code>t</Code> will be replaced with whatever argument is passed to the <Code>DEF_SQUARE</Code> macro when invoked later on.</P>
 
-      <P>That <It>almost</It> works, but there's one issue: when the preprocessor sees the <Code>square_t</Code> part of the above macro definition, it doesn't understand that the goal is to replace the "t" with the macro's given argument. Basically, it doesn't treat the <Code>t</Code> as a separate token from the rest of <Code>square_</Code>. It treats it all as part of a single token. (In general, the preprocessor will treat any string of consecutive letters, digits, and underscores as a single token).</P>
+      <P>That <It>almost</It> works, but there's one issue: when the preprocessor sees the <Code>square_t</Code> part of the above macro definition, it doesn't understand that the goal is to replace the "t" with the macro's given argument. Basically, it doesn't treat the <Code>t</Code> as a separate token from the rest of <Code>square_</Code>. It treats it all as part of a single token. (In general, the preprocessor will treat any valid identifier as a single token).</P>
 
       <P>That's to say, with the above macro written as-is, <Code>DEF_SQUARE(int)</Code> would be replaced by the preprocessor with <Code>{'int square_t(int x) {return x * x;}'}</Code>. That's almost right, except we don't want the function to be named <Code>square_t</Code>. We want it to be named <Code>square_int</Code>. This is important since, in C, two functions are not allowed to have the same name, even if their parameter lists are different (this is different from C++'s function naming rules). As such, our int-squaring function must have a distinct name from our float-squaring function, and so on. They can't just all be named <Code>square_t</Code>. That would result in a compiler error (multiple definitions of the same function).</P>
 
-      <P>The solution to this issue is the <Bold>concatenation operator</Bold>, which is a sequence of two hashtags (<Code>##</Code>). It can be used anywhere in a C source code program, including in the definition of a function-like macro. All it does is evaluate the token to its left, evaluate the token to its right, and "glue" (concatenate) the two text values together. For example, we can fix our above macro like so:</P>
+      <P>The solution to this issue is the <Bold>concatenation operator</Bold>, which is a sequence of two hashtags (<Code>##</Code>). It can be used anywhere in a C program, including in the definition of a function-like macro. All it does is evaluate the token to its left, evaluate the token to its right, and "glue" (concatenate) the two text values together. For example, we can fix our above macro like so:</P>
 
       <CBlock showLineNumbers={false}>{
 `#define DEF_SQUARE(t) t square_##t(t x) {return x * x;}`
@@ -297,7 +297,7 @@ $ valgrind ./concatenationoperator
 
       <P>As you write more and more complex macros, especially function-like macros that in turn define C functions, you may find yourself wanting the definition of the macro to span multiple lines. It turns out that you <It>can</It> place line breaks in the middle of a macro definition, but there must be a backslash character (<Code>{'\\'}</Code>) just before the line break:</P>
 
-      <CBlock fileName="concatenationoperator.c">{
+      <CBlock fileName="concatenationoperator.c" highlightLines="{3-7}">{
 `#include <stdio.h>
 
 // Note the \\ characters at the end of each line, just before
@@ -370,11 +370,11 @@ undef.c:26: warning: control reaches end of non-void function [-Wreturn-type]
 
       <SectionHeading id="conditionals">Conditional compilation</SectionHeading>
 
-      <P>There are various preprocessing directives that enable something known as <Bold>conditional compilation</Bold>. Conditional compilation allows you to put some source code within a "preprocessor if statement" (that's not standard terminology, but I think it's descriptive). Such if statements are evaluated by the preprocessor (not at runtime) and, if their conditions are false, then the preprocessor will essentially "delete" all of the source code contained within them. This this the preprocessing stage happens before compilation, this means that all of that source code is never seen by the compiler. Hence, "conditional compilation"<Emdash/>source code that will only be compiled if some condition is satisfied as determined by the preprocessor.</P>
+      <P>There are various preprocessing directives that enable something known as <Bold>conditional compilation</Bold>. Conditional compilation allows you to put some source code within a "preprocessor if statement" (that's not standard terminology, but I think it's descriptive). Such if statements are evaluated by the preprocessor (not at runtime) and, if their conditions are false, then the preprocessor will essentially "delete" all the source code contained within them. Since the preprocessing stage happens before compilation, this means that all of that source code is never seen by the compiler. Hence, "conditional compilation"<Emdash/>source code that will only be compiled if some condition is satisfied as determined by the preprocessor.</P>
 
       <P>These "preprocessor if statements" begin with one of several conditional preprocessing directives, such as <Code>#if</Code>, <Code>#ifdef</Code>, <Code>#ifndef</Code>, etc, and end with an <Code>#endif</Code> directive.</P>
 
-      <P>Let's start with <Code>#ifdef</Code> since it's the simplest. The <Code>#ifdef</Code> directive marks the beginning of a preprocessor if statement. Give it an identifier, and it will determine whether that identifier is currently defined as a macro (e.g., due to a a previous <Code>#define</Code> directive). If the identifier is <It>not</It> defined, either because the <Code>#define</Code> directive was never used to define it, or because it was undefined via an <Code>#undef</Code> directive, then the preprocessor will "delete" all of the source code contained within the preprocessor if statement. That means everything up to the subsequent <Code>#endif</Code> directive.</P>
+      <P>Let's start with <Code>#ifdef</Code> since it's the simplest. The <Code>#ifdef</Code> directive marks the beginning of a preprocessor if statement. Give it an identifier, and it will determine whether that identifier is currently defined as a macro (e.g., due to a a previous <Code>#define</Code> directive). If the identifier is <It>not</It> defined, either because the <Code>#define</Code> directive was never used to define it, or because it was undefined via an <Code>#undef</Code> directive, then the preprocessor will "delete" all the source code contained within the preprocessor if statement. That means everything up to the subsequent <Code>#endif</Code> directive.</P>
 
       <P>Let's extend our previous program a bit, "fixing" the <Code>DEF_SQUARE(double)</Code> issue in the process:</P>
 
@@ -469,7 +469,7 @@ Hello, World!
 
       <P>There's also an <Code>#ifndef</Code> directive, which is exactly the opposite of <Code>#ifdef</Code>: it checks whether the specified macro is <Ul>not</Ul> defined. If it <Ul>is</Ul> defined, then it "deletes" the code within the preprocessor if statement, hiding it from the compiler.</P>
 
-      <P>Moreover, there's an <Code>#else</Code> directive. This allows you to define two blocks of code, exactly one of which will be passed to the compiler (if the first isn't, then the second is). Simply write <Code>#else</Code> at the end of the first preprocessor if statement's body (instead of <Code>#endif</Code>). Then, at the end of the preprocessor else statement's body, simply write <Code>#endif</Code>. For example:</P>
+      <P>Moreover, there's an <Code>#else</Code> directive. This allows you to define two blocks of code, exactly one of which will be passed to the compiler (if the first isn't, then the second is). Simply write <Code>#else</Code> at the end of the first preprocessor if statement's body (instead of <Code>#endif</Code>). Then, at the end of the preprocessor else statement's body, write <Code>#endif</Code>. For example:</P>
 
       <CBlock fileName="ifdef.c" highlightLines="{62-71}">{
 `#include <stdio.h>
@@ -559,6 +559,7 @@ $ valgrind ./ifdef
 2^2 = 4
 3.14^2 = 9.859601
 Hello, World!
+XYZ
 ==1945160== 
 ==1945160== HEAP SUMMARY:
 ==1945160==     in use at exit: 0 bytes in 0 blocks
@@ -671,7 +672,7 @@ Enter a, b, and c, the coefficients of a quadratic formula: 2 4 1
 Root: -0.292893`
       }</TerminalBlock>
 
-      <P>Okay, perhaps that still doesn't seem very useful, but it enables lots of possibilities. To name a couple:</P>
+      <P>This enables lots of possibilities. To name a couple:</P>
 
       <Itemize>
         <Item>You can write a bunch of blocks of code enclosed in preprocessor if statements that look like this:</Item>
