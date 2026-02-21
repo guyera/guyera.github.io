@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	int my_array[] = {27, 7, -9};
 
 	// Store the array's base address in an integer pointer

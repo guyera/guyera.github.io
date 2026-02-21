@@ -100,7 +100,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
       <CBlock fileName="contiguous.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         // Create a table (2D array) of numbers. There are 2 "rows" and
         // 4 "columns".
         float my_table[2][4];
@@ -127,7 +127,7 @@ int main() {
       <CBlock fileName="contiguous.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         // Create a table (2D array) of numbers. There are 2 "rows" and
         // 4 "columns".
         float my_table[2][4];
@@ -159,7 +159,7 @@ int main() {
       <CBlock fileName="contiguous.c" highlightLines="{28-56}">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         // Create a table (2D array) of numbers. There are 2 "rows" and
         // 4 "columns".
         float my_table[2][4];
@@ -246,7 +246,7 @@ $ valgrind ./contiguous
       <CBlock fileName="contiguous.c" highlightLines="{22-28}">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         // Create a table (2D array) of numbers. There are 2 "rows" and
         // 4 "columns".
         float my_table[2][4];
@@ -339,7 +339,7 @@ $ valgrind ./contiguous
       <CBlock fileName="transposed.c" highlightLines="{33,43,48}">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         // Create a table (2D array) of numbers. There are 2 "rows" and
         // 4 "columns".
         float my_table[2][4];
@@ -440,7 +440,7 @@ $ valgrind ./transposed
       <CBlock fileName="aggregateinitialization.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         // A table / matrix with 3 "rows" and 2 "columns".
         // Notice: the size of the second dimension ("columns"), 2, is
         // REQUIRED on the lefthand side of the assignment operator.
@@ -525,7 +525,7 @@ $ valgrind ./aggregateinitialization
       <CBlock fileName="flattening.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         int values[][2] = {
                 {1, 7},
                 {-4, 2},
@@ -674,7 +674,7 @@ void print_table(int array[][2], size_t rows) {
 // While these are all valid declarations in some context, they don't
 // represent contiguous 2D arrays.
 
-int main() {
+int main(void) {
         // Recall: We also have to put the size of the non-first
         // dimensions here as well.
         int values[][2] = {
@@ -736,7 +736,7 @@ void print_1d_array(int array[], size_t size) {
 // Or, equivalently
 // void print_1d_array(int* array, size_t size)...
 
-int main() {
+int main(void) {
         int values[][2] = {
                 {1, 7},
                 {-4, 2},

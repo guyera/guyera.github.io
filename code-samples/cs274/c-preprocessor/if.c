@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	// The preprocessor evaluates the expression 1 + 2 == 4
 	// and finds it to be false (0). So printf("123\n"); is
 	// "deleted" by the preprocessor. It then evaluates

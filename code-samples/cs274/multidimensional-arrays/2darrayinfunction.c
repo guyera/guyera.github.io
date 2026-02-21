@@ -19,7 +19,7 @@ void print_table(int array[][2], size_t rows) {
 // While these are all valid declarations in some context, they don't
 // represent contiguous 2D arrays.
 
-int main() {
+int main(void) {
 	// Recall: We also have to put the size of the non-first
 	// dimensions here as well.
 	int values[][2] = {

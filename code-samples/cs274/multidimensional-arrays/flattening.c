@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	int values[][2] = {
 		{1, 7},
 		{-4, 2},

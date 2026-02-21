@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	int x = 100;
 
 	// This changes x to 20 and then prints 20

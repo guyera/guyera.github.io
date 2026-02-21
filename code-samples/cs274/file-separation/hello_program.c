@@ -2,6 +2,6 @@
 // the header file, which provides the prototype
 #include "say_hello.h"
 
-int main() {
+int main(void) {
 	say_hello();
 }

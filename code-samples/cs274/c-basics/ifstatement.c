@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	printf("Enter your grade percentage: ");
 	float percent;
 	scanf("%f", &percent);

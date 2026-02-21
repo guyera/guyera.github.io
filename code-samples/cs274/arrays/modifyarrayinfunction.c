@@ -6,7 +6,7 @@ void change_values(int values[]) {
 	values[1] = 7;
 }
 
-int main() {
+int main(void) {
 	int my_numbers[3] = {1, 12, -4};
 
 	change_values(my_numbers);

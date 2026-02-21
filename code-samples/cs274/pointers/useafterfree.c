@@ -6,7 +6,7 @@ int* add(int x, int y) {
 	return &sum; // Notice we return &sum instead of sum
 }
 
-int main() {
+int main(void) {
 	int* p = add(47, 52);
 	printf("47 + 52 = %d\n", *p);
 }

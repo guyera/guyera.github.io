@@ -142,7 +142,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
       <CBlock fileName="printingstrings.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         const char* my_string = "Hello, World!\\n";
         printf(my_string);
 }`
@@ -176,7 +176,7 @@ Hello, World!
       <CBlock fileName="printingstrings.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         const char* format = "%s, %s!\\n";
         const char* first_word = "Hello";
         const char* second_word = "World";
@@ -200,7 +200,7 @@ int main() {
 `#include <stdio.h>
 #include <string.h> // Necessary for strlen()!
 
-int main() {
+int main(void) {
         size_t length_of_hello_world = strlen("Hello, World!");
         printf("%ld\\n", length_of_hello_world);
         // Notice: %ld for size_t since it supports very large numbers
@@ -256,7 +256,7 @@ $ valgrind ./strlen
       <CBlock fileName="cannotmodifystring.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         char* my_string = "Hello";
         *my_string = 'J';
 }
@@ -301,7 +301,7 @@ Segmentation fault (core dumped)
       <CBlock fileName="cannotmodifystring.c" highlightLines="{4}">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         const char* my_string = "Hello";
         *my_string = 'J';
 }`

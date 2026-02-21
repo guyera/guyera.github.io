@@ -89,7 +89,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
       <P>For example, consider the following function:</P>
 
 <CBlock showLineNumbers={false}>{
-`void foo() {
+`void foo(void) {
         int array1[10];
         float array2[20];
         _Bool array3[5];
@@ -169,7 +169,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
       <P>Take this program for example:</P>
 
       <CBlock fileName="simpleprogram.c">{
-`int main() {
+`int main(void) {
         int a = 1;
         int b = a + 5;
         int c = b * 7;
@@ -277,7 +277,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
 `#include <stdio.h>
 #include <stdlib.h>
 
-int main() {
+int main(void) {
         // Allocate a block of dynamic memory that's just big enough to
         // store a single float. Store the base address of that block
         // of bytes in an float* variable, ptr.
@@ -362,7 +362,7 @@ $ valgrind ./dynmem
 `#include <stdio.h>
 #include <stdlib.h>
 
-int main() {
+int main(void) {
         // Ask the user for how big the array should be
         printf("How many floats should the array have?: ");
         size_t n;
@@ -501,7 +501,7 @@ How many floats should the array have?: 172
 `#include <stdio.h>
 #include <stdlib.h>
 
-int main() {
+int main(void) {
         // Ask the user for how big the array should be
         printf("How many floats should the array have?: ");
         size_t n;
@@ -591,7 +591,7 @@ How many floats should the array have?: 172
 #include <string.h> // For memcpy
 #include <stdio.h>
 
-int main() {
+int main(void) {
         // First, we create a pointer to store the base address of the
         // dynamic array. We'll modify this pointer as the program goes
         // on. For now, it'll be NULL, indicating that no array
@@ -695,7 +695,7 @@ Do you want to supply another number? Enter 1 for yes, 0 for no: 0
 #include <string.h> // For memcpy
 #include <stdio.h>
 
-int main() {
+int main(void) {
         // First, we create a pointer to store the base address of the
         // dynamic array. We'll modify this pointer as the program goes
         // on. For now, it'll be NULL, indicating that no array
@@ -780,7 +780,7 @@ void append(int* array, size_t size, int new_value) {
         array[size - 1] = new_value;
 }
 
-int main() {
+int main(void) {
         // Create an int array, initially with a single element in
         // it (7) (Arguably, it's not even really an array; just
         // a pointer to a single integer on the heap. But you can
@@ -842,7 +842,7 @@ double* create_array_of_zeroes(size_t size) {
         return array;
 }
 
-int main() {
+int main(void) {
         // Creates an array of 100 doubles, each initialized to 0.0,
         // storing its base address in the 'array' pointer.
         double* array = create_array_of_zeroes(100);
@@ -892,7 +892,7 @@ if (!array) {
       <CBlock fileName="doublefree.c">{
 `#include <stdlib.h>
 
-int main() {
+int main(void) {
         double* array = malloc(sizeof(double) * 100);
         if (!array) {
                 printf("Error on malloc()\\n");
@@ -959,7 +959,7 @@ $ valgrind ./doublefree
       <CBlock fileName="useafterfree.c">{
 `#include <stdlib.h>
 
-int main() {
+int main(void) {
         // Allocate dynamic array of 5 booleans
         _Bool* array = malloc(sizeof(_Bool) * 5);
         if (!array) {
@@ -1012,7 +1012,7 @@ $ valgrind ./useafterfree
       <CBlock fileName="useafterfree.c">{
 `#include <stdlib.h>
 
-int main() {
+int main(void) {
         // Allocate dynamic array of 5 booleans
         _Bool* array = malloc(sizeof(_Bool) * 5);
         if (!array) {

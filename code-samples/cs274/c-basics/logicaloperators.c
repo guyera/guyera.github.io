@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	// Ask user for integer x
 	int x;
 	scanf("%d", &x);

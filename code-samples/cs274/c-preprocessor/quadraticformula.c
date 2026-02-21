@@ -1,7 +1,7 @@
 #include <math.h>
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	printf("Enter a, b, and c, the coefficients of a quadratic formula: ");
 	double a;
 	double b;

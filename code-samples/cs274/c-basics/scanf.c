@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	// Prompt the user for some values
 	printf("Enter your age, followed by a space, followed by your "
 		"favorite number: ");

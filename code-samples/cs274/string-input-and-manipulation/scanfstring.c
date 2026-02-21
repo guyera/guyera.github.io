@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	printf("Enter your two favorite words, separated "
 		"by any whitespace: ");
 

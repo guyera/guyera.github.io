@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	// A table / matrix with 3 "rows" and 2 "columns".
 	// Notice: the size of the second dimension ("columns"), 2, is
 	// REQUIRED on the lefthand side of the assignment operator.

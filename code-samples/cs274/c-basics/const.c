@@ -1,4 +1,4 @@
-int main() {
+int main(void) {
 	float x = 5; // x is a variable of type 'float'
 	const float pi = 3.14; // pi is a constant of type 'const float'
 	

@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	// Prints 3.140000 (passed as a float)
 	printf("%f\n", 3.14f);
 

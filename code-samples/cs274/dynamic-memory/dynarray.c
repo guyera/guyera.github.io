@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main() {
+int main(void) {
 	// Ask the user for how big the array should be
 	printf("How many floats should the array have?: ");
 	size_t n;

@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	double* p;
 
 	printf("p points to a double with the value: %lf\n", *p);

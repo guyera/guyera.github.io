@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
-int main() {
+int main(void) {
 	printf("Enter any decimal number: ");
 	char* line = NULL;
 	size_t n = 0;

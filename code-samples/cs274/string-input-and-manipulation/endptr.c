@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	char* endptr = NULL;
 	
 	// Note: Passing the address of a pointer storing NULL is

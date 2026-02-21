@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	float x = 3.14;
 	float* p = &x;
 

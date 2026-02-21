@@ -12,7 +12,7 @@ double* create_array_of_zeroes(size_t size) {
 	return array;
 }
 
-int main() {
+int main(void) {
 	// Creates an array of 100 doubles, each initialized to 0.0,
 	// storing its base address in the 'array' pointer.
 	double* array = create_array_of_zeroes(100);

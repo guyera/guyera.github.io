@@ -105,7 +105,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
       <CBlock>{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         int x;
         int y;
         scanf("%d", &x);
@@ -146,7 +146,7 @@ int main() {
       <CBlock fileName="addressof.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         int x = 10;
         int y = 20;
         printf("The memory address of x is: %p\\n", &x);
@@ -184,7 +184,7 @@ The memory address of y is: 0x1ffefff9e8
       <CBlock fileName="addressof.c" highlightLines="{9-13}">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         int x = 10;
         int y = 20;
         printf("The memory address of x is: %p\\n", &x);
@@ -241,7 +241,7 @@ The memory address of y is: 0x1ffefff9e8
       <CBlock fileName="pointers.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         // Declare a "double pointer", capable of storing the memory
         // address of a variable of type double
         double* p1; // Notice the asterisk!
@@ -260,7 +260,7 @@ int main() {
       <CBlock fileName="pointers.c" highlightLines="{15-21}">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         // Declare a "double pointer", capable of storing the memory
         // address of a variable of type double
         double* p1; // Notice the asterisk!
@@ -312,7 +312,7 @@ int main() {
       <CBlock fileName="pointers.c" highlightLines="{23-38}">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         // Declare a "double pointer", capable of storing the memory
         // address of a variable of type double
         double* p1; // Notice the asterisk!
@@ -398,7 +398,7 @@ $ valgrind ./pointers
       <CBlock fileName="dereference.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         float x = 3.14;
         float* p = &x;
 
@@ -442,7 +442,7 @@ void change_to_100(int* p) {
         *p = 100;
 }
 
-int main() {
+int main(void) {
         int x = 5;
         change_to_100(&x);
         printf("The value of x is: %d\\n", x);
@@ -500,7 +500,7 @@ The value of x is: 100
       <CBlock fileName="uninitializedpointer.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         double* p;
 
         printf("p points to a double with the value: %lf\\n", *p);
@@ -577,7 +577,7 @@ int* add(int x, int y) {
         return &sum; // Notice we return &sum instead of sum
 }
 
-int main() {
+int main(void) {
         int* p = add(47, 52);
         printf("47 + 52 = %d\\n", *p);
 }
@@ -681,7 +681,7 @@ void print_info_about_person(int* age, float* favorite_number) {
         }
 }
 
-int main() {
+int main(void) {
         int age = 27;
         float favorite_number = 3.14;
 
@@ -793,7 +793,7 @@ OR
       <P>Here's an example to illustrate:</P>
 
       <CBlock fileName="constpointers.c">{
-`int main() {
+`int main(void) {
         int x = 1;
         int y = 2;
 
@@ -840,7 +840,7 @@ OR
       <P>Since such pointers are constant pointers, they must be initialized the moment they're declared and cannot be modified afterward. But in addition, dereferencing them retrieves the underlying value as a constant, so the values that they point to also cannot be modified through them. For example:</P>
 
       <CBlock fileName="constpointers.c" highlightLines="{26-37}">{
-`int main() {
+`int main(void) {
         int x = 1;
         int y = 2;
 

@@ -12,7 +12,7 @@
 // If the word NOTHING appears anywhere in the source code,
 // the preprocessor will automatically remove it.
 
-int main() {
+int main(void) {
 	// The preprocessor will "rewrite" the below line of code as
 	// printf("Hello, World!\n");
 	// before passing it off to the compiler. In other words,

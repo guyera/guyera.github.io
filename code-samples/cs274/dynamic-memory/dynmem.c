@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main() {
+int main(void) {
 	// Allocate a block of dynamic memory that's just big enough to
 	// store a single float. Store the base address of that block
 	// of bytes in an float* variable, ptr.

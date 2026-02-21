@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	int x; // Declaration. x is bound to the main function's scope
 
 	// This line of code is inside the main function's scope and

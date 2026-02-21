@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	printf("%d\n", 5 < 10); // Prints 1 for true
 	printf("%d\n", 5 >= 10); // Prints 0 for false
 

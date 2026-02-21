@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	const char* format = "%s, %s!\n";
 	const char* first_word = "Hello";
 	const char* second_word = "World";

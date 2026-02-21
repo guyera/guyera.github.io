@@ -96,7 +96,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
       <CBlock fileName="hello.c" highlightLines="{1}">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         printf("Hello, World!\\n");
         return 0;
 }
@@ -133,7 +133,7 @@ int main() {
       <P>The typical syntax for defining a <Code>main()</Code> function is as follows:</P>
 
       <SyntaxBlock>{
-`int main() {
+`int main(void) {
     <Some code goes here>
 }`
       }</SyntaxBlock>
@@ -147,7 +147,7 @@ int main() {
       <CBlock fileName="hello.c" highlightLines="{5}">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         printf("Hello, World!\\n");
         return 0;
 }
@@ -167,7 +167,7 @@ int main() {
       <CBlock fileName="hello.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         printf("Hello, World!\\n");
 }
 `
@@ -184,7 +184,7 @@ int main() {
       <CBlock fileName="hello.c" highlightLines="{4-7}">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         // This is a single-line comment!
         // The purpose of a comment is to explain the adjacent code.
         // The below line of code prints "Hello, World!" to the terminal.
@@ -208,7 +208,7 @@ comment */`
       <CBlock fileName="hello.c" highlightLines="{4-7}">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         /* This is a multiline comment!
         The purpose of a comment is to explain the adjacent code.
         The below line of code prints "Hello, World!" to the terminal. */
@@ -226,7 +226,7 @@ int main() {
       <CBlock fileName="hello.c" highlightLines="{4-7}">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         /* This is a multiline comment!
         The purpose of a comment is to explain the adjacent code.
         The below line of code prints "Hello, World!" to the terminal. */
@@ -240,7 +240,7 @@ int main() {
       <CBlock fileName="hello.c" highlightLines="{4-7}">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
 /* This is a multiline comment!
 The purpose of a comment is to explain the adjacent code.
 The below line of code prints "Hello, World!" to the terminal. */
@@ -266,7 +266,7 @@ printf("Hello, World!\\n"); /* You can also put a comment here */
       <CBlock fileName="hello.c" highlightLines="{4}">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         printf("Hello, World!\\n");
 }
 `
@@ -299,7 +299,7 @@ int main() {
       <CBlock fileName="printformatted.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         printf("The value of 2+2 is: %d\\nThe value of 1.0 / 3.0, rounded to two decimal places, is: %.2lf\\n", 2 + 2, 1.0 / 3.0);
 }
 `
@@ -436,7 +436,7 @@ fflush(stdout); // Flush standard output to display the printed text immediately
       <CBlock fileName="printformatted.c" highlightLines="{5-8}">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         printf(
                 "The value of 2+2 is: %d\\nThe value of 1.0 / 3.0, "
                         "rounded to two decimal places, is: %.2lf\\n",
@@ -454,7 +454,7 @@ int main() {
       <CBlock fileName="printliterals.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         // Prints 3.140000 (passed as a float)
         printf("%f\\n", 3.14f);
 
@@ -530,7 +530,7 @@ $ valgrind ./printliterals
 `#include <stdio.h>
 #include <math.h> // Needed to use the pow() function
 
-int main() {
+int main(void) {
         // Compute 2 to the power of 5 and print the result
         printf("%f\\n", pow(2, 5)); // Prints 32.000000
 }
@@ -585,7 +585,7 @@ $ valgrind ./powexample
       <P>This means that before a variable can be defined (given a value) and / or used, in must first be declared. To declare an automatic variable, write out its data type followed by its name. A variable declaration is a kind of statement, so it must be terminated with a semicolon. For example:</P>
 
       <CBlock fileName="variables.c">{
-`int main() {
+`int main(void) {
         // Declare an int variable named number_of_strawberries
         int number_of_strawberries;
 
@@ -605,7 +605,7 @@ $ valgrind ./powexample
       <P>For example:</P>
 
       <CBlock fileName="variables.c" highlightLines="{5-7,9-10,17,20,23}">{
-`int main() {
+`int main(void) {
         // Declare an int variable named number_of_strawberries
         int number_of_strawberries;
 
@@ -639,7 +639,7 @@ $ valgrind ./powexample
       <CBlock fileName="variables.c" highlightLines="{9-10,18-19}">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         // Declare an int variable named number_of_strawberries
         int number_of_strawberries;
 
@@ -703,7 +703,7 @@ $ valgrind ./variables
       <CBlock fileName="undeclaredvariables.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         // x has not been declared yet, so it can't be referenced.
         // This is a syntax error.
         printf("%d\\n", x);
@@ -731,7 +731,7 @@ undeclaredvariables.c:6:24: note: each undeclared identifier is reported only on
       <CBlock fileName="uninitializedvariables.c" highlightLines="{7-10}">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         // Declare an int variable named number_of_strawberries
         int number_of_strawberries;
 
@@ -839,7 +839,7 @@ $
       <CBlock fileName="uninitializedvariables.c" highlightLines="{10}">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         // Declare an int variable named number_of_strawberries
         int number_of_strawberries;
 
@@ -888,7 +888,7 @@ uninitializedvariables.c:10:9: warning: ‘number_of_strawberries’ is used uni
       <CBlock fileName="variables.c" highlightLines="{4-6,11-13,18-21}">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         // Declare an int variable named number_of_strawberries
         // and initialize it to 5 all in one statement
         int number_of_strawberries = 5;
@@ -918,7 +918,7 @@ int main() {
       <CBlock fileName="variables.c" highlightLines="{11-12,17-18}">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         // Declare an int variable named number_of_strawberries
         // and initialize it to 5 all in one statement
         int number_of_strawberries = 5;
@@ -956,7 +956,7 @@ int main() {
       <CBlock fileName="increment.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         int my_variable = 0;
 
         // Used on their own, my_variable++ and ++my_variable do the
@@ -1011,7 +1011,7 @@ $ valgrind ./increment
       <CBlock fileName="assignmentasexpression.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         int x = 100;
 
         // This changes x to 20 and then prints 20
@@ -1108,7 +1108,7 @@ printf("%lf\\n", x_as_double / y);`
       <P>In the simplest case, a data type can be qualified as <Code>const</Code> by simply writing the <Code>const</Code> keyword immediately before the rest of the data type. For example:</P>
 
       <CBlock fileName="const.c">{
-`int main() {
+`int main(void) {
         float x = 5; // x is a variable of type 'float'
         const float pi = 3.14; // pi is a constant of type 'const float'
 }`
@@ -1119,7 +1119,7 @@ printf("%lf\\n", x_as_double / y);`
       <P>If a value's type is <Code>const</Code>-qualified, then it cannot be changed at any point in the program. For example:</P>
 
       <CBlock fileName="const.c" highlightLines="{6}">{
-`int main() {
+`int main(void) {
         float x = 5; // x is a variable of type 'float'
         const float pi = 3.14; // pi is a constant of type 'const float'
 
@@ -1176,7 +1176,7 @@ pi = 3.14; // Cannot modify pi after declaration!`
       <CBlock fileName="scanf.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         // Prompt the user for some values
         printf("Enter your age, followed by a space, followed by your "
                 "favorite number: ");
@@ -1266,7 +1266,7 @@ The sum is 36.810001
       <CBlock fileName="relationaloperators.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         printf("%d\\n", 5 < 10); // Prints 1 for true
         printf("%d\\n", 5 >= 10); // Prints 0 for false
 
@@ -1304,7 +1304,7 @@ int main() {
       <CBlock fileName="logicaloperators.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         // Ask user for integer x
         int x;
         scanf("%d", &x);
@@ -1373,7 +1373,7 @@ int main() {
       <CBlock fileName="ifstatement.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         printf("Enter your grade percentage: ");
         float percent;
         scanf("%f", &percent);
@@ -1492,7 +1492,7 @@ Your grade is a B+
       <CBlock fileName="scope.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         int x; // Declaration. x is bound to the main function's scope
 
         // This line of code is inside the main function's scope and
@@ -1529,7 +1529,7 @@ int main() {
       <CBlock fileName="scope.c" highlightLines="{24-29}">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         int x; // Declaration. x is bound to the main function's scope
 
         // This line of code is inside the main function's scope and
@@ -1576,7 +1576,7 @@ int main() {
       <CBlock fileName="scope.c" highlightLines="{34}">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         int x; // Declaration. x is bound to the main function's scope
 
         // This line of code is inside the main function's scope and
@@ -1633,7 +1633,7 @@ scope.c:34:24: note: each undeclared identifier is reported only once for each f
       <CBlock fileName="scope.c" highlightLines="{30-33,19-20,12-13}">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         int x; // Declaration. x is bound to the main function's scope
 
         // This line of code is inside the main function's scope and
@@ -1678,7 +1678,7 @@ int main() {
       <CBlock fileName="scope.c" highlightLines="{12-13,19-22,37-43}">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         int x; // Declaration. x is bound to the main function's scope
 
         // This line of code is inside the main function's scope and
@@ -1746,7 +1746,7 @@ int x;
       <CBlock fileName="shadowing.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         int x = 1; // Shadowed x
 
         {
@@ -1762,7 +1762,7 @@ int main() {
       <CBlock fileName="shadowing.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         int x = 1; // Shadowed x
 
         {
@@ -1792,7 +1792,7 @@ int main() {
       <CBlock fileName="shadowing.c" highlightLines="{25-28}">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         int x = 1; // Shadowed x
 
         {
@@ -1852,7 +1852,7 @@ int main() {
       <CBlock fileName="while.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         int counter = 1;
         while (counter <= 5) {
                 printf("%d\\n", counter);
@@ -1911,7 +1911,7 @@ $ valgrind ./while
       <CBlock fileName="dowhile.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         int user_choice;
         do {
                 printf("It's your turn. Choose an option.\\n");
@@ -1968,7 +1968,7 @@ int main() {
       <CBlock fileName="for.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         for (int counter = 1; counter <= 5; ++counter) {
                 printf("%d\\n", counter);
         }
@@ -2067,7 +2067,7 @@ $ valgrind ./for
 
       <P>To conclude our C Basics lecture content, let's talk functions. As you hopefully know, a <Bold>function</Bold> is a reusable block of code. Functions provide useful abstractions, allowing you to think about simple interfaces instead of complicated implementation details (e.g., raising one number to the power of another involves extremely complicated low-level instructions, but you don't have to think about that if you just call the <Code>pow()</Code> function). Functions also help modularize scopes and reduce code duplication, both of which can reduce coupling.</P>
 
-      <P>To <Ul>declare</Ul> a function in C (i.e., to state its existence without fully defining it), write out the function's <Bold>prototype</Bold>. The syntax is as follows:</P>
+      <P>To <Ul>declare</Ul> a function in C (i.e., to state its existence without fully defining it), write out the function's <Bold>prototype</Bold>. If the function has one or more parameters, then the syntax is as follows:</P>
 
       <SyntaxBlock>{
 `<return type> <name>(<parameter 1>, <parameter 2>, ..., <parameter N>);`
@@ -2085,11 +2085,19 @@ $ valgrind ./for
 
       <P>The return type is <Code>double</Code> because the <Code>pow()</Code> function produces a floating point number as an output. Its name is <Code>pow</Code>. Its parameters are <Code>double base</Code> and <Code>double exponent</Code> because, in order to be called (used), it needs to know what number (the base) should be raised to the power of what other number (the exponent). Hence, it has placeholders for these things (the <It>actual</It> base and exponent will be supplied as arguments by the caller).</P>
 
-      <P>In order to use a function within a translation unit (a <Code>.c</Code> source code file), it must be accessible. Recall that symbol accessibility is dicated by scope rules. However, functions have an additional rule in standard C: <Ul>they can only be declared (and defined) in global scope</Ul>. Since all scopes are nested within global scope, this doesn't limit their accessibility in any way; so long as a function is declared in global scope above any lines of code that use it, then everything should work.</P>
+      <P>So that's the syntax for prototyping functions with one or more parameters. However, if a function has no parameters, you should <Ul>not</Ul> simply leave its parameter list empty. Instead, to indicate the lack of any parameters whatsoever, write the keyword <Code>void</Code> inside the parentheses (and nothing else):</P>
+
+      <SyntaxBlock>{
+`<return type> <name>(void);`
+      }</SyntaxBlock>
+
+      <P>(You technically <It>can</It> leave the parameter list blank, but that does not prototype a function that takes no arguments. Rather, it prototypes a function that takes an <It>unspecified number of arguments</It>. Writing <Code>void</Code> for the parameter list instructs the compiler to generate errors when the function is called with arguments. That's what you want.)</P>
+
+      <P>In order to use a function within a translation unit (loosely, a <Code>.c</Code> source code file), it must be accessible. Recall that symbol accessibility is dicated by scope rules. However, functions have an additional rule in standard C: <Ul>they can only be declared (and defined) in global scope</Ul>. Since all scopes are nested within global scope, this doesn't limit their accessibility in any way; so long as a function is declared in global scope above any lines of code that use it, then everything should work.</P>
       
       <P>However, functions must not only be declared, but also defined. In particular, a function must be declared above any lines of code that try to use it, but it must additionally be defined exactly once <It>somewhere</It> in the program's global scope (the exact location of the definition is not important, so long as it's in global scope; a function may even be defined below the lines of code that try to use it, or even in another <Code>.c</Code> file entirely if you know how file separation works).</P>
 
-      <P>A function prototype, as in the above syntax, only declares a function<Emdash/>it does not define it. To define a function, use the following syntax:</P>
+      <P>A function prototype, as in the above syntax, only declares a function<Emdash/>it does not define it. To define a function, use the exact same syntax as for the prototype, but replace the semicolon with a function body enclosed in curly braces. For example, for a function with one or more parameters:</P>
 
       <SyntaxBlock>{
 `<return type> <name>(<parameter 1>, <parameter 2>, ..., <parameter N>) {
@@ -2097,7 +2105,15 @@ $ valgrind ./for
 }`
       }</SyntaxBlock>
 
-      <P>Notice that this is the exact same syntax as that of a function prototype, except the semicolon has been replaced with curly braces containing <Code>{'<body>'}</Code>, which is the block of code that the function will execute when called. Critically, the return type, name, and parameter list in the header of a function definition <Ul>must</Ul> match the return type, name, and parameter list in the function's prototype. Otherwise, they may be considered to be two separate functions.</P>
+      <P>And for a function with no parameters:</P>
+
+      <SyntaxBlock>{
+`<return type> <name>(void) {
+    <body>
+}`
+      }</SyntaxBlock>
+
+      <P>In both cases, <Code>{'<body>'}</Code> is the block of code that the function will execute when called. Critically, the return type, name, and parameter list in the header of a function definition <Ul>must</Ul> match the return type, name, and parameter list in the function's prototype. Otherwise, they may be considered to be two separate functions.</P>
 
       <P>Since a function body is enclosed in curly braces, it also has its own scope. Although the parameters (which are a kind of variable) are technically outside the curly braces of the function body, they are still considered to be scoped to the function body. That is, they're accessible within the function body and will be released from memory shortly after the function body ends (more on this in <Link href={`${PARENT_PATH}/${allPathData["pointers"].pathName}`}>a future lecture</Link>).</P>
 
@@ -2194,7 +2210,7 @@ int prompt_for_integer_in_range(int low, int high) {
         return user_input;
 }
 
-int main() {
+int main(void) {
         // Ask the user for an integer between 1 and 10
         int num_between_1_and_10 = prompt_for_integer_in_range(1, 10);
 
@@ -2265,7 +2281,7 @@ void print_quadratic_equation(float a, float b, float c) {
         printf("%.1fx^2 + %.1fx + %.1f = 0\\n", a, b, c);
 }
 
-int main() {
+int main(void) {
         print_quadratic_equation(2, 4, 7);
 }
 `
@@ -2315,7 +2331,7 @@ float foo(int x) {
         }
 }
 
-int main() {
+int main(void) {
         foo(5);
 }`
       }</CBlock>
@@ -2348,7 +2364,7 @@ float foo(int x) {
         }
 }
 
-int main() {
+int main(void) {
         foo(5);
 }`
       }</CBlock>
@@ -2405,7 +2421,7 @@ float foo(int x) {
         }
 }
 
-int main() {
+int main(void) {
         foo(5);
 }`
       }</CBlock>
@@ -2427,7 +2443,7 @@ void change_to_100(int x) {
         x = 100;
 }
 
-int main() {
+int main(void) {
         int x = 5;
         change_to_100(x);
         printf("The value of x is: %d\\n", x);

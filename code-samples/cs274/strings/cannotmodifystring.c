@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	const char* my_string = "Hello";
 	*my_string = 'J';
 }

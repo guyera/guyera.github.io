@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	// sentence1's characters are NOT modifiable!
 	const char* sentence1 = "Hello, World!";
 

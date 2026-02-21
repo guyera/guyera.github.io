@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-int main() {
+int main(void) {
 	double* array = malloc(sizeof(double) * 100);
 	if (!array) {
 		printf("Error on malloc()\n");

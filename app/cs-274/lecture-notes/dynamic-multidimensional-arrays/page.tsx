@@ -92,7 +92,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
       <CBlock fileName="doublepointers.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         int x;
 
         int* p = &x;
@@ -201,7 +201,7 @@ long prompt_for_integer(const char* prompt) {
         return res;
 }
 
-int main() {
+int main(void) {
         // Ask the user for an integer m and an integer n
         size_t m = prompt_for_integer("Enter an integer m: ");
         size_t n = prompt_for_integer("Enter an integer n: ");
@@ -251,7 +251,7 @@ long prompt_for_integer(const char* prompt) {
         return res;
 }
 
-int main() {
+int main(void) {
         // Ask the user for an integer m and an integer n
         size_t m = prompt_for_integer("Enter an integer m: ");
         size_t n = prompt_for_integer("Enter an integer n: ");
@@ -390,7 +390,7 @@ long prompt_for_integer(const char* prompt) {
         return res;
 }
 
-int main() {
+int main(void) {
         // Ask the user for an integer m and an integer n
         size_t m = prompt_for_integer("Enter an integer m: ");
         size_t n = prompt_for_integer("Enter an integer n: ");
@@ -531,7 +531,7 @@ long prompt_for_integer(const char* prompt) {
         return res;
 }
 
-int main() {
+int main(void) {
         // Ask the user for an integer m and an integer n
         size_t m = prompt_for_integer("Enter an integer m: ");
         size_t n = prompt_for_integer("Enter an integer n: ");
@@ -631,7 +631,7 @@ long prompt_for_integer(const char* prompt) {
         return res;
 }
 
-int main() {
+int main(void) {
         // Ask the user for an integer m and an integer n
         size_t m = prompt_for_integer("Enter an integer m: ");
 

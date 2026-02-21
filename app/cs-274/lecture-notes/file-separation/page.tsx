@@ -127,11 +127,11 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
       <CBlock fileName="hello_program.c">{
 `#include <stdio.h>
 
-void say_hello() {
+void say_hello(void) {
         printf("Hello, World!\\n");
 }
 
-int main() {
+int main(void) {
         say_hello();
 }
 `
@@ -142,7 +142,7 @@ int main() {
       <CBlock fileName="say_hello.c">{
 `#include <stdio.h>
 
-void say_hello() {
+void say_hello(void) {
         printf("Hello, World!\\n");
 }
 `
@@ -151,7 +151,7 @@ void say_hello() {
       <P>To avoid violating the ODR, we must also remove the definition of <Code>say_hello</Code> from <Code>hello_program.c</Code>. While we're at it, let's remove the <Code>{'#include <stdio.h>'}</Code> directive as well since we're no longer going to be calling <Code>printf</Code> in it:</P>
 
       <CBlock fileName="hello_program.c">{
-`int main() {
+`int main(void) {
         say_hello();
 }
 `
@@ -191,7 +191,7 @@ hello_program.c:2:9: warning: implicit declaration of function ‘say_hello’ [
       <P>Well, at the beginning of the term, we discussed these things called "function prototypes". Recall that they look exactly like function definitions, except the function body is replaced with a semicolon:</P>
       
       <CBlock showLineNumbers={false}>{
-`void say_hello();`
+`void say_hello(void);`
       }</CBlock>
 
       <P>Recall that a function prototype serves as a function declaration but not a definition. In contrast, function definitions serve as both definitions <It>and</It> declarations.</P>
@@ -199,9 +199,9 @@ hello_program.c:2:9: warning: implicit declaration of function ‘say_hello’ [
       <P>That's to say, function prototypes allow us to declare functions without defining them. This allows us to satisfy rule 2 (declaring symbols in each translation unit before reeferencing them) without violating rule 1 (the ODR) in the process:</P>
 
       <CBlock fileName="hello_program.c">{
-`void say_hello();
+`void say_hello(void);
 
-int main() {
+int main(void) {
         say_hello();
 }
 `
@@ -262,7 +262,7 @@ collect2: error: ld returned 1 exit status
       <P>Yes, we can. First, we'll move the prototype into its own <Bold>header file</Bold>. A header file is simply a C source code file, typically with the <Code>.h</Code> extension, whose purpose is to provide contents that will be included within <It>other</It> C source code files (e.g., <Code>.c</Code> files, or even other header files) via an <Code>#include</Code> directive. Let's do that:</P>
 
       <CBlock fileName="say_hello.h">{
-`void say_hello();`
+`void say_hello(void);`
       }</CBlock>
 
       <P>Notice that I named the header file <Code>say_hello.h</Code>. It prototypes the <Code>say_hello</Code> function, which is in turn defined in <Code>say_hello.c</Code>. This is a very common practice: for each <Code>.c</Code> file that defines functions, provide a corresponding <Code>.h</Code> (header) file that prototypes those very same functions.</P>
@@ -276,7 +276,7 @@ collect2: error: ld returned 1 exit status
 // the header file, which provides the prototype
 #include "say_hello.h"
 
-int main() {
+int main(void) {
         say_hello();
 }
 `
@@ -325,7 +325,7 @@ int main() {
 `#ifndef SAY_HELLO_H
 #define SAY_HELLO_H
 
-void say_hello();
+void say_hello(void);
 
 #endif
 `
@@ -341,7 +341,7 @@ void say_hello();
 #include "say_hello.h"
 #include "say_hello.h" // Second, unnecessary include
 
-int main() {
+int main(void) {
         say_hello();
 }
 `

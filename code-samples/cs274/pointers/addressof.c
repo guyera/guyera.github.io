@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	int x = 10;
 	int y = 20;
 	printf("The memory address of x is: %p\n", &x);

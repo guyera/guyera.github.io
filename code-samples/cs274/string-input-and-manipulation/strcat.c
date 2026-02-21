@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
-int main() {
+int main(void) {
 	printf("Enter a sentence: ");
 	char* line = NULL;
 	size_t n = 0;

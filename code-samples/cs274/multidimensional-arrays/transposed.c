@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	// Create a table (2D array) of numbers. There are 2 "rows" and
 	// 4 "columns".
 	float my_table[2][4];

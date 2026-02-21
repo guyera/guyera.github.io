@@ -18,7 +18,7 @@ void append(int* array, size_t size, int new_value) {
 	array[size - 1] = new_value;
 }
 
-int main() {
+int main(void) {
 	// Create an int array, initially with a single element in
 	// it (7) (Arguably, it's not even really an array; just
 	// a pointer to a single integer on the heap. But you can

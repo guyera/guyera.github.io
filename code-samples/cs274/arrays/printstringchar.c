@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	const char* sentence = "Hello, World!";
 
 	// Print the first character of the string (%c is the format

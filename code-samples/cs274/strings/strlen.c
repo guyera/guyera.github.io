@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h> // Necessary for strlen()!
 
-int main() {
+int main(void) {
 	size_t length_of_hello_world = strlen("Hello, World!");
 	printf("%ld\n", length_of_hello_world);
 	// Notice: %ld for size_t since it supports very large numbers

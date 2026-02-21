@@ -6,7 +6,7 @@
 // exactly).
 #define PRINT_INTEGER(x) printf("%d\n", x)
 
-int main() {
+int main(void) {
 	// The preprocessor rewrites the below line as
 	// printf("%d\n", 2);
 	PRINT_INTEGER(2);

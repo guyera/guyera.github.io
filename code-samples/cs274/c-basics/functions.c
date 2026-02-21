@@ -31,7 +31,7 @@ int prompt_for_integer_in_range(int low, int high) {
 	return user_input;
 }
 
-int main() {
+int main(void) {
 	// Ask the user for an integer between 1 and 10
 	int num_between_1_and_10 = prompt_for_integer_in_range(1, 10);
 	

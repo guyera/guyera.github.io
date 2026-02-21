@@ -99,7 +99,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
       <P>Because the preprocessor's control flow has absolutely nothing to do with the program's <It>runtime</It> control flow, it's conventional to leave preprocessing directives unindented, even if they appear within nested scopes. This makes them stand out visually, and it aligns with the fact that preprocessor directives are completely separated from the program's scope rules (i.e., a preprocessing directive within a scope is not really a "part" of that scope; scopes mean nothing to the preprocessor.). We'll discuss the <Code>#define</Code> directive in a moment, but just to illustrate:</P>
         
       <CBlock showLineNumbers={false}>{
-`int main() {
+`int main(void) {
         if (1 + 1 == 2) {
                 // Notice: The below preprocessor directive
                 // is unindented. But these lines of code
@@ -140,7 +140,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
 // If the word NOTHING appears anywhere in the source code,
 // the preprocessor will automatically remove it.
 
-int main() {
+int main(void) {
         // The preprocessor will "rewrite" the below line of code as
         // printf("Hello, World!\\n");
         // before passing it off to the compiler. In other words,
@@ -186,7 +186,7 @@ Hello, World!
 // exactly).
 #define PRINT_INTEGER(x) printf("%d\\n", x)
 
-int main() {
+int main(void) {
         // The preprocessor rewrites the below line as
         // printf("%d\\n", 2);
         PRINT_INTEGER(2);
@@ -265,7 +265,7 @@ DEF_SQUARE(double)
 
 // ... And so on
 
-int main() {
+int main(void) {
         printf("2^2 = %d\\n", square_int(2));
         printf("3.14^2 = %f\\n", square_float(3.14f));
 }`
@@ -317,7 +317,7 @@ DEF_SQUARE(double)
 
 // ... And so on
 
-int main() {
+int main(void) {
         printf("2^2 = %d\\n", square_int(2));
         printf("3.14^2 = %f\\n", square_float(3.14f));
 }`
@@ -360,8 +360,8 @@ undef.c:18:1: warning: return type defaults to ‘int’ [-Wimplicit-int]
    18 | DEF_SQUARE(double)
       | ^~~~~~~~~~
 undef.c: In function ‘DEF_SQUARE’:
-undef.c:22:12: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘{’ token
-   22 | int main() {
+undef.c:22:16: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘{’ token
+   22 | int main(void) {
       |            ^
 undef.c:26: error: expected ‘{’ at end of input
 undef.c:26: warning: control reaches end of non-void function [-Wreturn-type]
@@ -406,7 +406,7 @@ DEF_SQUARE(double)
 
 // ... And so on
 
-int main() {
+int main(void) {
         printf("2^2 = %d\\n", square_int(2));
         printf("3.14^2 = %f\\n", square_float(3.14f));
 
@@ -499,7 +499,7 @@ DEF_SQUARE(double)
 
 // ... And so on
 
-int main() {
+int main(void) {
         printf("2^2 = %d\\n", square_int(2));
         printf("3.14^2 = %f\\n", square_float(3.14f));
 
@@ -581,7 +581,7 @@ XYZ
       <CBlock fileName="if.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         // The preprocessor evaluates the expression 1 + 2 == 4
         // and finds it to be false (0). So printf("123\\n"); is
         // "deleted" by the preprocessor. It then evaluates
@@ -619,7 +619,7 @@ int main() {
 `#include <math.h>
 #include <stdio.h>
 
-int main() {
+int main(void) {
         printf("Enter a, b, and c, the coefficients of a quadratic formula: ");
         double a;
         double b;

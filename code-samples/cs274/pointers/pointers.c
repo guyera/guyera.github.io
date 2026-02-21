@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	// Declare a "double pointer", capable of storing the memory
 	// address of a variable of type double
 	double* p1; // Notice the asterisk!

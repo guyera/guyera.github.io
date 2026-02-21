@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	// An array of 6 characters
 	char str[] = {'H', 'e', 'l', 'l', 'o', '\0'};
 

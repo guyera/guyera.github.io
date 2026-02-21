@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	int user_choice;
 	do {
 		printf("It's your turn. Choose an option.\n");

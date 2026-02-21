@@ -36,7 +36,7 @@ long prompt_for_integer(const char* prompt) {
 	return res;
 }
 
-int main() {
+int main(void) {
 	// Ask the user for an integer m and an integer n
 	size_t m = prompt_for_integer("Enter an integer m: ");
 

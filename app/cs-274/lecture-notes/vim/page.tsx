@@ -102,7 +102,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
       <CBlock>{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
     printf("Hello, World!\\n");
 }`
       }</CBlock>

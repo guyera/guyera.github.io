@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <ctype.h> // islower and isupper
 
-int main() {
+int main(void) {
 	if (islower('A')) {
 		printf("'A' is a lowercase letter\n");
 	}

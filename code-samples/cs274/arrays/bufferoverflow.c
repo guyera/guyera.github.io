@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	float values[] = {5.7, -1.2, 41.5};
 
 	// values has 3 elements. That means the valid indices are

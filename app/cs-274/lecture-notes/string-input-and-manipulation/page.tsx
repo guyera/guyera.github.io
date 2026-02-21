@@ -106,7 +106,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
       <CBlock fileName="inputbuffer.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         int x;
 
         // Read the user's first integer input
@@ -170,7 +170,7 @@ $ valgrind ./inputbuffer
       <CBlock fileName="scanfstring.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         printf("Enter your two favorite words, separated "
                 "by any whitespace: ");
 
@@ -256,7 +256,7 @@ ssize_t len = getline(&line, &n, stdin);`
 #include <stdio.h>
 #include <sys/types.h>
 
-int main() {
+int main(void) {
         char* line = NULL;
         size_t n = 0;
         printf("Give me a fun quote: ");
@@ -308,7 +308,7 @@ Your quote was: The epic highs and lows of high school football
 #include <stdio.h>
 #include <sys/types.h>
 
-int main() {
+int main(void) {
         char* line = NULL;
         size_t n = 0;
         printf("Give me a fun quote: ");
@@ -367,7 +367,7 @@ Your quote was: The epic highs and lows of high school football
 #include <stdio.h>
 #include <sys/types.h>
 
-int main() {
+int main(void) {
         char* line = NULL;
         size_t n = 0;
         printf("Give me a fun quote: ");
@@ -479,7 +479,7 @@ fgets(line, 256, stdin);`
 `#include <string.h> // For strlen
 #include <stdio.h>
 
-int main() {
+int main(void) {
         printf("Enter a line of text no more than 30 "
                 "characters in length: ");
 
@@ -659,7 +659,7 @@ if (!fgets_result) {
 #include <stdio.h>
 #include <string.h>
 
-int main() {
+int main(void) {
         printf("Enter the password: ");
         char* line = NULL;
         size_t n = 0;
@@ -756,7 +756,7 @@ Wrong password!
 #include <stdio.h>
 #include <string.h>
 
-int main() {
+int main(void) {
         printf("Enter a sentence: ");
         char* line = NULL;
         size_t n = 0;
@@ -847,7 +847,7 @@ Your modified sentence is: Zhe epic highs and lows of high school football
 #include <stdio.h>
 #include <string.h>
 
-int main() {
+int main(void) {
         printf("Enter a sentence: ");
         char* line = NULL;
         size_t n = 0;
@@ -949,7 +949,7 @@ The concatenated result is: Hello. World!
 #include <stdio.h>
 #include <string.h>
 
-int main() {
+int main(void) {
         printf("Enter a sentence: ");
         char* line = NULL;
         size_t n = 0;
@@ -1028,7 +1028,7 @@ sprintf(x_as_string, "%d", x);`
 #include <stdio.h>
 #include <string.h>
 
-int main() {
+int main(void) {
         printf("Enter a sentence: ");
         char* line = NULL;
         size_t n = 0;
@@ -1127,7 +1127,7 @@ I like pineapple on my tacos
 #include <stdio.h>
 #include <string.h>
 
-int main() {
+int main(void) {
         printf("Enter any decimal number: ");
         char* line = NULL;
         size_t n = 0;
@@ -1236,7 +1236,7 @@ The value of your bitstring converted to the decimal system is: 6
 `#include <stdlib.h>
 #include <stdio.h>
 
-int main() {
+int main(void) {
         char* endptr = NULL;
 
         // Note: Passing the address of a pointer storing NULL is
@@ -1309,7 +1309,7 @@ $ valgrind ./endptr
 `#include <stdio.h>
 #include <ctype.h> // islower and isupper
 
-int main() {
+int main(void) {
         if (islower('A')) {
                 printf("'A' is a lowercase letter\\n");
         }
@@ -1539,7 +1539,7 @@ strcpy(tokens[0], token);`
 #include <stdio.h>
 #include <string.h>
 
-int main() {
+int main(void) {
         printf("Enter a comma-separated list of numbers: ");
         char* line = NULL;
         size_t n = 0;

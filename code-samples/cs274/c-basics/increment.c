@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	int my_variable = 0;
 	
 	// Used on their own, my_variable++ and ++my_variable do the

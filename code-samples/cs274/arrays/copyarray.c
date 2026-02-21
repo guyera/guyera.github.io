@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-int main() {
+int main(void) {
 	float cool_values[] = {3.14, 9.81, 2.71};
 	float copy[3];
 	

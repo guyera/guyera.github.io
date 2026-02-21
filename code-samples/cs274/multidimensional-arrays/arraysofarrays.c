@@ -9,7 +9,7 @@ void print_1d_array(int array[], size_t size) {
 // Or, equivalently
 // void print_1d_array(int* array, size_t size)...
 
-int main() {
+int main(void) {
 	int values[][2] = {
 		{1, 7},
 		{-4, 2},

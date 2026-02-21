@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-int main() {
+int main(void) {
 	// Allocate dynamic array of 5 booleans
 	_Bool* array = malloc(sizeof(_Bool) * 5);
 	if (!array) {

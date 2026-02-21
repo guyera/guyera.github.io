@@ -2,7 +2,7 @@
 #include <string.h> // For strlen
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	printf("Enter a line of text no more than 30 "
 		"characters in length: ");
 	

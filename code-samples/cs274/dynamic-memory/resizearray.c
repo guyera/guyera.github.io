@@ -2,7 +2,7 @@
 #include <string.h> // For memcpy
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	// First, we create a pointer to store the base address of the
 	// dynamic array. We'll modify this pointer as the program goes
 	// on. For now, it'll be NULL, indicating that no array

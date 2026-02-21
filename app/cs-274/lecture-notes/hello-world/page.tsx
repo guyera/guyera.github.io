@@ -101,7 +101,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
       <CBlock fileName="hello.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         printf("Hello, World!");
         return 0;
 }
@@ -207,7 +207,7 @@ Hello, World!$
       <CBlock fileName="hello.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         printf("Hello, World!\\n");
         return 0;
 }
@@ -357,7 +357,7 @@ total 120
       <CBlock fileName="hello.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         printf("Hello, World!\\n")
         return 0;
 }

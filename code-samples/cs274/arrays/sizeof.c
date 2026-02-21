@@ -12,7 +12,7 @@ void foo2(int arr[20]) {
 	printf("%ld\n", sizeof(arr));
 }
 
-int main() {
+int main(void) {
 	// Note: %ld is used as format specifier for size_t values
 	// (similar to long int values), which is the type of value
 	// returned by sizeof

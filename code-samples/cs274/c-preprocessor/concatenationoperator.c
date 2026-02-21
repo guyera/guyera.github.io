@@ -17,7 +17,7 @@ DEF_SQUARE(double)
 
 // ... And so on
 
-int main() {
+int main(void) {
 	printf("2^2 = %d\n", square_int(2));
 	printf("3.14^2 = %f\n", square_float(3.14f));
 }

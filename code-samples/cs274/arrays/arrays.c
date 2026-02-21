@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	float some_numbers[100];
 
 	// Initializes all elements to 3.14

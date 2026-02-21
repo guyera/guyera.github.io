@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	// Allocate an array of 1000 null terminators
 	// (an "empty string")
 	char my_string[1000] = {0};

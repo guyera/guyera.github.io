@@ -13,7 +13,7 @@ void print_numbers(double numbers[], size_t array_size) {
 	printf("\n");
 }
 
-int main() {
+int main(void) {
 	double my_numbers[] = {3.14, 9.81, -7.2};
 	print_numbers(my_numbers, 3);
 

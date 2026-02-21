@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <sys/types.h>
 
-int main() {
+int main(void) {
 	char* line = NULL;
 	size_t n = 0;
 	printf("Give me a fun quote: ");

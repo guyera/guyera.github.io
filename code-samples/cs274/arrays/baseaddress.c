@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	int my_array[] = {27, 7, -9};
 	
 	printf("%p\n", my_array);

@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
 	// Declare an int variable named number_of_strawberries
 	int number_of_strawberries;
 

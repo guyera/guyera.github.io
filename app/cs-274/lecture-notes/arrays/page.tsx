@@ -107,7 +107,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
       <CBlock fileName="arrays.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         float some_numbers[100];
 }
 `
@@ -138,7 +138,7 @@ int main() {
       <CBlock fileName="arrays.c" highlightLines="{5}">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         float some_numbers[100];
         some_numbers[0] = 3.14f;
 }
@@ -150,7 +150,7 @@ int main() {
       <CBlock fileName="arrays.c" highlightLines="{6-10}">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         float some_numbers[100];
 
         // Initialize each element to a value matching its
@@ -167,7 +167,7 @@ int main() {
       <CBlock fileName="arrays.c" highlightLines="{8}">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         float some_numbers[100];
 
         // Initializes all elements to 3.14
@@ -185,7 +185,7 @@ int main() {
       <CBlock fileName="arrays.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         float some_numbers[100];
 
         // Initializes all elements to 3.14
@@ -267,7 +267,7 @@ Element 9: 3.140000
       <CBlock fileName="aggregateinit.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         int numbers[5] = {1, 4, 7, -9, 2};
 
         // Prints 7
@@ -304,7 +304,7 @@ $ valgrind ./aggregateinit
       <CBlock fileName="aggregateinit.c" highlightLines="{4-5}">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         // Notice: no size in the square brackets. Inferred to be 5.
         int numbers[] = {1, 4, 7, -9, 2};
 
@@ -328,7 +328,7 @@ int main() {
       <CBlock fileName="zeroinitialization.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         // Allocate an array of 1000 integers. Initialize the first
         // element to 0. The remaining 999 elements are then ALSO
         // initialized to zero because their values aren't specified
@@ -365,7 +365,7 @@ int main() {
       <CBlock fileName="baseaddress.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         int my_array[] = {27, 7, -9};
 
         printf("%p\\n", my_array);
@@ -401,7 +401,7 @@ $ valgrind ./baseaddress
       <CBlock fileName="baseaddress.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         int my_array[] = {27, 7, -9};
 
         printf("%p\\n", my_array);
@@ -451,7 +451,7 @@ $ valgrind ./baseaddress
       <CBlock fileName="pointerstoarrays.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         int my_array[] = {27, 7, -9};
 
         // Store the array's base address in an integer pointer
@@ -512,7 +512,7 @@ $ valgrind ./pointerstoarrays
       <CBlock fileName="pointerarithmetic.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         int my_array[] = {27, 7, -9};
 
         int* ptr = my_array;
@@ -556,7 +556,7 @@ $ valgrind ./pointerarithmetic
       <CBlock fileName="pointerarithmetic.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         int my_array[] = {27, 7, -9};
 
         int* ptr = my_array;
@@ -608,7 +608,7 @@ $ valgrind ./pointerarithmetic
       <CBlock fileName="substring.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         // An array of 6 characters
         char str[] = {'H', 'e', 'l', 'l', 'o', '\\0'};
 
@@ -693,7 +693,7 @@ ell
       <CBlock fileName="printstringchar.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         const char* sentence = "Hello, World!";
 
         // Print the first character of the string (%c is the format
@@ -759,7 +759,7 @@ Hello, World!
       <CBlock fileName="modifiablecstring.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         // sentence1's characters are NOT modifiable!
         const char* sentence1 = "Hello, World!";
 
@@ -818,7 +818,7 @@ Jello  World!
       <CBlock fileName="zeroinitialization.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         // Allocate an array of 1000 null terminators
         // (an "empty string")
         char my_string[1000] = {0};
@@ -881,7 +881,7 @@ He
       <CBlock fileName="bufferoverflow.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         float values[] = {5.7, -1.2, 41.5};
 
         // values has 3 elements. That means the valid indices are
@@ -1001,7 +1001,7 @@ void print_numbers(double numbers[], size_t array_size) {
         printf("\\n");
 }
 
-int main() {
+int main(void) {
         double my_numbers[] = {3.14, 9.81, -7.2};
         print_numbers(my_numbers, 3);
 }
@@ -1049,7 +1049,7 @@ void print_numbers(double numbers[], size_t array_size) {
         printf("\\n");
 }
 
-int main() {
+int main(void) {
         double my_numbers[] = {3.14, 9.81, -7.2};
         print_numbers(my_numbers, 3);
 
@@ -1104,7 +1104,7 @@ void print_numbers(double numbers[], size_t array_size) {
         printf("\\n");
 }
 
-int main() {
+int main(void) {
         double my_numbers[] = {3.14, 9.81, -7.2};
         print_numbers(my_numbers, 3);
 
@@ -1172,7 +1172,7 @@ void change_to_100(int* p) {
         *p = 100;
 }
 
-int main() {
+int main(void) {
         int x = 5;
         change_to_100(&x);
         printf("The value of x is: %d\\n", x);
@@ -1193,7 +1193,7 @@ void change_values(int values[]) {
         values[1] = 7;
 }
 
-int main() {
+int main(void) {
         int my_numbers[3] = {1, 12, -4};
 
         change_values(my_numbers);
@@ -1238,7 +1238,7 @@ $ valgrind ./modifyarrayinfunction
       <CBlock fileName="sizeof.c">{
 `#include <stdio.h>
 
-int main() {
+int main(void) {
         // Note: %ld is used as format specifier for size_t values
         // (similar to long int values), which is the type of value
         // returned by sizeof
@@ -1303,7 +1303,7 @@ void foo2(int arr[20]) {
         printf("%ld\\n", sizeof(arr));
 }
 
-int main() {
+int main(void) {
         // Note: %ld is used as format specifier for size_t values
         // (similar to long int values), which is the type of value
         // returned by sizeof
@@ -1389,7 +1389,7 @@ float copy[] = cool_values;`
         <Item>Create a new array that's big enough to store all the values from the original array. Then copy each value from the original array into the new array one at a time using a loop (e.g., a for loop).</Item>
 
         <CBlock fileName="copyarray.c">{
-`int main() {
+`int main(void) {
         float cool_values[] = {3.14, 9.81, 2.71};
         float copy[3];
         for (int i = 0; i < 3; ++i) {
@@ -1409,7 +1409,7 @@ float copy[] = cool_values;`
 `#include <stdio.h>
 #include <string.h>
 
-int main() {
+int main(void) {
         float cool_values[] = {3.14, 9.81, 2.71};
         float copy[3];
 

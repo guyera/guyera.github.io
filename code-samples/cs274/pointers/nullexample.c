@@ -16,7 +16,7 @@ void print_info_about_person(int* age, float* favorite_number) {
 	}
 }
 
-int main() {
+int main(void) {
 	int age = 27;
 	float favorite_number = 3.14;
 

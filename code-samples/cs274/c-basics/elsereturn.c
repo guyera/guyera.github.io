@@ -12,6 +12,6 @@ float foo(int x) {
 	}
 }
 
-int main() {
+int main(void) {
 	foo(5);
 }
