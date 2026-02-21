@@ -41,3 +41,6 @@ pages:
   - pathName: 'c-preprocessor'
     pageTitle: 'C Preprocessor'
     namedIdentifier: 'c-preprocessor'
+  - pathName: 'file-separation'
+    pageTitle: 'File Separation'
+    namedIdentifier: 'file-separation'
