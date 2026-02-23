@@ -17,7 +17,7 @@ export default async function Image({ src, alt, caption, srcDarkMode, width, hei
   } else {
     return (
       <>
-        <NextImage src={src} alt={alt} className={`ml-auto mr-auto max-w-[100%] ${caption ? 'mb-1' : 'mb-7'}`} width={width} height={height}/>
+        <NextImage src={src} alt={alt} className={`ml-auto mr-auto max-w-[100%] ${caption ? 'mb-1' : 'mb-7'} ${className ? className : ''}`} width={width} height={height}/>
         {caption}
       </>
     )

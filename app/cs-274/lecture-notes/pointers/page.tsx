@@ -119,7 +119,7 @@ int main(void) {
 
       <P>While it's true that all of these things are stored in memory, let's just focus on the variables <Code>x</Code> and <Code>y</Code>. That will make our analysis a bit simpler. The computer's RAM is essentially a gigantic array of bytes, and while the program is executing, <It>somewhere</It> in that array, you'll find the values of <Code>x</Code> and <Code>y</Code>. Suppose that the <Code>scanf()</Code> call in the above program has executed, and the user entered <Code>5</Code> for the value of <Code>x</Code>, but the subsequent computation for <Code>y</Code> hasn't yet finished. At that point, the program's memory (the "array of bytes") might look something like this:</P>
 
-      <Image src={MemoryArrangement1} alt="x occupies 4 bytes of memory, has value 5, and is located in memory starting at memory address 2. y occupies 4 bytes of memory, has an undefined value, and is located in memory starting at memory address 9."/>
+      <Image src={MemoryArrangement1} alt="x occupies 4 bytes of memory, has value 5, and is located in memory starting at memory address 2. y occupies 4 bytes of memory, has an undefined value, and is located in memory starting at memory address 9." className="w-full"/>
 
       <P>The numbers underneath the "array of bytes" represent the indices of those bytes. I've only depicted 16 total bytes of memory, but keep in mind that most modern PCs have several billion bytes of memory (larger servers may even have trillions). I've depicted <Code>x</Code> and <Code>y</Code> as each taking up 4 bytes of memory because <Code>int</Code> values <It>often</It> take up 4 bytes (but that's not always the case; it depends on the platform). Also notice that I've depicted <Code>x</Code> and <Code>y</Code> as having some bytes of space between them. Perhaps those bytes are being used by the program for other purposes. This may or may not happen in practice; it's largely up to the compiler (and operating system) to decide exactly how to arrange these variables in memory. That said, we will discuss some memory models that programs use to generally arrange data in a future lecture.</P>
 
@@ -127,7 +127,7 @@ int main(void) {
 
       <P>But after the next instruction is executed, and <Code>y</Code> is initialized to the value of <Code>2 * x</Code>, the program's memory will be updated to look like this:</P>
 
-      <Image src={MemoryArrangement2} alt="x and y are in the same places in memory and take up the same amount of space, but y now has defined value 10"/>
+      <Image src={MemoryArrangement2} alt="x and y are in the same places in memory and take up the same amount of space, but y now has defined value 10" className="w-full"/>
 
       <P>Whenever the program needs to access one of these variables, such as for the above write operation, or to read their values for the upcoming <Code>printf()</Code> call, it needs to be able to locate them. Because RAM is essentially one gigantic array of bytes, each byte can be identified, or located, by its index. The first byte in RAM has index 0, the second byte has index 1, the third byte has index 2, and so on, as depicted in the above diagrams.</P>
 
@@ -287,7 +287,7 @@ int main(void) {
 
       <P>So, <Code>p2</Code> stores the address of <Code>x</Code>, which in turn stores the integer value <Code>10</Code>. In memory, this might look something like the following:</P>
 
-      <Image src={PointerArrangement} alt="x occupies 4 bytes of memory, has value 10, and is located in memory starting at memory address 2. p occupies 8 bytes of memory, has value 2, and is located in memory starting at memory address 7."/>
+      <Image src={PointerArrangement} alt="x occupies 4 bytes of memory, has value 10, and is located in memory starting at memory address 2. p occupies 8 bytes of memory, has value 2, and is located in memory starting at memory address 7." className="w-full"/>
 
       <P>In the above diagram, <Code>p</Code> stores the value <Code>2</Code> since that's the memory address ("byte index") at which <Code>x</Code> is located. If you follow the blue arrow to memory address 2, you'll find the start of <Code>x</Code>, which in turn stores the integer value <Code>10</Code>.</P>
 
@@ -387,7 +387,7 @@ $ valgrind ./pointers
 
       <P>Remember the diagram from earlier with <Code>p</Code>, <Code>x</Code>, and the blue arrow? Here it is again for your convenience:</P>
 
-      <Image src={PointerArrangement} alt="x occupies 4 bytes of memory, has value 10, and is located in memory starting at memory address 2. p occupies 8 bytes of memory, has value 2, and is located in memory starting at memory address 7."/>
+      <Image src={PointerArrangement} alt="x occupies 4 bytes of memory, has value 10, and is located in memory starting at memory address 2. p occupies 8 bytes of memory, has value 2, and is located in memory starting at memory address 7." className="w-full"/>
 
       <P>Considering the above diagram, dereferencing <Code>p</Code> (i.e., <Code>*p</Code>) essentially means to follow the blue arrow to find the thing that <Code>p</Code> is pointing to. In this case, that thing is <Code>x</Code>, which stores the value <Code>10</Code>. Indeed, dereferencing <Code>p</Code> gives you indirect access to that value of <Code>10</Code>.</P>
 

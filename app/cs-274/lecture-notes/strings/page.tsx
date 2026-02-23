@@ -91,7 +91,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
 
       <P>The ASCII table looks like this:</P>
 
-      <Image src={AsciiTable} alt="A table with a column containing character symbols and a column containing corresponding integers" caption={<Caption>(<Link href="https://commons.wikimedia.org/wiki/File:Ascii-codes-table.png">Sourced from Wikimedia Commons</Link>, licensed CC BY-SA)</Caption>}/>
+      <Image src={AsciiTable} alt="A table with a column containing character symbols and a column containing corresponding integers" caption={<Caption>(<Link href="https://commons.wikimedia.org/wiki/File:Ascii-codes-table.png">Sourced from Wikimedia Commons</Link>, licensed CC BY-SA)</Caption>} className="w-full"/>
 
       <P>The ASCII table only covers a total of 127 characters, primarily those found on American keyboards in addition to a few others. It doesn't cover other countries' alphabets. However, it's a subset of other standard, more comprehensive character encodings (e.g., UTF-8), so most C implementations use the ASCII table for encoding these 127 characters. For example, the ASCII encoding of capital A is 65. This means that whenever a C program needs to store or operate on a capital A, it will most likely represent it under the hood as the number 65 (in binary form).</P>
 
@@ -107,7 +107,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
 
       <P>For example, suppose you construct an array of 8 characters: <Code>'H'</Code>, <Code>'e'</Code>, <Code>'l'</Code>, <Code>'l'</Code>, <Code>'o'</Code>, followed by two null terminator characters, and finally a lowercase <Code>'z'</Code>:</P>
 
-      <Image src={CharArrayDiagram} alt="H, e, l, l, o, two null terminators, and a lowercase z are arranged into an array" srcDarkMode={CharArrayDiagramDarkMode} width={400}/>
+      <Image src={CharArrayDiagram} alt="H, e, l, l, o, two null terminators, and a lowercase z are arranged into an array" srcDarkMode={CharArrayDiagramDarkMode} className="w-[25rem]"/>
 
       <P>Such an array would be a valid C string<Emdash/>it's an array of characters, and its content ends in one or more null terminators (two, in this case). Based on that description, you might have noticed that the last character, <Code>'z'</Code>, is <Ul>not</Ul> considered to be part of the string's content. Indeed, it's a part of the array of characters, but not really part of the <It>string</It>. This is precisely what null terminators do: they mark the end of the string's content, so anything appearing after them is ignored by functions that operate on strings (e.g., <Code>printf()</Code>). If this string were to be printed to the terminal, the output would simply be <Code>Hello</Code>. The null terminators would not be printed (they're non-printable), nor would the <Code>'z'</Code> that comes after them.</P>
 

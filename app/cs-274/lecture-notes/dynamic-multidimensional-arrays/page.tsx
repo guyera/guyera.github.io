@@ -168,7 +168,7 @@ int main(void) {
 
       <P>That is, the structure looks a bit like this:</P>
 
-      <Image src={ArrayDiagram} alt="A 1D array of pointers, each of which points to a separate 1D array of float values" srcDarkMode={ArrayDiagramDarkMode} width={750}/>
+      <Image src={ArrayDiagram} alt="A 1D array of pointers, each of which points to a separate 1D array of float values" srcDarkMode={ArrayDiagramDarkMode} className="w-[47rem]"/>
 
       <P>In essence, all the one-dimensional arrays of objects are like "rows", and the one-dimensional array of pointers that <It>point</It> to those rows ties everything together into a sort of 2D construct. (However, keep in mind that such a structure is only <It>conceptually</It> two-dimensional; in practice, all the individual arrays making up the structure are one-dimensional, as you can see above).</P>
 
@@ -349,7 +349,7 @@ Enter an integer n: 7
 
       <P>Take another look at the diagram from earlier:</P>
 
-      <Image src={ArrayDiagram} alt="A 1D array of pointers, each of which points to a separate 1D array of float values" srcDarkMode={ArrayDiagramDarkMode} width={750}/>
+      <Image src={ArrayDiagram} alt="A 1D array of pointers, each of which points to a separate 1D array of float values" srcDarkMode={ArrayDiagramDarkMode} className="w-[47rem]"/>
 
       <P>The pointers in the "outer" array of pointers are contiguous, and the elements within a given "row" are contiguous, but the rows <It>themselves</It> are not necessarily contiguous with (adjacent to) one another (nor are they contiguous with / adjacent to the outer array of pointers). This shouldn't be too surprising. Each of these arrays<Emdash/>the outer array of pointers, and each of the inner arrays of objects<Emdash/>was allocated through a completely separate call to the <Code>malloc</Code> function. This function simply searches for <It>some place</It> on the heap where the requested block of bytes can fit. If you call it many times, it may allocate many respective blocks of bytes that are <It>nowhere near each other</It>.</P>
 
@@ -586,7 +586,7 @@ int main(void) {
 
       <P>Noncontiguous multidimensional arrays with rows of varying sizes are often referred to as <Bold>jagged arrays</Bold> because, if you were to visualize them as a table, some rows would be shorter than others, giving its edge a sort of jagged look:</P>
 
-      <Image src={JaggedArrayDiagram} alt="A 1D array of pointers, each of which points to a separate 1D array of float values. Those separate arrays are of varying lengths." srcDarkMode={JaggedArrayDiagramDarkMode} width={750}/>
+      <Image src={JaggedArrayDiagram} alt="A 1D array of pointers, each of which points to a separate 1D array of float values. Those separate arrays are of varying lengths." srcDarkMode={JaggedArrayDiagramDarkMode} className="w-[47rem]"/>
 
       <P>Keep in mind, though, that you have to keep track of the sizes of each row (i.e., the number of columns in each row). When all rows are the same size, that's easy; it's just a single number to keep track of. But when the rows are of varying sizes, you have to keep track of <It>all</It> of those rows' sizes. You might store those sizes in a separate, lower-dimensional array. For example, if you have a 2D jagged array with M rows (each with varying numbers of columns), you might keep track of the sizes of each of those rows in a separate 1D array of M integers. If the number of rows (M) varies throughout the program, or, more generally, is decided at runtime, then this separate 1D array-of-sizes will likely need to be dynamically allocated as well (and therefore freed when you're done with it).</P>
 

@@ -75,7 +75,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
 
       <P>Every terminal looks slightly different, but they all serve the same function. Here's what my terminal looks like:</P>
 
-      <Image src={TerminalImg} alt="A screenshot of a terminal window"/>
+      <Image src={TerminalImg} alt="A screenshot of a terminal window" className="w-[55rem]"/>
 
       <P>Open your terminal. Most modern terminals offer ways of configuring their settings and color schemes through a graphical menu at the top of the terminal window. The default PowerShell color scheme is white text on a bright blue background; many people don't like that, but it's easy to reconfigure. Also, if you're on Windows and using PowerShell, I strongly suggest that you enable the option that allows you to use Ctrl+Shift+C/V as Copy/Paste. Once you do this, Ctrl+Shift+C will copy the highlighted text in the terminal to the system clipboard, and Ctrl+Shift+V will paste the system clipboard contents into the terminal. Note that in most terminals, Ctrl+C (without Shift) does <Ul>not</Ul> copy text to the clipboard, and Ctrl+V (without Shift) does <Ul>not</Ul> paste text from the clipboard; they have other purposes.</P>
       

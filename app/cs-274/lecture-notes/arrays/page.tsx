@@ -348,7 +348,7 @@ int main(void) {
 
       <P>For example, suppose you have an array containing the integer values 27, 7, and -9. Suppose an single <Code>int</Code> occupies 4 bytes of memory (it does on the ENGR servers). Suppose the first element (27) has a memory address of <Code>0x00000004</Code>. In that case, the second element (7) will have a memory address of <Code>0x00000008</Code>. That is, the second element starts in memory immediately after the first element ends:</P>
 
-      <Image src={ArrayMemoryDiagram} alt="27, 7, and -9 are arranged into an array. Their memory addresses are depicted." srcDarkMode={ArrayMemoryDiagramDarkMode} width={300}/>
+      <Image src={ArrayMemoryDiagram} alt="27, 7, and -9 are arranged into an array. Their memory addresses are depicted." srcDarkMode={ArrayMemoryDiagramDarkMode} className="w-[19rem]"/>
 
       <P>Note: <Code>0x0000000C</Code> is 12, expressed in hexadecimal notation.</P>
 

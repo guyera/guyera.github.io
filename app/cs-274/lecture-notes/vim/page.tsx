@@ -91,11 +91,11 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
 
       <P>This command starts Vim, telling it to open the file called <Code>hello.c</Code> in your working directory (if the file doesn't exist, it will be created automatically). The moment you execute the command, your entire terminal will be taken over by the Vim user interface. It will look vaguely like this:</P>
 
-      <Image src={VimImg} alt="A screenshot of Vim when first opened"/>
+      <Image src={VimImg} alt="A screenshot of Vim when first opened" className="w-[55rem]"/>
 
       <P>Vim is a text editor, which means it can (of course) be used to edit the file that you just created and opened (<Code>hello.c</Code>). However, at this stage, if you naively try to write some text, it won't work as you'd expect. This is because Vim has multiple modes of operation. When first opened, it will be in Normal Mode by default. In order to insert text, you must first switch to Insert Mode. You can do this by pressing the "i" key on the keyboard. After doing so, you should see <Code>-- Insert --</Code> appear at the bottom-left of the terminal:</P>
 
-      <Image src={VimInsertModeImg} alt="A screenshot of Vim after switching to Insert Mode"/>
+      <Image src={VimInsertModeImg} alt="A screenshot of Vim after switching to Insert Mode" className="w-[55rem]"/>
 
       <P>At this point, you may now start writing text into the file. I didn't tell you this, but we named the file <Code>hello.c</Code> because <Code>.c</Code> is the standard C source code file extension, and we're going to write a brief "Hello, World!" C program. Copy and paste the following code directly into Vim (you should be able to paste from your system clipboard into Vim via Ctrl+Shift+V in PowerShell, assuming you've enabled it in your PowerShell settings, or via Cmd+V in a Mac Terminal):</P>
 
@@ -111,7 +111,7 @@ int main(void) {
 
       <P>While in Normal Mode, there are at least two kinds of commands that you can execute: a) simple hotkey commands, where you press a single key and it performs some corresponding action, and b) complete commands, which are prefixed with a colon (<Code>:</Code>). Currently, our goal is just to save and quit. There are no hotkey commands for this, so we have to execute a complete command. First, type a colon. It should appear at the bottom-left of your terminal:</P>
 
-      <Image src={VimColonImg} alt="A screenshot of Vim with an arrow pointing to the colon that appears when executing a complete command from Normal Mode."/>
+      <Image src={VimColonImg} alt="A screenshot of Vim with an arrow pointing to the colon that appears when executing a complete command from Normal Mode." className="w-[55rem]"/>
 
       <P>After the colon, you can type any one of various Vim commands and press enter to execute it. The basic commands that you'll use most frequently are as follows:</P>
 
