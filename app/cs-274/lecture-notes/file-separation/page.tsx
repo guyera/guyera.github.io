@@ -26,6 +26,11 @@ import { fileURLToPath } from 'url'
 import path from 'path'
 import fs from 'fs'
 
+import CircularDependencyDiagram from './assets/circular-dependencies.png'
+import CircularDependencyDiagramDarkMode from './assets/circular-dependencies-dark-mode.png'
+import NonCircularDependencyDiagram from './assets/non-circular-dependencies.png'
+import NonCircularDependencyDiagramDarkMode from './assets/non-circular-dependencies-dark-mode.png'
+
 // @ts-ignore
 import sourcesConfig from '../sources.yaml'
 import TitleBlock from '../ui/titleblock'
@@ -361,7 +366,7 @@ int main(void) {
 
       <P>Suppose a header file <Code>a.h</Code> includes another header file <Code>b.h</Code>, and then <Code>b.h</Code> includes <Code>c.h</Code>, and then <Code>c.h</Code> includes <Code>a.h</Code>, all in one big cycle.</P>
 
-      {/*TODO diagram*/}
+      <Image src={CircularDependencyDiagram} alt="A dependency graph containing two nodes, a.h and b.h, with arrows running between them in both directions" srcDarkMode={CircularDependencyDiagramDarkMode} className="w-[17rem]"/>
 
       <P>This is known as a <Bold>circular dependency</Bold>, and it very often causes compilation errors that even header guards can't fix.</P>
 
@@ -369,7 +374,7 @@ int main(void) {
 
       <P>In almost all cases, the solution to a circular dependency is simply refactoring. Ask yourself: does <Code>a</Code> actually need to depend on <Code>b</Code>? Or can <Code>a</Code> get away with depending on just a small <It>part</It> of <Code>b</Code>? If so, you can often extract that small part of <Code>b</Code> into a separate component (e.g., a separate structure type) <Code>c</Code>. <Code>a</Code> and <Code>b</Code> can then both depend on <Code>c</Code>, and <Code>b</Code> can continue to depend on <Code>a</Code>, but <Code>a</Code> no longer depends directly on <Code>b</Code> (and <Code>c</Code> is a small, standalone piece that depends on neither <Code>a</Code> nor <Code>b</Code>).  This breaks the include cycle. It's a more complicated organization, but there are no circular dependencies, and therefore no paradoxes.</P>
 
-      {/*TODO diagram*/}
+      <Image src={NonCircularDependencyDiagram} alt="A dependency graph containing three nodes, a.h, b.h, and c.h, with arrows running from a.h to c.h, from b.h to c.h, and from b.h to a.h" srcDarkMode={NonCircularDependencyDiagramDarkMode} className="w-[17rem]"/>
       
       <P>(Or, of course, you can do things the other way around<Emdash/>extract a small part of <Code>a</Code> into its own component that <Code>b</Code> depends on, instead of depending directly on <Code>a</Code>).</P>
 
