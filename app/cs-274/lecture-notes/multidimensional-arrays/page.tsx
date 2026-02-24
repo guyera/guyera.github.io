@@ -435,9 +435,9 @@ $ valgrind ./transposed
 
       <P>(Moreover, there are occasionally very good reasons, perhaps related to cache coherency, to store a table of values with the first dimension representing the columns instead of the rows).</P>
 
-      <P>By the way, before we move on, note that you can use aggregate initialization for 2D arrays as well. In the initializer (the comma-separated list on the righthand side of the assignment operator), you must specify a comma-separated list <It>of</It> comma-separated lists. Each list is enclosed in curly braces, and the inner lists contain the actual values of the elements. The number of inner lists is the size of the first dimension (the number of "rows"), and the number of values <It>in</It> the inner lists is the size of the second dimension (the number of "columns"). However, there's a caveat: you must specify size of the second dimension in the square brackets in the declaration (generalizing to higher-dimensional arrays, you must specify the sizes of <Ul>all dimensions except for the first</Ul>). For example:</P>
+      <P>By the way, before we move on, note that you can use brace-enclosed initializer lists to initialize 2D arrays as well. In the comma-separated list on the righthand side of the assignment operator, you must specify a comma-separated list <It>of</It> comma-separated lists. Each inner list is enclosed in curly braces, and they contain the actual values of the elements. The number of inner lists is the size of the first dimension (the number of "rows"), and the number of values <It>in</It> the inner lists is the size of the second dimension (the number of "columns"). However, there's a caveat: you must specify size of the second dimension in the square brackets in the declaration (generalizing to higher-dimensional arrays, you must specify the sizes of <Ul>all dimensions except for the first</Ul>). For example:</P>
 
-      <CBlock fileName="aggregateinitialization.c">{
+      <CBlock fileName="innitializerlist.c">{
 `#include <stdio.h>
 
 int main(void) {
@@ -465,12 +465,12 @@ int main(void) {
       <P>Here's the output:</P>
 
       <TerminalBlock copyable={false}>{
-`$ gcc -g -Wall -o aggregateinitialization aggregateinitialization.c 
-$ valgrind ./aggregateinitialization 
+`$ gcc -g -Wall -o innitializerlist innitializerlist.c 
+$ valgrind ./innitializerlist 
 ==3927392== Memcheck, a memory error detector
 ==3927392== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
 ==3927392== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
-==3927392== Command: ./aggregateinitialization
+==3927392== Command: ./innitializerlist
 ==3927392== 
 -1
 0
@@ -486,7 +486,7 @@ $ valgrind ./aggregateinitialization
 `
       }</TerminalBlock>
 
-      <P>This extends to higher dimensions as well. For example, you can put comma-separated lists inside of comma-separated lists, which in turn are inside of a larger comma-separated list, to aggregate-initialize a 3D array.</P>
+      <P>This extends to higher dimensions as well. For example, you can put comma-separated lists inside of comma-separated lists, which in turn are inside of a larger comma-separated list, to initialize a 3D array.</P>
 
       <P>Moving on. You might be thinking, "Sure, you can print a table however you'd like, but what does a contiguous 2D array actually look like in memory? Perhaps the first dimension really <It>is</It> the number of rows." Well, memory is inherently one-dimensional; it has no "rows" or "columns". This means that all multidimensional constructs must <It>somehow</It> be converted into a one-dimensional representation in order to be stored in memory.</P>
 
@@ -647,7 +647,7 @@ $ valgrind ./flattening
 
       <Enumerate listStyleType="decimal">
         <Item>When declaring a contiguous multidimensional array parameter, you must use the "array-style" declaration syntax; you cannot explicitly declare the parameter as a pointer (even though it <It>essentially is</It> a pointer).</Item>
-        <Item>Moreover, when using this array-style declaration syntax, you must write out a pair of square brackets for each dimension (just like when declaring any other contiguous multidimensional array variable), but <Ul>the sizes of all the dimensions except for the first must be explicitly specified</Ul>. Recall that this is the same rule that we discussed with respect to aggregate initialization of multidimensional arrays.</Item>
+        <Item>Moreover, when using this array-style declaration syntax, you must write out a pair of square brackets for each dimension (just like when declaring any other contiguous multidimensional array variable), but <Ul>the sizes of all the dimensions except for the first must be explicitly specified</Ul>. Recall that this is the same rule that we discussed with respect to initializing a multidimensional array with an initializer list.</Item>
       </Enumerate>
 
       <P>Here's an example to demonstrate these rules:</P>

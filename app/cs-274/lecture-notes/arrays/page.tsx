@@ -71,7 +71,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
 
       <Itemize>
         <Item><Link href="#arrays">Arrays</Link></Item>
-        <Item><Link href="#aggregate-initialization">Aggregate initialization</Link></Item>
+        <Item><Link href="#initializer-lists">Initializer lists</Link></Item>
         <Item><Link href="#arrays-in-memory">Arrays in memory</Link></Item>
         <Item><Link href="#pointers-to-arrays">Pointers to arrays</Link></Item>
         <Item><Link href="#more-on-c-strings">More on C strings</Link></Item>
@@ -178,7 +178,7 @@ int main(void) {
 `
       }</CBlock>
 
-      <P>We'll cover <Link href="#aggregate-initialization">another initialization trick</Link> shortly.</P>
+      <P>We'll cover <Link href="#initializer-lists">another initialization trick</Link> shortly.</P>
 
       <P>Once an array element has been initialized, it can be used however you'd like. Simply access it by indexing the array:</P>
 
@@ -254,9 +254,9 @@ Element 9: 3.140000
 
       <P>To be clear, the stack isn't the only place where you can allocate arrays. Arrays can be allocated on the heap as well, and heap-allocated arrays are (sort of) resizable. But we'll talk about the stack and the heap in a future lecture.</P>
       
-      <SectionHeading id="aggregate-initialization">Aggregate initialization</SectionHeading>
+      <SectionHeading id="initializer-lists">Initializer lists</SectionHeading>
 
-      <P>Suppose you want to create a fairly small array, say 5 elements. In such a case, you can initialize all the elements in the array at once via <Bold>aggregate initialization</Bold>, which is done at the time the array is declared. The syntax looks like this:</P>
+      <P>Suppose you want to create a fairly small array, say 5 elements. In such a case, you can initialize all the elements in the array at once via a brace-enclosed <Bold>initializer list</Bold>, which is done at the time the array is declared. The syntax looks like this:</P>
 
       <SyntaxBlock>{
 `<type> <name>[<size>] = {<values>};`
@@ -264,7 +264,7 @@ Element 9: 3.140000
 
       <P>Replace <Code>{'<type>'}</Code> with the type of elements stored in the array, <Code>{'<name>'}</Code> with the name of the array, <Code>{'<size>'}</Code> with the number of elements in the array, and <Code>{'<values>'}</Code> with a <Ul>comma-separated list</Ul> of values to be contained within the array. The elements of the array will be initialized to the specified values in left-to-right order. For example:</P>
 
-      <CBlock fileName="aggregateinit.c">{
+      <CBlock fileName="initializerlist.c">{
 `#include <stdio.h>
 
 int main(void) {
@@ -279,12 +279,12 @@ int main(void) {
       <P>Here's the output:</P>
 
       <TerminalBlock copyable={false}>{
-`$ gcc -g -Wall -o aggregateinit aggregateinit.c 
-$ valgrind ./aggregateinit 
+`$ gcc -g -Wall -o initializerlist initializerlist.c 
+$ valgrind ./initializerlist 
 ==3844558== Memcheck, a memory error detector
 ==3844558== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
 ==3844558== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
-==3844558== Command: ./aggregateinit
+==3844558== Command: ./initializerlist
 ==3844558== 
 7
 ==3844558== 
@@ -299,9 +299,9 @@ $ valgrind ./aggregateinit
 `
       }</TerminalBlock>
 
-      <P>A neat thing about aggregate initialization is that you can optionally omit the array's size. The compiler will infer the size of the array based on the number of values in the comma-separated list:</P>
+      <P>A neat thing about initializer lists is that you can optionally omit the array's size. The compiler will infer the size of the array based on the number of values in the list:</P>
 
-      <CBlock fileName="aggregateinit.c" highlightLines="{4-5}">{
+      <CBlock fileName="initializerlist.c" highlightLines="{4-5}">{
 `#include <stdio.h>
 
 int main(void) {
@@ -316,14 +316,14 @@ int main(void) {
 
       <P>It does the same thing as before.</P>
 
-      <P>Now, suppose the size in the square brackets doesn't match the number of values in the comma-separated list in an aggregate initialization of an array. What happens? Well, the rule might surprise you:</P>
+      <P>Now, suppose the size in the square brackets doesn't match the number of values in the initializer list of an array. What happens? Well, the rule might surprise you:</P>
 
       <Itemize>
         <Item>If the number of values in the comma-separated list is <Ul>greater</Ul> than the size specified in the square brackets, then the program is ill-formed. Some compilers may issue an error. Many will just issue a warning, and undefined behavior will ensue when the array is initialized.</Item>
         <Item>However, if the number of values in the comma-separated list is <Ul>less</Ul> than the size specified in the square brackets, then the remaining elements are <Bold>zero-initialized</Bold>. That is, the bytes that make up their memory are initialized to a bunch of zeros.</Item>
       </Itemize>
 
-      <P>The second bullet point is helpful. It means that, if you <It>want</It> to create an array and initialize it with a bunch of zeros, aggregate initialization provides a simple way of doing that:</P>
+      <P>The second bullet point is helpful. It means that, if you <It>want</It> to create an array and initialize it with a bunch of zeros, an initializer list provides a simple way of doing that:</P>
 
       <CBlock fileName="zeroinitialization.c">{
 `#include <stdio.h>
@@ -750,7 +750,7 @@ Hello, World!
 `char <name>[<size>] = "<contents>";`
       }</SyntaxBlock>
 
-      <P>The <Code>{'<size>'}</Code> is actually optional, just as with aggregate initialization. If the size is omitted, the program will automatically make the array large enough to store the contents of the string literal followed by at least one null terminator (and it will indeed populate it with those characters, including the null terminator). Otherwise, the size of the array will match the specified size, in which case the specified size <Ul>must</Ul> be large enough to store the contents of the specified C string plus at least one null terminator. If the size is specified, but it's too small to store the contents of the C string plus at least one null terminator, undefined behavior ensues.</P>
+      <P>The <Code>{'<size>'}</Code> is actually optional, just like when initializing an array with an initializer list. If the size is omitted, the program will automatically make the array large enough to store the contents of the string literal followed by at least one null terminator (and it will indeed populate it with those characters, including the null terminator). Otherwise, the size of the array will match the specified size, in which case the specified size <Ul>must</Ul> be large enough to store the contents of the specified C string plus at least one null terminator. If the size is specified, but it's too small to store the contents of the C string plus at least one null terminator, undefined behavior ensues.</P>
 
       <P>(Technically, if <Code>{'<size>'}</Code> is exactly equal to the length of the string's contents, meaning there just <It>barely</It> isn't enough room to fit a null terminator, the behavior is still well-defined: it simply creates a character array containing the contents of the string <Ul>without</Ul> a null terminator at the end. Such a character array is <Ul>not</Ul> a proper C string, so proceeding to treat it like a C string (e.g., pass it to various functions provided by <Code>string.h</Code> will typically invoke undefined behavior due to a buffer over-read / overflow.)</P>
 
