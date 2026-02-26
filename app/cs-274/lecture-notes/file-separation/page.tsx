@@ -123,9 +123,9 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
 
       <P>That was a lot of theory, but here's the takeaway that's most practically relevant for your purposes: it's possible to separate a C program into several <Code>.c</Code> files, compile them as independent translation units, and link them all together into a final executable. Yes, we're finally going to organize our code into separate C source code files rather than putting all of our code in one gigantic file.</P>
 
-      <P>It's actually fairly easy to do so long as you understand a couple simple rules. Here's the first rule: each global symbol (e.g., function) used by the program must be defined <Ul>exactly once</Ul>, in <Ul>exactly one translation unit</Ul> (<Code>.c</Code> source code file) across the <Ul>entire program</Ul>. This is known as the <Bold>one-definition rule (ODR)</Bold>.</P>
+      <P>It's actually fairly easy to do so long as you understand a couple simple rules. Here's the first rule: each function used by the program must be defined <Ul>exactly once</Ul>, in <Ul>exactly one translation unit</Ul> (<Code>.c</Code> source code file) across the <Ul>entire program</Ul>.</P>
 
-      <P>(The ODR is actually slightly more nuanced than that. In some cases, such as in structure type definitions and <Code>inline</Code> function definitions, multiple definitions are allowed so long as they're token-for-token identical. Multiple <It>non-identical</It> definitions are allowed for symbols with internal linkage.)</P>
+      <P>(Technically, <Code>inline</Code> functions can have multiple definitions across translation units. But regular functions cannot.).</P>
 
       <P>Take this program for example:</P>
 
@@ -153,7 +153,7 @@ void say_hello(void) {
 `
       }</CBlock>
 
-      <P>To avoid violating the ODR, we must also remove the definition of <Code>say_hello</Code> from <Code>hello_program.c</Code>. While we're at it, let's remove the <Code>{'#include <stdio.h>'}</Code> directive as well since we're no longer going to be calling <Code>printf</Code> in it:</P>
+      <P>To avoid violating our first rule, we must also remove the definition of <Code>say_hello</Code> from <Code>hello_program.c</Code>. While we're at it, let's remove the <Code>{'#include <stdio.h>'}</Code> directive as well since we're no longer going to be calling <Code>printf</Code> in it:</P>
 
       <CBlock fileName="hello_program.c">{
 `int main(void) {
@@ -183,15 +183,15 @@ hello_program.c:2:9: warning: implicit declaration of function ‘say_hello’ [
 
       <P>Although this is technically only a warning, and although the program will probably <It>actually</It> work in this very particular case, officially, our program currently invokes undefined behavior.</P>
 
-      <P>Why's that? Well, I said that every symbol [with external linkage] must be defined exactly once in exactly one translation unit (i.e., the ODR). But there's actually another rule. You're essentially already aware of this second rule, but now I have to bring it into context: a given symbol (function, variable, etc) must be <Bold>declared</Bold> before it can be referenced. Specifically, this rule is enforced by the compiler<Emdash/>not the linker<Emdash/>which means that it's imposed on a per-translation-unit basis (because the compiler only looks at one translation unit at a time). That's to say, in any given C source code file, if that file references a symbol (function, variable, etc) anywhere within it, that symbol must be declared <Ul>within that file</Ul> before said reference.</P>
+      <P>Why's that? Well, I said that every function must be defined exactly once in exactly one translation unit. But there's actually another rule. You're essentially already aware of this second rule, but now I have to bring it into context: a given function (or symbol in general) must be <Bold>declared</Bold> before it can be referenced. Specifically, this rule is enforced by the compiler<Emdash/>not the linker<Emdash/>which means that it's imposed on a per-translation-unit basis (because the compiler only looks at one translation unit at a time). That's to say, in any given C source code file, if that file references a function (or any symbol) anywhere within it, that symbol must be declared <Ul>within that file</Ul> before said reference.</P>
 
-      <P>Be careful with the terminology. Declaration is not the same thing as definition. Here are our two rules side-by-side: 1) across all translation units, each referenced symbol must be <Ul>defined </Ul> exactly once (i.e., the ODR); and 2) within a given translation unit, all symbols must be <Ul>declared</Ul> before they're referenced.</P>
+      <P>Be careful with the terminology. Declaration is not the same thing as definition. Here are our two rules side-by-side: 1) across all translation units, each referenced function must be <Ul>defined </Ul> exactly once; and 2) within a given translation unit, all functions must be <Ul>declared</Ul> before they're referenced.</P>
 
-      <P>As it stands, our program satisfies rule 1 (the ODR) but not rule 2. Indeed, <Code>hello_program.c</Code> calls (and therefore references) the <Code>say_hello</Code> function but does not declare it prior to said reference.</P>
+      <P>As it stands, our program satisfies rule 1 but not rule 2. Indeed, <Code>hello_program.c</Code> calls (and therefore references) the <Code>say_hello</Code> function but does not declare it prior to said reference.</P>
 
       <P>(The reason it's only a warning instead of an error is because, in older versions of C, the compiler is allowed attempt to <It>infer</It> missing function declarations. But it makes some very bold assumptions during this inference: it assumes that the function's return type is supposed to be <Code>int</Code>, and that it accepts any number of arguments. If this assumption is violated, which it often is, undefined behavior may ensue. This is known as an <Bold>implicit function declaration</Bold>. In newer versions of C, this produces an error instead of a warning.)</P>
 
-      <P>Now, if we were to copy and paste the definition of the <Code>say_hello</Code> function back into <Code>hello_program.c</Code> above the <Code>main</Code> function, that would satisfy rule 2, but we would then be violating rule 1 (the ODR). Not to mention, it'd defeat the entire purpose of file separation. So, what do we do? How do we satisfy both rules simultaneously while still keeping our function definitions organized in separate files?</P>
+      <P>Now, if we were to copy and paste the definition of the <Code>say_hello</Code> function back into <Code>hello_program.c</Code> above the <Code>main</Code> function, that would satisfy rule 2, but we would then be violating rule 1. Not to mention, it'd defeat the entire purpose of file separation. So, what do we do? How do we satisfy both rules simultaneously while still keeping our function definitions organized in separate files?</P>
 
       <P>Well, at the beginning of the term, we discussed these things called "function prototypes". Recall that they look exactly like function definitions, except the function body is replaced with a semicolon:</P>
       
@@ -201,7 +201,7 @@ hello_program.c:2:9: warning: implicit declaration of function ‘say_hello’ [
 
       <P>Recall that a function prototype serves as a function declaration but not a definition. In contrast, function definitions serve as both definitions <It>and</It> declarations.</P>
 
-      <P>That's to say, function prototypes allow us to declare functions without defining them. This allows us to satisfy rule 2 (declaring symbols in each translation unit before reeferencing them) without violating rule 1 (the ODR) in the process:</P>
+      <P>That's to say, function prototypes allow us to declare functions without defining them. This allows us to satisfy rule 2 (declaring symbols in each translation unit before reeferencing them) without violating rule 1 in the process:</P>
 
       <CBlock fileName="hello_program.c">{
 `void say_hello(void);
@@ -222,7 +222,7 @@ int main(void) {
 
       <P>It runs as expected, printing <Code>Hello, World!</Code> to the terminal.</P>
 
-      <P>Note that the C source code files do not need to be listed in any particular order in the <Code>gcc</Code> command, but they <It>must</It> all be listed. If you forget to list one of them, then the linker won't be aware of it, and it'll fail to locate the definitions of the symbols defined in that missing translation unit. This will produce a "missing definition" linker error. For example:</P>
+      <P>Note that the C source code files do not need to be listed in any particular order in the <Code>gcc</Code> command, but they <It>must</It> all be listed. If you forget to list one of them, then the linker won't be aware of it, and it'll fail to locate the definitions of the functions defined in that missing translation unit. This will produce an "undefined reference" linker error. For example:</P>
 
       <TerminalBlock copyable={false}>{
 `$ gcc -g -Wall -o hello_program hello_program.c

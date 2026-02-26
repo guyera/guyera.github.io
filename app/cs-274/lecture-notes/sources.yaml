@@ -44,3 +44,6 @@ pages:
   - pathName: 'file-separation'
     pageTitle: 'File Separation'
     namedIdentifier: 'file-separation'
+  - pathName: 'structure-types'
+    pageTitle: 'Structure Types'
+    namedIdentifier: 'structure-types'
