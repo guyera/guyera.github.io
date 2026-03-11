@@ -373,7 +373,7 @@ $ valgrind ./bubble_sort
       <Itemize>
         <Item>Rather than receiving the array (<Code>arr</Code>) as an <Code>int*</Code> parameter, you could receive it as a <Code>void*</Code> parameter.</Item>
         <Item>However, recall that void pointers can't be dereferenced, so <Code>arr[j]</Code> and <Code>arr[j+1]</Code> would now generate compiler errors. To fix that, rather than passing the <It>elements</It> (<Code>arr[j]</Code> and <Code>arr[j+1]</Code>) to the function that <Code>should_swap</Code> points to, you'd instead have to pass the <It>addresses of the elements</It>.</Item>
-        <Item>But how do you compute those addresses? You might think <Code>arr + j</Code> would give you the address of <Code>arr[j]</Code> (after all, that's usually how pointer arithmetic works). However, recall that pointer arithmetic doesn't quite work like that on void pointers since the compiler doesn't know the size of the elements within the array that the void pointer (<Code>arr</Code>) points to. In fact, pointer arithmetic officially isn't allowed on void pointers <It>at all</It> according to the C standard (though GCC provides an automatically-enabled extension that treats void pointers like <Code>char</Code> pointers for the purposes of pointer arithmetic). So, to compute the address of the <Code>j</Code>th and <Code>j+1</Code>st elements, you'd have to 1) cast the array from <Code>void*</Code> to <Code>char*</Code> (so that the compiler treats the underlying element size as 1); 2) receive an additional (fourth) <Code>size_t</Code> argument in the <Code>bubble_sort</Code> function that specifies the size of a single element in the array; and 3) conduct the pointer arithmetic manually (e.g., to get the address of the <Code>j</Code>th element in the array, assuming <Code>arr</Code> is of type <Code>void*</Code>, you could do <Code>((char*) arr) + j * elem_size</Code>, where <Code>elem_size</Code> is a <Code>size_t</Code> parameter specifying the size of a single array element).</Item>
+        <Item>But how do you compute those addresses? You might think <Code>arr + j</Code> would give you the address of <Code>arr[j]</Code> (after all, that's usually how pointer arithmetic works). However, recall that pointer arithmetic doesn't quite work like that on void pointers since the compiler doesn't know the size of the elements within the array that the void pointer (<Code>arr</Code>) points to. In fact, pointer arithmetic officially isn't allowed on void pointers <It>at all</It> according to the C standard (though GCC provides an automatically-enabled extension that treats void pointers like <Code>char</Code> pointers for the purposes of pointer arithmetic). So, to compute the address of the <Code>j</Code>th and <Code>j+1</Code>st elements, you'd have to 1) cast the array from <Code>void*</Code> to <Code>char*</Code> (so that the compiler treats the underlying element size as 1 byte); 2) receive an additional (fourth) <Code>size_t</Code> argument in the <Code>bubble_sort</Code> function that specifies the size of a single element in the array; and 3) conduct the pointer arithmetic manually (e.g., to get the address of the <Code>j</Code>th element in the array, assuming <Code>arr</Code> is of type <Code>void*</Code>, you could do <Code>((char*) arr) + j * elem_size</Code>, where <Code>elem_size</Code> is a <Code>size_t</Code> parameter specifying the size of a single array element).</Item>
         <Item>Finally, the parameter type list of the function that <Code>should_swap</Code> points to should be <Code>(void*, void*)</Code> instead of <Code>(int, int)</Code>, and the actual functions that it might point to would have to type-cast their <Code>void*</Code> parameters into the underlying, <It>correct</It> dynamic type before dereferencing and parsing the objects that they point to.</Item>
       </Itemize>
 
@@ -504,7 +504,6 @@ _Bool should_swap_ascending_int(void* a, void* b) {
         int a_val = *((int*) a);
         int b_val = *((int*) b);
 
-
         // In ascending order, we want a_val < b_val (given
         // element smaller than the element after it). So if
         // a_val > b_val, they need to be swapped.
@@ -583,7 +582,7 @@ int main(void) {
                 should_swap_descending_int
         );
 
-        // Print the array to prove it worked
+        // Print the array
         for (size_t i = 0; i < 5; ++i) {
                 printf("%d\\t", numbers[i]);
         }
@@ -597,6 +596,8 @@ int main(void) {
                 sizeof(float),
                 should_swap_ascending_float
         );
+
+        // Print the array
         for (size_t i = 0; i < 5; ++i) {
                 printf("%.2f\\t", my_floats[i]);
         }
@@ -607,9 +608,9 @@ int main(void) {
 
       <SectionHeading id="spiral-rule">Spiral rule</SectionHeading>
 
-      <P>There's a trick referred to as the <Bold>spiral rule</Bold>, or sometimes the <Bold>clockwise rule</Bold>, for reading declarations of complex-typed symbols in C. The rule says to start at the name of the symbol in question, then look immediately to its right, then read tokens in a spiral / "clockwise" order from there.</P>
+      <P>There's a trick referred to as the <Bold>spiral rule</Bold>, or sometimes the <Bold>clockwise rule</Bold>, for reading declarations of complex-typed symbols in C. The rule says to start at the name of the symbol in question, then look immediately to its right, then read tokens in a spiral / "clockwise" order from there, respecting precedence set by parentheses.</P>
 
-      <P>For example, consider this declaration:</P>
+      <P>This might make more sense with an example. Consider this declaration:</P>
 
       <CBlock showLineNumbers={false}>{
 `void (*fp)(int, double);`
@@ -661,7 +662,9 @@ void (*fp)(int, double);
 `
       }</CBlock>
 
-      <P>This tells us the that the return type of the function is <Code>void</Code>. In other words, reading the whole statement in spiral / clockwise order starting at <Code>fp</Code>, we get "<Code>fp</Code> is a pointer to a function with parameters of type <Code>int</Code> and <Code>double</Code> that returns a value of type <Code>void</Code>" (or, rather, "that returns nothing").</P>
+      <P>(Does it look like a clockwise spiral now?)</P>
+
+      <P>This tells us that the return type of the function is <Code>void</Code>. In other words, reading the whole statement in spiral / clockwise order starting at <Code>fp</Code>, we get "<Code>fp</Code> is a pointer to a function with parameters of type <Code>int</Code> and <Code>double</Code> that returns a value of type <Code>void</Code>" (or, rather, "that returns nothing").</P>
 
       <P>This rule gets a bit messier for more complex declarations. Take this one, for example:</P>
 
@@ -669,11 +672,37 @@ void (*fp)(int, double);
 `void (*signal(int, void (*fp)(int)))(int);`
       }</CBlock>
 
-      <P>Following the spiral rule, you might deduce that "<Code>signal</Code> is a function that accepts two parameters, the first being an <Code>int</Code> and the second being, itself, a function <It>pointer</It> (here named <Code>fp</Code>) that points to a function accepting an <Code>int</Code> as a parameter and returning nothing. <Code>signal</Code> then returns a pointer to a function that accepts a single parameter of type <Code>int</Code> (as specified by the very last <Code>(int)</Code> token) and returns nothing."</P>
+      <P>Following the spiral rule, you might deduce that "<Code>signal</Code> is a function that accepts two parameters, the first being an <Code>int</Code> and the second being, itself, a function <It>pointer</It> (here named <Code>fp</Code>) that points to a function accepting an <Code>int</Code> as an argument and returning nothing. <Code>signal</Code> then returns a pointer to a function that accepts a single argument of type <Code>int</Code> (as specified by the very last <Code>(int)</Code> token) and returns nothing (as specified by the very first <Code>void</Code> token."</P>
 
-      <P>Indeed, <Code>signal</Code> is not a function pointer, but rather a function <It>that returns a function pointer</It>. Deducing this requires very careful application of the spiral rule.</P>
+      <P>Indeed, <Code>signal</Code> is not a function pointer, but rather a function <It>that returns a function pointer</It>. That is, the above declaration is actually a function prototype. Deducing this requires very careful application of the spiral rule.</P>
 
-      <P><Link href="https://c-faq.com/decl/spiral.anderson.html">Here's</Link> a good resource for a deeper explanation of the spiral rule.</P>
+      <P>The above example was taken from a 1994 post by David Anderson to the <Code>comp.lang.c</Code> Usenet newsgroup. <Link href="https://c-faq.com/decl/spiral.anderson.html">Here's</Link> a copy of the original post. It's a good resource for learning about the spiral rule.</P>
+
+      <P>By the way, if you read the post, you might also realize that the right-to-left reading rule for constness (and volatility) is actually just a specific instance of the clockwise / spiral rule<Emdash/>since the identifier is at the very right of the declaration, working clockwise from the identifier is equivalent to working leftward:</P>
+
+      <CBlock showLineNumbers={false}>{
+`
+       +---------------------+
+       |                     |
+       |  +----------------+ |
+       |  |                | |
+       |  |   +----------+ | |
+       |  |   |          | | |
+const int * const p; -+  | | |
+  ^    |  |   |       |  | | |
+  |    |  |   +-------+  | | |
+  |    |  |              | | |
+  |    |  +--------------+ | |
+  |    |                   | |
+  |    +-------------------+ |
+  |                          |
+  ---------------------------+
+`
+      }</CBlock>
+
+      <P>"<Code>p</Code> is a constant pointer to an integer that is constant".</P>
+
+      <P>(Or, if you switched the ordering to the equivalent <Code>int const * const p;</Code>, then the reading would be "<Code>p</Code> is a constant pointer to a constant integer".)</P>
 
       <SectionHeading id="typedefs">(Optional content) <Code>typedef</Code> for function pointers</SectionHeading>
 
@@ -779,19 +808,290 @@ int main(void) {
 `
       }</CBlock>
 
-      {/*TODO Typedefs for function pointers*/}
-
       <SectionHeading id="casting-to-void-pointers">(Optional content) Casting to void pointers?</SectionHeading>
 
-      <P>Uh oh! Alex is behind on lecture notes!</P>
+      <P>A void pointer can store the address of <It>almost</It> anything. The one thing that it <It>can't</It> store the address of is a function. That's to say, a function pointer cannot be casted to a void pointer.</P>
 
-      {/*TODO function pointers can't technically be casted to void pointers w/o UB. But works fine on most systems, so it's USUALLY safe to print function pointers with %p (just not guaranteed to work on all systems).*/}
+      <P>Well, that's <It>technically</It> the case according to the C standard, anyways. In practice, most compilers have extensions that support casting function pointers to void pointers. But, officially, any C code that casts a function pointer to a void pointer is undefined behavior and therefore non-portable (i.e., it won't necessarily work as intended on every platform).</P>
+
+      <P>For example, consider this simple program:</P>
+      
+      <CBlock fileName="function_pointers.c" highlightLines="{28-36}">{
+`#include <stdio.h>
+
+double foo(int a, const char* some_string, float f) {
+        // Divide the (first) integer parameter by the (third)
+        // float parameter. Print the (second) string parameter,
+        // followed by a colon, followed by the computed
+        // quotient.
+        float quotient = a / f;
+        printf("%s: %f\\n", some_string, quotient);
+
+        // Coerce the quotient to a double and return it (for
+        // some reason...)
+        return quotient;
+}
+
+int main(void) {
+        double (*my_pointer)(int, const char*, float) = foo;
+
+        // my_pointer points to the function foo.
+
+        // Print out the memory address of foo, stored in the
+        // pointer
+        printf("%p\\n", my_pointer);
+
+        // Print out the memory address of foo directly
+        printf("%p\\n", foo);
+
+        // Call the function that my_pointer points to, passing
+        // 1, "1/2", and 2.0f as the arguments, and storing the
+        // return value in quotient.
+        float quotient = (*my_pointer)(1, "1/2", 2.0f);
+
+        // Print the quotient as well (though it should've
+        // already been printed by the foo function, which we
+        // just called through my_pointer)
+        printf("%.2lf\\n", quotient);
+}
+`
+      }</CBlock>
+
+      <P>Look familiar? This program is from the beginning of this lecture. When I first showed you this program, I left a note below it stating that it technically isn't strictly portable according to the C standard. Indeed, it officially contains some undefined behavior.</P>
+
+      <P>Internally, <Code>printf</Code> automatically casts all pointer arguments (besides the format string) to void pointers. For example, in the call <Code>printf("%p\n", my_pointer)</Code>, <Code>my_pointer</Code> is internally casted to a void pointer by <Code>printf</Code>. Similarly, in the call <Code>printf("%p\n", foo)</Code>, the function <Code>foo</Code> decays to a function pointer, and then that function pointer is, again, internally casted to a void pointer by <Code>printf</Code>. Because function pointers technically aren't supposed to be casted to void pointers, both of these function calls officially result in undefined behavior.</P>
+
+      <P>But GCC has an extension that supports casting function pointers to void pointers, hence why the compiler and Valgrind didn't generate any warnings or errors. However, if we supply the <Code>-pedantic</Code> flag to <Code>gcc</Code>, which tells the compiler to adhere more closely to the C standard, it will warn us about these castings:</P>
+
+      <TerminalBlock copyable={false}>{
+`$ gcc -g -Wall -pedantic -o function_pointers function_pointers.c 
+function_pointers.c: In function ‘main’:
+function_pointers.c:23:18: warning: format ‘%p’ expects argument of type ‘void *’, but argument 2 has type ‘double (*)(int,  const char *, float)’ [-Wformat=]
+   23 |         printf("%p\\n", my_pointer);
+      |                 ~^     ~~~~~~~~~~
+      |                  |     |
+      |                  |     double (*)(int,  const char *, float)
+      |                  void *
+function_pointers.c:26:18: warning: format ‘%p’ expects argument of type ‘void *’, but argument 2 has type ‘double (*)(int,  const char *, float)’ [-Wformat=]
+   26 |         printf("%p\\n", foo);
+      |                 ~^     ~~~
+      |                  |     |
+      |                  |     double (*)(int,  const char *, float)
+      |                  void *
+`
+      }</TerminalBlock>
+
+      <P>The program still <It>works</It>, but the warnings are telling us that, if we decided to, say, switch to a different C compiler, or perhaps compile for a different target platform, it might <It>not</It> work anymore.</P>
+
+      <P>Luckily, there's very rarely any practical reason to cast a function pointer to a void pointer other than for debugging purposes (e.g., to print the memory address of a function via <Code>printf</Code>). Relying on a compiler extension just for some debugging trace statements probably isn't the worst thing in the world.</P>
+
+      <P>(In theory, the ability to cast a function pointer to a void pointer would enable some <It>extremely</It> meta programming and / or dynamic control flow, like functions that accept pointers to other arbitrary functions, which are then re-casted to their appropriate function pointer types by <It>other</It> functions that are also passed by pointer. Or something to that effect. But such practices are uncommon in general, especially in C programs.)</P>
 
       <SectionHeading id="polymorphism">(Optional content) Polymorphism?</SectionHeading>
 
-      <P>Uh oh! Alex is behind on lecture notes!</P>
+      <P>As you hopefully remember from CS 162 (or equivalent), polymorphism means "many forms". Officially, it refers to a function's ability to accept and operate on arguments of various types in different ways. But in many modern object-oriented languages, it's often implemented via interface inheritance and method overrides (i.e., subtype polymorphism<Emdash/>a specific kind of polymorphism).</P>
 
-      {/*TODO Polymorphism as separate optional content section*/}
+      <P>For example, a video game might consist of various kinds of monsters, each of which can attack the player. But different monsters might attack the player in different ways. Rather than storing an array of vampires and a separate array of zombies, and then iterating through <It>both</It> of those arrays one at a time, telling each vampire and zombie to attack the player, the polymorphic solution would be to simply store a single array of polymorphic monster handles. When iterating through the array of monster handles, the goal is to call a different attack function depending on the dynamic type of the monster (i.e, if the monster handle actually refers to a vampire, then call one attack function, but if it refers to a zombie, then call a different attack function).</P>
+
+      <P>C doesn't support subtypes (inheritance) nor methods, and therefore it doesn't support subtype polymorphism. However, we can <It>simulate</It> polymorphism in C with function pointers and void pointers:</P>
+
+      <CBlock fileName="polymorphism.c">{
+`#include <stdlib.h>
+#include <stdio.h>
+
+// Player, zombie, and vampire structure types. These should
+// really be in their own header files, but I've put them
+// here for brevity of the demonstration.
+struct player {
+        int hp;
+};
+
+struct zombie {
+        int sanity;
+};
+
+struct vampire {
+        int strength;
+};
+
+// "Polymorphic" handle on some kind of entity that can attack
+// the player
+struct attacker {
+        // Every attacker contains a "context". This context
+        // contains the state of the attacker (i.e., the entity
+        // "doing" the attacking). For example, it
+        // might be a zombie structure, or it might be a
+        // vampire structure. It depends on who the attacker is.
+        // So we use a void pointer to represent it.
+        void* context;
+
+        // Every attacker has an attack function. But different
+        // attackers can have different attack functions to
+        // attack the player in different ways. So we use a
+        // function pointer, which will point to the given
+        // attacker's particular attack function. It will
+        // accept the player AND the context (i.e., the state
+        // of the attacker) via pointers.
+        void (*attack)(void* context, struct player* p);
+};
+
+// Zombies attack the player via this function. Notice that its
+// signature aligns with that of the attack function pointer
+// of the attacker structure type. This allows us to store its
+// address in said field.
+void zombie_attack(void* context, struct player* p) {
+        // context is a void pointer so as to align with
+        // the signature of the attack function pointer field
+        // in the attacker structure type, but it must ACTUALLY
+        // point to a zombie (since this is the zombie_attack
+        // function). Cast it to a struct zombie*.
+        struct zombie* z = context;
+
+        // If the zombie is still sane, it loses sanity.
+        // Otherwise, it attacks the player.
+        if (z->sanity > 0) {
+                --(z->sanity);
+        } else {
+                p->hp -= 2; // Zombies do 2 damage
+        }
+}
+
+// Similarly, vampires attack the player via this function.
+void vampire_attack(void* context, struct player* p) {
+        // context is a void pointer so as to align with
+        // the signature of the attack function pointer field
+        // in the attacker structure type, but it must ACTUALLY
+        // point to a vampire (since this is the vampire_attack
+        // function). Cast it to a struct vampire*.
+        struct vampire* v = context;
+
+        // The amount of damage dealt to the player should match
+        // the vampire's current strength
+        p->hp -= v->strength;
+
+        // The vampire sucks the player's blood and gets
+        // stronger, up to a maximum strength of 3.
+        if (v->strength < 3) {
+                ++(v->strength);
+        }
+}
+
+// Creates a zombie on the heap and returns its address.
+// Using the heap allows us to store its address in various
+// places (e.g., in the context field of an attacker structure)
+// without worrying about those pointers becoming dangling due
+// to the object falling out of scope before we're done with
+// it.
+struct zombie* create_zombie() {
+        struct zombie* z = malloc(sizeof(struct zombie));
+        z->sanity = 3; // Zombies start with 3 sanity
+        return z;
+}
+
+// Similarly, creates a vampire on the heap
+struct vampire* create_vampire() {
+        struct vampire* v = malloc(sizeof(struct vampire));
+        v->strength = 1; // Vampires start with 1 strength
+        return v;
+}
+
+int main(void) {
+        // The player starts with 10 hp
+        struct player p = {.hp = 10};
+
+        // Create an array of attackers (could be on the heap;
+        // I used the stack for simplicity of the demo).
+        struct attacker attackers[2];
+
+        // The first attacker will be a zombie
+        struct zombie* z = create_zombie();
+
+        // We want the first attacker to refer to z. That is,
+        // attackers[0].context should point to z, and
+        // attackers[0].attack should point to the zombie_attack
+        // function. That way, when we call
+        // (*attackers[0].attack)(attackers[0].context, &p),
+        // it will call the zombie_attack function to attack
+        // the player, passing the zombie (z) as the context.
+        attackers[0].context = z; // Casts to void pointer
+        attackers[0].attack = zombie_attack;
+
+        // The second attacker is a vampire
+        struct vampire* v = create_vampire();
+        attackers[1].context = v; // Casts to void pointer
+        attackers[1].attack = vampire_attack;
+
+        // Now, in order to tell ALL the attackers to attack
+        // the players, we just need to iterate once, through
+        // a single array (attackers), like so:
+        for (size_t i = 0; i < 2; ++i) {
+                // Each attacker has a pointer pointing to its
+                // own special attack function, as well as
+                // a void pointer that points to the context
+                // storing the attacker's state to be passed
+                // to said attack function. Call the attack
+                // function, passing it the context (and the
+                // address of the player to be attacked)
+                (*attackers[i].attack)(
+                        attackers[i].context,
+                        &p
+                );
+        }
+
+        // Just to prove it worked... The zombie should have
+        // lost 1 sanity, the player should have lost 1 HP
+        // (from the vampire), and the vampire should have
+        // gained 1 strength. That is, z->sanity should be 2,
+        // p->hp should be 9, and v->strength should be 2.
+        printf("z->sanity: %d\\n", z->sanity);
+        printf("p.hp: %d\\n", p.hp);
+        printf("v->strength: %d\\n", v->strength);
+
+        // Free the zombie and vampire. We can actually
+        // do that through their context void pointers stored
+        // in the attackers array in this case, if we want
+        // (free() technically always casts the given pointer to
+        // a void pointer anyways; that's its parameter type)
+        for (size_t i = 0; i < 2; ++i) {
+                free(attackers[i].context);
+        }
+
+        // Of course, if the attackers array were on the heap
+        // instead of the stack, we'd have to free it too
+        // (free(attackers)). But that's not the case in this
+        // simple demo
+}
+`
+      }</CBlock>
+
+      <P>And here's the output:</P>
+
+      <TerminalBlock copyable={false}>{
+`$ gcc -g -Wall -o polymorphism polymorphism.c 
+$ valgrind ./polymorphism 
+==2879485== Memcheck, a memory error detector
+==2879485== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==2879485== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
+==2879485== Command: ./polymorphism
+==2879485== 
+z->sanity: 2
+p.hp: 9
+v->strength: 2
+==2879485== 
+==2879485== HEAP SUMMARY:
+==2879485==     in use at exit: 0 bytes in 0 blocks
+==2879485==   total heap usage: 3 allocs, 3 frees, 1,032 bytes allocated
+==2879485== 
+==2879485== All heap blocks were freed -- no leaks are possible
+==2879485== 
+==2879485== For lists of detected and suppressed errors, rerun with: -s
+==2879485== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+`
+      }</TerminalBlock>
+
+      <P>Just as I said, we've simulated polymorphism in that we can store handles of vampires <It>and</It> zombies in a single array of <Code>attacker</Code> structures. Each <Code>attacker</Code> has a void pointer (<Code>context</Code>) pointing to the actual entity doing the attacking (perhaps a <Code>zombie</Code>, or perhaps a <Code>vampire</Code>) as well as a pointer to an attack function. The attack function is given the context and the player. It casts the context to the appropriate dynamic type (e.g., <Code>zombie_attack</Code> casts the context to <Code>struct zombie*</Code>, whereas <Code>vampire_attack</Code> casts the context to <Code>struct vampire*</Code>) and then conducts the entity-specific attack logic, updating the player's and / or the attacking entity's state in the process. To make all the attacking entities attack the player, we simply iterate through the array of <Code>attacker</Code> structures, calling each of their attack functions, passing their respective contexts and the player as arguments.</P>
+
+      <P>In fact, because the zombie and vampire themselves are on the heap, we could very well let their pointers fall out of scope after storing them in the respective <Code>attacker</Code> structures' context fields, and the program would still work just fine. We're even able to free their memory directly through said context fields. The pointers <Code>v</Code> and <Code>z</Code> in the <Code>main</Code> function aren't even really needed; they're just used as temporary storage for a moment before being casted to void pointers and copied into the <Code>attacker</Code> structures.</P>
 
     </>
   )
