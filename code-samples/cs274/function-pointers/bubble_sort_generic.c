@@ -121,7 +121,6 @@ _Bool should_swap_ascending_int(void* a, void* b) {
 	// ACTUALLY point to integers)
 	int a_val = *((int*) a);
 	int b_val = *((int*) b);
-	
 
 	// In ascending order, we want a_val < b_val (given
 	// element smaller than the element after it). So if
@@ -201,7 +200,7 @@ int main(void) {
 		should_swap_descending_int
 	);
 
-	// Print the array to prove it worked
+	// Print the array
 	for (size_t i = 0; i < 5; ++i) {
 		printf("%d\t", numbers[i]);
 	}
@@ -215,6 +214,8 @@ int main(void) {
 		sizeof(float),
 		should_swap_ascending_float
 	);
+
+	// Print the array
 	for (size_t i = 0; i < 5; ++i) {
 		printf("%.2f\t", my_floats[i]);
 	}

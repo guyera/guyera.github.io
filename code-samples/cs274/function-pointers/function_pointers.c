@@ -34,6 +34,4 @@ int main(void) {
 	// already been printed by the foo function, which we
 	// just called through my_pointer)
 	printf("%.2lf\n", quotient);
-
-	int arr[10];
 }
