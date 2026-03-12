@@ -53,3 +53,6 @@ pages:
   - pathName: 'function-pointers'
     pageTitle: 'Function Pointers'
     namedIdentifier: 'function-pointers'
+  - pathName: 'cpp'
+    pageTitle: 'C++'
+    namedIdentifier: 'cpp'
