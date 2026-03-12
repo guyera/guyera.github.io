@@ -80,7 +80,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
         <Item><Link href="#references">References</Link></Item>
         <Item><Link href="#methods">Methods (member functions)</Link></Item>
         <Item><Link href="#access-modifiers">Access modifiers</Link></Item>
-        <Item><Link href="#constructors-and-destructors">Constructors and destructors</Link></Item>
+        <Item><Link href="#constructors">Constructors</Link></Item>
         <Item><Link href="#cpp-classes">C++ Classes</Link></Item>
         <Item><Link href="#raii-unique-pointers-and-vectors">RAII, unique pointers, and vectors</Link></Item>
         <Item><Link href="#and-more">And more</Link></Item>
@@ -444,7 +444,7 @@ greeter.hpp:8:21: note: declared private here
 
       <P>Indeed, this is an example of information hiding to enforce encapsulation. Again, in Python, we'd do this by simply renaming <Code>name</Code> to <Code>_name</Code>. But in Python, information hiding (and access control in general) is not enforced. In C++, it is.</P>
 
-      <SectionHeading id="constructors-and-destructors">Constructors and destructors</SectionHeading>
+      <SectionHeading id="constructors">Constructors</SectionHeading>
       
       <P>We now need a way to initialize the <Code>name</Code> field of the <Code>greeter</Code> structure type from within the <Code>main</Code> function. We could introduce a setter to do that. But a better idea would be to use a constructor.</P>
 
