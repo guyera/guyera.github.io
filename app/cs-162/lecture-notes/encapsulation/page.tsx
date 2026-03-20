@@ -115,22 +115,28 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
 `
       }</PythonBlock>
 
-      <P>Every <Code>Dog</Code> object has two attributes: <Code>name</Code> and <Code>birth_year</Code>. Suppose we have a <Code>Dog</Code> object called <Code>spot</Code>, and we want to "operate on" <Code>spot</Code>'s attributes. This is what <Code>spot</Code>'s methods are for. For example, when we first create <Code>spot</Code>, we need to assign values to <Code>spot</Code>'s attributes. We do this with the constructor. And afterwards, we might want to print <Code>spot</Code>'s attributes to the terminal. We do this with <Code>spot</Code>'s <Code>print()</Code> method (i.e., <Code>spot.print()</Code>). These methods are defined next to (co-located with) the attributes that they operate on, so this is an example of encapsulation.</P>
+      <P>Every <Code>Dog</Code> object has two attributes: <Code>name</Code> and <Code>birth_year</Code>. Suppose we have a <Code>Dog</Code> object called <Code>spot</Code>, and we want to "operate on" <Code>spot</Code>'s attributes. This is what <Code>spot</Code>'s methods are for. For example, when we first create <Code>spot</Code>, we need to assign values to <Code>spot</Code>'s attributes. We do this with the constructor. And afterwards, we might want to print <Code>spot</Code>'s attributes to the terminal. We do this with <Code>spot</Code>'s <Code>print()</Code> method (i.e., <Code>spot.print()</Code>). These methods are defined next to (co-located with) the attributes that they operate on, so this is an example of encapsulation. </P>
+
+      <P>We generally prefer encapsulation of data which belongs together. Data which is highly related should be grouped together, and data which is not very similar could potentially be part of a different class. The degree to which related data is encapsulated with each other and separate from unrelated data is called <Bold>cohesion</Bold>. We generally prefer code which is <Bold>higly cohesive</Bold>.</P>
 
       <SectionHeading id="coupling">Coupling</SectionHeading>
 
       <P>So, how can encapsulation be used to improve code maintainability? Well, it actually helps in a couple different ways:</P>
 
       <Enumerate listStyleType="decimal">
-        <Item>It helps reign in coupling</Item>
-        <Item>It helps establish class invariants</Item>
+        <Item>Encapsulation can reduce coupling</Item>
+        <Item>Encapsulation can enable class invariants</Item>
       </Enumerate>
 
       <P>Let's focus on coupling for now. We'll cover class invariants <Link href="#class-invariants">in a moment</Link>.</P>
 
-      <P><Bold>Coupling</Bold>, like encapsulation, is a bit hard to define. Again, if you ask 100 software engineers, you'll get 100 different definitions. (I once watched <Link href="https://www.youtube.com/watch?v=hd0v72pD1MI">an entire podcast</Link> about coupling and cohesion consisting of various highly regarded software engineers, including the likes of Kent Beck, Jim Weirich, and Ron Jeffries, and, even by the end of the podcast, they had mostly failed to agree on a unified definition of what these terms mean). However, there is a theme among the various definitions: coupling, in some sense or another, refers to the case where changing one component of code requires changing one or more other components of code in turn. This is a somewhat vague definition, but it's good enough for our use case.</P>
+      <P><Bold>Coupling</Bold>, like encapsulation, is a bit subjective. However, there is a theme among the various definitions: coupling, in some sense or another, refers to the case where changing one component of code requires changing one or more other components of code in turn. This is a somewhat vague definition, but it's good enough for our use case.</P>
+
+      <P>If you ask 100 software engineers, you'll get 100 different definitions. (I once watched <Link href="https://www.youtube.com/watch?v=hd0v72pD1MI">an entire podcast</Link> about coupling and cohesion consisting of various highly regarded software engineers, including the likes of Kent Beck, Jim Weirich, and Ron Jeffries, and, even by the end of the podcast, they had mostly failed to agree on a unified definition of what these terms mean).</P>
 
       <P>Not all coupling is the same. For one, there are different degrees of coupling. If two components of code are <Bold>tightly coupled</Bold>, that means one is highly dependent on the other (and possibly vice-versa as well), so changing one will almost always require changing the other. In contrast, if two components of code are <Bold>loosely coupled</Bold>, that means they are only loosely dependent on one another, so changing one may or may not require changing the other.</P>
+
+      <P>We generally prefer <Bold>loose coupling</Bold> over tight coupling.</P>
 
       <P>Coupling can also be <Bold>local</Bold> or <Bold>pervasive</Bold>. These are not widely accepted terms (I think I just made them up), but I think they're useful, so I'll use them anyways. Under my definitions, local coupling is when a small, controlled number of adjacent code components are coupled together, whereas pervasive coupling is when a given code component is coupled to countless other code components throughout the entire codebase (and, perhaps more importantly, pervasive coupling tends to get worse over time as the codebase gets more complex, but local coupling is mostly fixed; this is a result of <Link href="https://en.wikipedia.org/wiki/Open%E2%80%93closed_principle">Bertrand Meyer's open-closed principle</Link> of object-oriented software design).</P>
 
@@ -194,7 +200,7 @@ for p in my_database.people:
 
       <P>Perhaps all the above code <It>works</It>, but consider: as this program grows in complexity (and perhaps becomes more successful / popular, garnering more users, etc), the size of the person databases will likely grow as well. In each of the above examples, <Code>my_database</Code> might have, say, millions of people in it. At a certain point, simply using a for loop to iterate over every single person in the database, looking for all the people with a given name or age, might no longer be a good idea; such for loops can be extremely slow when iterating over a gigantic list.</P>
 
-      <P>So, when that day comes, how do we speed up the program? Well, there are various solutions. Most of them are too advanced for you to fully appreciate right now, but they all have one thing in common: in order to implement them, we'll almost surely have to rewrite most if not <It>all</It> of the above code.</P>
+      <P>So, when that day comes, how do we speed up the program? There are many techniques you will learn in your computer science education. In order to implement any optimizations, we'll almost surely have to rewrite most if not <It>all</It> of the above code.</P>
 
       <P>For example, one way of speeding up a searching process is to use a binary search rather than a linear search. We might discuss the binary search algorithm later on in the term, but to give you a very general idea, it's a searching algorithm that searches through a <Ul>sorted list</Ul> to find a given value. It's much faster than a naive for loop (i.e., a linear search). However, it requires that the list be sorted ahead of time. To use a binary search to find a person with a certain name, you'd need a list of people sorted (e.g., alphabetically) by their names. And to use a binary search to find the people with a given age, you'd need another <It>separate</It> list of people sorted (e.g., in ascending order) by their ages. To implement this idea, we'd have to rewrite both of the above for loops, replacing them with a binary search implementation. But beyond that, we'd also have to change how we add people to the database: 1) there would now be two lists of people instead of one (one sorted by name, and one sorted by age), so whenever we want to add a person to the database, we'd have to add them to <It>both</It> of these lists; and 2) we'd have to make sure to insert people in their correct places within the respective lists so that the lists remain sorted (as opposed to simply appending them to the list, as we do above). Indeed, this would require rewriting <It>all</It> of the above code.</P>
 
@@ -208,11 +214,11 @@ for p in my_database.people:
 
       <P>You might also notice that the <Code>PersonDatabase</Code> class is not very well encapsulated. There are countless lines of code sprawled throughout the codebase that directly operate on the <Code>people</Code> attribute (e.g., <Code>my_database.people.append(joe)</Code>), and none of those lines of code are co-located (bundled) with the <Code>people</Code> attribute (i.e., none of those lines of code are in methods of the <Code>PersonDatabase</Code> class). We'll explore this more in the next section.</P>
 
-      <SectionHeading id="reigning-in-coupling">Reigning in coupling</SectionHeading>
+      <SectionHeading id="reigning-in-coupling">Reducing coupling</SectionHeading>
 
-      <P>I said that encapsulation can help "reign in" coupling, but what does that mean?</P>
+      <P>I said that encapsulation can help "reduce" coupling, but what does that mean?</P>
 
-      <P>First, understand that coupling is inevitable in some form or another. At the very least, coupling occurs between all direct <Bold>dependencies</Bold>. A dependency is just a component of code that another component of code depends / relies on. Dependencies are <It>everywhere</It>. Whenever one function A calls another function B, that's a dependency<Emdash/>A depends on B. Whenever a class A defines an attribute of some other class type B, that's a dependency (again, A depends on B). Even within a single function, there are plenty of dependencies. If a line of code prints the value of the variable <Code>x</Code>, then that print statement depends on <Code>x</Code> having previously been defined<Emdash/>that's a dependency between two lines of code. This clearly cannot be avoided.</P>
+      <P>First, understand that some coupling is inevitable. Your functions, data, and classes exist to interact with each other. At the very least, coupling occurs between all direct <Bold>dependencies</Bold>. A dependency is just a component of code that another component of code depends / relies on. Dependencies are <It>everywhere</It>. Whenever one function A calls another function B, that's a dependency<Emdash/>A depends on B. Whenever a class A defines an attribute of some other class type B, that's a dependency (again, A depends on B). Even within a single function, there are plenty of dependencies. If a line of code prints the value of the variable <Code>x</Code>, then that print statement depends on <Code>x</Code> having previously been defined<Emdash/>that's a dependency between two lines of code. This clearly cannot be avoided.</P>
 
       <P>Dependencies inevitably introduce coupling because in order to depend on something, you must interact with it. In particular, code components interact with one another through their <Bold>interfaces</Bold>. Definitionally, an interface is simply the part of a code component that other components need to know about in order to interact with it. Take this function, for example:</P>
 
@@ -225,11 +231,11 @@ for p in my_database.people:
 
       <P>Because dependencies interact with each other through their interfaces, changing a code component's interface requires changing how other components (specifically its dependents) interact with it (in contrast, changing a component's implementation generally does not require changing how other components interact with it). Keeping with our example, if I wanted to change the name of <Code>foo</Code> to <Code>bar</Code>, I'd have to change how I reference it in each and every <Code>foo</Code> function call. Or if I wanted to add a third parameter, I'd also have to add a third argument in each and every <Code>foo</Code> function call. (But if I wanted to change its <It>body</It><Emdash/>its implementation<Emdash/>I would not need to change how I call it). That's all to say, coupling inherently occurs at interfaces, and dependencies inherently interact with each other through their interfaces. Therefore, dependencies inherently create coupling, and this is inevitable.</P>
 
-      <P>That's not to say that coupling can never be <It>reduced</It>. Indeed, some coupling is essentially "unnecessary". For example, if a single block of code is copied and pasted many times over, then the coupling between it and its external dependencies is essentially replicated many times over as well. Moving the shared logic into a function and simply calling that function many times over can help reduce much of that unnecessary coupling.</P>
+      <P>However, some coupling is essentially "unnecessary" and can be mitigated with better software design. For example, if a single block of code is copied and pasted many times over, then the coupling between it and its external dependencies is essentially replicated many times over as well. Moving the shared logic into a function and simply calling that function many times over can help reduce much of that unnecessary coupling.</P>
 
       <P>Next, understand that coupling is not inherently evil; it only makes code harder to change. But remember that there are various forms and degrees of coupling. A component of code that's subject to tight, pervasive coupling is going to be much harder to change than a component of code that's subject to loose, local couplng.</P>
 
-      <P>With all that in mind, encapsulation can help us "reign in", or "manage" coupling in various ways:</P>
+      <P>With all that in mind, encapsulation can help us "reduce", or "manage" coupling in various ways:</P>
 
       <Enumerate listStyleType="decimal">
         <Item>It groups related things together (particularly, data and the behavior operating on that data), which keeps much of the relevant coupling contained in one place. This makes it easier to find all the coupled code that needs to be changed.</Item>
