@@ -64,6 +64,15 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
     <>
       <P>We're going to start writing some Python code soon, but first we need to set up our development environment.</P>
 
+      <SectionHeading id="venv">Python 3.12</SectionHeading>
+      <P>Python is such a widely-used language that it is installed by default on many operating systems, including Linux. This class will use Python 3.12 (or above), which includes some nice language features that aren't present on older versions. While we could just upgrade our system's Python interpreter version, it's not usually the best approach because the OS needs Python and we might create some side effects.</P>
+
+      <ShellBlock>{
+`module load python/3.12`
+      }</ShellBlock>
+
+      <P>Now when you run <Code>python --version</Code>, you should see it print something like <Code>3.12.12</Code>. Any version above 3.12 is the right version for this class! If you want to install this version on your local machine, you probably don't have the <Code>module</Code> command available, but you can install Python 3.12 with <Code>pyenv</Code> (on Windows), <Code>apt|yum|dnf</Code> on Linux, or Homebrew on a Mac.</P>
+
       <SectionHeading id="venv">venv</SectionHeading>
 
       <P>We're going to install some Python development packages (specifically <Link href="#mypy">Mypy</Link>, and perhaps some others throughout the term). Trouble is, we don't have the necessary permissions to install software packages on the engineering servers.</P>
@@ -100,20 +109,14 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
 `(env) guyera@flip2:cs162$`
       }</ShellBlock>
       
-      <P>This means that your virtual environment has been activated. You can now install Python packages.</P>
+      <P>(You might see double parenthesis around your venv, which is okay.) This means that your virtual environment has been activated. You can now install Python packages.</P>
 
-      <P>(If you'd ever like to undo this configuration, simply remove the line from <Code>~/.bashrc</Code> that you just added).</P>
+      <P>(If you'd ever like to undo this configuration, simply remove the line from <Code>~/.bashrc</Code> that you just added). You can also deactivate an active virtual environment by running:</P>
 
-      <SectionHeading id="upgrading-pip">Upgrading pip</SectionHeading>
-      <P>Your virtual environment comes with a copy of pip, which is a recursive acronym that stands for "pip installs packages". pip is the standard Python package manager, meaning it's used to install Python packages.</P>
-
-      <P>But the engineering servers have a slightly outdated version of Python, so when we used Python to generate our virtual environment, that virtual environment came with an outdated version of pip as well. Funny enough, since pip is a package manager, it can be used to update various Python-related packages, including itself. To tell pip to update itself, make sure that your virtual environment is activated, and then execute the following shell command:</P>
-
-      <ShellBlock>{
-`pip install --upgrade pip`
+      <ShellBlock copyable={false}>{
+`(env) guyera@flip2:cs162$ deactivate
+guyera@flip2:cs162$`
       }</ShellBlock>
-
-      <P>After a moment, a message should appear indicating a successful installation of the latest version of pip.</P>
 
       <SectionHeading id="mypy">Mypy</SectionHeading>
 
@@ -131,7 +134,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
 
       <P>Luckily, there is a way to leverage the power of static typing in a Python codebase. Although Python has a duck typing type system, it supports optional static type hints, and it can be supplemented with certain static analysis tools that get you pretty close to a C++-like static type system. <Link href="https://mypy-lang.org/index.html"><Term>Mypy</Term></Link> is one such tool, and it's essentially industry-standard at this point.</P>
       
-      <P>So, we're going to install Mypy in our Python virtual environment. Make sure your virtual environment is activated, and then execute the following shell command:</P>
+      <P>So, we're going to install Mypy in our Python virtual environment. Every virtual environment comes with a copy of pip, which is a recursive acronym that stands for "pip installs packages". pip is the standard Python package manager, meaning it's used to install Python packages. We will use pip to intall Mypy. Make sure your virtual environment is activated, and then execute the following shell command:</P>
 
       <ShellBlock>{
 `pip install mypy`
@@ -174,9 +177,9 @@ if __name__ == '__main__':
 `mypy hello.py`
       }</ShellBlock>
 
-      <P>This will run <Code>mypy</Code> over the code in <Code>hello.py</Code>, notifying you of any type errors (or other Mypy-discoverable errors) present in your source code. In this case, there's nothing wrong with the code, and a message should be printed to your terminal indicating as such.</P>
+      <P>This will run <Code>mypy</Code> over the code in <Code>hello.py</Code>, notifying you of any type errors (or other Mypy-discoverable errors) present in your source code. In this case, there's nothing wrong with the code, and a message should be printed to your terminal indicating as such. The very first time you run mypy, you may find it takes a while, but it will be faster in subsequent runs.</P>
 
-      <P>The grading scripts and TAs will always run <Code>mypy</Code> over your code when grading your programming submissions, so if you forget to do it yourself, you might be surprised when your grade comes back with penalties (even if the program <It>works</It>, you'll still be penalized for having type errors).</P>
+      <P>Gradescope will always run <Code>mypy</Code> over your code when grading your programming submissions, so if you forget to do it yourself you might be surprised when you see test failures after submitting your code. Even if the program <It>works</It>, you'll still be penalized for having type errors.</P>
 
       <P>Now let's run the program itself. The standard way of running Python programs is through the <Code>python</Code> interpreter; simply execute the following shell command:</P>
 
