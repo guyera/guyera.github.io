@@ -10,6 +10,6 @@ export default async function SyntaxBlock({ children }: { children?: any }) {
   )
 }
 
-registerMDGenerator(SyntaxBlock, (props, children) => {
+registerMDGenerator(SyntaxBlock, (props: any, children: any) => {
   return '```\n' + concatenateChildrenMD(children) + '\n```\n\n'
 })

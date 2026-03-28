@@ -21,7 +21,7 @@ export default async function Itemize({ children, listStyleType="dash" }: { chil
   )
 }
 
-registerMDGenerator(Itemize, (props, children) => {
+registerMDGenerator(Itemize, (props: any, children: any) => {
   var res = []
   for (const child of children) {
     var childRes = []
@@ -37,10 +37,10 @@ registerMDGenerator(Itemize, (props, children) => {
     for (const line of childMDLines) {
       childRes.push('  ' + line)
     }
-    childRes = childRes.join('\n')
-    res.push(childRes)
+    var childResStr = childRes.join('\n')
+    res.push(childResStr)
   }
-  res = res.join('\n')
-  res += '\n\n'
-  return res
+  var resStr = res.join('\n')
+  resStr += '\n\n'
+  return resStr
 })

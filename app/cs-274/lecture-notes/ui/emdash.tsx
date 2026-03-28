@@ -6,6 +6,6 @@ export default async function Emdash() {
   )
 }
 
-registerMDGenerator(Emdash, (props, children) => {
+registerMDGenerator(Emdash, (props: any, children: any) => {
   return '---'
 })

@@ -25,7 +25,7 @@ export default async function Image({ src, alt, caption, srcDarkMode, width, hei
   }
 }
 
-registerMDGenerator(Image, (props, children) => {
+registerMDGenerator(Image, (props: any, children: any) => {
   var res = '['
   if (props.alt) {
     res += props.alt

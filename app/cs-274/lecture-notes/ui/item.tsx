@@ -8,6 +8,6 @@ export default async function Item({ children }: { children?: any }) {
   )
 }
 
-registerMDGenerator(Item, (props, children) => {
+registerMDGenerator(Item, (props: any, children: any) => {
   return concatenateChildrenMD(children) + '\n\n'
 })

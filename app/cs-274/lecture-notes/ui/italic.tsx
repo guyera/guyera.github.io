@@ -6,6 +6,6 @@ export default async function Italic({ children }: { children?: any }) {
   )
 }
 
-registerMDGenerator(Italic, (props, children) => {
+registerMDGenerator(Italic, (props: any, children: any) => {
   return '*' + concatenateChildrenMD(children) + '*'
 })

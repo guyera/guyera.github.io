@@ -6,6 +6,6 @@ export default async function Bold({ children }: { children?: any }) {
   )
 }
 
-registerMDGenerator(Bold, (props, children) => {
+registerMDGenerator(Bold, (props: any, children: any) => {
   return '**' + concatenateChildrenMD(children) + '**'
 })

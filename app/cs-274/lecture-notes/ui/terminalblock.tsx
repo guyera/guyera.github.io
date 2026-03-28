@@ -10,6 +10,6 @@ export default async function TerminalBlock({ children, fileName, highlightLines
   )
 }
 
-registerMDGenerator(TerminalBlock, (props, children) => {
+registerMDGenerator(TerminalBlock, (props: any, children: any) => {
   return '```\n' + concatenateChildrenMD(children) + '\n```\n\n'
 })

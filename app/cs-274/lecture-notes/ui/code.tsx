@@ -7,7 +7,7 @@ export default async function Code({ children }: { children?: any }) {
   )
 }
 
-registerMDGenerator(Code, (props, children) => {
+registerMDGenerator(Code, (props: any, children: any) => {
   var res = '`'
   res += concatenateChildrenMD(children)
   res += '`'

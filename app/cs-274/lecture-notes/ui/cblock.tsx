@@ -10,7 +10,7 @@ export default async function CBlock({ children, fileName, highlightLines='', co
   )
 }
 
-registerMDGenerator(CBlock, (props, children) => {
+registerMDGenerator(CBlock, (props: any, children: any) => {
   var res = ''
   if (Object.hasOwn(props, 'fileName')) {
     res += props.fileName + ':\n'

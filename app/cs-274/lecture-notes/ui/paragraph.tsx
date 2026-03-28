@@ -8,6 +8,6 @@ export default async function Paragraph({ children, spaceBelow=true }: { childre
   )
 }
 
-registerMDGenerator(Paragraph, (props, children) => {
+registerMDGenerator(Paragraph, (props: any, children: any) => {
   return concatenateChildrenMD(children) + '\n\n'
 })

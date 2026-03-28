@@ -7,6 +7,6 @@ export default async function Link({ children, href }: { children?: any, href: s
   )
 }
 
-registerMDGenerator(Link, (props, children) => {
+registerMDGenerator(Link, (props: any, children: any) => {
   return '[' + concatenateChildrenMD(children) + '](' + props.href + ')'
 })

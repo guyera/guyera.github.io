@@ -6,6 +6,6 @@ export default async function Underline({ children }: { children?: any }) {
   )
 }
 
-registerMDGenerator(Underline, (props, children) => {
+registerMDGenerator(Underline, (props: any, children: any) => {
   return '<ins>' + concatenateChildrenMD(children) + '</ins>'
 })

@@ -22,7 +22,7 @@ export default async function Enumerate({ children, listStyleType="lower-alpha" 
   )
 }
 
-registerMDGenerator(Enumerate, (props, children) => {
+registerMDGenerator(Enumerate, (props: any, children: any) => {
   var res = []
   var counter = 1
   for (const child of children) {
@@ -40,10 +40,10 @@ registerMDGenerator(Enumerate, (props, children) => {
     for (const line of childMDLines) {
       childRes.push('  ' + line)
     }
-    childRes = childRes.join('\n')
-    res.push(childRes)
+    var childResStr = childRes.join('\n')
+    res.push(childResStr)
   }
-  res = res.join('\n')
-  res += '\n\n'
-  return res
+  var resStr = res.join('\n')
+  resStr += '\n\n'
+  return resStr
 })

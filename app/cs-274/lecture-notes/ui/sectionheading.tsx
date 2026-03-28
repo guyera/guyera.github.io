@@ -7,6 +7,6 @@ export default async function SectionHeading({ children, id }: { children?: any,
   )
 }
 
-registerMDGenerator(SectionHeading, (props, children) => {
+registerMDGenerator(SectionHeading, (props: any, children: any) => {
   return '## ' + concatenateChildrenMD(children) + '\n\n'
 })

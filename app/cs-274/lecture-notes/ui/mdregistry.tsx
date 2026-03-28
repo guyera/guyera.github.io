@@ -3,11 +3,11 @@ import P from './paragraph'
 
 export const mdGeneratorMap = new Map()
 
-export function registerMDGenerator(reactComponentType, mdGenerator) {
+export function registerMDGenerator(reactComponentType: any, mdGenerator: any) {
   mdGeneratorMap.set(reactComponentType, mdGenerator)
 }
 
-export function concatenateChildrenMD(children) {
+export function concatenateChildrenMD(children: any): string {
   var res = []
   for (const child of children) {
     res.push(generateMD(child))
@@ -15,7 +15,7 @@ export function concatenateChildrenMD(children) {
   return res.join('')
 }
 
-export function generateMD(node) {
+export function generateMD(node: any): string {
   if (typeof node === 'string') {
     return node
   }
