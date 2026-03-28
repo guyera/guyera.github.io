@@ -1,5 +1,6 @@
 import RehypeCopyableCodeBlock from '@/app/ui/codeblock/rehypecopyablecodeblock'
 import RehypeCodeBlock from '@/app/ui/codeblock/rehypecodeblock'
+import { registerMDGenerator, concatenateChildrenMD } from './mdregistry'
 
 export default async function CBlock({ children, fileName, highlightLines='', copyable=true, showLineNumbers=true }: { children?: any, fileName?: string, highlightLines?: string, copyable?: boolean, showLineNumbers?: boolean }) {
   return (
@@ -8,3 +9,12 @@ export default async function CBlock({ children, fileName, highlightLines='', co
     </div>
   )
 }
+
+registerMDGenerator(CBlock, (props, children) => {
+  var res = ''
+  if (Object.hasOwn(props, 'fileName')) {
+    res += props.fileName + ':\n'
+  }
+  res += '```c\n' + concatenateChildrenMD(children) + '\n```\n\n'
+  return res
+})

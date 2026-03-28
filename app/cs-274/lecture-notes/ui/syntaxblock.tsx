@@ -1,5 +1,6 @@
 import RehypeCopyableCodeBlock from '@/app/ui/codeblock/rehypecopyablecodeblock'
 import RehypeCodeBlock from '@/app/ui/codeblock/rehypecodeblock'
+import { registerMDGenerator, concatenateChildrenMD } from './mdregistry'
 
 export default async function SyntaxBlock({ children }: { children?: any }) {
   return (
@@ -8,3 +9,7 @@ export default async function SyntaxBlock({ children }: { children?: any }) {
     </div>
   )
 }
+
+registerMDGenerator(SyntaxBlock, (props, children) => {
+  return '```\n' + concatenateChildrenMD(children) + '\n```\n\n'
+})

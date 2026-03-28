@@ -1,4 +1,6 @@
 import { garamond } from '@/app/ui/fonts';
+import Item from './item'
+import { registerMDGenerator, concatenateChildrenMD, generateMD } from './mdregistry'
 
 export default async function Itemize({ children, listStyleType="dash" }: { children?: any, listStyleType?: string }) {
   let listStyleClass: string
@@ -18,3 +20,27 @@ export default async function Itemize({ children, listStyleType="dash" }: { chil
     </ul>
   )
 }
+
+registerMDGenerator(Itemize, (props, children) => {
+  var res = []
+  for (const child of children) {
+    var childRes = []
+    var childMD = generateMD(child)
+    var childMDLines = childMD.split('\n')
+    var firstLine = childMDLines.shift()
+    if (child.type == Item) {
+      childRes.push('- ' + firstLine)
+    } else {
+      childRes.push('  ' + firstLine)
+    }
+
+    for (const line of childMDLines) {
+      childRes.push('  ' + line)
+    }
+    childRes = childRes.join('\n')
+    res.push(childRes)
+  }
+  res = res.join('\n')
+  res += '\n\n'
+  return res
+})

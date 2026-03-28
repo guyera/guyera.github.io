@@ -1,5 +1,6 @@
 import RehypeCopyableCodeBlock from '@/app/ui/codeblock/rehypecopyablecodeblock'
 import RehypeCodeBlock from '@/app/ui/codeblock/rehypecodeblock'
+import { registerMDGenerator, concatenateChildrenMD } from './mdregistry'
 
 export default async function TerminalBlock({ children, fileName, highlightLines, copyable=true }: { children?: any, copyable?: boolean, highlightLines?: string, fileName?: string }) {
   return (
@@ -8,3 +9,7 @@ export default async function TerminalBlock({ children, fileName, highlightLines
     </div>
   )
 }
+
+registerMDGenerator(TerminalBlock, (props, children) => {
+  return '```\n' + concatenateChildrenMD(children) + '\n```\n\n'
+})
