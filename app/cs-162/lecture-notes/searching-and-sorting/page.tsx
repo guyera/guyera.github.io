@@ -226,11 +226,11 @@ The index of 15 is 4
       <P><Bold>Selection sort</Bold> is perhaps the most intuitive sorting algorithm. Suppose you want to sort a list of integers in ascending order. Then selection sort would go something like this:</P>
 
       <Enumerate listStyleType="decimal">
-        <Item>Maintain two parts of the list: a sorted part on the left, and an unsorted part on the right. They're divided by an imaginary line. Initially, that line is at the very left of the list (i.e., the entire list is unsorted).</Item>
-        <Item>Select (find) the smallest value in the unsorted part of the list. This can be done by iterating through the entire unsorted part of the list, keeping track of the smallest discovered value and comparing each subsequent element to that value. Whenever a smaller value is found, update the variable that keeps track of the smallest discovered value accordingly.</Item>
-        <Item>Swap the selected value with the first value in the unsorted part of the list.</Item>
-        <Item>Take the imaginary line that divides the two parts of the list and shift it over one space to the right. It should now be immediately to the right of the value that you just put at the beginning of the unsorted part of the list (which is now the last value in the sorted part of the list).</Item>
-        <Item>Repeat steps 2-4 until the imaginary line is at the very right of the list (technically, you can stop one iteration before that).</Item>
+        <Item><P>Maintain two parts of the list: a sorted part on the left, and an unsorted part on the right. They're divided by an imaginary line. Initially, that line is at the very left of the list (i.e., the entire list is unsorted).</P></Item>
+        <Item><P>Select (find) the smallest value in the unsorted part of the list. This can be done by iterating through the entire unsorted part of the list, keeping track of the smallest discovered value and comparing each subsequent element to that value. Whenever a smaller value is found, update the variable that keeps track of the smallest discovered value accordingly.</P></Item>
+        <Item><P>Swap the selected value with the first value in the unsorted part of the list.</P></Item>
+        <Item><P>Take the imaginary line that divides the two parts of the list and shift it over one space to the right. It should now be immediately to the right of the value that you just put at the beginning of the unsorted part of the list (which is now the last value in the sorted part of the list).</P></Item>
+        <Item><P>Repeat steps 2-4 until the imaginary line is at the very right of the list (technically, you can stop one iteration before that).</P></Item>
       </Enumerate>
 
       <P>Put another way, selection sort involves finding the smallest element and swapping it with the first element in the list; finding the second smallest element and swapping it with the second element in the list; and so on. This results in the list being sorted in ascending order after N-1 iterations (where N is the length of the list). Each of those iterations in turn requires iterating through the entire unsorted part of the list to find the smallest (or largest, or otherwise "most extreme") element. A typical implementation, then, often looks like a for loop inside a for loop.</P>
@@ -248,10 +248,10 @@ The index of 15 is 4
       <P>Another fairly intuitive sorting algorithm is <Bold>insertion sort</Bold>. It's similar to selection sort at a high level, but they differ in some details:</P>
 
       <Enumerate listStyleType="decimal">
-        <Item>Maintain two parts of the list: a sorted part on the left, and an unsorted part on the right. They're divided by an imaginary line. Initially, that line is immediately to the right of the first element in the list (i.e., the first element is in the sorted part, but the rest of the list is in the unsorted part).</Item>
-        <Item>Take the first element in the unsorted part of the list and insert it into its correct sorted position in the sorted part of the list. When done on a Python list or array, this typically involves repeatedly comparing the element with the neighbor to its left and, if it's smaller than said neighbor, swapping the two elements (i.e., "push" the element to the left until it's larger than whatever is to its left). If everything to the left of the element is smaller than it, then simply keep swapping it with the neighbor to its left until it's at the very left of the entire list.</Item>
-        <Item>Take the imaginary line that divides the two parts of the list and shift it over one space to the right.</Item>
-        <Item>Repeat steps 2-3 until the imaginary line is at the very right of the list.</Item>
+        <Item><P>Maintain two parts of the list: a sorted part on the left, and an unsorted part on the right. They're divided by an imaginary line. Initially, that line is immediately to the right of the first element in the list (i.e., the first element is in the sorted part, but the rest of the list is in the unsorted part).</P></Item>
+        <Item><P>Take the first element in the unsorted part of the list and insert it into its correct sorted position in the sorted part of the list. When done on a Python list or array, this typically involves repeatedly comparing the element with the neighbor to its left and, if it's smaller than said neighbor, swapping the two elements (i.e., "push" the element to the left until it's larger than whatever is to its left). If everything to the left of the element is smaller than it, then simply keep swapping it with the neighbor to its left until it's at the very left of the entire list.</P></Item>
+        <Item><P>Take the imaginary line that divides the two parts of the list and shift it over one space to the right.</P></Item>
+        <Item><P>Repeat steps 2-3 until the imaginary line is at the very right of the list.</P></Item>
       </Enumerate>
 
       <P>Put another way, insertion sort basically builds up a new list from the original list, but it builds it up in sorted order as it goes: as it pulls elements from the original list, it inserts them into the sorted list in their correct positions.</P>
@@ -301,15 +301,15 @@ The index of 15 is 4
 
       <P>I've obviously left out an important part: the merging. How do you merge two small sorted lists into a single large sorted list?</P>
 
-      <P>Well, the merge algorithm looks a bit different for different data streuctures. And, in fact, when you're sorting a Python list, there are a couple different merge algorithms that will work. But the most common one goes like this:</P>
+      <P>Well, the merge algorithm looks a bit different for different data structures. And, in fact, when you're sorting a Python list, there are a couple different merge algorithms that will work. But the most common one goes like this:</P>
 
       <Enumerate listStyleType="decimal">
-        <Item>Create a new, empty list. Let <Code>new_list</Code> denote this new list.</Item>
-        <Item>Maintain two indices: <Code>i</Code> and <Code>j</Code>. Initialize both of them to <Code>0</Code>.</Item>
-        <Item>Compare the element in the left half-list at index <Code>i</Code> with the element in the right half-list at index <Code>j</Code>. Whichever is smaller, append it to <Code>new_list</Code> and increment the corresponding index (i.e., if the element in the left half-list is smaller, append it to <Code>new_list</Code> and increment <Code>i</Code>; if the element in the right half-list is smaller, append it to <Code>new_list</Code> and increment <Code>j</Code>).</Item>
-        <Item>Repeat step 3 until all of the values from one of the two half-lists has been appended to <Code>new_list</Code>.</Item>
-        <Item>Append the remaining values from the remaining half-list to <Code>new_list</Code> in left-to-right order.</Item>
-        <Item>Return <Code>new_list</Code>.</Item>
+        <Item><P>Create a new, empty list. Let <Code>new_list</Code> denote this new list.</P></Item>
+        <Item><P>Maintain two indices: <Code>i</Code> and <Code>j</Code>. Initialize both of them to <Code>0</Code>.</P></Item>
+        <Item><P>Compare the element in the left half-list at index <Code>i</Code> with the element in the right half-list at index <Code>j</Code>. Whichever is smaller, append it to <Code>new_list</Code> and increment the corresponding index (i.e., if the element in the left half-list is smaller, append it to <Code>new_list</Code> and increment <Code>i</Code>; if the element in the right half-list is smaller, append it to <Code>new_list</Code> and increment <Code>j</Code>).</P></Item>
+        <Item><P>Repeat step 3 until all of the values from one of the two half-lists has been appended to <Code>new_list</Code>.</P></Item>
+        <Item><P>Append the remaining values from the remaining half-list to <Code>new_list</Code> in left-to-right order.</P></Item>
+        <Item><P>Return <Code>new_list</Code>.</P></Item>
       </Enumerate>
 
       <P>I encourage you to stop for a moment and prove to yourself that this algorithm works.</P>

@@ -185,48 +185,43 @@ mkdir labs`
       <P>You now know how to organize and navigate your file space on the engineering servers using <Code>pwd</Code>, <Code>ls</Code>, <Code>cd</Code>, and <Code>mkdir</Code>, but terminals and shells are capable of a lot more than that. Below are some other shell commands that you might find useful every now and then.</P>
 
       <Itemize>
-        <Item><Code>rm</Code>: used to remove (delete) files. Provide a single command-line argument specifying the path to the file you want to remove. For example, the following shell command would delete the file called <Code>hello.txt</Code> that's currently in your working directory (assuming such a file exists):</Item>
+        <Item><P><Code>rm</Code>: used to remove (delete) files. Provide a single command-line argument specifying the path to the file you want to remove. For example, the following shell command would delete the file called <Code>hello.txt</Code> that's currently in your working directory (assuming such a file exists):</P>
 
-        <ShellBlock>rm hello.txt</ShellBlock>
+        <ShellBlock>rm hello.txt</ShellBlock></Item>
 
-        <Item><Code>rm -r</Code>: used to remove (delete) directories, including everything inside them. It's technically the same command as the previous one, but with an additional <Code>-r</Code> command-line argument. This is a special command-line argument known as a <Term>flag</Term>. Flags simply enable special capabilities of shell commands that would otherwise be disabled. By default, <Code>rm</Code> is not capable of removing entire directories. But when the <Code>-r</Code> flag is provided, it can. For example, the following shell command would delete the directory called <Code>images</Code> that's currently in your working directory (assuming the <Code>images</Code> directory exists):</Item>
+        <Item><P><Code>rm -r</Code>: used to remove (delete) directories, including everything inside them. It's technically the same command as the previous one, but with an additional <Code>-r</Code> command-line argument. This is a special command-line argument known as a <Term>flag</Term>. Flags simply enable special capabilities of shell commands that would otherwise be disabled. By default, <Code>rm</Code> is not capable of removing entire directories. But when the <Code>-r</Code> flag is provided, it can. For example, the following shell command would delete the directory called <Code>images</Code> that's currently in your working directory (assuming the <Code>images</Code> directory exists):</P>
 
-        <ShellBlock>rm -r images</ShellBlock>
+        <ShellBlock>rm -r images</ShellBlock></Item>
 
-        <Item><Code>cp</Code>: used to create copies of files. Provide <Ul>two</Ul> command-line arguments: the path of the existing file that you want to create a copy of, and the path that you want the new copy to have. For example, the following shell command would copy the file called <Code>hello.txt</Code> that's currently in your working directory, and the copy would be called <Code>goodbye.txt</Code> (also in your working directory):</Item>
+        <Item><P><Code>cp</Code>: used to create copies of files. Provide <Ul>two</Ul> command-line arguments: the path of the existing file that you want to create a copy of, and the path that you want the new copy to have. For example, the following shell command would copy the file called <Code>hello.txt</Code> that's currently in your working directory, and the copy would be called <Code>goodbye.txt</Code> (also in your working directory):</P>
 
-        <ShellBlock>cp hello.txt goodbye.txt</ShellBlock>
+        <ShellBlock>cp hello.txt goodbye.txt</ShellBlock></Item>
         
-        <Item><Code>cp -r</Code>: used to create copies of entire directories, including everything inside them. It works exactly like <Code>cp</Code>. The <Code>-r</Code> flag simply enables copying directories. For example, the below shell command would copy the directory called <Code>images</Code> that's currently in your working directory, and the copy would be called <Code>backup</Code> (also in your working directory). The contents of the two directories would be identical<Emdash/>all of the files and directories within the <Code>images</Code> directory are copied along with it.</Item>
+        <Item><P><Code>cp -r</Code>: used to create copies of entire directories, including everything inside them. It works exactly like <Code>cp</Code>. The <Code>-r</Code> flag simply enables copying directories. For example, the below shell command would copy the directory called <Code>images</Code> that's currently in your working directory, and the copy would be called <Code>backup</Code> (also in your working directory). The contents of the two directories would be identical<Emdash/>all of the files and directories within the <Code>images</Code> directory are copied along with it.</P>
 
-        <ShellBlock>cp -r images pictures</ShellBlock>
+        <ShellBlock>cp -r images pictures</ShellBlock></Item>
 
-        <Item><Code>cat</Code>: used to display the contents of a file in the terminal. Provide a single command-line argument, specifying the path of the file whose contents you want to display. For example, the following shell command would display the contents of the file called <Code>hello.txt</Code> in your working directory (assuming such a file exists):</Item>
+        <Item><P><Code>cat</Code>: used to display the contents of a file in the terminal. Provide a single command-line argument, specifying the path of the file whose contents you want to display. For example, the following shell command would display the contents of the file called <Code>hello.txt</Code> in your working directory (assuming such a file exists):</P>
 
-        <ShellBlock>cat hello.txt</ShellBlock>
+        <ShellBlock>cat hello.txt</ShellBlock></Item>
 
-        <Item><Code>cat</Code> can also be used to concatenate two or more files' contents together into a single string of text (this was actually its original purpose), but it's mostly just used to display file contents in the terminal. It will be more useful once we've discussed <Link href={`${PARENT_PATH}/${allPathData["terminal-based-text-editing"].pathName}`}>terminal-based text-editing</Link>.</Item>
+        <Item><P><Code>cat</Code> can also be used to concatenate two or more files' contents together into a single string of text (this was actually its original purpose), but it's mostly just used to display file contents in the terminal. It will be more useful once we've discussed <Link href={`${PARENT_PATH}/${allPathData["terminal-based-text-editing"].pathName}`}>terminal-based text-editing</Link>.</P></Item>
       </Itemize>
 
       <SectionHeading>Other terminal tricks</SectionHeading>
 
       <P>Being able to use a terminal and shell efficiently will make your life a lot easier. Here are some simple tricks to speed things up.</P>
-
-
-
-
-
       
       <Itemize>
-        <Item>Pressing the up arrow on your keyboard will iterate backward through your history of recently executed shell commands (and pressing the down arrow will iterate forward through it). For example, at any given time, simply pressing the up arrow followed by the enter key will usually re-execute whatever shell command you executed most recently.</Item>
+        <Item><P>Pressing the up arrow on your keyboard will iterate backward through your history of recently executed shell commands (and pressing the down arrow will iterate forward through it). For example, at any given time, simply pressing the up arrow followed by the enter key will usually re-execute whatever shell command you executed most recently.</P></Item>
       
-        <Item>Typing an exclamation point followed by a few characters and pressing enter will re-execute whatever command you most recently executed starting with those characters. For example, if you recently executed <Code>cat coolfile.txt</Code>, then typing <Code>!ca</Code> and pressing enter will re-execute that same command (assuming you haven't executed any other commands starting with <Code>ca</Code> even more recently).</Item>
+        <Item><P>Typing an exclamation point followed by a few characters and pressing enter will re-execute whatever command you most recently executed starting with those characters. For example, if you recently executed <Code>cat coolfile.txt</Code>, then typing <Code>!ca</Code> and pressing enter will re-execute that same command (assuming you haven't executed any other commands starting with <Code>ca</Code> even more recently).</P></Item>
 
-        <Item>The <Code>history</Code> command (which accepts no command-line arguments) prints your history of recent shell commands.</Item>
+        <Item><P>The <Code>history</Code> command (which accepts no command-line arguments) prints your history of recent shell commands.</P></Item>
 
-        <Item>When typing out a file path as a command-line argument to a shell command, you can press the tab key to autocomplete parts of the path. For example, if you're trying to remove the file called <Code>long-file-name-that-nobody-wants-to-type.txt</Code> (e.g., with the <Code>rm</Code> shell command), rather than typing out the entire file name, you can just type out the first couple of letters and press the tab key. Your terminal will autocomplete as much as it can. If you press the tab key and find that it only autocompletes part of the file name, one possible reason is that you simply mistyped the first few characters, but the other possibility is that there are multiple files in the directory that starts with the same few characters. In the latter case, pressing the tab key will only autocomplete up until the point where the two file names differ. At that point, pressing the tab key <Ul>twice</Ul> in rapid succession will print out the names of all of the files starting with those characters.</Item>
+        <Item><P>When typing out a file path as a command-line argument to a shell command, you can press the tab key to autocomplete parts of the path. For example, if you're trying to remove the file called <Code>long-file-name-that-nobody-wants-to-type.txt</Code> (e.g., with the <Code>rm</Code> shell command), rather than typing out the entire file name, you can just type out the first couple of letters and press the tab key. Your terminal will autocomplete as much as it can. If you press the tab key and find that it only autocompletes part of the file name, one possible reason is that you simply mistyped the first few characters, but the other possibility is that there are multiple files in the directory that starts with the same few characters. In the latter case, pressing the tab key will only autocomplete up until the point where the two file names differ. At that point, pressing the tab key <Ul>twice</Ul> in rapid succession will print out the names of all of the files starting with those characters.</P></Item>
 
-        <Item>Holding <Code>Ctrl</Code> and pressing <Code>C</Code> will terminate (immediately end) whatever command is currently executing. However, it can also be used to effectively cancel whatever command you have typed out so far. For example, suppose you start typing out a really long command only to realize that you made a mistake at the very beginning of it, or perhaps you change your mind and decide that you don't want to execute the command at all. In either case, you can simply hold <Code>Ctrl</Code> and press <Code>C</Code>, and it will cancel everything that you've typed so far.</Item>
+        <Item><P>Holding <Code>Ctrl</Code> and pressing <Code>C</Code> will terminate (immediately end) whatever command is currently executing. However, it can also be used to effectively cancel whatever command you have typed out so far. For example, suppose you start typing out a really long command only to realize that you made a mistake at the very beginning of it, or perhaps you change your mind and decide that you don't want to execute the command at all. In either case, you can simply hold <Code>Ctrl</Code> and press <Code>C</Code>, and it will cancel everything that you've typed so far.</P></Item>
 
       </Itemize>
     </>

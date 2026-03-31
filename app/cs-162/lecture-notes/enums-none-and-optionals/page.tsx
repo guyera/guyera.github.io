@@ -63,7 +63,15 @@ export async function generateMetadata({ params } : { params: Promise<any> }) {
 async function LectureNotes({ allPathData }: { allPathData: any }) {
   return (
     <>
-      <SectionHeading>Enums</SectionHeading>
+      <P>Here's the outline for this lecture:</P>
+
+      <Itemize>
+        <Item><Link href="#enums">Enums</Link></Item>
+        <Item><Link href="#optionals">Optionals</Link></Item>
+      </Itemize>
+
+      <SectionHeading id="enums">Enums</SectionHeading>
+
       <P>We've seen how classes can be a useful way to organize our code and related data. When we create a new instance of an object, we can change its attributes without affecting other instances. We can even encapsulate changes to our object attributes to ensure that all the data remains consistent. But sometimes it makes sense to restrict the possible instances that a class can be. For example, let's say we are building a calendar. You might create a class to store days of the week:</P>
 
       <PythonBlock copyable={false} showLineNumbers={false}>{
@@ -166,7 +174,8 @@ print(DayOfWeek(1)) # will print DayOfWeek.MONDAY
 `print(DayOfWeek.MONDAY.value)
 `}</PythonBlock>
 
-      <SectionHeading>Optionals</SectionHeading>
+      <SectionHeading id="optionals">Optionals</SectionHeading>
+
       <P>There's a special primitive data type in Python that we haven't covered yet: <Code>NoneType</Code>. <Code>NoneType</Code> is the type of the <Code>None</Code> literal (in the same way that <Code>boolean</Code> is the type of the <Code>True</Code> and <Code>False</Code> literals, and <Code>int</Code> is the type of the literal <Code>100</Code>). <Code>NoneType</Code> is special in that <Code>None</Code> is the <Ul>only</Ul> value in all of Python whose type is <Code>NoneType</Code> (whereas there are two valid boolean values, billions of valid integer values, and so on).</P>
 
       <P>The purpose of the value <Code>None</Code> is to indicate the absence of data. This can be helpful for constructing variables that sometimes store actual values but sometimes don't. As a simple example, suppose you have a list of <Code>Person</Code> objects and want to retrieve the age of a person with a given name from the list. Naively, you might try something like this:</P>

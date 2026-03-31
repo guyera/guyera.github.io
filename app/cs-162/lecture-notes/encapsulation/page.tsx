@@ -124,8 +124,8 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
       <P>So, how can encapsulation be used to improve code maintainability? Well, it actually helps in a couple different ways:</P>
 
       <Enumerate listStyleType="decimal">
-        <Item>Encapsulation can reduce coupling</Item>
-        <Item>Encapsulation can enable class invariants</Item>
+        <Item><P>Encapsulation can reduce coupling</P></Item>
+        <Item><P>Encapsulation can enable class invariants</P></Item>
       </Enumerate>
 
       <P>Let's focus on coupling for now. We'll cover class invariants <Link href="#class-invariants">in a moment</Link>.</P>
@@ -238,9 +238,9 @@ for p in my_database.people:
       <P>With all that in mind, encapsulation can help us "reduce", or "manage" coupling in various ways:</P>
 
       <Enumerate listStyleType="decimal">
-        <Item>It groups related things together (particularly, data and the behavior operating on that data), which keeps much of the relevant coupling contained in one place. This makes it easier to find all the coupled code that needs to be changed.</Item>
-        <Item>By grouping related things together, it makes unnecessary coupling more apparent / easier to notice, which allows us to eliminate or reduce it.</Item>
-        <Item>It can be enforced (strictly, in some programming languages) via <Link href="#private-attributes-and-methods">private attributes and methods</Link>, solidifying all the above points.</Item>
+        <Item><P>It groups related things together (particularly, data and the behavior operating on that data), which keeps much of the relevant coupling contained in one place. This makes it easier to find all the coupled code that needs to be changed.</P></Item>
+        <Item><P>By grouping related things together, it makes unnecessary coupling more apparent / easier to notice, which allows us to eliminate or reduce it.</P></Item>
+        <Item><P>It can be enforced (strictly, in some programming languages) via <Link href="#private-attributes-and-methods">private attributes and methods</Link>, solidifying all the above points.</P></Item>
       </Enumerate>
 
       <P>I think the first point is fairly clear, and we'll discuss the third point in a bit, so let's focus on the second point. I think it'll make more sense with an example, so let's consider our <Code>PersonDatabase</Code> class. I said that it wasn't very well-encapsulated since it doesn't expose methods to operate on its <Code>people</Code> attribute. Instead, we simply operate on the <Code>people</Code> attribute directly from various places throughout our codebase (e.g., <Code>my_database.people.append(joe)</Code>). That's not encapsulation. Let's rewrite this class in a way that practices encapsulation. We'll start with an extremely naive rewriting of it; we'll take all the operations in our entire codebase that we're currently doing with the <Code>people</Code> attribute, and we'll move them each into their own method within the <Code>PersonDatabase</Code> class (yes, this will be painful, but bear with me):</P>

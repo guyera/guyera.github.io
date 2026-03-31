@@ -75,9 +75,9 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
       <P>When I defined the term "object", I offered a few different definitions:</P>
 
       <Enumerate>
-        <Item>An instance of a class</Item>
-        <Item>A thing with both state and behavior (e.g., an instance of a class that has both attributes and methods)</Item>
-        <Item>Any value (or, more rigorously, anything that stores a value)</Item>
+        <Item><P>An instance of a class</P></Item>
+        <Item><P>A thing with both state and behavior (e.g., an instance of a class that has both attributes and methods)</P></Item>
+        <Item><P>Any value (or, more rigorously, anything that stores a value)</P></Item>
       </Enumerate>
 
       <P>Clearly, these definitions are not all identical, but they're all valid depending on the context. In the Python language specification, the third definition is used: an object is simply <It>any value</It>, regardless of the type of that value. This means that, from the perspective of the Python language specification, even integer values such as <Code>5</Code> and <Code>-100</Code> are objects.</P>

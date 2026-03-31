@@ -326,8 +326,8 @@ x2: 0.6513878188659973
       <P>We can actually clean up the above code in a couple of ways:</P>
 
       <Itemize>
-        <Item>When a tuple is used as a return value, you can optionally leave out the parentheses. For example, to return a tuple consisting of the variables <Code>a</Code>, <Code>b</Code>, and <Code>c</Code>, you can simply write <Code>return a, b, c</Code> as opposed to <Code>return (a, b, c)</Code>. Leaving out the parentheses in such a case is more idiomatic / conventional, so we should do that.</Item>
-        <Item>We're currently storing the returned tuple in a variable named <Code>roots</Code> and <It>then</It> unpacking it into <Code>first_root</Code> and <Code>second_root</Code>. But, as you might have surmised, there's no reason that we couldn't directly unpack the return value into <Code>first_root</Code> and <Code>second_root</Code>, skipping the need for the <Code>roots</Code> variable altogether. This is also more idiomatic, so we should do this as well.</Item>
+        <Item><P>When a tuple is used as a return value, you can optionally leave out the parentheses. For example, to return a tuple consisting of the variables <Code>a</Code>, <Code>b</Code>, and <Code>c</Code>, you can simply write <Code>return a, b, c</Code> as opposed to <Code>return (a, b, c)</Code>. Leaving out the parentheses in such a case is more idiomatic / conventional, so we should do that.</P></Item>
+        <Item><P>We're currently storing the returned tuple in a variable named <Code>roots</Code> and <It>then</It> unpacking it into <Code>first_root</Code> and <Code>second_root</Code>. But, as you might have surmised, there's no reason that we couldn't directly unpack the return value into <Code>first_root</Code> and <Code>second_root</Code>, skipping the need for the <Code>roots</Code> variable altogether. This is also more idiomatic, so we should do this as well.</P></Item>
       </Itemize>
 
       <P>Here's the updated code taking into account the above changes:</P>

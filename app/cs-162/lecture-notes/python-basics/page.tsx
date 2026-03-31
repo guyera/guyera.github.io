@@ -252,9 +252,9 @@ Shepherd's Pie
       <P>Strings are just one builtin data type in Python. Here are some others:</P>
 
       <Itemize>
-        <Item><Code>int</Code>: Integer, meaning a whole number. An <Code>int</Code> literal is simply a hardcoded number without any decimal points, such as <Code>-12</Code>, or <Code>1</Code>, or <Code>1000000</Code>.</Item>
-        <Item><Code>float</Code>: Floating point number, meaning a number that may or may not be a whole number. A <Code>float</Code> literal is simply a hardcoded number with a decimal point in it, such as <Code>-12.3</Code>, or <Code>1.5</Code>, or <Code>1000000.7182</Code>, or, yes, even <Code>1.0</Code> (although <Code>1.0</Code> is a whole number, it's written with a decimal point in it, so Python treats it as a <Code>float</Code> expression rather than an <Code>int</Code> expression; this distinction matters).</Item>
-        <Item><Code>bool</Code>: Boolean, meaning a true or false value. There are exactly two valid <Code>bool</Code> literals in Python: <Code>True</Code> and <Code>False</Code> (they <Ul>must</Ul> be capitalized).</Item>
+        <Item><P><Code>int</Code>: Integer, meaning a whole number. An <Code>int</Code> literal is simply a hardcoded number without any decimal points, such as <Code>-12</Code>, or <Code>1</Code>, or <Code>1000000</Code>.</P></Item>
+        <Item><P><Code>float</Code>: Floating point number, meaning a number that may or may not be a whole number. A <Code>float</Code> literal is simply a hardcoded number with a decimal point in it, such as <Code>-12.3</Code>, or <Code>1.5</Code>, or <Code>1000000.7182</Code>, or, yes, even <Code>1.0</Code> (although <Code>1.0</Code> is a whole number, it's written with a decimal point in it, so Python treats it as a <Code>float</Code> expression rather than an <Code>int</Code> expression; this distinction matters).</P></Item>
+        <Item><P><Code>bool</Code>: Boolean, meaning a true or false value. There are exactly two valid <Code>bool</Code> literals in Python: <Code>True</Code> and <Code>False</Code> (they <Ul>must</Ul> be capitalized).</P></Item>
       </Itemize>
 
       <P><Code>str</Code>, <Code>int</Code>, <Code>float</Code>, and <Code>bool</Code> are all the builtin types you need to know about for now.</P>
@@ -264,12 +264,12 @@ Shepherd's Pie
       <P>The addition operator (<Code>+</Code>) is just one of many arithmetic operators available in Python. Here are the ones that you should know:</P>
 
       <Itemize>
-        <Item><Code>+</Code>: Addition</Item>
-        <Item><Code>-</Code>: Subtraction</Item>
-        <Item><Code>*</Code>: Multiplication</Item>
-        <Item><Code>/</Code>: Division</Item>
-        <Item><Code>%</Code>: Modulo, meaning remainder after division of integers. For example, <Code>6 % 3</Code> is 0 because 6 is perfectly divisible by 3, so there's no remainder after division. <Code>7 % 3</Code> is 1 (since 7 divided by 3 is 2 with a remainder of 1), <Code>8 % 3</Code> is 2, <Code>9 % 3</Code> is 0 again, and so on. Notice: as you increase the value on the left of the modulo operator, the value of the whole expression cycles from 0 through N - 1, where N is the value on the right of the modulo operator. Indeed, the modulo operator is useful for creating cyclical behavior in a computer program.</Item>
-        <Item><Code>**</Code>: Exponentiation. For example, the Python expression <Code>5 ** 2</Code> evaluates to 25 (since 5 squared is 25).</Item>
+        <Item><P><Code>+</Code>: Addition</P></Item>
+        <Item><P><Code>-</Code>: Subtraction</P></Item>
+        <Item><P><Code>*</Code>: Multiplication</P></Item>
+        <Item><P><Code>/</Code>: Division</P></Item>
+        <Item><P><Code>%</Code>: Modulo, meaning remainder after division of integers. For example, <Code>6 % 3</Code> is 0 because 6 is perfectly divisible by 3, so there's no remainder after division. <Code>7 % 3</Code> is 1 (since 7 divided by 3 is 2 with a remainder of 1), <Code>8 % 3</Code> is 2, <Code>9 % 3</Code> is 0 again, and so on. Notice: as you increase the value on the left of the modulo operator, the value of the whole expression cycles from 0 through N - 1, where N is the value on the right of the modulo operator. Indeed, the modulo operator is useful for creating cyclical behavior in a computer program.</P></Item>
+        <Item><P><Code>**</Code>: Exponentiation. For example, the Python expression <Code>5 ** 2</Code> evaluates to 25 (since 5 squared is 25).</P></Item>
       </Itemize>
       
       <P>The division operator (<Code>/</Code>) is unique in that it's the only arithmetic operator that always produces a <Code>float</Code> value. For example, <Code>1 / 2</Code> is 0.5, a value of type <Code>float</Code>. Moreover, <Code>1 / 1</Code> is 1.0, also of type <Code>float</Code>. In contrast, the other arithmetic operators produce a value whose type depends on the types of the operands (e.g., multiplying an <Code>int</Code> by another <Code>int</Code> will produce an <Code>int</Code>, but multiplying an <Code>int</Code> by a <Code>float</Code> will produce a <Code>float</Code>).</P>
@@ -982,12 +982,12 @@ Your age is (roughly) 26
       <P>Before we can create if statements, we have to understand boolean expressions, particularly <Code>relational operators</Code>. Relational operators compare two values to produce a boolean based on an analysis of a relationship between them. For example, the equality operator, <Code>==</Code>, will produce a <Code>True</Code> value if the operands (i.e., the expressions on both sides of it) are equal to each other (in some sense or another), and it will produce a <Code>False</Code> value otherwise. Here are the relational operators that you should know about:</P>
 
       <Itemize>
-        <Item><Code>==</Code> (equality): Produces <Code>True</Code> if and only if the two operands are equal (and <Code>False</Code> otherwise). Notice that it uses <Ul>two</Ul> equal signs. If you only used one equal sign, that would be an assignment operator, which is a completely different thing. Accidentally using an assignment operator instead of an equality operator is an incredibly common mistake among beginner programmers.</Item>
-        <Item><Code>!=</Code> (inequality): Produces <Code>True</Code> if and only if the two operands are <Ul>not</Ul> equal (and <Code>False</Code> otherwise).</Item>
-        <Item><Code>{`<`}</Code> (less than): Produces <Code>True</Code> if and only if the operand on the left is smaller than the operand on the right (and <Code>False</Code> otherwise).</Item>
-        <Item><Code>{`>`}</Code> (greater than): Produces <Code>True</Code> if and only if the operand on the left is greater than the operand on the right (and <Code>False</Code> otherwise).</Item>
-        <Item><Code>{`<=`}</Code> (less than or equal to): Produces <Code>True</Code> if and only if the operand on the left is smaller than or equal to the operand on the right (and <Code>False</Code> otherwise).</Item>
-        <Item><Code>{`>=`}</Code> (greater than or equal to): Produces <Code>True</Code> if and only if the operands on the left is greater than or equal to the operand on the right (and <Code>False</Code> otherwise).</Item>
+        <Item><P><Code>==</Code> (equality): Produces <Code>True</Code> if and only if the two operands are equal (and <Code>False</Code> otherwise). Notice that it uses <Ul>two</Ul> equal signs. If you only used one equal sign, that would be an assignment operator, which is a completely different thing. Accidentally using an assignment operator instead of an equality operator is an incredibly common mistake among beginner programmers.</P></Item>
+        <Item><P><Code>!=</Code> (inequality): Produces <Code>True</Code> if and only if the two operands are <Ul>not</Ul> equal (and <Code>False</Code> otherwise).</P></Item>
+        <Item><P><Code>{`<`}</Code> (less than): Produces <Code>True</Code> if and only if the operand on the left is smaller than the operand on the right (and <Code>False</Code> otherwise).</P></Item>
+        <Item><P><Code>{`>`}</Code> (greater than): Produces <Code>True</Code> if and only if the operand on the left is greater than the operand on the right (and <Code>False</Code> otherwise).</P></Item>
+        <Item><P><Code>{`<=`}</Code> (less than or equal to): Produces <Code>True</Code> if and only if the operand on the left is smaller than or equal to the operand on the right (and <Code>False</Code> otherwise).</P></Item>
+        <Item><P><Code>{`>=`}</Code> (greater than or equal to): Produces <Code>True</Code> if and only if the operands on the left is greater than or equal to the operand on the right (and <Code>False</Code> otherwise).</P></Item>
       </Itemize>
 
       <P>Here's an example program to demonstrate relational operators:</P>
@@ -1198,9 +1198,9 @@ XYZ
       <P>Now let's talk <Term>logical operators</Term>. Logical operators operate on booleans and produce booleans. There are three main logical operators that you should know about:</P>
 
       <Itemize>
-        <Item><Code>and</Code>: The logical "and" operator. The operation will evaluate to true if and only if the boolean expressions on both sides of it are true. Otherwise, it evaluates to false.</Item>
-        <Item><Code>or</Code>: The logical "or" operator. The operation will evaluate to true if and only if at least one of the boolean expressions on either side of it is true. Otherwise, it evaluates to false.</Item>
-        <Item><Code>not</Code>: The logical "not" operator. This is a unary operator, meaning you put a boolean expression on its right, but nothing on its left. It simply negates the value of the boolean expression on its right (if the boolean expression is true, it evaluates to false; if the boolean expression is false, it evaluates to true).</Item>
+        <Item><P><Code>and</Code>: The logical "and" operator. The operation will evaluate to true if and only if the boolean expressions on both sides of it are true. Otherwise, it evaluates to false.</P></Item>
+        <Item><P><Code>or</Code>: The logical "or" operator. The operation will evaluate to true if and only if at least one of the boolean expressions on either side of it is true. Otherwise, it evaluates to false.</P></Item>
+        <Item><P><Code>not</Code>: The logical "not" operator. This is a unary operator, meaning you put a boolean expression on its right, but nothing on its left. It simply negates the value of the boolean expression on its right (if the boolean expression is true, it evaluates to false; if the boolean expression is false, it evaluates to true).</P></Item>
       </Itemize>
 
       <P>Here's an example program that demonstrates logical operators:</P>
