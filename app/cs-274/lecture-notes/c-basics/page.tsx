@@ -108,12 +108,12 @@ int main(void) {
       <P>When building a C program into an executable via <Code>gcc</Code>, several build steps take place, including at least:</P>
 
       <Enumerate listStyleType="decimal">
-        <Item><Bold>Preprocessing</Bold>. This step parses and executes preprocessing directives within a translation unit (e.g., a file ending in <Code>.c</Code>) to transform / manipulate the C code to produce new C code. This step does not produce any assembly code nor machine code. It simply takes C source code (with preprocessing directives) as input and produces new C code (without preprocessing directives) as output.</Item>
+        <Item><P><Bold>Preprocessing</Bold>. This step parses and executes preprocessing directives within a translation unit (e.g., a file ending in <Code>.c</Code>) to transform / manipulate the C code to produce new C code. This step does not produce any assembly code nor machine code. It simply takes C source code (with preprocessing directives) as input and produces new C code (without preprocessing directives) as output.</P>
 
-        <P>In some sense, preprocessing directives are a form of <Bold>metaprogramming</Bold>. They're lines of code that manipulate the surrounding code itself when executed by the preprocessor.</P>
-        <Item><Bold>Compilation</Bold>. This step takes the preprocessed C code and translates it into either assembly or machine code (often using some other intermediate representation(s) in the middle, like LLVM or GIMPLE).</Item>
-        <Item>(Sometimes) <Bold>Assembly</Bold>. If the compilation process produced assembly code instead of machine code, then that assembly code must further be "assembled" (translated) into machine code.</Item>
-        <Item><Bold>Linking</Bold>. The previous three steps<Emdash/>preprocessing, compilation, and assembly<Emdash/>happen independently on each translation unit (e.g., each file ending in <Code>.c</Code>) that make up the whole project. Once all those translation units are compiled, they have to be linked together into a single library or executable. They also have to be linked against their dependencies, such as the C standard library. This is all done by the linking step.</Item>
+        <P>In some sense, preprocessing directives are a form of <Bold>metaprogramming</Bold>. They're lines of code that manipulate the surrounding code itself when executed by the preprocessor.</P></Item>
+        <Item><P><Bold>Compilation</Bold>. This step takes the preprocessed C code and translates it into either assembly or machine code (often using some other intermediate representation(s) in the middle, like LLVM or GIMPLE).</P></Item>
+        <Item><P>(Sometimes) <Bold>Assembly</Bold>. If the compilation process produced assembly code instead of machine code, then that assembly code must further be "assembled" (translated) into machine code.</P></Item>
+        <Item><P><Bold>Linking</Bold>. The previous three steps<Emdash/>preprocessing, compilation, and assembly<Emdash/>happen independently on each translation unit (e.g., each file ending in <Code>.c</Code>) that make up the whole project. Once all those translation units are compiled, they have to be linked together into a single library or executable. They also have to be linked against their dependencies, such as the C standard library. This is all done by the linking step.</P></Item>
       </Enumerate>
 
       <P>Preprocessing directives like <Code>#include</Code> are processed by <Code>gcc</Code> during step 1 above. That is, <Code>#include</Code>, and other directives starting with <Code>#</Code>, manipulate the surrounding C code in various ways.</P>
@@ -281,15 +281,15 @@ int main(void) {
       <P>Some common format specifiers include:</P>
 
       <Itemize>
-        <Item><Code>%d</Code>. This stands for "deicmal", and it's used as a placeholder for values of type <Code>int</Code> (and similar). More on types shortly.</Item>
-        <Item><Code>%f</Code>. This stands for "floating point number", and it's used as a placeholder for values of type <Code>float</Code> (and similar), such as <Code>3.14f</Code>.</Item>
+        <Item><P><Code>%d</Code>. This stands for "deicmal", and it's used as a placeholder for values of type <Code>int</Code> (and similar). More on types shortly.</P></Item>
+        <Item><P><Code>%f</Code>. This stands for "floating point number", and it's used as a placeholder for values of type <Code>float</Code> (and similar), such as <Code>3.14f</Code>.</P>
 
-        <P>If you want to print a floating point value to just two decimal places, for example, you can use the modified format specifier <Code>%.2f</Code> (and <Code>%.3f</Code> for three decimal places, and so on).</P>
-        <Item><Code>%lf</Code>. This stands for "long floating point number", and it's used as a placeholder for values of type <Code>double</Code> (and similar), such as <Code>3.14</Code>.</Item>
+        <P>If you want to print a floating point value to just two decimal places, for example, you can use the modified format specifier <Code>%.2f</Code> (and <Code>%.3f</Code> for three decimal places, and so on).</P></Item>
+        <Item><P><Code>%lf</Code>. This stands for "long floating point number", and it's used as a placeholder for values of type <Code>double</Code> (and similar), such as <Code>3.14</Code>.</P>
 
-        <P>Again, you can modify it to limit decimal places, such as <Code>%.2lf</Code>.</P>
-        <Item><Code>%c</Code>. This stands for "character", and it's used as a placeholder for values of type <Code>char</Code>.</Item>
-        <Item><Code>%s</Code>. This stands for "string", and it's used as a placeholder for other string values.</Item>
+        <P>Again, you can modify it to limit decimal places, such as <Code>%.2lf</Code>.</P></Item>
+        <Item><P><Code>%c</Code>. This stands for "character", and it's used as a placeholder for values of type <Code>char</Code>.</P></Item>
+        <Item><P><Code>%s</Code>. This stands for "string", and it's used as a placeholder for other string values.</P></Item>
       </Itemize>
 
       <P>There plenty of others. We might cover some more later.</P>
@@ -410,21 +410,21 @@ fflush(stdout); // Flush standard output to display the printed text immediately
       <P>There are various <Bold>primitive types</Bold> in C. These types are very simple and built into the language. Some basic primitive types include:</P>
 
       <Itemize>
-        <Item><Code>int</Code>. This data type represents integer values (whole numbers).</Item>
-        <Item><Code>float</Code>. This data type represents floating point values (i.e., numbers with decimal points in them).</Item>
-        <Item><Code>long int</Code>, or simply <Code>long</Code>. This data type is similar to <Code>int</Code>, but it's usually capable of representing larger (i.e., greater magnitude) values. The tradeoff is that it usually consumes more memory than the <Code>int</Code> data type.</Item>
-        <Item><Code>double</Code>. This data type is similar to <Code>float</Code>, but it's usually capable of representing larger (i.e., greater magnitude) values and with greater precision (i.e., more decimal places).</Item>
-        <Item><Code>char</Code>. This data type represents a single character. Technically, a <Code>char</Code> value is just a whole number, usually between <Code>-128</Code> and <Code>127</Code>. However, the computer is capable of converting these numbers to and from character symbols (e.g., when printing them to the terminal). This works via a character encoding, specifically ASCII. We'll discuss this in greater detail later on in the term.</Item>
+        <Item><P><Code>int</Code>. This data type represents integer values (whole numbers).</P></Item>
+        <Item><P><Code>float</Code>. This data type represents floating point values (i.e., numbers with decimal points in them).</P></Item>
+        <Item><P><Code>long int</Code>, or simply <Code>long</Code>. This data type is similar to <Code>int</Code>, but it's usually capable of representing larger (i.e., greater magnitude) values. The tradeoff is that it usually consumes more memory than the <Code>int</Code> data type.</P></Item>
+        <Item><P><Code>double</Code>. This data type is similar to <Code>float</Code>, but it's usually capable of representing larger (i.e., greater magnitude) values and with greater precision (i.e., more decimal places).</P></Item>
+        <Item><P><Code>char</Code>. This data type represents a single character. Technically, a <Code>char</Code> value is just a whole number, usually between <Code>-128</Code> and <Code>127</Code>. However, the computer is capable of converting these numbers to and from character symbols (e.g., when printing them to the terminal). This works via a character encoding, specifically ASCII. We'll discuss this in greater detail later on in the term.</P></Item>
       </Itemize>
 
       <P>The simplest kinds of expressions are <Bold>literals</Bold>. A literal is just a hard-coded value. You can create literals for each of the primitive types that I just mentioned:</P>
 
       <Itemize>
-        <Item><Code>10</Code>, <Code>-142</Code>, and <Code>0</Code> are all literals of type <Code>int</Code>.</Item>
-        <Item><Code>3.14</Code>, <Code>-4.5</Code>, <Code>0.0</Code>, <Code>.1</Code>, and even <Code>3.</Code> are all considered to be literals of type <Ul><Code>double</Code></Ul>. Basically, any plainly written number with a decimal point in it is a <Code>double</Code> literal.</Item>
-        <Item><Code>long</Code> literals look the same as <Code>int</Code> literals, except they have an <Code>l</Code> (that's a lowercase L) at the end of them. For example: <Code>10l</Code>, <Code>-142l</Code>, and <Code>0l</Code> are all examples of <Code>long</Code> literals.</Item>
-        <Item><Code>float</Code> literals look the same as <Code>double</Code> literals, except they have an <Code>f</Code> at the end of them. For example, <Code>3.14f</Code>, <Code>-4.5f</Code>, <Code>0.0f</Code>, <Code>.1f</Code>, and <Code>3.f</Code> are all examples of <Code>float</Code> literals.</Item>
-        <Item><Code>char</Code> literals are enclosed in single quotes (apostrophes). For example: <Code>'a'</Code>, <Code>'D'</Code>, <Code>'4'</Code>, and <Code>'@'</Code> are all examples of <Code>char</Code> literals. Importantly, there must be exactly one character between the apostrophes (or a single-character escape sequence, like <Code>'\n'</Code>).</Item>
+        <Item><P><Code>10</Code>, <Code>-142</Code>, and <Code>0</Code> are all literals of type <Code>int</Code>.</P></Item>
+        <Item><P><Code>3.14</Code>, <Code>-4.5</Code>, <Code>0.0</Code>, <Code>.1</Code>, and even <Code>3.</Code> are all considered to be literals of type <Ul><Code>double</Code></Ul>. Basically, any plainly written number with a decimal point in it is a <Code>double</Code> literal.</P></Item>
+        <Item><P><Code>long</Code> literals look the same as <Code>int</Code> literals, except they have an <Code>l</Code> (that's a lowercase L) at the end of them. For example: <Code>10l</Code>, <Code>-142l</Code>, and <Code>0l</Code> are all examples of <Code>long</Code> literals.</P></Item>
+        <Item><P><Code>float</Code> literals look the same as <Code>double</Code> literals, except they have an <Code>f</Code> at the end of them. For example, <Code>3.14f</Code>, <Code>-4.5f</Code>, <Code>0.0f</Code>, <Code>.1f</Code>, and <Code>3.f</Code> are all examples of <Code>float</Code> literals.</P></Item>
+        <Item><P><Code>char</Code> literals are enclosed in single quotes (apostrophes). For example: <Code>'a'</Code>, <Code>'D'</Code>, <Code>'4'</Code>, and <Code>'@'</Code> are all examples of <Code>char</Code> literals. Importantly, there must be exactly one character between the apostrophes (or a single-character escape sequence, like <Code>'\n'</Code>).</P></Item>
       </Itemize>
 
       <P>(There are some exceptions to the above, but this understanding is good enough.)</P>
@@ -518,10 +518,10 @@ $ valgrind ./printliterals
       <P>Most of these operators work as you'd expect. However, here are some important notes:</P>
 
       <Itemize>
-        <Item>PEMDAS applies as you'd expect. And yes, you can use parentheses to control order of operations. For example, <Code>printf("%d\n", 3 * 4 + 5)</Code> prints <Code>17</Code> to the terminal, but <Code>printf("%d\n", 3 * (4 + 5))</Code> prints <Code>27</Code>.</Item>
-        <Item>Dividing two integers results in so-called <Bold>integer division</Bold>. Basically, the output is truncated (rounded toward zero). For example, <Code>3</Code> is an <Code>int</Code>, and <Code>4</Code> is an <Code>int</Code>, but <Code>3 / 4</Code> is also considered to be an <Code>int</Code> by the C compiler. Specifically, it's an <Code>int</Code> with value <Code>0</Code> (in "real life", 3 / 4 would be 0.75, but integer division means that C always truncates / rounds these quotients toward zero<Emdash/>positive quotients are rounded down, and negative quotients are rounded up). If you want to avoid this rounding / truncating behavior, just make sure that at least one of the two operands is a float or double (e.g., <Code>3.0 / 4</Code>, or <Code>3 / 4.0</Code>, or <Code>3.0 / 4.0</Code>).</Item>
+        <Item><P>PEMDAS applies as you'd expect. And yes, you can use parentheses to control order of operations. For example, <Code>printf("%d\n", 3 * 4 + 5)</Code> prints <Code>17</Code> to the terminal, but <Code>printf("%d\n", 3 * (4 + 5))</Code> prints <Code>27</Code>.</P></Item>
+        <Item><P>Dividing two integers results in so-called <Bold>integer division</Bold>. Basically, the output is truncated (rounded toward zero). For example, <Code>3</Code> is an <Code>int</Code>, and <Code>4</Code> is an <Code>int</Code>, but <Code>3 / 4</Code> is also considered to be an <Code>int</Code> by the C compiler. Specifically, it's an <Code>int</Code> with value <Code>0</Code> (in "real life", 3 / 4 would be 0.75, but integer division means that C always truncates / rounds these quotients toward zero<Emdash/>positive quotients are rounded down, and negative quotients are rounded up). If you want to avoid this rounding / truncating behavior, just make sure that at least one of the two operands is a float or double (e.g., <Code>3.0 / 4</Code>, or <Code>3 / 4.0</Code>, or <Code>3.0 / 4.0</Code>).</P>
 
-        <P>(If you're dividing integer variables and want to avoid integer division, you can employ type casting.)</P>
+        <P>(If you're dividing integer variables and want to avoid integer division, you can employ type casting.)</P></Item>
       </Itemize>
 
       <P>Note that C does not have an operator for exponentiation. To raise a base to the power of an exponent, you must use the <Code>pow()</Code> function, which is provided by the standard library header file <Code>math.h</Code>. Importantly, this function's return type is <Code>double</Code>, so if you want to print its return value directly, you should use a <Code>%lf</Code> format specifier (using <Code>%d</Code> will not work, even if the arguments are integers):</P>
@@ -1094,11 +1094,11 @@ printf("%lf\\n", x_as_double / y);`
       <P>To avoid issues, only cast between types for which you're aware of and understand the conversion rules. Here are some such rules:</P>
 
       <Itemize>
-        <Item>Type-casting a floating-point-typed (e.g., <Code>float</Code> or <Code>double</Code>) expression into an integral type (e.g., <Code>int</Code> or <Code>long int</Code>) performs truncation: the decimal point and everything after it is dropped. You can also think of this as "rounding toward zero". For example, the value of <Code>(int) -3.99</Code> is <Code>-3</Code>; the value of <Code>(int) 3.99</Code> is <Code>3</Code>; and the value of <Code>(int) 3.01</Code> is <Code>3</Code>.</Item>
-        <Item>Type-casting an integral-typed (e.g., <Code>int</Code> or <Code>long int</Code>) expression into a floating-point type (e.g., <Code>float</Code> or <Code>double</Code>) works by simply adding a <Code>.0</Code> to the end of the value. For example, the value of <Code>(float) 3</Code> is <Code>3.0f</Code>.</Item>
-        <Item>When the converted value is too large to be represented by the newly casted type, then it's "shrunk" to a smaller value in an implementation-defined manner (this is similar to undefined behavior, but usually less dangerous). For example, the value of <Code>(int) 999999999999l</Code> is usually implementation-defined because such a large value usually cannot be represented by the <Code>int</Code> type.</Item>
-        <Item>When casting from a high-precision floating-point type to a lower-precision floating-point type (e.g., <Code>double</Code> to <Code>float</Code>), even if the value is small enough to be represented by the new type, it may still lose some decimal places due to the reduced precision.</Item>
-        <Item>Remember that <Code>char</Code> values are technically whole numbers that are converted to character symbols by the computer when necessary (e.g., when printing them to the terminal). This means that <Code>char</Code> is an integral type, similar to <Code>int</Code> and <Code>long</Code>, so they tend to follow similar casting / conversion rules.</Item>
+        <Item><P>Type-casting a floating-point-typed (e.g., <Code>float</Code> or <Code>double</Code>) expression into an integral type (e.g., <Code>int</Code> or <Code>long int</Code>) performs truncation: the decimal point and everything after it is dropped. You can also think of this as "rounding toward zero". For example, the value of <Code>(int) -3.99</Code> is <Code>-3</Code>; the value of <Code>(int) 3.99</Code> is <Code>3</Code>; and the value of <Code>(int) 3.01</Code> is <Code>3</Code>.</P></Item>
+        <Item><P>Type-casting an integral-typed (e.g., <Code>int</Code> or <Code>long int</Code>) expression into a floating-point type (e.g., <Code>float</Code> or <Code>double</Code>) works by simply adding a <Code>.0</Code> to the end of the value. For example, the value of <Code>(float) 3</Code> is <Code>3.0f</Code>.</P></Item>
+        <Item><P>When the converted value is too large to be represented by the newly casted type, then it's "shrunk" to a smaller value in an implementation-defined manner (this is similar to undefined behavior, but usually less dangerous). For example, the value of <Code>(int) 999999999999l</Code> is usually implementation-defined because such a large value usually cannot be represented by the <Code>int</Code> type.</P></Item>
+        <Item><P>When casting from a high-precision floating-point type to a lower-precision floating-point type (e.g., <Code>double</Code> to <Code>float</Code>), even if the value is small enough to be represented by the new type, it may still lose some decimal places due to the reduced precision.</P></Item>
+        <Item><P>Remember that <Code>char</Code> values are technically whole numbers that are converted to character symbols by the computer when necessary (e.g., when printing them to the terminal). This means that <Code>char</Code> is an integral type, similar to <Code>int</Code> and <Code>long</Code>, so they tend to follow similar casting / conversion rules.</P></Item>
       </Itemize>
 
       <SectionHeading id="const"><Code>const</Code></SectionHeading>
@@ -1831,11 +1831,11 @@ int main(void) {
 
       <P>There are three kinds of loops in C:</P>
 
-      <Enumerate>
+      <Itemize>
         <Item>While loops</Item>
         <Item>Do-while loops</Item>
         <Item>For loops</Item>
-      </Enumerate>
+      </Itemize>
 
       <P>We'll start with <Bold>while loops</Bold>. The syntax for a while loop is just like that of an if statement, except the keyword <Code>if</Code> is replaced with the keyword <Code>while</Code>:</P>
 
@@ -1950,11 +1950,11 @@ int main(void) {
       <P>Notice that the header of the for loop (i.e., the first line in the above syntax) has three placeholders separated by <Ul>semicolons</Ul> (not commas). When the control flow reaches a for loop, here's what the program does:</P>
 
       <Enumerate listStyleType="decimal">
-        <Item>The initialization statement (<Code>{'<initialization>'}</Code>) is executed. Commonly, this will initialize a counting / iterating variable (either a preexisting variable, or one that's declared on the spot).</Item>
-        <Item>The loop condition (<Code>{'<condition>'}</Code>) is evaluated. If it's false (0), then the loop ends, proceeding to execute whatever code comes after the loop. But if it's true (nonzero), move on to step 3.</Item>
-        <Item>The loop body (<Code>{'<body>'}</Code>) is executed.</Item>
-        <Item>The iteration statement (<Code>{'<iteration>'}</Code>) is executed.</Item>
-        <Item>Repeat from step 2.</Item>
+        <Item><P>The initialization statement (<Code>{'<initialization>'}</Code>) is executed. Commonly, this will initialize a counting / iterating variable (either a preexisting variable, or one that's declared on the spot).</P></Item>
+        <Item><P>The loop condition (<Code>{'<condition>'}</Code>) is evaluated. If it's false (0), then the loop ends, proceeding to execute whatever code comes after the loop. But if it's true (nonzero), move on to step 3.</P></Item>
+        <Item><P>The loop body (<Code>{'<body>'}</Code>) is executed.</P></Item>
+        <Item><P>The iteration statement (<Code>{'<iteration>'}</Code>) is executed.</P></Item>
+        <Item><P>Repeat from step 2.</P></Item>
       </Enumerate>
 
       <P>Notice that the initialization statement (<Code>{'<initialize>'}</Code>) is only executed once. Indeed, it's not really part of the "loop" insofar as it's never repeated. In many cases, placing the initialization statement immediately before the for loop produces the same result.</P>

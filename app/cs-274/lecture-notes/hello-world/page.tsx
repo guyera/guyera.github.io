@@ -83,11 +83,11 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
       <P>There are many advantages to this development environment:</P>
 
       <Itemize>
-        <Item>Consistency. Everyone with an ENGR account can connect to the ENGR servers over SSH. From there, everyone will be working with the same environment<Emdash/>the same operating system, the same compiler version, the same C standard library implementation, the same dynamic analysis tooling, and so on.</Item>
-        <Item>Practice with terminals and shells. These are critical tools to any software engineer / programmer, so you should become an expert in using them. Doing all your development in a terminal will give you lots of valuable experience.</Item>
-        <Item>Configurability. Vim is extremely configurable (e.g., via macros). Shells are also extremely configurable (e.g., via aliases, environment variables, user-local shell scripts, and so on).</Item>
+        <Item><P>Consistency. Everyone with an ENGR account can connect to the ENGR servers over SSH. From there, everyone will be working with the same environment<Emdash/>the same operating system, the same compiler version, the same C standard library implementation, the same dynamic analysis tooling, and so on.</P></Item>
+        <Item><P>Practice with terminals and shells. These are critical tools to any software engineer / programmer, so you should become an expert in using them. Doing all your development in a terminal will give you lots of valuable experience.</P></Item>
+        <Item><P>Configurability. Vim is extremely configurable (e.g., via macros). Shells are also extremely configurable (e.g., via aliases, environment variables, user-local shell scripts, and so on).</P></Item>
 
-        <Item>Development efficiency. Vim's text-processing capabilities are unparallelled if you know how to use it effectively.</Item>
+        <Item><P>Development efficiency. Vim's text-processing capabilities are unparallelled if you know how to use it effectively.</P></Item>
       </Itemize>
 
       <P>While you don't have to use Vim for all your assignments and labs, terminals and shells are a critical part of this course's content, so you will be assessed on your ability to use them throughout the term.</P>
@@ -125,8 +125,8 @@ int main(void) {
       <P>Of course, machine code is difficult for a person to understand, so program translation is typically done automatically by another computer program. Such programs are known as <Bold>translators</Bold>. For example, a translator might convert a C program into one of many machine code languages (depending on the target platform). There are two primary kinds of translators:</P>
 
       <Itemize>
-        <Item><Bold>Compilers</Bold>. These convert programs from one language to another <Ul>up front</Ul>. In other words, they perform the entire translation process all in one fell swoop. Assuming the target language is machine code, then after the compilation process is complete, the compiled machine code can be executed directly on the target platform.</Item>
-        <Item><Bold>Interpreters</Bold>. These interpret (translate) programs <Ul>on the fly</Ul>, at runtime, sometimes one line / statement at a time.</Item>
+        <Item><P><Bold>Compilers</Bold>. These convert programs from one language to another <Ul>up front</Ul>. In other words, they perform the entire translation process all in one fell swoop. Assuming the target language is machine code, then after the compilation process is complete, the compiled machine code can be executed directly on the target platform.</P></Item>
+        <Item><P><Bold>Interpreters</Bold>. These interpret (translate) programs <Ul>on the fly</Ul>, at runtime, sometimes one line / statement at a time.</P></Item>
       </Itemize>
 
       <P>The crucial difference is when the translation happens. Compilers translate programs before they're executed (before runtime). Interpreters translate (interpret) programs <It>as</It> they're being executed (at runtime).</P>
@@ -150,13 +150,13 @@ int main(void) {
       <P>Let's break this down:</P>
 
       <Itemize>
-        <Item><Code>gcc</Code> is the shell command that invokes the GCC build tool to compile a C program into a machine code executable.</Item>
-        <Item>The <Code>-g</Code> flag tells <Code>gcc</Code> to insert debugging symbols into the compiled machine code. These symbols can be used by static and dynamic analysis tools (e.g., debuggers like Valgrind). You should omit this flag when building a C program for a production environment, but you should usually include it whenever you're developing and / or debugging a C program.</Item>
-        <Item><Code>-o hello-world</Code> specifies the name of the executable file that we want to create. <Code>gcc</Code> is a C compiler, so it compiles C programs into machine code programs. C programs are written in the form of C source code files (e.g., <Code>hello.c</Code>), but machine code programs, too, are stored in files. <Code>gcc</Code> needs to know what name to give the file that will contain the machine code version of our program. <Code>-o hello-world</Code> tells <Code>gcc</Code> to name that file <Code>hello-world</Code>. Notice that it has no extension. This is common; executable files often do not have an extension.</Item>
+        <Item><P><Code>gcc</Code> is the shell command that invokes the GCC build tool to compile a C program into a machine code executable.</P></Item>
+        <Item><P>The <Code>-g</Code> flag tells <Code>gcc</Code> to insert debugging symbols into the compiled machine code. These symbols can be used by static and dynamic analysis tools (e.g., debuggers like Valgrind). You should omit this flag when building a C program for a production environment, but you should usually include it whenever you're developing and / or debugging a C program.</P></Item>
+        <Item><P><Code>-o hello-world</Code> specifies the name of the executable file that we want to create. <Code>gcc</Code> is a C compiler, so it compiles C programs into machine code programs. C programs are written in the form of C source code files (e.g., <Code>hello.c</Code>), but machine code programs, too, are stored in files. <Code>gcc</Code> needs to know what name to give the file that will contain the machine code version of our program. <Code>-o hello-world</Code> tells <Code>gcc</Code> to name that file <Code>hello-world</Code>. Notice that it has no extension. This is common; executable files often do not have an extension.</P>
 
-        <P>Note: If you leave out the <Code>-o hello-world</Code>, then it will automatically name the executable <Code>a.out</Code> by default (or <Code>a.exe</Code> on Windows).</P>
+        <P>Note: If you leave out the <Code>-o hello-world</Code>, then it will automatically name the executable <Code>a.out</Code> by default (or <Code>a.exe</Code> on Windows).</P></Item>
 
-        <Item><Code>hello.c</Code> is the name of the C source code file containing the C program that we're trying to build / translate into machine code. If our program was spread across multiple C source code files, we would simply list all of them here, separated by spaces.</Item>
+        <Item><P><Code>hello.c</Code> is the name of the C source code file containing the C program that we're trying to build / translate into machine code. If our program was spread across multiple C source code files, we would simply list all of them here, separated by spaces.</P></Item>
       </Itemize>
 
       <P>Here's what it might look like when you execute the above shell command:</P>
@@ -283,8 +283,8 @@ Hello, World!
       <P>In order to execute a file, it must be executable. This usually means two things:</P>
 
       <Itemize>
-        <Item>It must follow the target system's executable file format. Linux uses the Executable and Linkable Format (ELF). All executables generated by <Code>gcc</Code> targeting Linux systems will automatically follow this format.</Item>
-        <Item>The user who intends to execute the file must have the proper permissions to do so. In most cases, all executables generated by <Code>gcc</Code> will have all executable permission bits enabled, meaning that all users will have the necessary permissions to execute them.</Item>
+        <Item><P>It must follow the target system's executable file format. Linux uses the Executable and Linkable Format (ELF). All executables generated by <Code>gcc</Code> targeting Linux systems will automatically follow this format.</P></Item>
+        <Item><P>The user who intends to execute the file must have the proper permissions to do so. In most cases, all executables generated by <Code>gcc</Code> will have all executable permission bits enabled, meaning that all users will have the necessary permissions to execute them.</P></Item>
       </Itemize>
 
       <P>In some scenarios (e.g., when writing shell scripts), you might find yourself wanting to execute a file for which you do not have executable permissions. Even if you're the <It>owner</It> of the file (e.g., because you created it), you may still not have executable permissions for it by default.</P>
@@ -315,7 +315,7 @@ total 120
 
       <P>The permissions of a file are given in the first part of the output. See all those dashes, r's, and w's? Those reflect file permissions. In this case, both files have the same permissions: <Code>-rw-r--r--</Code>.</P>
 
-      <P>The first character in the permission string actually just tells you what type of file it is. A dash (<Code>-</Code>) means that it's a regular file (or, more rigorously, a hard link). A <Code>d</Code> means that it's a directory (folder). There are other characters as well for other special kinds of files (e.g., symbolic links).</P>
+      <P>The first character in the permission string actually just tells you what type of file it is. A dash (<Code>-</Code>) means that it's a regular file (or, more rigorously, a hard link to a regular file). A <Code>d</Code> means that it's a directory (folder). There are other characters as well for other special kinds of files (e.g., symbolic links).</P>
 
       <P>The next three characters (<Code>rw-</Code>, in the case of both the above files) specify the permissions of the file's owning user. As stated, both of these files are owned by <Code>guyera</Code>, so they reflect what permissions the Linux user <Code>guyera</Code> has when working with the files. The first of these three characters specifies whether the owning user has permissions to read the file (i.e., to view its contents). If it's an <Code>r</Code>, then the owning user does have such permissions. If it's a dash (<Code>-</Code>), then they don't. In this case, it's an <Code>r</Code> for both files, so <Code>guyera</Code> does, indeed, have permissions to read (view the contents of) these files. The second of these three characters is similar, but it specifies whether the owning user has permissions to write the file (i.e., modify its contents). If it's a <Code>w</Code>, then they do. If it's a dash (<Code>-</Code>), then they don't. In this case, it's a <Code>w</Code> for both files, so <Code>guyera</Code> does, indeed, have permissions to write (modify) these files. Finally, the third of these three characters specifies whether the owning user has permissions to execute the file. If it's an <Code>x</Code>, then they do. If it's a dash (<Code>-</Code>), then they don't. In this case, it's a dash for both files, so <Code>guyera</Code> cannot execute either of them (hence the "permission denied" error).</P>
 

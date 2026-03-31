@@ -87,9 +87,9 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
       <P>An <Bold>array</Bold> is a <Bold>contiguous</Bold>, <Bold>homogeneous</Bold>, <Bold>sequence</Bold> of <Bold>elements</Bold> (values). Let's unpack that jargon.</P>
 
       <Itemize>
-        <Item><Bold>Contiguous</Bold>: This means that all the elements (values) in an array are arranged right next to each other in memory. For example, the first element of an array is right next to the second element in memory.</Item>
-        <Item><Bold>Homogeneous</Bold>: This means that all elements in a single array must be of the same [static] type.</Item>
-        <Item><Bold>Sequence</Bold>: This means that the elements in an array are ordered, and it's up to the programmer to decide the ordering. There's a first element, a second element, a third element, and so on, and you have to decide what values are stored in each position.</Item>
+        <Item><P><Bold>Contiguous</Bold>: This means that all the elements (values) in an array are arranged right next to each other in memory. For example, the first element of an array is right next to the second element in memory.</P></Item>
+        <Item><P><Bold>Homogeneous</Bold>: This means that all elements in a single array must be of the same [static] type.</P></Item>
+        <Item><P><Bold>Sequence</Bold>: This means that the elements in an array are ordered, and it's up to the programmer to decide the ordering. There's a first element, a second element, a third element, and so on, and you have to decide what values are stored in each position.</P></Item>
       </Itemize>
 
       <P>If you're familiar with lists in Python, arrays are a bit similar, except Python lists are heterogeneous (not homogeneous), though static analysis tools like Mypy often enforce homogeneity.</P>
@@ -319,8 +319,8 @@ int main(void) {
       <P>Now, suppose the size in the square brackets doesn't match the number of values in the initializer list of an array. What happens? Well, the rule might surprise you:</P>
 
       <Itemize>
-        <Item>If the number of values in the comma-separated list is <Ul>greater</Ul> than the size specified in the square brackets, then the program is ill-formed. Some compilers may issue an error. Many will just issue a warning, and undefined behavior will ensue when the array is initialized.</Item>
-        <Item>However, if the number of values in the comma-separated list is <Ul>less</Ul> than the size specified in the square brackets, then the remaining elements are <Bold>zero-initialized</Bold>. That is, the bytes that make up their memory are initialized to a bunch of zeros.</Item>
+        <Item><P>If the number of values in the comma-separated list is <Ul>greater</Ul> than the size specified in the square brackets, then the program is ill-formed. Some compilers may issue an error. Many will just issue a warning, and undefined behavior will ensue when the array is initialized.</P></Item>
+        <Item><P>However, if the number of values in the comma-separated list is <Ul>less</Ul> than the size specified in the square brackets, then the remaining elements are <Bold>zero-initialized</Bold>. That is, the bytes that make up their memory are initialized to a bunch of zeros.</P></Item>
       </Itemize>
 
       <P>The second bullet point is helpful. It means that, if you <It>want</It> to create an array and initialize it with a bunch of zeros, an initializer list provides a simple way of doing that:</P>
@@ -1386,7 +1386,7 @@ float copy[] = cool_values;`
       <P>To create a copy of an array, you have two options:</P>
 
       <Itemize listStyleType="lower-alpha">
-        <Item>Create a new array that's big enough to store all the values from the original array. Then copy each value from the original array into the new array one at a time using a loop (e.g., a for loop).</Item>
+        <Item><P>Create a new array that's big enough to store all the values from the original array. Then copy each value from the original array into the new array one at a time using a loop (e.g., a for loop).</P>
 
         <CBlock fileName="copyarray.c">{
 `int main(void) {
@@ -1399,9 +1399,9 @@ float copy[] = cool_values;`
         printf("%f\\n", copy[2]); // Prints 2.71
 }
 `
-        }</CBlock>
+        }</CBlock></Item>
 
-        <Item>Include <Code>string.h</Code>. Create a new array that's big enough to store all the values from the original array. Then, use the <Code>memcpy</Code> function, provided by <Code>string.h</Code>, to copy all the bytes from the original array's buffer into the new array's buffer.</Item>
+        <Item><P>Include <Code>string.h</Code>. Create a new array that's big enough to store all the values from the original array. Then, use the <Code>memcpy</Code> function, provided by <Code>string.h</Code>, to copy all the bytes from the original array's buffer into the new array's buffer.</P>
 
         <P><Code>memcpy</Code> accepts three arguments: 1) a pointer to the base address of the buffer into which you're trying to copy data; 2) a pointer to the base address of the buffer from which you're trying to copy data; and 3) the number of <Ul>bytes</Ul> that you want to be copied. When using <Code>memcpy</Code> to copy an array, the first argument is typically the base address of the new array, the second argument is typically the base address of the original array (being copied), and the third argument is typically the size (in bytes) of a single element multiplied by the number of elements in the original array.</P>
         
@@ -1419,7 +1419,7 @@ int main(void) {
         printf("%f\\n", copy[2]); // Prints 2.71
 }
 `
-        }</CBlock>
+        }</CBlock></Item>
       </Itemize>
 
       <P>(By the way, if <Code>cool_values</Code> had many more than just 3 elements in its initializer (comma-separated value list), and you didn't want to count them all, then this is actually one of those rare cases where the <Code>sizeof</Code> trick to compute an array's number of elements could be helpful. The new array could be declared via <Code>float copy[sizeof(cool_values) / sizeof(float)]</Code>, and the last argument to <Code>memcpy</Code> could simply be written as <Code>sizeof(cool_values)</Code>. But be careful to only do this with arrays<Emdash/>not pointers to arrays.)</P>
@@ -1433,9 +1433,9 @@ int main(void) {
       <P>If you need some function <Code>foo</Code> to effectively "output" an automatic array of values, consider this simple strategy:</P>
 
       <Enumerate listStyleType="decimal">
-        <Item>Wherever it is that you <It>call</It> the <Code>foo</Code> function, declare an automatic array just before doing so</Item>
-        <Item>Then, when you call the <Code>foo</Code> function, pass in that pre-declared array and its size as arguments</Item>
-        <Item>Within the <Code>foo</Code> function, modify the elements of that provided array</Item>
+        <Item><P>Wherever it is that you <It>call</It> the <Code>foo</Code> function, declare an automatic array just before doing so</P></Item>
+        <Item><P>Then, when you call the <Code>foo</Code> function, pass in that pre-declared array and its size as arguments</P></Item>
+        <Item><P>Within the <Code>foo</Code> function, modify the elements of that provided array</P></Item>
       </Enumerate>
 
       <P>This strategy allows the <Code>foo</Code> function to effectively output an automatic array, but it does so by populating the values of a given pre-declared array rather than by returning an array.</P>

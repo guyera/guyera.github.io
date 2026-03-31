@@ -13,7 +13,7 @@ export default async function Itemize({ children, listStyleType="dash" }: { chil
       throw new Error(`Expected listStyleType to be one of ['dash', 'lower-alpha'], but got ${listStyleType}`)
   }
   return (
-    <ul className={`${listStyleClass} list-inside pl-16 mb-7`}>
+    <ul className={`${listStyleClass} list-outside pl-16 mb-7`}>
       {children}
     </ul>
   )

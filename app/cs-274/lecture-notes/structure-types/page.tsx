@@ -94,9 +94,9 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
       <P>You should be familiar with classes and object-oriented programming. A structure type is sort of like a class, save a few important differences:</P>
 
       <Itemize>
-        <Item>In C, a structure type can't have methods / member functions (though they can in C++).</Item>
-        <Item>In C, structure types do not support information-hiding / member access modifiers. That is, all fields are "public" (this is also not the case in C++).</Item>
-        <Item>In C, structure types do not support inheritance<Emdash/>only composition (again, this is not the case in C++).</Item>
+        <Item><P>In C, a structure type can't have methods / member functions (though they can in C++).</P></Item>
+        <Item><P>In C, structure types do not support information-hiding / member access modifiers. That is, all fields are "public" (this is also not the case in C++).</P></Item>
+        <Item><P>In C, structure types do not support inheritance<Emdash/>only composition (again, this is not the case in C++).</P></Item>
       </Itemize>
 
       <P>That's to say, structure types in C are not primarily an encapsulation mechanism. They're just a way of grouping related data via composition (e.g., establishing "has-a" relationships).</P>
@@ -135,16 +135,16 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
       <P>Now, <It>where</It> do we write the above code? After all, we just covered file separation, so you might be wondering how structure type definitions play into header files. First, let me remind you of the rules that we discussed previously:</P>
 
       <Itemize>
-        <Item>Each function that's referenced within a program must be defined <Ul>exactly once</Ul> within <Ul>exactly one</Ul> translation unit across the program.</Item>
-        <Item>Each function that's referenced within a translation unit must be declared within that translation unit before it's referenced.</Item>
+        <Item><P>Each function that's referenced within a program must be defined <Ul>exactly once</Ul> within <Ul>exactly one</Ul> translation unit across the program.</P></Item>
+        <Item><P>Each function that's referenced within a translation unit must be declared within that translation unit before it's referenced.</P></Item>
       </Itemize>
 
       <P>Now, structure types have their own additional rules:</P>
 
       <Itemize>
-        <Item>Each structure type that's referenced within a translation unit must be declared within that translation unit before it's referenced</Item>
-        <Item>But also, with a few exceptions, in order to "use" a structure type within a translation unit, it generally must be <Ul>defined within that translation unit</Ul> before it's used. This means that if the structure type is used in multiple translation units, it must be declared <Ul>and</Ul> defined in all those translation units.</Item>
-        <Item>If a structure type is defined in multiple translation units, all those definitions must be token-for-token identical, or else sharing structures of said type across translation units (e.g., passing them from one function to another, defined in two different translation units) may invoke undefined behavior.</Item>
+        <Item><P>Each structure type that's referenced within a translation unit must be declared within that translation unit before it's referenced</P></Item>
+        <Item><P>But also, with a few exceptions, in order to "use" a structure type within a translation unit, it generally must be <Ul>defined within that translation unit</Ul> before it's used. This means that if the structure type is used in multiple translation units, it must be declared <Ul>and</Ul> defined in all those translation units.</P></Item>
+        <Item><P>If a structure type is defined in multiple translation units, all those definitions must be token-for-token identical, or else sharing structures of said type across translation units (e.g., passing them from one function to another, defined in two different translation units) may invoke undefined behavior.</P></Item>
       </Itemize>
         
       <P>(For the curious reader: if you use a forward declaration to declare a structure type without defining it within a translation unit, there are a <It>few</It> things that you can still do with that incomplete type. You can create pointers that point to structures of the incomplete type; you can use the incomplete type as a return type or parameter type in function <Ul>prototypes</Ul>; and perhaps you can do a few other minor things with them. But you <Ul>cannot</Ul> directly instantiate incomplete types, nor access members of their instances, nor pass them to the <Code>sizeof</Code> operator.)</P>
@@ -835,8 +835,8 @@ Player's birth year: 1970 | Player's batting average: 0.20
       <P>However, if done naively, this has one obvious downside, which is that the function receiving the structure's memory address as an argument is then capable of modifying the fields of the underlying structure that its parameter points to by dereferencing it (via <Code>*</Code>, or <Code>{'->'}</Code>, or <Code>[0]</Code>, etc). In most cases, you don't want that<Emdash/>the function is simply receiving the structure as an <It>input</It>, so it has no business modifying it. Hence, to forbid modifications of the underlying structure's fields (thereby preventing bugs and making the function's contract clearer), the parameter is often <Code>const</Code>-qualified. Specifically:</P>
 
       <Itemize>
-        <Item>If a function receives a structure of type <Code>T</Code> as an argument and does <Ul>not</Ul> need to modify the structure, then the parameter is usually typed as <Code>const struct T*</Code> (a pointer to a constant structure of type <Code>T</Code>).</Item>
-        <Item>If a function receives a structure of type <Code>T</Code> as an argument and <Ul>does</Ul> need to modify the structure, then the parameter is usually typed as <Code>struct T*</Code> (no <Code>const</Code> qualification).</Item>
+        <Item><P>If a function receives a structure of type <Code>T</Code> as an argument and does <Ul>not</Ul> need to modify the structure, then the parameter is usually typed as <Code>const struct T*</Code> (a pointer to a constant structure of type <Code>T</Code>).</P></Item>
+        <Item><P>If a function receives a structure of type <Code>T</Code> as an argument and <Ul>does</Ul> need to modify the structure, then the parameter is usually typed as <Code>struct T*</Code> (no <Code>const</Code> qualification).</P></Item>
       </Itemize>
 
       <P>Our <Code>print_baseball_player</Code> function accepts a baseball player as an argument and does <Ul>not</Ul> need to modify it. Hence, we should probably follow this conventional wisdom and declare the parameter as <Code>const struct baseball_player*</Code> (instead of simply <Code>baseball_player</Code>). This will prevent an entire baseball player structure argument from being copied whenever the function is called, saving time and space.</P>
@@ -1073,8 +1073,8 @@ Name: Aditya | birth year: 2001
       <P>So, if you want to be able to compare two structures for "equality", the typical strategy is:</P>
 
       <Enumerate listStyleType="decimal">
-        <Item>Decide what exactly "equality" means for your use case.</Item>
-        <Item>Create a function that accepts two structures (via pointers-to-constants) and manually checks for "equality", according to your previously decided definition.</Item>
+        <Item><P>Decide what exactly "equality" means for your use case.</P></Item>
+        <Item><P>Create a function that accepts two structures (via pointers-to-constants) and manually checks for "equality", according to your previously decided definition.</P></Item>
       </Enumerate>
 
       <P>For example, perhaps I decide that two <Code>person</Code> structures should be considered "equal" if their <Code>name</Code> arrays contain the same contents. Then I might create a function to check that condition:</P>
@@ -1145,12 +1145,12 @@ int main() {
       <P>In general, here are some tips for dealing with complex data compositions:</P>
 
       <Itemize>
-        <Item>Allocate outside-in. For example, allocate the array of <Code>person</Code> structures, then allocate the arrays of characters for those structures' <Code>name</Code> fields.</Item>
-        <Item>Free inside-out. For example, free the people's names before freeing the array of people.</Item>
-        <Item>Single responsibility principle: A given function should not be responsible for allocating, freeing, copying, or otherwise processing the entire composition. It should only be responsible for its "layer" of the composition. For example, the <Code>main</Code> function allocates (and frees) the array of <Code>person</Code> structures, but it does <Ul>not</Ul> allocate nor free their names. It relies on <Code>create_person</Code> and <Code>free_person</Code> to do that. To take it further, suppose every person has an array of <Code>pet</Code> structures, each of which has an array of medical records. Then the <Code>create_person</Code> and <Code>free_person</Code> functions should be responsible for allocating and freeing the fields of the given <Code>person</Code> structure, but <Ul>not</Ul> the fields of the <Code>pet</Code> structures within that person's array of pets. Instead, those responsibilities should be delegated to separate functions (e.g., <Code>create_pet</Code> and <Code>free_pet</Code>). And so on.</Item>
-        <Item>You have to keep track of what's on the heap and what's on the stack. In most cases, arrays within structures should be stored on the heap, and the structure should simply have a pointer field pointing to that array.</Item>
+        <Item><P>Allocate outside-in. For example, allocate the array of <Code>person</Code> structures, then allocate the arrays of characters for those structures' <Code>name</Code> fields.</P></Item>
+        <Item><P>Free inside-out. For example, free the people's names before freeing the array of people.</P></Item>
+        <Item><P>Single responsibility principle: A given function should not be responsible for allocating, freeing, copying, or otherwise processing the entire composition. It should only be responsible for its "layer" of the composition. For example, the <Code>main</Code> function allocates (and frees) the array of <Code>person</Code> structures, but it does <Ul>not</Ul> allocate nor free their names. It relies on <Code>create_person</Code> and <Code>free_person</Code> to do that. To take it further, suppose every person has an array of <Code>pet</Code> structures, each of which has an array of medical records. Then the <Code>create_person</Code> and <Code>free_person</Code> functions should be responsible for allocating and freeing the fields of the given <Code>person</Code> structure, but <Ul>not</Ul> the fields of the <Code>pet</Code> structures within that person's array of pets. Instead, those responsibilities should be delegated to separate functions (e.g., <Code>create_pet</Code> and <Code>free_pet</Code>). And so on.</P></Item>
+        <Item><P>You have to keep track of what's on the heap and what's on the stack. In most cases, arrays within structures should be stored on the heap, and the structure should simply have a pointer field pointing to that array.</P>
 
-        <P>You also have to keep track of <Bold>object ownership</Bold>. For example, if a structure has a pointer field that points to an array, are there any <It>other</It> pointers in the program that point to that same array? If so, who's responsible for freeing that array? Does the array "belong" to the structure? Does the structure "own" it? Or does the structure simply "reference" it? In the former case, the array should be freed when the program's done using the structure (e.g., via a function like <Code>free_person</Code>). In the latter case, the array should not necessarily be freed when the structure is freed.</P>
+        <P>You also have to keep track of <Bold>object ownership</Bold>. For example, if a structure has a pointer field that points to an array, are there any <It>other</It> pointers in the program that point to that same array? If so, who's responsible for freeing that array? Does the array "belong" to the structure? Does the structure "own" it? Or does the structure simply "reference" it? In the former case, the array should be freed when the program's done using the structure (e.g., via a function like <Code>free_person</Code>). In the latter case, the array should not necessarily be freed when the structure is freed, and to avoid use-after-free errors, you should take care to, say, set the structure's pointer field to <Code>NULL</Code> when the object is freed elsewhere.</P></Item>
       </Itemize>
 
       <SectionHeading id="typedef"><Code>typedef</Code></SectionHeading>

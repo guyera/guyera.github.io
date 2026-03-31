@@ -99,11 +99,11 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
       <P>First, a couple notes:</P>
 
       <Itemize>
-        <Item>The GNU Compiler Collection (GCC) comes with a C++ command-line build tool, <Code>g++</Code>. <Code>g++</Code> has a very similar interface to that of <Code>gcc</Code>, but it's used to compile C++ programs instead of C programs. I'll use it for my demonstrations.</Item>
-        <Item>There are various accepted file extensions for C++ source code files. There's <Code>.cpp</Code>, <Code>.cc</Code> (perhaps standing for "C with Classes", though historians can bicker about this), <Code>.c++</Code>, <Code>.cxx</Code>, <Code>.C</Code>, <Code>.CPP</Code>, and <Code>.cxx</Code>. I'll use <Code>.cpp</Code>, for no particular reason. The choice doesn't matter that much, so long as you're consistent with the rest of the codebase and surrounding (e.g., GNU Make) build tools.</Item>
-        <Item>For header files that use C++-specific features and therefore can't be included in a regular C translation unit, use the <Code>.hpp</Code> file extension instead of <Code>.h</Code>. If the header file uses features that are compatible with both C and C++, you can use either <Code>.h</Code> or <Code>.hpp</Code>, depending on your goals (e.g., use <Code>.h</Code> if you plan to maintain the file such that it will continue to be includeable in C translation units, else use <Code>.hpp</Code>).</Item>
-        <Item>In C, a function taking no arguments should have the parameter list <Code>(void)</Code>. For example, <Code>int main(void)</Code>. In C++, a function taking no arguments should simply have an empty parameter list. For example, <Code>int main()</Code>. Technically, <Code>int main(void)</Code> is acceptable in C++ for backwards-compatibility with C, but it's equivalent to <Code>int main()</Code>, and the latter is more common.</Item>
-        <Item>In C++, the <Code>struct</Code> keyword is optional when declaring a structure (though still necessary when defining a structure type). For example, to create a person structure in C++, you can simply write <Code>person samantha;</Code> instead of <Code>struct person samantha;</Code></Item>
+        <Item><P>The GNU Compiler Collection (GCC) comes with a C++ command-line build tool, <Code>g++</Code>. <Code>g++</Code> has a very similar interface to that of <Code>gcc</Code>, but it's used to compile C++ programs instead of C programs. I'll use it for my demonstrations.</P></Item>
+        <Item><P>There are various accepted file extensions for C++ source code files. There's <Code>.cpp</Code>, <Code>.cc</Code> (perhaps standing for "C with Classes", though historians can bicker about this), <Code>.c++</Code>, <Code>.cxx</Code>, <Code>.C</Code>, <Code>.CPP</Code>, and <Code>.cxx</Code>. I'll use <Code>.cpp</Code>, for no particular reason. The choice doesn't matter that much, so long as you're consistent with the rest of the codebase and surrounding (e.g., GNU Make) build tools.</P></Item>
+        <Item><P>For header files that use C++-specific features and therefore can't be included in a regular C translation unit, use the <Code>.hpp</Code> file extension instead of <Code>.h</Code>. If the header file uses features that are compatible with both C and C++, you can use either <Code>.h</Code> or <Code>.hpp</Code>, depending on your goals (e.g., use <Code>.h</Code> if you plan to maintain the file such that it will continue to be includeable in C translation units, else use <Code>.hpp</Code>).</P></Item>
+        <Item><P>In C, a function taking no arguments should have the parameter list <Code>(void)</Code>. For example, <Code>int main(void)</Code>. In C++, a function taking no arguments should simply have an empty parameter list. For example, <Code>int main()</Code>. Technically, <Code>int main(void)</Code> is acceptable in C++ for backwards-compatibility with C, but it's equivalent to <Code>int main()</Code>, and the latter is more common.</P></Item>
+        <Item><P>In C++, the <Code>struct</Code> keyword is optional when declaring a structure (though still necessary when defining a structure type). For example, to create a person structure in C++, you can simply write <Code>person samantha;</Code> instead of <Code>struct person samantha;</Code></P></Item>
       </Itemize>
 
       <SectionHeading id="standard-output">Standard output</SectionHeading>
@@ -117,10 +117,10 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
       <P>Here's a breakdown of this syntax:</P>
 
       <Itemize>
-        <Item><Code>std::cout</Code> refers to the <Code>cout</Code> object ("console output") that's part of the <Code>std</Code> ("standard") namespace, provided by <Code>iostream</Code>. It's a special object that represents the program's standard output stream.</Item>
-        <Item><Code>{'<<'}</Code> is the stream insertion operator. It inserts the value on the right into the output stream on the left (such as <Code>std::cout</Code>, the standard output stream, hooked up to the terminal by default in most cases).</Item>
-        <Item><Code>{'<<'}</Code> can be chained multiple times in a single statement to print multiple values all at once. For example, <Code>{'std::cout << "Hello, " << "World!"'}</Code> will print <Code>Hello, World!</Code> to the terminal.</Item>
-        <Item><Code>{'std::endl'}</Code> is the <Code>endl</Code> object from the <Code>std</Code> namespace, also provided by <Code>iostream</Code>. It stands for "endline". It just represents a newline character sequence. That is, it's similar to <Code>\n</Code>. There are minor differences between <Code>std::endl</Code> and <Code>\n</Code> in terms of flushing behavior for non-standard output buffers, but that's beyond the scope of this lecture.</Item>
+        <Item><P><Code>std::cout</Code> refers to the <Code>cout</Code> object ("console output") that's part of the <Code>std</Code> ("standard") namespace, provided by <Code>iostream</Code>. It's a special object that represents the program's standard output stream.</P></Item>
+        <Item><P><Code>{'<<'}</Code> is the stream insertion operator. It inserts the value on the right into the output stream on the left (such as <Code>std::cout</Code>, the standard output stream, hooked up to the terminal by default in most cases).</P></Item>
+        <Item><P><Code>{'<<'}</Code> can be chained multiple times in a single statement to print multiple values all at once. For example, <Code>{'std::cout << "Hello, " << "World!"'}</Code> will print <Code>Hello, World!</Code> to the terminal.</P></Item>
+        <Item><P><Code>{'std::endl'}</Code> is the <Code>endl</Code> object from the <Code>std</Code> namespace, also provided by <Code>iostream</Code>. It stands for "endline". It just represents a newline character sequence. That is, it's similar to <Code>\n</Code>. There are minor differences between <Code>std::endl</Code> and <Code>\n</Code> in terms of flushing behavior for non-standard output buffers, but that's beyond the scope of this lecture.</P></Item>
       </Itemize>
 
       <P>So, here's a "Hello, World!" program in C++:</P>
@@ -211,10 +211,10 @@ Hello, World!
       <P>In addition to pointers, C++ also has <Bold>references</Bold>. Loosely, you can think of a reference as being equivalent to a pointer, except:</P>
 
       <Itemize>
-        <Item>While a pointer is declared using the <Code>*</Code> symbol, a reference instead uses the <Code>&</Code> symbol (e.g., <Code>int& my_reference</Code>, versus <Code>int* my_pointer</Code>).</Item>
-        <Item>All references are themselves constant. Therefore, a reference must be initialized the moment it's declared. (Or the reference must be a parameter of a function, in which case it's automatically initialized to refer to the given argument at the time of the function call).</Item>
-        <Item>When initializing a reference, you do <Ul>not</Ul> have to write the address-of operator (<Code>&</Code>) in front of the object whose address you'd like to store inside it. In fact, you can't. The address-of operator is implied.</Item>
-        <Item>After a reference has been declared, any time you write out the name of the reference, it's automatically dereferenced. That is, you do <Ul>not</Ul> have to write out the dereference operator (<Code>*</Code>) in front of a reference in order to dereference it. In fact, you can't. The dereference operator is implied.</Item>
+        <Item><P>While a pointer is declared using the <Code>*</Code> symbol, a reference instead uses the <Code>&</Code> symbol (e.g., <Code>int& my_reference</Code>, versus <Code>int* my_pointer</Code>).</P></Item>
+        <Item><P>All references are themselves constant. Therefore, a reference must be initialized the moment it's declared. (Or the reference must be a parameter of a function, in which case it's automatically initialized to refer to the given argument at the time of the function call).</P></Item>
+        <Item><P>When initializing a reference, you do <Ul>not</Ul> have to write the address-of operator (<Code>&</Code>) in front of the object whose address you'd like to store inside it. In fact, you can't. The address-of operator is implied.</P></Item>
+        <Item><P>After a reference has been declared, any time you write out the name of the reference, it's automatically dereferenced. That is, you do <Ul>not</Ul> have to write out the dereference operator (<Code>*</Code>) in front of a reference in order to dereference it. In fact, you can't. The dereference operator is implied.</P></Item>
       </Itemize>
 
       <P>Okay, that's not exactly how the C++ standard defines references, but it's a simple way of thinking about them, and it's <It>essentially</It> true.</P>
@@ -562,8 +562,8 @@ Hello, my name is Joe
       <P>Besides structure types, C++ also has <Bold>classes</Bold>. In C++, classes and structure types are essentially identical. To create a class, simply create a structure type definition, but replace the keyword <Code>struct</Code> with the keyword <Code>class</Code>. The only differences between them are:</P>
 
       <Itemize>
-        <Item>In a structure type, members are public by default. In a class, members are private by default.</Item>
-        <Item>When a structure type inherits from another data type, that inheritance relationship is public by default. When a class inherits from another data type, that inheritance relationship is private by default.</Item>
+        <Item><P>In a structure type, members are public by default. In a class, members are private by default.</P></Item>
+        <Item><P>When a structure type inherits from another data type, that inheritance relationship is public by default. When a class inherits from another data type, that inheritance relationship is private by default.</P></Item>
       </Itemize>
 
       <P>I don't expect you to understand the second bullet point. But either way, both of these bullet points simply describe <It>default</It> access control. Defaults are just that<Emdash/>defaults. Access control can be changed using access modifiers. Indeed, although structure type members are public by default, and class members are private by default, you can easily create a structure type where all members are private (just write <Code>private:</Code> at the top of its definition), and you can easily create a class where all members are public (just write <Code>public:</Code> at the top of its definition).</P>
@@ -711,8 +711,8 @@ int main() {
       <P>Ultimately, this is the takeaway:</P>
 
       <Itemize>
-        <Item>If you want to create a single object on the heap, you should probably just use a unique pointer.</Item>
-        <Item>If you want to create a resizable list of objects on the heap, you should probably just use a vector.</Item>
+        <Item><P>If you want to create a single object on the heap, you should probably just use a unique pointer.</P></Item>
+        <Item><P>If you want to create a resizable list of objects on the heap, you should probably just use a vector.</P></Item>
       </Itemize>
 
       <P>These are not hard and fast rules. There are other language mechanisms that you can also use to manage dynamic memory. But these are the two simplest and most common tools for the job. If you follow this advice, the RAII mechanisms (e.g., destructors) will take care of the dynamic memory, making memory leaks [almost] impossible. And, again, methods like <Code>std::vector::at</Code> perform bounds-checking, catching buffer overreads and buffer overflows as well.</P>
@@ -724,23 +724,23 @@ int main() {
       <P>There are <It>tons</It> of details about C++ that I didn't cover in this lecture. It's a <It>massive</It> language with lots of modern, extensive features. If you want to learn more, I recommend starting with the following topics:</P>
 
       <Itemize>
-        <Item>More on constructors, including member initializer lists.</Item>
-        <Item>Destructors, and how to create them yourself.</Item>
-        <Item>Resource ownership (and more in depth on RAII).</Item>
-        <Item>Inheritance, <Code>protected</Code>, and method overrides.</Item>
-        <Item>Subtype polymorphism, including object slicing, the <Code>virtual</Code> keyword, and the <Code>override</Code> keyword.</Item>
-        <Item>Shared pointers. Similar to unique pointers, but copyable (unique pointers can't be copied, though you can copy the objects that they point to and wrap new unique pointers around them). They use automatic reference counters to keep track of the number of shared pointers pointing to the same object.</Item>
-        <Item>Also, weak pointers, which are related to shared pointers.</Item>
+        <Item><P>More on constructors, including member initializer lists.</P></Item>
+        <Item><P>Destructors, and how to create them yourself.</P></Item>
+        <Item><P>Resource ownership (and more in depth on RAII).</P></Item>
+        <Item><P>Inheritance, <Code>protected</Code>, and method overrides.</P></Item>
+        <Item><P>Subtype polymorphism, including object slicing, the <Code>virtual</Code> keyword, and the <Code>override</Code> keyword.</P></Item>
+        <Item><P>Shared pointers. Similar to unique pointers, but copyable (unique pointers can't be copied, though you can copy the objects that they point to and wrap new unique pointers around them). They use automatic reference counters to keep track of the number of shared pointers pointing to the same object.</P></Item>
+        <Item><P>Also, weak pointers, which are related to shared pointers.</P>
 
-        <P>Note: Unique pointers, shared pointers, and weak pointers are often grouped together under the umbrella term "smart pointers".</P>
-        <Item><Code>std::array</Code> and other C++-standard generic collections (e.g., <Code>std::set</Code>, <Code>std::map</Code>, <Code>std::deque</Code>, unordered versions of these generics, and countless more).</Item>
-        <Item><Code>new</Code>, <Code>delete</Code>, and <Code>delete[]</Code>. These are similar to <Code>malloc</Code> and <Code>free</Code>, but 1) they're built-in operators instead of functions provided by a header file, and 2) they interact with constructors and destructors. In fact, using <Code>malloc</Code> to try to allocate an object with a constructor in C++ often leads to undefined behavior if you don't know what you're doing; you usually must use <Code>new</Code> instead. But again, you usually shouldn't need <It>any</It> of these tools if you opt for RAII-minded generics like smart pointers and vectors instead.</Item>
-        <Item>Generics (e.g., class templates and function templates), and how to create them yourself.</Item>
-        <P>Dislcaimer: C++'s generics model is extremely extensive, perhaps more so than that of any other conventional programming language out there. If you explore this topic, you'll run into plenty of complicated subtopics, like SFINAE.</P>
-        <Item><Code>std::optional</Code></Item>
-        <Item>Exceptions (<Code>throw</Code>, <Code>try</Code>, and <Code>catch)</Code>.</Item>
+        <P>Note: Unique pointers, shared pointers, and weak pointers are often grouped together under the umbrella term "smart pointers".</P></Item>
+        <Item><P><Code>std::array</Code> and other C++-standard generic collections (e.g., <Code>std::set</Code>, <Code>std::map</Code>, <Code>std::deque</Code>, unordered versions of these generics, and countless more).</P></Item>
+        <Item><P><Code>new</Code>, <Code>delete</Code>, and <Code>delete[]</Code>. These are similar to <Code>malloc</Code> and <Code>free</Code>, but 1) they're built-in operators instead of functions provided by a header file, and 2) they interact with constructors and destructors. In fact, using <Code>malloc</Code> to try to allocate an object with a constructor in C++ often leads to undefined behavior if you don't know what you're doing; you usually must use <Code>new</Code> instead. But again, you usually shouldn't need <It>any</It> of these tools if you opt for RAII-minded generics like smart pointers and vectors instead.</P></Item>
+        <Item><P>Generics (e.g., class templates and function templates), and how to create them yourself.</P>
+        <P>Dislcaimer: C++'s generics model is extremely extensive, perhaps more so than that of any other conventional programming language out there. If you explore this topic, you'll run into plenty of complicated subtopics, like SFINAE.</P></Item>
+        <Item><P><Code>std::optional</Code></P></Item>
+        <Item><P>Exceptions (<Code>throw</Code>, <Code>try</Code>, and <Code>catch)</Code>.</P>
 
-        <P>Disclaimer: C++ exceptions are unchecked. Lots of people don't like that (for good reasons). Some people project the issues with unchecked exceptions onto exceptions in general (e.g., because they don't know that there's a difference). This has created a whole group of people who say, unconditionally, "exceptions are bad". There's another group of people who strongly disagree. Arguments ensue. If you encounter that side of the internet, approach it with an open mind. It's a complicated debate with decades of history behind it.</P>
+        <P>Disclaimer: C++ exceptions are unchecked. Lots of people don't like that (for good reasons). Some people project the issues with unchecked exceptions onto exceptions in general (e.g., because they don't know that there's a difference). This has created a whole group of people who say, unconditionally, "exceptions are bad". There's another group of people who strongly disagree. Arguments ensue. If you encounter that side of the internet, approach it with an open mind. It's a complicated debate with decades of history behind it.</P></Item>
       </Itemize>
 
     </>

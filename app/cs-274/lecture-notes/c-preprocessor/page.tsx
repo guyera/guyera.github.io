@@ -79,9 +79,9 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
       <P><Code>gcc</Code> is much more than a compiler; it's a full-fledged C build tool. Building a C program into an executable involves several steps, only one of which is compilation:</P>
 
       <Enumerate listStyleType="decimal">
-        <Item><Bold>Preprocessing</Bold>: The <Bold>C preprocessor</Bold> interprets <Bold>preprocessing directives</Bold> and modifies the C source code accordingly.</Item>
-        <Item><Bold>Compilation</Bold>: The C compiler compiles the preprocessed C source code into object code. This is done in <Bold>translation units</Bold> (loosely, each <Code>.c</Code> file in a C program represents a distinct translation unit).</Item>
-        <Item><Bold>Linking</Bold>: All the compiled translation units' object code, along with the object code of any libraries the program uses (including the C standard library), is <Bold>linked</Bold> together into a final product (e.g., an executable, or a library).</Item>
+        <Item><P><Bold>Preprocessing</Bold>: The <Bold>C preprocessor</Bold> interprets <Bold>preprocessing directives</Bold> and modifies the C source code accordingly.</P></Item>
+        <Item><P><Bold>Compilation</Bold>: The C compiler compiles the preprocessed C source code into object code. This is done in <Bold>translation units</Bold> (loosely, each <Code>.c</Code> file in a C program represents a distinct translation unit).</P></Item>
+        <Item><P><Bold>Linking</Bold>: All the compiled translation units' object code, along with the object code of any libraries the program uses (including the C standard library), is <Bold>linked</Bold> together into a final product (e.g., an executable, or a library).</P></Item>
       </Enumerate>
 
       <P><Code>gcc</Code> does all these things and more.</P>
@@ -218,9 +218,9 @@ int main(void) {
       <P>The preprocessor can help us out here: we can define a function-like macro that accepts a type name <Code>t</Code> as an argument and expands to the definition of a function that's capable of squaring values of type <Code>t</Code>. For example, we could define a function-like macro named <Code>DEF_SQUARE(t)</Code> such that:</P>
 
       <Itemize>
-        <Item><Code>DEF_SQUARE(int)</Code> expands to <Code>{'int square_int(int x) {return x * x;\}'}</Code></Item>
-        <Item><Code>DEF_SQUARE(float)</Code> expands to <Code>{'float square_float(float x) {return x * x;}'}</Code></Item>
-        <Item>And so on...</Item>
+        <Item><P><Code>DEF_SQUARE(int)</Code> expands to <Code>{'int square_int(int x) {return x * x;\}'}</Code></P></Item>
+        <Item><P><Code>DEF_SQUARE(float)</Code> expands to <Code>{'float square_float(float x) {return x * x;}'}</Code></P></Item>
+        <Item><P>And so on...</P></Item>
       </Itemize>
 
       <P>This would allow us to define a squaring function for a new data type by just writing <Code>{'DEF_SQUARE(<type>)'}</Code>, replacing <Code>{'<type>'}</Code> with the data type in question.</P>
@@ -675,7 +675,7 @@ Root: -0.292893`
       <P>This enables lots of possibilities. To name a couple:</P>
 
       <Itemize>
-        <Item>You can write a bunch of blocks of code enclosed in preprocessor if statements that look like this:</Item>
+        <Item><P>You can write a bunch of blocks of code enclosed in preprocessor if statements that look like this:</P>
 
         <CBlock showLineNumbers={false}>{
 `#ifdef DEBUG
@@ -683,9 +683,9 @@ Root: -0.292893`
 #endif`
         }</CBlock>
 
-        <P>Such code will only be compiled if the <Code>DEBUG</Code> macro is defined. Whenever you want to run the program in "debug mode", just supply <Code>-DDEBUG</Code> when building it, "enabling" blocks of code enclosed in such preprocessor if statements. When you want to build the program for deployment to a production environment, just omit <Code>-DDEBUG</Code>, and those blocks will be "deleted" by the preprocessor before the source code is passed to the compiler.</P>
+        <P>Such code will only be compiled if the <Code>DEBUG</Code> macro is defined. Whenever you want to run the program in "debug mode", just supply <Code>-DDEBUG</Code> when building it, "enabling" blocks of code enclosed in such preprocessor if statements. When you want to build the program for deployment to a production environment, just omit <Code>-DDEBUG</Code>, and those blocks will be "deleted" by the preprocessor before the source code is passed to the compiler.</P></Item>
 
-        <Item>There exist built-in macros that are already defined by default and available to the preprocessor. For example, most C build tools will automatically define the <Code>_WIN32</Code> macro when building an executable to be run on Windows systems. Hence, if you want your program to have some code that only gets executed when run on Windows, you can put it in a preprocessor if statement block like so:</Item>
+        <Item><P>There exist built-in macros that are already defined by default and available to the preprocessor. For example, most C build tools will automatically define the <Code>_WIN32</Code> macro when building an executable to be run on Windows systems. Hence, if you want your program to have some code that only gets executed when run on Windows, you can put it in a preprocessor if statement block like so:</P>
 
         <CBlock showLineNumbers={false}>{
 `#ifdef _WIN32
@@ -693,7 +693,7 @@ Root: -0.292893`
 #endif`
         }</CBlock>
 
-        <P>There are similar macros for various other platforms. This is extremely helpful when writing low-level code that requires platform-specific dependencies<Emdash/>you can write different versions of it that work on different platforms, and put each version of the code in its own preprocessor if statement body so that only one of them will be passed to the compiler depending on the target build platform.</P>
+        <P>There are similar macros for various other platforms. This is extremely helpful when writing low-level code that requires platform-specific dependencies<Emdash/>you can write different versions of it that work on different platforms, and put each version of the code in its own preprocessor if statement body so that only one of them will be passed to the compiler depending on the target build platform.</P></Item>
       </Itemize>
 
       <SectionHeading id="and-more">And more!</SectionHeading>

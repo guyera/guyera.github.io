@@ -624,10 +624,10 @@ $ valgrind ./flattening
       <P>Stride is important in indexing logic. When you index a contiguous multidimensional array, such as <Code>values[i][j]</Code>, here's what really happens:</P>
 
       <Enumerate listStyleType="decimal">
-        <Item>The program retrieves the base address of the array in memory (the first byte of the first element, in row-major order)</Item>
-        <Item>The program takes the row index, <Code>i</Code>, and multiplies it by the stride of the first dimension. Let A denote this computed value.</Item>
-        <Item>The program takes the column index, <Code>j</Code>, and multiplies it by the stride of the second dimension. Let B denote this computed value.</Item>
-        <Item>The program computes the sum of all three values: the array's base address + A + B. This sum is the memory address of the element being accessed. It then dereferences that memory address, retrieving the underlying value.</Item>
+        <Item><P>The program retrieves the base address of the array in memory (the first byte of the first element, in row-major order)</P></Item>
+        <Item><P>The program takes the row index, <Code>i</Code>, and multiplies it by the stride of the first dimension. Let A denote this computed value.</P></Item>
+        <Item><P>The program takes the column index, <Code>j</Code>, and multiplies it by the stride of the second dimension. Let B denote this computed value.</P></Item>
+        <Item><P>The program computes the sum of all three values: the array's base address + A + B. This sum is the memory address of the element being accessed. It then dereferences that memory address, retrieving the underlying value.</P></Item>
       </Enumerate>
 
       <P>Let's consider an example. First, here's the definition of <Code>values</Code> again for your convenience:</P>
@@ -646,8 +646,8 @@ $ valgrind ./flattening
       <P>Why does this all matter? Well, it matters greatly when contiguous multidimensional arrays are passed to functions. Indeed, functions can have contiguous multidimensional array parameters. For the most part, these work very similarly to 1D array parameters, meaning they're really just pointers, and contiguous multidimensional array arguments really just decay to their base addresses. However, there are a couple additional constraints:</P>
 
       <Enumerate listStyleType="decimal">
-        <Item>When declaring a contiguous multidimensional array parameter, you must use the "array-style" declaration syntax; you cannot explicitly declare the parameter as a pointer (even though it <It>essentially is</It> a pointer).</Item>
-        <Item>Moreover, when using this array-style declaration syntax, you must write out a pair of square brackets for each dimension (just like when declaring any other contiguous multidimensional array variable), but <Ul>the sizes of all the dimensions except for the first must be explicitly specified</Ul>. Recall that this is the same rule that we discussed with respect to initializing a multidimensional array with an initializer list.</Item>
+        <Item><P>When declaring a contiguous multidimensional array parameter, you must use the "array-style" declaration syntax; you cannot explicitly declare the parameter as a pointer (even though it <It>essentially is</It> a pointer).</P></Item>
+        <Item><P>Moreover, when using this array-style declaration syntax, you must write out a pair of square brackets for each dimension (just like when declaring any other contiguous multidimensional array variable), but <Ul>the sizes of all the dimensions except for the first must be explicitly specified</Ul>. Recall that this is the same rule that we discussed with respect to initializing a multidimensional array with an initializer list.</P></Item>
       </Enumerate>
 
       <P>Here's an example to demonstrate these rules:</P>

@@ -134,10 +134,10 @@ $ valgrind ./void_pointers
       <P>You might ask, "If <Code>void</Code> pointers can store addresses of anything, why do we need other kinds of pointers at all? Why can't we just always use <Code>void</Code> pointers?" Good question. <Code>void</Code> pointers are <Ul>extremely</Ul> limited in terms of what you can do with them:</P>
 
       <Itemize>
-        <Item>You can't conduct pointer arithmetic on a <Code>void</Code> pointer (e.g., <Code>ptr + 1</Code> is not allowed if <Code>ptr</Code> is a <Code>void</Code> pointer)</Item>
+        <Item><P>You can't conduct pointer arithmetic on a <Code>void</Code> pointer (e.g., <Code>ptr + 1</Code> is not allowed if <Code>ptr</Code> is a <Code>void</Code> pointer)</P>
 
-        <P>(Okay, it <It>is</It> allowed in that GCC and other popular C compilers provide extensions that support it, treating <Code>sizeof(void)</Code> as <Code>1</Code> in such a context. But it's not technically standard C, so it's not portable.)</P>
-        <Item><Ul>More importantly, you can't dereference a <Code>void</Code> pointer</Ul>. That is, you can't access the data that a <Code>void</Code> pointer points to, at least not through the <Code>void</Code> pointer itself. That means no <Code>*</Code> operators, no <Code>[]</Code> operators, and no <Code>{'->'}</Code> operators. None of these can be used on a <Code>void</Code> pointer.</Item>
+        <P>(Okay, it <It>is</It> allowed in that GCC and other popular C compilers provide extensions that support it, treating <Code>sizeof(void)</Code> as <Code>1</Code> in such a context. But it's not technically standard C, so it's not portable.)</P></Item>
+        <Item><P><Ul>More importantly, you can't dereference a <Code>void</Code> pointer</Ul>. That is, you can't access the data that a <Code>void</Code> pointer points to, at least not through the <Code>void</Code> pointer itself. That means no <Code>*</Code> operators, no <Code>[]</Code> operators, and no <Code>{'->'}</Code> operators. None of these can be used on a <Code>void</Code> pointer.</P></Item>
       </Itemize>
 
       <P>Both of these limitations are due to the same fundamental reason: the compiler needs to be able to determine what type of data a pointer points to in order to support the above operations, but the compiler has no way of knowing what type of data a given <Code>void</Code> pointer might point to at a given point in time.</P>

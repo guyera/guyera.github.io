@@ -86,9 +86,9 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
       <P>As I said in <Link href={`${PARENT_PATH}/${allPathData["c-preprocessor"].pathName}`}>our lecture on the preprocessor</Link>, the full C build pipeline consists of at least the following steps:</P>
 
       <Enumerate listStyleType="decimal">
-        <Item><Bold>Preprocessing</Bold>: The <Bold>C preprocessor</Bold> interprets <Bold>preprocessing directives</Bold> and modifies the C source code accordingly.</Item>
-        <Item><Bold>Compilation</Bold>: The C compiler compiles the preprocessed C source code into object code. This is done in <Bold>translation units</Bold> (loosely, each <Code>.c</Code> file in a C program represents a distinct translation unit).</Item>
-        <Item><Bold>Linking</Bold>: All the compiled translation units' object code, along with the object code of any libraries the program uses (including the C standard library), is <Bold>linked</Bold> together into a final product (e.g., an executable, or a library).</Item>
+        <Item><P><Bold>Preprocessing</Bold>: The <Bold>C preprocessor</Bold> interprets <Bold>preprocessing directives</Bold> and modifies the C source code accordingly.</P></Item>
+        <Item><P><Bold>Compilation</Bold>: The C compiler compiles the preprocessed C source code into object code. This is done in <Bold>translation units</Bold> (loosely, each <Code>.c</Code> file in a C program represents a distinct translation unit).</P></Item>
+        <Item><P><Bold>Linking</Bold>: All the compiled translation units' object code, along with the object code of any libraries the program uses (including the C standard library), is <Bold>linked</Bold> together into a final product (e.g., an executable, or a library).</P></Item>
       </Enumerate>
 
       <P>We've discussed preprocessing and compilation at length, but what's linking?</P>
@@ -106,13 +106,13 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
       <P>But I've skipped an important step: for a given application with many translation units and library dependencies, how is everything combined together into a single, final executable (or library)? Answer: <Bold>the linker</Bold>. The linker is part of GCC (or, rather, GCC invokes the linker as part of the build pipeline). Here's what the linker does:</P>
 
       <Enumerate listStyleType="decimal">
-        <Item>(Object code collection) The linker collects the object code (compiled data and machine code) from all the necessary translation units, including those of the program's <Code>.c</Code> files as well as those of any libraries used by the program.</Item>
+        <Item><P>(Object code collection) The linker collects the object code (compiled data and machine code) from all the necessary translation units, including those of the program's <Code>.c</Code> files as well as those of any libraries used by the program.</P>
 
-        <P>(<Code>gcc</Code> will link in the C standard library automatically, but linking the program with any other library at build time requires an explicit linker flag. For example, <Code>-lm</Code> links with the definitions of various math functions provided by <Code>math.h</Code>, <Code>-lpthread</Code> links with the POSIX threading library, and so on).</P>
-        <Item>(Verification) The linker makes sure that there are no conflicts between the translation units (e.g., it verifies that each function and external global variable / constant is defined exactly once across all translation units)</Item>
-        <Item>(Relocation, step 1) Given that the program will need to use functions, global variables, etc, that are defined across <It>all</It> of these translation units, it must somehow be decided how all of these things will be arranged in the program's memory. The linker makes these decisions.</Item>
-        <Item>(Relocation, step 2) The linker modifies references (e.g., memory addresses) of various symbols (functions, global variables, etc) used across all the translation units' object code to match their new locations in the program's memory as decided by the linker in the previous step.</Item>
-        <Item>(Concatenation, loosely) The linker combines / "concatenates" all the translation units' modified object code into a single file (e.g., an executable, or a library that can be further linked into other executables / libraries).</Item>
+        <P>(<Code>gcc</Code> will link in the C standard library automatically, but linking the program with any other library at build time requires an explicit linker flag. For example, <Code>-lm</Code> links with the definitions of various math functions provided by <Code>math.h</Code>, <Code>-lpthread</Code> links with the POSIX threading library, and so on).</P></Item>
+        <Item><P>(Verification) The linker makes sure that there are no conflicts between the translation units (e.g., it verifies that each function and external global variable / constant is defined exactly once across all translation units)</P></Item>
+        <Item><P>(Relocation, step 1) Given that the program will need to use functions, global variables, etc, that are defined across <It>all</It> of these translation units, it must somehow be decided how all of these things will be arranged in the program's memory. The linker makes these decisions.</P></Item>
+        <Item><P>(Relocation, step 2) The linker modifies references (e.g., memory addresses) of various symbols (functions, global variables, etc) used across all the translation units' object code to match their new locations in the program's memory as decided by the linker in the previous step.</P></Item>
+        <Item><P>(Concatenation, loosely) The linker combines / "concatenates" all the translation units' modified object code into a single file (e.g., an executable, or a library that can be further linked into other executables / libraries).</P></Item>
       </Enumerate>
 
       <P>In other words, once the preprocessor and compiler have preprocessed and then compiled each translation unit (e.g., each <Code>.c</Code> file) into object code, the linker is responsible for combining all that object code, along with the object code of library dependencies like the C standard library, into a final product.</P>

@@ -137,9 +137,9 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
       <P>That's particularly problematic if you want to move some data from one place in memory to another. Think about it<Emdash/>moving an object in memory really means doing the following:</P>
 
       <Enumerate listStyleType="decimal">
-        <Item>Allocate a new block in memory to which the object's bytes will be moved</Item>
-        <Item>Copy the bytes of the object from its current block in memory to the new block</Item>
-        <Item>Free the object's old block in memory</Item>
+        <Item><P>Allocate a new block in memory to which the object's bytes will be moved</P></Item>
+        <Item><P>Copy the bytes of the object from its current block in memory to the new block</P></Item>
+        <Item><P>Free the object's old block in memory</P></Item>
       </Enumerate>
 
       <P>These three steps clearly do <Ul>not</Ul> allocate and free data in a last-in-first-out fashion. They involve allocating a new block of memory, and then freeing an <It>older</It> block of memory shortly thereafter, without freeing the recently allocated new block first. Given that the stack's memory management is automatic and LIFO, the above sequence of operations isn't possible on the stack.</P>
@@ -229,7 +229,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
 
       <P>This contiguity comes with several additional advantages. A relatively small advantage is compactness: having no gaps between objects on the stack means little to no memory is wasted.</P>
 
-      <P>But there are much bigger advantages. A major advantage is that the program only needs to dereference <It>one</It> memory address (besides those containing the machine instructions) to retrieve an object on the stack (that being the address computed by adding the object's stack offset with the stack frame's base address). That's just one layer of indirection. Most alternative memory models (e.g., Python's heap) require two layers of indirection for data access. This is another reason why the stack is highly performant.</P>
+      <P>But there are much bigger advantages. A major advantage is that the program only needs to dereference <It>one</It> memory address (besides those containing the machine instructions) to retrieve an object on the stack (that being the address computed by adding the object's stack offset with the stack frame's base address). Most alternative memory models (e.g., Python's heap) require two layers of indirection for data access. This is another reason why the stack is highly performant.</P>
 
       <P>Another major advantage of contiguity is <Bold>spacial locality</Bold>. Spacial locality is a measure of how closely together objects are stored, particularly objects that are accessed back-to-back / in near succession. If a program is going to be accessing a group of objects back-to-back, such as a group of automatic variables declared in the same scope, then it's extremely beneficial, from a performance standpoint, for those objects to be close together in memory (i.e., to have high spacial locality). The reasons for this are largely beyond the scope of this course, though we may explore some of the reasons in lab; if you're curious, you should research <Link href="https://en.wikipedia.org/wiki/CPU_cache">CPU caches, cache lines</Link>, <Link href="https://en.wikipedia.org/wiki/Cache_prefetching">cache prefetching</Link>, and <Link href="https://en.wikipedia.org/wiki/Locality_of_reference">locality of reference</Link>.</P>
 
@@ -248,15 +248,15 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
       <P>Indeed, such a memory model exists, and it's called <Bold>the heap</Bold>. The heap is the direct counterpart to the stack.</P>
 
       <Itemize>
-        <Item>The stack is contiguous. The heap is non-contiguous.</Item>
+        <Item><P>The stack is contiguous. The heap is non-contiguous.</P>
 
         <Itemize>
-          <Item>Contiguity gives compactness. Hence, the stack is very compact. The heap is much less compact, or "wasteful" of memory. It's often <Bold>fragmented</Bold> (i.e., contains gaps / unallocated blocks of memory in between objects)</Item>
-          <Item>Contiguity gives several performance advantages, like spacial locality and ease of access through a single layer of indirection. The heap often has much worse spacial locality, and two layers of indirection are required to access an object on the heap.</Item>
-        </Itemize>
-        <Item>The stack is simple to use. Stack frames are allocated and freed automatically according to function calls and scopes. The heap is much harder to use (at least in C). Heap allocations and frees are performed manually by calling certain functions (<Code>malloc</Code>, <Code>free</Code>, etc). That means it's possible for the programmer to mess up (e.g., forget to allocate something, or forget to free something).</Item>
+          <Item><P>Contiguity gives compactness. Hence, the stack is very compact. The heap is much less compact, or "wasteful" of memory. It's often <Bold>fragmented</Bold> (i.e., contains gaps / unallocated blocks of memory in between objects)</P></Item>
+          <Item><P>Contiguity gives several performance advantages, like spacial locality and ease of access. The heap often has much worse spacial locality, and an additional layer of indirection is required to access an object on the heap.</P></Item>
+        </Itemize></Item>
+        <Item><P>The stack is simple to use. Stack frames are allocated and freed automatically according to function calls and scopes. The heap is much harder to use (at least in C). Heap allocations and frees are performed manually by calling certain functions (<Code>malloc</Code>, <Code>free</Code>, etc). That means it's possible for the programmer to mess up (e.g., forget to allocate something, or forget to free something).</P>
 
-        <P>(In many other programming languages, like Python, Java, and C#, the heap is still simple to use, but at an even larger performance cost of a garbage collector.)</P>
+        <P>(In many other programming languages, like Python, Java, and C#, the heap is still simple to use, but at an even larger performance cost of a garbage collector.)</P></Item>
       </Itemize>
 
       <P>Now, I've just said that allocating and freeing data on the heap must be done "manually" by calling certain functions. Let's start there. Memory that's allocated on the heap is referred to as <Bold>dynamic memory</Bold>, or <Bold>dynamically allocated memory</Bold>. Dynamic memory is allocated in individual contiguous blocks. In the simplest case, a block of dynamic memory can be allocated via the <Code>malloc</Code> function, which is provided by <Code>stdlib.h</Code>. In most cases, you should call it like so:</P>
@@ -444,12 +444,12 @@ How many floats should the array have?: 172
       <P>So, we should fix our memory leak. In order to fix a memory leak, you must first <It>find</It> it. In this case, it's simple: the dynamic array that <Code>numbers</Code> points to was never freed. But in more complicated programs that allocate and free a lot of dynamic memory, it might not be obvious where the memory leak(s) are coming from. To locate memory leaks in a C program:</P>
 
       <Enumerate listStyleType="decimal">
-        <Item>Make sure to compile the program with the <Code>-g</Code> flag</Item>
-        <Item>When running the program through Valgrind, supply the flags <Code>--leak-check=full</Code> and <Code>--show-leak-kinds=all</Code>. For example:</Item>
+        <Item><P>Make sure to compile the program with the <Code>-g</Code> flag</P></Item>
+        <Item><P>When running the program through Valgrind, supply the flags <Code>--leak-check=full</Code> and <Code>--show-leak-kinds=all</Code>. For example:</P>
         
         <P><Code>valgrind --leak-check=full --show-leak-kinds=all a.out</Code></P>
 
-        <P>This will cause Valgrind to tell you not just <It>how much</It> memory was leaked, but <It>where that memory was allocated</It>. It also causes Valgrind to show information about certain categories of memory leaks that it otherwise wouldn't.</P>
+        <P>This will cause Valgrind to tell you not just <It>how much</It> memory was leaked, but <It>where that memory was allocated</It>. It also causes Valgrind to show information about certain categories of memory leaks that it otherwise wouldn't.</P></Item>
       </Enumerate>
 
       <P>I strongly recommend that you put the following line of code at the bottom of your <Code>.bashrc</Code> file within your home directory on the ENGR servers:</P>
@@ -564,8 +564,8 @@ How many floats should the array have?: 172
       <P>Exactly when dynamic memory should be freed is largely up to the programmer. However, the timing of the free must follow these constraints:</P>
 
       <Enumerate listStyleType="decimal">
-        <Item>Each block of allocated dynamic memory must be freed exactly once, <It>eventually</It>. If you free it zero times, that's a memory leak. If you free it two or more times, that's a double-free error, which invokes undefined behavior.</Item>
-        <Item>A block of allocated dynamic memory must not be freed before the program is done using it. Otherwise, you have a use-after-free error, which invokes undefined behavior.</Item>
+        <Item><P>Each block of allocated dynamic memory must be freed exactly once, <It>eventually</It>. If you free it zero times, that's a memory leak. If you free it two or more times, that's a double-free error, which invokes undefined behavior.</P></Item>
+        <Item><P>A block of allocated dynamic memory must not be freed before the program is done using it. Otherwise, you have a use-after-free error, which invokes undefined behavior.</P></Item>
       </Enumerate>
 
       <P>Now, here's a critical point that often confuses students: in the above program, the pointer, <Code>numbers</Code>, is stored on the <Ul>stack</Ul>. It is <Ul>not</Ul> stored on the heap. However, the block of bytes that it <It>points</It> to is stored on the heap. This means that when the pointer falls out of scope (or, in most C implementations, when its function ends), the pointer itself will be freed from memory along with its stack frame. However, the block of memory on the heap that it points to will <Ul>not</Ul> be freed at that time. Moreover, if <Code>numbers</Code> falls out of scope before we get a chance to free the dynamic memory that it points to, and we don't create a copy of that pointer anywhere else, then it will become impossible to ever free the dynamic memory from that point on in the program. After all, the <Code>free</Code> function requires you to give it the base address of the block to be freed. If that base address is only stored in the <Code>numbers</Code> pointer, and that pointer falls out of scope, then you'll no longer have access to any pointers storing that address, so you won't be able to pass it to the <Code>free</Code> function.</P>
@@ -579,9 +579,9 @@ How many floats should the array have?: 172
       <P>The basic strategy to effectively resize an array is as follows:</P>
 
       <Enumerate listStyleType="decimal">
-        <Item>Allocate a new block of dynamic memory to represent the array post-resizing (perhaps larger than the old array, or perhaps smaller, depending on your goals)</Item>
-        <Item>Copy the elements that you want to keep from the old array to the new array</Item>
-        <Item>Free the old array</Item>
+        <Item><P>Allocate a new block of dynamic memory to represent the array post-resizing (perhaps larger than the old array, or perhaps smaller, depending on your goals)</P></Item>
+        <Item><P>Copy the elements that you want to keep from the old array to the new array</P></Item>
+        <Item><P>Free the old array</P></Item>
       </Enumerate>
 
       <P>We can't do this on the stack since the stack allocates and frees memory in a very particular (LIFO) order. The heap has no such restrictions; we can allocate and free whatever dynamic memory we want, whenever we want. So let's implement this strategy:</P>

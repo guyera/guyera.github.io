@@ -644,12 +644,12 @@ Segmentation fault (core dumped)`
       <P>There are a few other ways of invoking undefined behavior with improper pointer usage as well. For example, attempting to store the address of a <Code>float</Code> inside a non-float pointer (e.g., a pointer of type <Code>int*</Code>) will often lead to undefined behavior. To avoid issues with pointers:</P>
 
       <Enumerate listStyleType="decimal">
-        <Item>Never dereference an uninitialized pointer</Item>
-        <Item>Never dereference a dangling pointer</Item>
-        <Item>Only store addresses in the appropriate types of pointers</Item>
-        <Item>Avoid type-casting pointers except when absolutely necessary. Upcasting in C++ is fine, and casting to <Code>void*</Code> is often necessary in C since it doesn't support proper subtype polymorphism. But never type-cast, say, an int pointer to a float pointer.</Item>
-        <Item>Make sure to never dereference <Link href="#null">a <Code>NULL</Code> pointer</Link></Item>
-        <Item>Be careful when conducting pointer arithmetic (i.e., when computing memory addresses by performing arithmetic on other memory addresses; we'll discuss this more when we cover arrays in a future lecture)</Item>
+        <Item><P>Never dereference an uninitialized pointer</P></Item>
+        <Item><P>Never dereference a dangling pointer</P></Item>
+        <Item><P>Only store addresses in the appropriate types of pointers</P></Item>
+        <Item><P>Avoid type-casting pointers except when absolutely necessary. Upcasting in C++ is fine, and casting to <Code>void*</Code> is often necessary in C since it doesn't support proper subtype polymorphism. But never type-cast, say, an int pointer to a float pointer.</P></Item>
+        <Item><P>Make sure to never dereference <Link href="#null">a <Code>NULL</Code> pointer</Link></P></Item>
+        <Item><P>Be careful when conducting pointer arithmetic (i.e., when computing memory addresses by performing arithmetic on other memory addresses; we'll discuss this more when we cover arrays in a future lecture)</P></Item>
       </Enumerate>
 
       <SectionHeading id="null"><Code>NULL</Code></SectionHeading>
@@ -753,8 +753,8 @@ Age: Unknown. Favorite #: Unknown.
       <P>Three more notes about <Code>NULL:</Code></P>
 
       <Enumerate listStyleType="decimal">
-        <Item>A pointer will only ever be <Code>NULL</Code> if you explicitly assign it the value of <Code>NULL</Code> (e.g., <Code>int* p = NULL</Code>, or by explicitly supplying a <Code>NULL</Code> argument to a pointer parameter). Dangling pointers and uninitialized pointers are <Ul>not</Ul> the same thing as <Code>NULL</Code> pointers. While it's possible to use an if statement to check if a pointer is <Code>NULL</Code> (as above), it's <Ul>not</Ul> possible to use an if statement to check if a pointer is dangling or uninitialized.</Item>
-        <Item>You should <Ul>never</Ul> dereference a pointer that might be <Code>NULL</Code>. Since memory address 0 (or however <Code>NULL</Code> is represented) is never allowed to store any actual data, dereferencing it invokes undefined behavior. In most cases, it will trigger a segmentation fault and crash the program. This is important; <Code>NULL</Code> is an extremely common value for pointers (any pointer can be set to <Code>NULL</Code>, and programmers set pointers to <Code>NULL</Code> all the time), so if there's <Ul>any</Ul> chance that a given pointer might be <Code>NULL</Code>, check it with an if statement before trying to dereference it.</Item>
+        <Item><P>A pointer will only ever be <Code>NULL</Code> if you explicitly assign it the value of <Code>NULL</Code> (e.g., <Code>int* p = NULL</Code>, or by explicitly supplying a <Code>NULL</Code> argument to a pointer parameter). Dangling pointers and uninitialized pointers are <Ul>not</Ul> the same thing as <Code>NULL</Code> pointers. While it's possible to use an if statement to check if a pointer is <Code>NULL</Code> (as above), it's <Ul>not</Ul> possible to use an if statement to check if a pointer is dangling or uninitialized.</P></Item>
+        <Item><P>You should <Ul>never</Ul> dereference a pointer that might be <Code>NULL</Code>. Since memory address 0 (or however <Code>NULL</Code> is represented) is never allowed to store any actual data, dereferencing it invokes undefined behavior. In most cases, it will trigger a segmentation fault and crash the program. This is important; <Code>NULL</Code> is an extremely common value for pointers (any pointer can be set to <Code>NULL</Code>, and programmers set pointers to <Code>NULL</Code> all the time), so if there's <Ul>any</Ul> chance that a given pointer might be <Code>NULL</Code>, check it with an if statement before trying to dereference it.</P></Item>
       </Enumerate>
 
       <SectionHeading id="constness-with-pointers">Constness with pointers</SectionHeading>
@@ -763,10 +763,10 @@ Age: Unknown. Favorite #: Unknown.
 
       <P>In particular, there are two different notions of constness with respect to pointers:</P>
 
-      <Enumerate listStyleType="decimal">
+      <Itemize>
         <Item>Constant pointers</Item>
         <Item>Pointers to constant data</Item>
-      </Enumerate>
+      </Itemize>
 
       <P>If a pointer itself is qualified constant (case 1), then that means the pointer itself must be initialized when it's declared, and it can't be changed after the fact. That's to say, you can't change "where it points to". You must immediately store a memory address inside it, and you cannot change that memory address afterward.</P>
 
@@ -825,8 +825,8 @@ OR
       <P>A neat way to remember the difference between the syntax for constant-pointer and pointer-to-constant-data is as follows:</P>
 
       <Enumerate listStyleType="decimal">
-        <Item>If the keyword <Code>const</Code> appears at the very left of the type specifier, move it to the right of the data type (but before the first asterisk). For example, if the full declaration is <Code>const int* p;</Code>, then change it to <Code>int const * p;</Code>. These syntaxes are equivalent, so this doesn't affect the meaning of the type.</Item>
-        <Item>From there, read the fully qualified type from right to left. For example, <Code>int const * p</Code> would be read as "<Code>p</Code> is a pointer to a constant integer". Hence, <Code>p</Code> is a pointer-to-constant-data. In contrast, <Code>int* const p</Code> would be read as "<Code>p</Code> is a constant pointer to an integer". Hence, <Code>p</Code> is a constant pointer.</Item>
+        <Item><P>If the keyword <Code>const</Code> appears at the very left of the type specifier, move it to the right of the data type (but before the first asterisk). For example, if the full declaration is <Code>const int* p;</Code>, then change it to <Code>int const * p;</Code>. These syntaxes are equivalent, so this doesn't affect the meaning of the type.</P></Item>
+        <Item><P>From there, read the fully qualified type from right to left. For example, <Code>int const * p</Code> would be read as "<Code>p</Code> is a pointer to a constant integer". Hence, <Code>p</Code> is a pointer-to-constant-data. In contrast, <Code>int* const p</Code> would be read as "<Code>p</Code> is a constant pointer to an integer". Hence, <Code>p</Code> is a constant pointer.</P></Item>
       </Enumerate>
 
       <P>Let's take it one step further. Suppose you want to create a <It>constant pointer to constant data</It>. You can do that by combining the above syntaxes:</P>
