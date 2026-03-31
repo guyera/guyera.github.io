@@ -10,7 +10,7 @@ export default async function Enumerate({ children, listStyleType="lower-alpha" 
       listStyleClass = "list-[lower-alpha]"
       break
     default:
-      listStyleClass = `list-[${listStyleType}]`
+      throw new Error(`Expected listStyleType to be one of ['decimal', 'lower-alpha'], but got ${listStyleType}`)
       break
   }
   return (
