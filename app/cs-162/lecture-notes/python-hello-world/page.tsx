@@ -79,13 +79,13 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
 
       <P>But there's a simple workaround. Python ships with a module called <Code>venv</Code>, which stands for <Term>Virtual Environment</Term>. Packages installed in a Python virtual environment are isolated from the rest of the system, and you have full access to every Python virtual environment that you create. Hence, Python virtual environments will allow us to install and use whatever software packages we need throughout the term. (See <Link href="https://docs.python.org/3/library/venv.html">the official docs about Python virtual environments</Link> for more info).</P>
 
-      <P>Login to the engineering servers in a terminal via an SSH session. Use <Code>cd</Code> to navigate to your <Code>cs162</Code> directory (if you don't already have one, you should create one via <Code>mkdir</Code>). Then execute the following shell command:</P>
+      <P>Login to the engineering servers in a terminal via an SSH session. Use <Code>cd</Code> to navigate to your <Code>cs-162</Code> directory (if you don't already have one, you should create one via <Code>mkdir</Code>). Then execute the following shell command:</P>
 
       <ShellBlock>{
 `python -m venv env`
       }</ShellBlock>
 
-      <P>After a few minutes, the command will complete, and you'll have a new directory named <Code>env</Code> inside your <Code>cs162</Code> directory (you can see it with <Code>ls</Code>). That directory contains the Python virtual environment that you'll use for all your work in this course.</P>
+      <P>After a few minutes, the command will complete, and you'll have a new directory named <Code>env</Code> inside your <Code>cs-162</Code> directory (you can see it with <Code>ls</Code>). That directory contains the Python virtual environment that you'll use for all your work in this course.</P>
 
       <P>But you're not done yet. Next, you need to activate your Python virtual environment. The simplest way to do this is by sourcing the activation script, but that will only activate it until you log out of the engineering servers<Emdash/>next time you log in, it will be deactivated again. To make your life easier, I strongly suggest configuring Bash to automatically activate it immediately whenever you log into the engineering servers. To do this, use Vim to open up the <Code>.bashrc</Code> file in your home directory:</P>
 
@@ -96,17 +96,17 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
       <P>(You should already have a <Code>.bashrc</Code> file, and it should already have some important stuff in it. If it looks empty, then you probably typed its name wrong. It should be exactly <Code>~/.bashrc</Code>). Scroll to the bottom of the file. Enter insert mode (press the i key) and paste the following command into its own line:</P>
 
       <ShellBlock>{
-`source ~/cs162/env/bin/activate`
+`source ~/cs-162/env/bin/activate`
       }</ShellBlock>
 
-      <P>If your <Code>cs162</Code> directory is not stored directly inside your home directory (represented by the tilde, <Code>~</Code>), that's fine<Emdash/>just replace <Code>~/cs162/env</Code> with the path to the <Code>env</Code> directory created in the previous step (recall that you can use <Code>pwd</Code> to see the path of your current working directory). Save and quit Vim (press escape to enter Normal Mode, and then type <Code>:wq</Code> and press enter).</P>
+      <P>If your <Code>cs-162</Code> directory is not stored directly inside your home directory (represented by the tilde, <Code>~</Code>), that's fine<Emdash/>just replace <Code>~/cs-162/env</Code> with the path to the <Code>env</Code> directory created in the previous step (recall that you can use <Code>pwd</Code> to see the path of your current working directory). Save and quit Vim (press escape to enter Normal Mode, and then type <Code>:wq</Code> and press enter).</P>
 
       <P>Finally, you need to get Bash to run the updated <Code>.bashrc</Code> script. It automatically runs this script every time you log into the engineering servers, so simply logging out (e.g., via the <Code>exit</Code> command, or by exiting out of your terminal) and logging back in will do the trick. Alternatively, you can just source the <Code>.bashrc</Code> file by running the following shell command in your terminal: <Code>source ~/.bashrc</Code>.</P>
 
       <P>The text <Code>(env)</Code> should now appear at the very left of your terminal prompt. For example, it might look something like this:</P>
 
       <ShellBlock copyable={false}>{
-`(env) guyera@flip2:cs162$`
+`(env) guyera@flip2:cs-162$`
       }</ShellBlock>
       
       <P>(You might see double parenthesis around your venv, which is okay.) This means that your virtual environment has been activated. You can now install Python packages.</P>
@@ -114,8 +114,8 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
       <P>(If you'd ever like to undo this configuration, simply remove the line from <Code>~/.bashrc</Code> that you just added). You can also deactivate an active virtual environment by running:</P>
 
       <ShellBlock copyable={false}>{
-`(env) guyera@flip2:cs162$ deactivate
-guyera@flip2:cs162$`
+`(env) guyera@flip2:cs-162$ deactivate
+guyera@flip2:cs-162$`
       }</ShellBlock>
 
       <SectionHeading id="mypy">Mypy</SectionHeading>
