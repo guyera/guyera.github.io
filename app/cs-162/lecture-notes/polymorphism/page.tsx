@@ -447,7 +447,7 @@ if __name__ == '__main__':
 
       <P>Again, this sort of type casting is a bit different from what you've seen before. When you cast a <Code>float</Code> to an <Code>int</Code> via <Code>int(3.14)</Code>, its value actually changes from <Code>3.14</Code> to <Code>3</Code>. But in this case, the type casting is essentially only performed on the <It>annotated</It> types of the objects. This means that, from MyPy's perspective, the elements in the list are all of type <Code>Monster</Code>, but from the interpreter's perspective, the elements in the list are of the various subtypes<Emdash/><Code>Zombie</Code>, <Code>Vampire</Code>, and <Code>Goblin</Code>. That's to say, the zombies in the list are still zombies, the vampires are still vampires, and the goblins are still goblins; they aren't <It>actually</It> converted to the <Code>Monster</Code> type (in contrast to <Code>3.14</Code> being converted to <Code>3</Code> in the case of explicit type casting). But MyPy treats them <It>as if they were</It> of the <Code>Monster</Code> type (and, because of the inheritance hierarchy and is-a relationships, they sort of <It>are</It> monsters, even though their actual types are more specific than that).</P>
 
-      <P>In essence, we've created a heterogeneous list (a list containing elements of various types), but in a way that makes MyPy happy. The details will become clear once we've discussed <Link href="#dynamic-and-static-types">dynamic and static types</Link>.</P>
+      <P>In essence, we've created a heterogeneous list (a list containing elements of various types), but in a way that makes MyPy happy. The details will become clear <Link href="#dynamic-and-static-types">once we've discussed dynamic and static types</Link>.</P>
 
       <P>This greatly reduces the amount of duplicated code (and therefore unnecessary coupling). Yes, we still need a for loop in the <Code>main()</Code> function for each subclass in order to actually <It>create</It> the objects, but after that point<Emdash/>once we've created them, upcasted them, and put them in the list<Emdash/>we no longer need to duplicate any of our code on a per-subclass basis. For example, we only need a single for loop in the <Code>game_loop()</Code> function rather than one per subclass. Similarly, the <Code>game_loop()</Code> function only needs a single list parameter and corresponding argument rather than one per subclass.</P>
 
@@ -475,7 +475,7 @@ if __name__ == '__main__':
 
       <P>This means that the variable <Code>m</Code> in the above line of code is <Bold>polymorphic</Bold>. Depending on the iteration of the for loop, <Code>m</Code> might be a <Code>Zombie</Code>, or it might be a <Code>Vampire</Code>, or it might be a <Code>Goblin</Code>. Indeed, <Code>m</Code> is an expression whose type could be one of several different things. In fact, <Code>m</Code>'s type could be <It>any</It> class that inherits from the <Code>Monster</Code> class, or it could even simply be the <Code>Monster</Code> class itself (our program doesn't actually create regular <Code>Monster</Code> objects, but there's no reason that it <It>couldn't</It>).</P>
 
-      <P>Again, Python makes polymorphism very easy. Any time you upcast objects, you're probably doing polymorphism. But in some other programming languages (e.g., C++), upcasting by itself does not enable polymorphism. In those languages, other explicit syntax is required in addition to upcasting in order to get polymorphism to work properly (e.g., to deal with object slicing and static binding). We'll discuss this in more detail <Link href="#polymorphism-in-other-languages">shortly</Link>.</P>
+      <P>Again, Python makes polymorphism very easy. Any time you upcast objects, you're probably doing polymorphism. But in some other programming languages (e.g., C++), upcasting by itself does not enable polymorphism. In those languages, other explicit syntax is required in addition to upcasting in order to get polymorphism to work properly (e.g., to deal with object slicing and static binding). <Link href="#polymorphism-in-other-languages">We'll discuss this in more detail shortly</Link>.</P>
 
       <P>(To be clear: Python is not the only language that makes polymorphism easy and automatic. However, making polymorphism easy usually requires sacrificing performance.)</P>
 
@@ -726,7 +726,7 @@ class Goblin(Monster):
 
       <P>Avoiding object slicing usually involves upcasting pointers or references rather than upcasting objects directly (we don't have time to discuss why this solves the problem, but it does).</P>
 
-      <P>Python doesn't have an object slicing problem because, in Python, everything is a reference (we discussed this in <Link href={`${PARENT_PATH}/${allPathData["references-and-copies"].pathName}`}>a past lecture</Link>), so when you upcast something in Python, you're inherently upcasting a reference. But, as with dynamic binding, this can cause performance issues.</P>
+      <P>Python doesn't have an object slicing problem because, in Python, everything is a reference (<Link href={`${PARENT_PATH}/${allPathData["references-and-copies"].pathName}`}>we discussed this in a past lecture</Link>), so when you upcast something in Python, you're inherently upcasting a reference. But, as with dynamic binding, this can cause performance issues.</P>
     </>
   )
 }

@@ -132,7 +132,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
 
       <P>Now, what if we got rid of <It>all three</It> if statements, omitting the requirement that x be positive? Well, then we'd run into a different problem: <Code>fib(2)</Code> would recurse to <Code>fib(1) + fib(0)</Code>; <Code>fib(0)</Code> would recurse to <Code>fib(-1) + fib(-2)</Code>; <Code>fib(-2)</Code> would recurse to <Code>fib(-3) + fib(-4)</Code>; and so on, forever and ever. Mathematically, this would correspond to an infinite expansion of terms, never resolving to an actual value. Programatically, this would mean the function would call itself forever and ever<Emdash/>a sort of infinite loop (this is sometimes referred to as <Bold>infinite recursion</Bold>).</P>
 
-      <P>(Technically, infinite recursion usually causes a stack overflow, which crashes the program and is, therefore, not <It>really</It> infinite. More on this <Link href="#performance-of-recursion">later</Link>.)</P>
+      <P>(Technically, infinite recursion usually causes a stack overflow, which crashes the program and is, therefore, not <It>really</It> infinite. <Link href="#performance-of-recursion">More on this later</Link>.)</P>
 
       <P>In the case of the fibonacci sequence, both fib(1) <It>and</It> fib(2) must be explicit defined as the hard-coded (non-recursive) values 0 and 1, respectively. That is, even leaving out just <It>one</It> of these two if statements would break the entire function. I encourage you to think about why that's the case.</P>
 

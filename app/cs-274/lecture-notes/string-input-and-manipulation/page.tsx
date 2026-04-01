@@ -1295,7 +1295,7 @@ $ valgrind ./endptr
 
       <P>You must be very cognizant about where <Code>endptr</Code> points to. In this case, it points to the space between "3.14" and "Hello" in the string literal, which is stored in the readonly section of the data segment and is therefore <Ul>not</Ul> writable. If the above program attempted to modify the contents pointed to by <Code>endptr</Code>, it would invoke undefined behavior. Unfortunately, <Code>endptr</Code> can't simply be qualified as <Code>const char*</Code> (or, equivalently, <Code>char const *</Code>) because the type of the second parameter of <Code>strtol</Code> and <Code>strtod</Code> is <Ul>not</Ul> const-qualified, and constness can't be implicitly casted away. That is, if <Code>endptr</Code> was declared as <Code>const char* endptr</Code>, then the compiler would issue warnings (and possibly errors) when trying to pass its address to <Code>strtod</Code>.</P>
 
-      <P>(There's a complicated but interesting reason why the <Code>endptr</Code> parameter isn't const-qualified. See <Link href="https://stackoverflow.com/questions/3874196/why-is-the-endptr-parameter-to-strtof-and-strtod-a-pointer-to-a-non-const-char-p">here</Link> if you're curious.)</P>
+      <P>(There's a complicated but interesting reason why the <Code>endptr</Code> parameter isn't const-qualified. <Link href="https://stackoverflow.com/questions/3874196/why-is-the-endptr-parameter-to-strtof-and-strtod-a-pointer-to-a-non-const-char-p">Here's an explanation</Link> if you're curious.)</P>
 
       <SectionHeading id="islower-and-isupper"><Code>islower</Code> and <Code>isupper</Code></SectionHeading>
 

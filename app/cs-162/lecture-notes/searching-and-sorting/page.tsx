@@ -241,7 +241,7 @@ The index of 15 is 4
 
       <P>That's to say, comparative sorting algorithms work with numbers, but they also work with other kinds of comparable data.</P>
 
-      <P>For the sake of time, I'll leave the implementation as an exercise for the reader (merge sort is more complicated anyways, and we'll be implementing it together <Link href="#merge-sort">in a bit</Link>).</P>
+      <P>For the sake of time, I'll leave the implementation as an exercise for the reader (merge sort is more complicated anyways, and <Link href="#merge-sort">we'll be implementing it together in a bit</Link>).</P>
 
       <SectionHeading id="insertion-sort">Insertion sort</SectionHeading>
 

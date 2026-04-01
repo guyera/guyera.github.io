@@ -178,7 +178,7 @@ int main(void) {
 `
       }</CBlock>
 
-      <P>We'll cover <Link href="#initializer-lists">another initialization trick</Link> shortly.</P>
+      <P><Link href="#initializer-lists">We'll cover another initialization trick shortly</Link>.</P>
 
       <P>Once an array element has been initialized, it can be used however you'd like. Simply access it by indexing the array:</P>
 
@@ -358,7 +358,7 @@ int main(void) {
 
       <P>Indeed, when you write <Code>my_array[i]</Code> for some index <Code>i</Code>, the computer just conducts some very simple pointer arithemtic: it computes an offset by multiplying <Code>i</Code> by the size of a single element, and then it adds that offset to the base address. This produces a new memory address. It then dereferences that memory address (i.e., it goes to the place in memory located at that address) to retrieve (or modify) the value stored there.</P>
 
-      <P>If all this talk of memory addresses reminds you of our lecture on <Link href={`${PARENT_PATH}/${allPathData["pointers"].pathName}`}>pointers</Link>, that's because it should. Arrays work entirely by pointer arithmetic.</P>
+      <P>If all this talk of memory addresses reminds you of <Link href={`${PARENT_PATH}/${allPathData["pointers"].pathName}`}>our lecture on pointers</Link>, that's because it should. Arrays work entirely by pointer arithmetic.</P>
 
       <P>In fact, in many contexts, the name of an array will <It>decay</It> into a pointer. For example, an automatic array variable can be directly printed using a <Code>%p</Code> format specifier, just like a pointer. When you do that, it prints out the array's base address:</P>
 

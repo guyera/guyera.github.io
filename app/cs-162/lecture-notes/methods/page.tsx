@@ -79,7 +79,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
 
       <P>For one, classes can have <Bold>methods</Bold>. A method is a function that exists within instances of a class, just as an attribute is a variable that exists within instances of a class. In some sense, if an attribute represents a "has-a" relationship, then a method represents a <Bold>"can" relationship</Bold>. For example, a <Code>Dog</Code> class might have a <Code>bark()</Code> method. In such a case, barking would be something that all <Code>Dog</Code> instances <Ul>can</Ul> do (dogs <Ul>can</Ul> bark, hence the "can" relationship).</P>
 
-      <P>Let's start simple. In <Link href={`${PARENT_PATH}/${allPathData["modules-and-packages"].pathName}`}>our modules and packages</Link> lecture, we created a <Code>Dog</Code> class and a <Code>print_dog()</Code> function. It looked like this:</P>
+      <P>Let's start simple. In <Link href={`${PARENT_PATH}/${allPathData["modules-and-packages"].pathName}`}>our modules and packages lecture</Link>, we created a <Code>Dog</Code> class and a <Code>print_dog()</Code> function. It looked like this:</P>
 
       <PythonBlock fileName="dog.py">{
 `class Dog:

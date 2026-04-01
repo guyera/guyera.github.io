@@ -289,9 +289,9 @@ Exception caught!
 
       <P>There is some other syntax surrounding try / except that you can use as well, but we won't discuss it. (For the curious reader, look up <Code>finally</Code> blocks and <Code>else</Code> blocks attached to try / except chains). </P>
 
-      <P>In many cases, you can solve the same problem in two different ways: a) checking some condition before attempting an operation, or b) attempting the operation in a try block, catching an exception if the operation fails. In such cases, there's a simple rule of thumb: you should prefer option a). That is, if there's a simple way to check whether an operation will fail before attempting it, you should almost always prefer to simply put that operation in an if statement, attempting it only if you know that it will succeed, rather than putting it in a try block and catching the exception when it inevitably occurs. Indeed, this means that the above example violates this rule of thumb. Rather than using try and except, we could simply use an if statement to check whether the user's specified index is out of bounds. And, indeed, that's probably what we should have done. But in other cases where an exception is the only reasonable or idiomatic solution to the problem (e.g., when <Link href="#casting-strings-to-other-types">sanitizing user-input strings</Link> in Python), using exceptions is perfectly fine.</P>
+      <P>In many cases, you can solve the same problem in two different ways: a) checking some condition before attempting an operation, or b) attempting the operation in a try block, catching an exception if the operation fails. In such cases, there's a simple rule of thumb: you should generally prefer option a). That is, if there's a simple way to check whether an operation will fail before attempting it, you should almost always prefer to simply put that operation in an if statement, attempting it only if you know that it will succeed, rather than putting it in a try block and catching the exception when it inevitably occurs. Indeed, this means that the above example violates this rule of thumb. Rather than using try and except, we could simply use an if statement to check whether the user's specified index is out of bounds. And, indeed, that's probably what we should have done. But in other cases where an exception is the only reasonable or idiomatic solution to the problem (e.g., when <Link href="#casting-strings-to-other-types">sanitizing user-input strings</Link> in Python), using exceptions is perfectly fine.</P>
 
-      <P>For the curious reader, the reason for this rule of thumb will be discussed in an optional section <Link href="#debate-on-exceptions">shortly</Link>.</P>
+      <P>For the curious reader, the reason for this rule of thumb will be discussed in <Link href="#debate-on-exceptions">an optional section shortly</Link>.</P>
 
       <SectionHeading id="casting-strings-to-other-types">Casting strings to other types</SectionHeading>
 
@@ -415,7 +415,7 @@ Cannot compute the log of 0!
 
       <P>Notice that <Code>print(e)</Code> simply prints the exception's message, which is the very same message as the one that was provided between the parentheses when the <Code>ValueError</Code> was created within the <Code>base_10_log()</Code> function.</P>
 
-      <P>Python has many types of built-in exceptions besides <Code>ValueError</Code>. A complete list of built-in exception types and their purposes can be found <Link href="https://docs.python.org/3/library/exceptions.html#concrete-exceptions">here</Link>.</P>
+      <P>Python has many types of built-in exceptions besides <Code>ValueError</Code>. <Link href="https://docs.python.org/3/library/exceptions.html#concrete-exceptions">Here's a complete list of built-in exception types and their purposes</Link>.</P>
 
       <SectionHeading id="throwing-vs-returning">Throwing vs returning</SectionHeading>
 

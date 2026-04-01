@@ -823,7 +823,7 @@ int main(void) {
 
       <SectionHeading id="returning-pointers-to-dynamic-memory">Returning pointers to dynamic memory</SectionHeading>
 
-      <P>Another thing that I should point out, though it might be obvious, is that it's perfectly valid for a function to return the base address of a block of dynamic memory that was allocated within said function. <Link href={`${PARENT_PATH}/${allPathData["pointers"].pathName}#undefined-behavior-with-pointers`}>As we've discussed</Link>, it's <Ul>not</Ul> okay to do this on the stack. This is because local variables allocated on the stack are freed when the scope / function ends, causing the returned address to become a dangling pointer. In contrast, heap-allocated memory will happily outlive the scope in which it was allocated<Emdash/>it survives until you free it via the <Code>free</Code> function.</P>
+      <P>Another thing that I should point out, though it might be obvious, is that it's perfectly valid for a function to return the base address of a block of dynamic memory that was allocated within said function. <Link href={`${PARENT_PATH}/${allPathData["pointers"].pathName}#undefined-behavior-with-pointers`}>As we've discussed, it's <Ul>not</Ul> okay to do this on the stack</Link>. This is because local variables allocated on the stack are freed when the scope / function ends, causing the returned address to become a dangling pointer. In contrast, heap-allocated memory will happily outlive the scope in which it was allocated<Emdash/>it survives until you free it via the <Code>free</Code> function.</P>
 
       <P>For example, you can write a function that allocates a dynamic array, populates it with a bunch of values, and returns its base address for subsequent access at the call site:</P>
 

@@ -698,7 +698,7 @@ Root: -0.292893`
 
       <SectionHeading id="and-more">And more!</SectionHeading>
 
-      <P>This lecture barely scratched the surface of the capabilities of the C preprocessor. If you want to know more, <Link href="https://gcc.gnu.org/onlinedocs/cpp.pdf">here's</Link> a link to GCC's manual on the topic.</P>
+      <P>This lecture barely scratched the surface of the capabilities of the C preprocessor. See <Link href="https://gcc.gnu.org/onlinedocs/cpp.pdf">GCC's manual on the topic</Link> for more information. </P>
 
     </>
   )

@@ -307,7 +307,7 @@ if __name__ == '__main__':
 `
       }</PythonBlock>
 
-      <P>When a variable is first created and given a value via the assignment operator, the variable's name is said to be <Term>bound</Term> to the location in the computer's memory where its value is stored. A variable may be referenced (i.e., used) in any lines of code that are <Ul>below</Ul> the line in which it was bound but still within the same <Link href="#scope">scope</Link> (i.e., the same function, class, or module, depending on where the variable was created; more on this <Link href="#scope">later</Link>). To reference (use) a variable, simply type out its name. Whenever your computer encounters a reference to a variable (i.e., the name of a variable, except when assigning that variable a value via the assignment operator), your computer essentially substitutes the value of the variable for the variable itself.</P>
+      <P>When a variable is first created and given a value via the assignment operator, the variable's name is said to be <Term>bound</Term> to the location in the computer's memory where its value is stored. A variable may be referenced (i.e., used) in any lines of code that are <Ul>below</Ul> the line in which it was bound but still within the same scope (i.e., the same function, class, or module, depending on where the variable was created; <Link href="#scope">more on this later</Link>). To reference (use) a variable, simply type out its name. Whenever your computer encounters a reference to a variable (i.e., the name of a variable, except when assigning that variable a value via the assignment operator), your computer essentially substitutes the value of the variable for the variable itself.</P>
 
       <P>In our above example, we create a variable called <Code>sentence</Code> in our <Code>main()</Code> function on line 12. Hence, if we so choose, we can reference that variable anywhere below line 12 while still within the <Code>main()</Code> function:</P>
 
@@ -508,7 +508,7 @@ if __name__ == '__main__':
 
       <P>Indeed, the type of <Code>x</Code> is printed as <Code>{`<class 'float'>`}</Code>, which proves that <Code>x</Code> is a float rather than a string.</P>
 
-      <P>Type casting will be more useful later on when we discuss <Link href="#standard-input">standard input</Link>.</P>
+      <P>Type casting will be more useful later on <Link href="#standard-input">when we discuss standard input</Link>.</P>
 
       <SectionHeading id="functions">Functions</SectionHeading>
 
@@ -709,7 +709,7 @@ if __name__ == '__main__':
 `
       }</PythonBlock>
 
-      <P>Again, don't worry too much about how the <Code>age()</Code> function works; we'll cover <Link href="#if-statements">if statements</Link> momentarily. The point is that there are situations where it's reasonable for a function to have multiple return statements.</P>
+      <P>Again, don't worry too much about how the <Code>age()</Code> function works; <Link href="#if-statements">we'll cover if statements momentarily</Link>. The point is that there are situations where it's reasonable for a function to have multiple return statements.</P>
 
       <P>It's also permissible to use return statements inside a function with a <Code>None</Code> return type (i.e., a function that doesn't return anything). However, in such cases, the <Code>return</Code> keyword must be used in isolation<Emdash/>it cannot be accompanied by a value (e.g., simply <Code>return</Code>, as opposed to, say, <Code>return 5</Code>). The purpose of this is to end the function early under certain conditions. Here's a (slightly contrived) example:</P>
 
@@ -934,7 +934,7 @@ TypeError: unsupported operand type(s) for -: 'int' and 'str'
 `
       }</TerminalBlock>
 
-      <P>So, how do we fix this? Well, recall our discussion about <Link href="#type-casting">type casting</Link>. I said that, in some cases, expressions must be <It>explicitly</It> type casted to convert them to the desired type (that's to say, in some cases, the interpreter will not automatically convert expressions into other types just to make them valid<Emdash/>it's your responsibility to do the type casting in such cases). In order to subtract <Code>birth_year</Code> from <Code>2025</Code>, we must first explicitly type-cast <Code>birth_year</Code> into an integer (or some other numeric type that can be subtracted from an integer):</P>
+      <P>So, how do we fix this? Well, recall <Link href="#type-casting">our discussion about type casting</Link>. I said that, in some cases, expressions must be <It>explicitly</It> type casted to convert them to the desired type (that's to say, in some cases, the interpreter will not automatically convert expressions into other types just to make them valid<Emdash/>it's your responsibility to do the type casting in such cases). In order to subtract <Code>birth_year</Code> from <Code>2025</Code>, we must first explicitly type-cast <Code>birth_year</Code> into an integer (or some other numeric type that can be subtracted from an integer):</P>
 
       <PythonBlock fileName="compute_age.py">{
 `def main() -> None:
@@ -971,7 +971,7 @@ Your age is (roughly) 26
 `
       }</TerminalBlock>
 
-      <P>Note: This isn't the point of the lecture, but the proper way of computing someone's age from their birthdate would be to use a complete and robust <Link href="https://docs.python.org/3/library/datetime.html">datetime library</Link>. Conducting arithmetic on dates and times is infamously difficult due to daylight savings time, discrepancies between time zones, time zone adjustments, leap years, and so on, so you should probably rely on an existing complete solution rather than trying to implement your own.</P>
+      <P>Note: This isn't the point of the lecture, but the proper way of computing someone's age from their birthdate would be to use <Link href="https://docs.python.org/3/library/datetime.html">a complete and robust datetime library</Link>. Conducting arithmetic on dates and times is infamously difficult due to daylight savings time, discrepancies between time zones, time zone adjustments, leap years, and so on, so you should probably rely on an existing complete solution rather than trying to implement your own.</P>
 
       <SectionHeading id="if-statements">If statements</SectionHeading>
 
@@ -1367,7 +1367,7 @@ if __name__ == '__main__':
 
       <P>There's another keyword that's somewhat similar to the <Code>break</Code> keyword: the <Code>continue</Code> keyword. Whereas the <Code>break</Code> keyword terminates the entire loop, the <Code>continue</Code> keyword simply terminates the current <It>iteration</It> of the loop. In other words, it essentially causes the interpreter to jump to the end of the loop body. The interpreter then re-evaluates the loop condition as it normally would when reaching the end of the loop body, and so on.</P>
 
-      <P>That's enough about while loops. Let's talk about for loops. A for loop is used to iterate over the items in an iterable container. In the simplest case, a for loop can be used to iterate over the elements of a list or <Term>range</Term>. We'll talk about lists <Link href="#lists">in a moment</Link>. Let's focus on ranges for now.</P>
+      <P>That's enough about while loops. Let's talk about for loops. A for loop is used to iterate over the items in an iterable container. In the simplest case, a for loop can be used to iterate over the elements of a list or <Term>range</Term>. <Link href="#lists">We'll talk about lists in a moment</Link>. Let's focus on ranges for now.</P>
 
       <P>A range is essentially just an ordered list of numbers defined by the first value, the last value, and the step size. For example, a range with a first value of 1, a last value of 7, and a step size of 2 would consist of the numbers 1, 3, 5, and 7 (the list starts at 1, ends at 7, and increments by the step size of 2 between each pair of elements).</P>
 

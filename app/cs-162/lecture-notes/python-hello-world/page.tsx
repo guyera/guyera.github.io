@@ -77,7 +77,7 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
 
       <P>We're going to install some Python development packages (specifically <Link href="#mypy">Mypy</Link>, and perhaps some others throughout the term). Trouble is, we don't have the necessary permissions to install software packages on the engineering servers.</P>
 
-      <P>But there's a simple workaround. Python ships with a module called <Code>venv</Code>, which stands for <Term>Virtual Environment</Term>. Packages installed in a Python virtual environment are isolated from the rest of the system, and you have full access to every Python virtual environment that you create. Hence, Python virtual environments will allow us to install and use whatever software packages we need throughout the term. (You can read more about Python virtual environments <Link href="https://docs.python.org/3/library/venv.html">here</Link>).</P>
+      <P>But there's a simple workaround. Python ships with a module called <Code>venv</Code>, which stands for <Term>Virtual Environment</Term>. Packages installed in a Python virtual environment are isolated from the rest of the system, and you have full access to every Python virtual environment that you create. Hence, Python virtual environments will allow us to install and use whatever software packages we need throughout the term. (See <Link href="https://docs.python.org/3/library/venv.html">the official docs about Python virtual environments</Link> for more info).</P>
 
       <P>Login to the engineering servers in a terminal via an SSH session. Use <Code>cd</Code> to navigate to your <Code>cs162</Code> directory (if you don't already have one, you should create one via <Code>mkdir</Code>). Then execute the following shell command:</P>
 

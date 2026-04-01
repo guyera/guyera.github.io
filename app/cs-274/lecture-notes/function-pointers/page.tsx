@@ -159,7 +159,7 @@ $ valgrind ./function_pointers
 `
       }</TerminalBlock>
 
-      <P>(Technically, passing a function pointer to <Code>printf</Code> is not strictly portable according to the C standard. This is because all pointer arguments get casted to type <Code>void*</Code> (void pointers) by <Code>printf</Code> just before printing, and casting a function pointer to a void pointer (and vice-versa) <Link href="#casting-to-void-pointers">technically results in undefined behavior</Link>. Still, it works on most platforms, at least for temporary debugging purposes).</P>
+      <P>(Technically, passing a function pointer to <Code>printf</Code> is not strictly portable according to the C standard. This is because all pointer arguments get casted to type <Code>void*</Code> (void pointers) by <Code>printf</Code> just before printing, and <Link href="#casting-to-void-pointers">casting a function pointer to a void pointer (and vice-versa) technically results in undefined behavior</Link>. Still, it works on most platforms, at least for temporary debugging purposes).</P>
 
       <P>Notice: you do <Ul>not</Ul> have to use the address-of operator (<Code>&</Code>) to explicitly retrieve the address of a function. Indeed, just like arrays, function names ("designators") <It>often</It> decay to their functions' addresses.</P>
 
@@ -676,7 +676,7 @@ void (*fp)(int, double);
 
       <P>Indeed, <Code>signal</Code> is not a function pointer, but rather a function <It>that returns a function pointer</It>. That is, the above declaration is actually a function prototype. Deducing this requires very careful application of the spiral rule.</P>
 
-      <P>The above example was taken from a 1994 post by David Anderson to the <Code>comp.lang.c</Code> Usenet newsgroup. <Link href="https://c-faq.com/decl/spiral.anderson.html">Here's</Link> a copy of the original post. It's a good resource for learning about the spiral rule.</P>
+      <P>The above example was taken from <Link href="https://c-faq.com/decl/spiral.anderson.html">a 1994 post by David Anderson to the <Code>comp.lang.c</Code> Usenet newsgroup</Link>. It's a good resource for learning about the spiral rule.</P>
 
       <P>By the way, if you read the post, you might also realize that the right-to-left reading rule for constness (and volatility) is actually just a specific instance of the clockwise / spiral rule<Emdash/>since the identifier is at the very right of the declaration, working clockwise from the identifier is equivalent to working leftward:</P>
 

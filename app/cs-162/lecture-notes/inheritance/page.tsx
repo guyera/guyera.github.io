@@ -249,7 +249,7 @@ def define_attributes(self, name: str, age: int) -> None:
 
       <P>But how do we call the <Code>Dog</Code> constructor from within the <Code>Husky</Code> constructor? Well, you might guess that you could do something like <Code>self.__init__(name, age)</Code>, and, perhaps surprisingly, that would actually be <It>almost</It> correct. However, there's an issue: <Code>Husky</Code> objects actually have <It>two</It> methods that are both named <Code>__init__()</Code>: the one inherited from the base class (i.e., the <Code>Dog</Code> constructor), and the one defined directly in the derived class (i.e., the <Code>Husky</Code> constructor itself). If, in the <Code>Husky</Code> constructor, we simply wrote <Code>self.__init__(name, age)</Code>, the Python interpreter would think that we're trying to tell the <Code>Husky</Code> constructor to call <It>itself</It>. But what we <It>actually</It> want is for the <Code>Husky</Code> constructor to call the <Code>Dog</Code> constructor. The fact that they're both named <Code>__init__()</Code> creates some ambiguity.</P>
 
-      <P>(By the way, the term <Bold>method overriding</Bold> describes the case wherein a base class and derived class each define a method with the same name. We'll talk about this more <Link href="overriding">in a moment</Link>.)</P>
+      <P>(By the way, the term <Bold>method overriding</Bold> describes the case wherein a base class and derived class each define a method with the same name. <Link href="#overriding">We'll discuss this further shortly</Link>.)</P>
 
       <P>Luckily, there's a solution. Python provides a special built-in function named <Code>super()</Code>. It accepts no arguments and returns a sort of base-class "version" of the calling object. You can then proceed to call methods on that object, and it will specifically call the <It>base-class methods</It>, even if the derived class has methods with the same name (i.e., overrides). That is, you can call a base class constructor from within a derived class constructor like so:</P>
 
@@ -550,7 +550,7 @@ def pull_sled(sled: Sled) -> None:
 
       <P>The power of overrides becomes more apparent in larger demonstrations with more classes. For example, we could have thirty different species-specific classes that all inherit from the <Code>Dog</Code> class, and many of them could override the <Code>vocalize()</Code> method, each in their own way. Perhaps a husky says "Awooo!", but a yorkshire terrier says "yip!". Also, suppose that many of those classes <It>don't</It> override the <Code>vocalize()</Code> method. That's perfectly okay<Emdash/>they'd still have the inherited <Code>vocalize()</Code> method from the <Code>Dog</Code> class, meaning the would simply print "Bark! Bark!" when their <Code>vocalize()</Code> method is called (indeed, the base-class method sort of serves as a "default" behavior if it's not overridden in a given derived class). I could write out such an example, but this lecture is already getting quite long, so I'll leave that as an exercise to the reader.</P>
 
-      <P>(And the <It>true</It> power of overrides is showcased by <Link href={`${PARENT_PATH}/${allPathData["polymorphism"].pathName}`}>polymorphism</Link>. But that's a different lecture.)</P>
+      <P>(And the <It>true</It> power of overrides is showcased by polymorphism. But that's <Link href={`${PARENT_PATH}/${allPathData["polymorphism"].pathName}`}>a different lecture</Link>.)</P>
 
       <P>Before we move on, here are some rules of thumb to keep in mind:</P>
 
