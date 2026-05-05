@@ -69,6 +69,8 @@ async function LectureNotes({ allPathData }: { allPathData: any }) {
         <Item><Link href="#pod-types-via-classes">POD types ("structure types") via classes</Link></Item>
         <Item><Link href="#type-annotating-class-instances">Type-annotating class instances</Link></Item>
         <Item><Link href="#file-input-example">Example: Loading POD types via text I/O</Link></Item>
+        <Item><Link href="#composition-of-objects">Composition of objects</Link></Item>
+        <Item><Link href="#references">References</Link></Item>
       </Itemize>
 
       <SectionHeading id="pod-types-via-classes">POD types ("structure types") via classes</SectionHeading>
@@ -545,6 +547,275 @@ Enter your choice: 3
       }</TerminalBlock>
 
       <P>The <Code>read_city_file()</Code> function reads (loads) a list of cities from the given text file using file input techniques. If we wanted to, we could create another function, say <Code>write_city_file()</Code>, that writes (saves) a given list of cities to a given text file (perhaps in the same comma-separated values format) using file output techniques. But the above example is already fairly long, so I'll leave this as an exercise for the reader.</P>
+
+      <SectionHeading id="composition-of-objects">Composition of objects</SectionHeading>
+
+      <P>Perhaps this is obvious, but there's no reason that an attribute within a POD-type object can't <It>also</It> be, say, a POD-type object. For example:</P>
+
+      <PythonBlock fileName="composition.py">{
+`class BusinessOwner:
+    first_name: str
+    last_name: str
+    address: str
+    phone_number: str
+
+class Business:
+    name: str
+    # Every business has an owner, which is in turn a BusinessOwner
+    # object
+    owner: BusinessOwner
+
+def main() -> None:
+    # Suppose we want to create a Business object. Every Business
+    # has an owner, so we'll start by creating the BusinessOwner
+    jensen_huang = BusinessOwner()
+    jensen_huang.first_name = 'Jensen'
+    jensen_huang.last_name = 'Huang'
+    jensen_huang.address = '123 GPU Way'
+    jensen_huang.phone_number = '(555) 123-4567'
+
+    # Now we can create a Business object
+    nvidia = Business()
+    nvidia.name = 'Nvidia Corporation'
+    # Store the BusinessOwner object, jensen_huang, inside the 'owner'
+    # attribute of the Business object, nvidia
+    nvidia.owner = jensen_huang
+
+
+if __name__ == '__main__':
+    main()
+`
+      }</PythonBlock>
+
+      <P>Indeed, objects can be arranged into arbitrary compositions. The above program stores a <Code>BusinessOwner</Code> object as an attribute of a <Code>Business</Code> object. If we wanted, the <Code>Business</Code> object could further be stored as an attribute of <It>another</It> object, and so on.</P>
+
+      <P>Suppose you want to print the first name of the owner of a given business. Here's one way to do that:</P>
+
+      <PythonBlock fileName="composition.py" highlightLines="{29-34}">{
+`class BusinessOwner:
+    first_name: str
+    last_name: str
+    address: str
+    phone_number: str
+
+class Business:
+    name: str
+    # Every business has an owner, which is in turn a BusinessOwner
+    # object
+    owner: BusinessOwner
+
+def main() -> None:
+    # Suppose we want to create a Business object. Every Business
+    # has an owner, so we'll start by creating the BusinessOwner
+    jensen_huang = BusinessOwner()
+    jensen_huang.first_name = 'Jensen'
+    jensen_huang.last_name = 'Huang'
+    jensen_huang.address = '123 GPU Way'
+    jensen_huang.phone_number = '(555) 123-4567'
+
+    # Now we can create a Business object
+    nvidia = Business()
+    nvidia.name = 'Nvidia Corporation'
+    # Store the BusinessOwner object, jensen_huang, inside the 'owner'
+    # attribute of the Business object, nvidia
+    nvidia.owner = jensen_huang
+
+    # You can chain dot operators to access objects within objects
+    # within objects (and so on). The first dot operator reaches inside
+    # the nvidia object to access its owner attribute. The second
+    # dot operator reaches inside that owner object to access its
+    # first_name attribute.
+    print(nvidia.owner.first_name)
+
+
+if __name__ == '__main__':
+    main()
+`
+      }</PythonBlock>
+
+      <P>However, in line with the Single Responsibility Principle (SRP), it'd be a better idea to create dedicated functions to facilitate such printing logic. In particular, the logic required to print the information of a <Code>BusinessOwner</Code> should probably be separated from that required to print the information of a <Code>Business</Code> (e.g., in case you ever need to print the information of just a <Code>BusinessOwner</Code> without the <Code>Business</Code>), which should in turn be separated from our program's other logic.</P>
+
+      <P>You'll find that when you adhere to the SRP closely, it's often not necessary to chain dot operators together. For example:</P>
+
+      <PythonBlock fileName="composition.py" highlightLines="{13-28,46-48}">{
+`class BusinessOwner:
+    first_name: str
+    last_name: str
+    address: str
+    phone_number: str
+
+class Business:
+    name: str
+    # Every business has an owner, which is in turn a BusinessOwner
+    # object
+    owner: BusinessOwner
+
+# Prints the information about a given BusinessOwner
+def print_business_owner(owner: BusinessOwner) -> None:
+    print(f'Owner first name: {owner.first_name}')
+    print(f'Owner last name: {owner.last_name}')
+    print(f'Owner address: {owner.address}')
+    print(f'Owner phone number: {owner.phone_number}')
+
+# Prints the information about a given Business, including its owner
+# (but delegates the printing logic for the owner to the
+# print_business_owner function, in line with the SRP).
+def print_business(business: Business) -> None:
+    print(f'Business name: {business.name}')
+    print(f'Business owner information:')
+    # To print the owner's information, call the
+    # print_business_owner function on this business's owner
+    print_business_owner(business.owner)
+
+def main() -> None:
+    # Suppose we want to create a Business object. Every Business
+    # has an owner, so we'll start by creating the BusinessOwner
+    jensen_huang = BusinessOwner()
+    jensen_huang.first_name = 'Jensen'
+    jensen_huang.last_name = 'Huang'
+    jensen_huang.address = '123 GPU Way'
+    jensen_huang.phone_number = '(555) 123-4567'
+
+    # Now we can create a Business object
+    nvidia = Business()
+    nvidia.name = 'Nvidia Corporation'
+    # Store the BusinessOwner object, jensen_huang, inside the 'owner'
+    # attribute of the Business object, nvidia
+    nvidia.owner = jensen_huang
+
+    # Print all the information about the business, including its
+    # owner
+    print_business(nvidia)
+
+
+if __name__ == '__main__':
+    main()
+`
+      }</PythonBlock>
+
+      <P>With this rewrite, the logic for printing the owner's first name has been extracted to <Code>print_business_owner</Code>. Since this function only needs access to the <Code>BusinessOwner</Code> object rather than the entire <Code>Business</Code> object, there are no more chained dot operators.</P>
+
+      <P>Chaining dot operators together isn't bad in and of itself, but it's sometimes a sign that a function has been given too many responsibilities, requiring it to operate on attributes at various levels in the object composition.</P>
+
+      <SectionHeading id="references">References</SectionHeading>
+
+      <P>When objects are passed around from place to place, be it via arguments and parameters, return values, or even just stored in other variables via the assignment operator, the objects' attributes behave a bit like list elements: modifying the object's attributes in one context also modifies them in the other context(s).</P>
+
+      <P>For example, if an object is passed from one function A into another function B, and then function B proceeds to modify the attributes of the received object, that <It>also</It> modifies the attributes of the object that was passed in from function A:</P>
+
+      <PythonBlock>{
+`class City:
+    name: str
+
+def change(city: City) -> None:
+    city.name = 'Las Vegas'
+
+def main() -> None:
+    my_city = City()
+    my_city.name = 'Corvallis'
+    change(my_city) # my_city.name is now 'Las Vegas'
+    print(my_city.name) # Prints Las Vegas
+
+if __name__ == '__main__':
+    main()`
+      }</PythonBlock>
+
+      <P>As I mentioned, this isn't just the case with arguments and parameters. It even happens when an object stored in one variable is simply assigned to another variable:</P>
+
+      <PythonBlock>{
+`class City:
+    name: str
+
+def main() -> None:
+    my_city = City()
+    my_city.name = 'Corvallis'
+
+    my_second_city = my_city # Here's the object assignment
+
+    # This changes my_city.name as well!
+    my_second_city.name = 'Las Vegas'
+
+    print(my_city.name) # Prints Las Vegas
+
+if __name__ == '__main__':
+    main()`
+      }</PythonBlock>
+
+      <P>We'll discuss the reason for this in a future lecture (it turns out that variables are just references, and it's possible for many variables to refer to the same object), but for now, this is just something that you should be aware of, else you may accidentally introduce some very confusing bugs into your labwork and homework assignments.</P>
+
+      <P>Here's a full example program to further illustrate this phenomenon. Please analyze it carefully:</P>
+
+      <PythonBlock fileName="modifyingattributes.py">{
+`class BusinessOwner:
+    first_name: str
+    last_name: str
+    address: str
+    phone_number: str
+
+class Business:
+    name: str
+    owner: BusinessOwner
+
+def foo(business: Business) -> None:
+    # Modifies not just the attribute of the parameter, but also that of
+    # the argument supplied in the function call
+    business.name = 'Amazon'
+
+def retrieve_owner(business: Business) -> BusinessOwner:
+    # Reach inside the given Business object and retrieve its
+    # owner attribute. Return it.
+    return business.owner
+
+def main() -> None:
+    jensen_huang = BusinessOwner()
+    jensen_huang.first_name = 'Jensen'
+    jensen_huang.last_name = 'Huang'
+    jensen_huang.address = '123 GPU Way'
+    jensen_huang.phone_number = '(555) 123-4567'
+
+    nvidia = Business()
+    nvidia.name = 'Nvidia Corporation'
+    nvidia.owner = jensen_huang
+
+    foo(nvidia) # Changes nvidia.name to 'Amazon'
+    print(nvidia.name) # Prints Amazon
+
+    # This is also the case with return values.
+    the_owner = retrieve_owner(nvidia)
+    # If we now modify the attributes of the_owner, that will
+    # ALSO modify the corresponding attributes of nvidia.owner
+    the_owner.first_name = 'Jeff'
+    print(nvidia.owner.first_name) # Prints Jeff
+
+    # Actually, none of this really has anything to do with functions.
+    # Even the original BusinessOwner object, jensen_huang, has
+    # been modified.
+    print(jensen_huang.first_name) # Prints Jeff
+
+    # Similarly, modifying jensen_huang.first_name also modifies
+    # nvidia.owner.first_name.
+    jensen_huang.first_name = 'Jensen'
+    print(nvidia.owner.first_name) # Prints Jensen
+    
+    # However, if we create a brand new BusinessOwner object, it'll
+    # be separate. Modifying it won't modify the others, and vice
+    # versa.
+    jeff = BusinessOwner()
+    jeff.first_name = 'Jeff'
+    jeff.last_name = 'Bezos'
+    jeff.address = '123 Amazon St'
+    jeff.phone_number = '(555) 987-6543'
+
+    print(jeff.first_name) # Prints Jeff
+    print(jensen_huang.first_name) # Prints Jensen
+    print(the_owner.first_name) # Prints Jensen
+    print(nvidia.owner.first_name) # Prints Jensen
+
+
+if __name__ == '__main__':
+    main()
+`
+      }</PythonBlock>
       
     </>
   )
