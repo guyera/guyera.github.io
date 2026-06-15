@@ -1,5 +1,5 @@
-import { redirect } from 'next/navigation';
+import { permanentRedirect } from 'next/navigation';
 
 export default function Page() {
-  redirect('https://guyera.github.io/cs162/lecture-notes/vim');
+  permanentRedirect('https://guyera.github.io/cs162/lecture-notes/vim');
 }
