@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
 
 export default function Page() {
-  redirect('https://guyera.github.io/cs162/lecture-notes/pythons-basic-data-structures/');
+  redirect('https://guyera.github.io/cs162/lecture-notes/pythons-basic-data-structures');
 }
